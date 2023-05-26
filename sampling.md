@@ -1,0 +1,270 @@
+---
+title: 'Working with samples'
+teaching: 10
+exercises: 2
+---
+
+
+
+
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do you work with posterior samples?
+- How can the posterior information be handled?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Learn how to
+  - work with posterior samples
+  - compute posterior intervals
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+In the last episode, we were introduced to the Bayesian formula and fit the binomial and normal models with the grid approximation. However, the poor scalability of the grid approximation makes it impractical to use on models of even moderate size. The standard solution is to Markov chain Monte Carlo (MCMC) methods that draw random samples from the posterior distribution. Later, we will learn about MCMC methods but now we'll learn working with samples. 
+
+## Example: binomial model
+
+Let's revisit the binomial model considered in the previous episode. The binomial model with a beta distribution is an example of a model where the analytical shape of the posterior is known. 
+
+$$p(\theta | X) = Beta(\alpha + x, \beta + N - x),$$
+where $\alpha$ and $\beta$ are the hyperparameters and $x$ the number of successes out of $N$ trials. 
+
+::::::::::::::::::::::::::::::::::::::::: challenge
+
+Derive the analytical posterior distribution for the Beta-Binomial model. 
+
+
+::::::::::::::::::::::::::::::: solution
+
+
+\begin{align}
+p(\theta | X) &\propto  p(X | \theta) p(\theta) \\
+              &= ... 
+\end{align}
+
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+Let's generate samples from the prior and posterior distributions, using the handedness data of the previous episode. 
+
+
+
+```r
+# Sample size
+N <- 50
+
+# 7/50 are left-handed
+x <- 7
+
+# Number of samples
+n_samples <- 5000
+
+# Prior hyperparameters
+alpha <- 1
+beta <- 10
+
+# Draw random values from the prior
+prior_samples <- rbeta(n = n_samples,
+                       shape1 = alpha,
+                       shape2 = beta)
+
+# Draw random values from the posterior
+posterior_samples <- rbeta(n = n_samples,
+                           shape1 = alpha + x, 
+                           shape2 = beta + N - x)
+
+bin_samples <- data.frame(prior = prior_samples, 
+                      posterior = posterior_samples)
+```
+
+
+Next, let's plot histograms for these samples along with the analytical densities, the normalized likelihood, and the "true" value (blue) based on a larger population sample. 
+
+
+```r
+# Wide --> long format
+bin_samples_w <- bin_samples %>% gather(key = "func")
+
+
+p <- ggplot(bin_samples_w) + 
+  geom_histogram(aes(x = value, y = after_stat(density),
+                     fill = func),
+                 bins = 50, 
+                 position = "identity", alpha = 0.75)
+
+# Add analytical distributions
+delta <- 0.001
+analytical_df <- data.frame(p = seq(0, 1, by = delta)) %>% 
+  mutate(analytical_prior = dbeta(x = p , alpha, beta), 
+         analytical_posterior = dbeta(x = p , alpha + x, beta + N - x), 
+         likelihood = dbinom(size = N, x = x, prob = p)) %>% 
+  mutate(likelihood = likelihood/(sum(likelihood)*delta)) %>% 
+  gather(key = "func", value = "value", -p)
+
+
+# Frequency in a large population sample (Hardyck, C. et al., 1976)
+p_true <- 9.6/100
+
+p <- p + 
+  geom_line(data = analytical_df, 
+            aes(x = p, y = value, color = func), 
+            linewidth = 1) +
+  geom_vline(xintercept = p_true,
+             color = "blue", 
+             linewidth = 1) +
+  scale_color_grafify() + 
+  scale_fill_grafify()
+
+print(p)
+```
+
+<img src="fig/sampling-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+
+
+In Episode 1, we summarized the posterior with points estimates, namely the posterior mode (MAP), mean and variance. 
+
+The standard way of reporting posterior information is based on *credible intervals* (CI), which refer to areas of the parameter space where a certain amount of posterior mass is located. Usually CIs are computed as quantiles of posterior, so for instance the 95\% CI would be located between the 2.5\% and 97.5\% percentiles. Another approach is to compute the smallest such set that contains 95\% of the posterior, which are also called highest posterior density intervals (HPDI). 
+
+Let us now compute the percentile-based CIs for the handedness example, along with the posterior mode (MAP), and include them in the figure. 
+
+(Figure too busy --> clarify)
+
+
+```r
+# MAP
+posterior_density <- density(posterior_samples)
+MAP <- posterior_density$x[which.max(posterior_density$y)]
+
+# 95% credible interval
+CIs <- quantile(posterior_samples, probs = c(0.025, 0.975))
+
+p <- p +
+  geom_vline(xintercept = CIs, linetype = "dashed") + 
+  geom_vline(xintercept = MAP) +
+  geom_vline(xintercept = p_true, color = "blue", size = 1) +
+  labs(title = "Black = MAP and CIs")
+```
+
+```{.warning}
+Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.
+```
+
+```r
+print(p)
+```
+
+<img src="fig/sampling-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+
+
+Another perspective into processing posterior information is to find the amount the posterior mass in a given interval (or some more general set). This approach enables determining probabilities for hypotheses. For instance, we might be interested in knowing the probability that the target parameter is less than 0.2, between 0.05 and 0.10, or less than 0.1 or greater than 0.20. Such probabilities can be recovered based on samples simply by computing the proportion of samples in these sets. 
+
+
+```r
+p_less_than_0.15 <- mean(posterior_samples < 0.15)
+p_between_0.05_0.1 <- mean(posterior_samples > 0.05 & posterior_samples < 0.1)
+p_outside_0.1_0.2 <- mean(posterior_samples < 0.1 | posterior_samples > 0.2)
+```
+
+Let's visualize these probabilities as proportions of the analytical posterior:
+
+<img src="fig/sampling-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+
+
+
+
+::::::::::::::::::::::::::::::::::::: discussion
+
+How would you compute CIs based on an analytical posterior density?
+
+Can you draw samples from the likelihood?
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+Write a function that returns the highest posterior density interval. Compute the 95% HPDI for the posterior samples generated (bin_samples) and compare it to the 95% CIs.
+
+
+:::::::::::::::::::::: hint
+
+If you sort the samples in order, each set of $n$ consecutive samples contains $100 \cdot n/N \%$ of the posterior. 
+
+:::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::: solution
+
+Let's write the function for computing the HPDI
+
+
+```r
+get_HPDI <- function(samples, prob) {
+  
+  # Total samples
+  n_samples <- length(samples)
+  
+  # How many samples constitute prob of the total number?
+  prob_samples <- round(prob*n_samples)
+  
+  # Sort samples
+  samples_sort <- samples %>% sort
+  
+  
+  # Each samples_sort[i:(i + prob_samples - 1)] contains prob of the total distribution mass
+  # Find the shortest such interval 
+  min_i <- lapply(1:(n_samples - prob_samples), function(i) {
+    
+    samples_sort[i + prob_samples - 1] - samples_sort[i]
+    
+  }) %>% unlist %>% which.min()
+  
+  # Get correspongind values
+  hpdi <- samples_sort[c(min_i, min_i + prob_samples)]
+  
+  return(hpdi)
+}
+```
+
+Then we can compute the 95% HPDI and compare it to the corresponding CIs
+
+
+```r
+data.frame(HPDI = get_HPDI(bin_samples$posterior, 0.95), 
+           CI = quantile(posterior_samples, probs = c(0.025, 0.975))) %>% 
+  t %>% 
+  data.frame() %>% 
+  mutate(length = X97.5. - X2.5.)
+```
+
+```{.output}
+          X2.5.    X97.5.   length
+HPDI 0.05188026 0.2183453 0.166465
+CI   0.05939937 0.2296694 0.170270
+```
+
+Both intervals contain the same mass but the HPDI is (slightly) shorter. 
+
+:::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- point 1
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
