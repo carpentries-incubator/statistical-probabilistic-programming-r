@@ -1,10 +1,5 @@
-# The Carpentries Workbench Template R Markdown Lesson
+# Statistical and Probabilistic Programming
 
-This lesson is a template lesson that uses [The Carpentries Workbench][workbench].
+This lessons introduces basic concepts in statistical and probabilistic programming. It covers the basics of Bayesian statistics and MCMC from an application-oriented perspective. The lesson is based in R but also makes extensive use of Stan.
 
-To get started using this template, make sure you're logged into Github and visit https://github.com/carpentries/workbench-template-rmd/generate
-and follow the instructions.
 
-If you have any questions, contact [@zkamvar](https://github.com/zkamvar)
-
-[workbench]: https://carpentries.github.io/sandpaper-docs/
