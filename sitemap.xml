@@ -1,81 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/01-introduction.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/01-introduction.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/404.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/404.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/CODE_OF_CONDUCT.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/LICENSE.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/aio.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/advanced-topics.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/images.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/aio.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/index.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/bayesian-statistics.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/01-introduction.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/404.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/images.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/CODE_OF_CONDUCT.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/index.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/LICENSE.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/01-introduction.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/aio.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/404.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/images.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/index.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/instructor-notes.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/advanced-topics.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/introduction.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/key-points.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/keypoints.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/hierarchical-models.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/profiles.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/images.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor/reference.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/index.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/instructor-notes.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/instructor-notes.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/introduction.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/introduction.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/key-points.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/key-points.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/keypoints.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/keypoints.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/profiles.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html</loc>
   </url>
   <url>
-    <loc>https://carpentries.github.io/workbench-template-rmd/reference.html</loc>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/model-checking.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/reference.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/sampling.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/setup.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/stan.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/key-points.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/keypoints.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/mcmc.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-checking.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/reference.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/sampling.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/setup.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html</loc>
   </url>
 </urlset>
