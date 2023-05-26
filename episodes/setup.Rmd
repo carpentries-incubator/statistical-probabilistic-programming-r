@@ -1,0 +1,45 @@
+---
+title: 'Setup'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How can I set R up for the course?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Install required packages
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+```{r, message = FALSE}
+
+# Required packages
+library(tidyverse)
+library(magrittr)
+library(cowplot)
+library(grafify)
+library(rstan)
+
+# Set graphical theme
+theme_set(theme_bw(15))
+
+# Set color scheme
+```
+
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- point 1
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
