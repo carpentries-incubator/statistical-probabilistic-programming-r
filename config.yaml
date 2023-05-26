@@ -11,29 +11,29 @@
 carpentry: 'incubator'
 
 # Overall title for pages.
-title: 'Lesson Title' # FIXME
+title: 'Statistical and Probabilistic Programming'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: ~ # FIXME
+created: ~
 
 # Comma-separated list of keywords for the lesson
-keywords: 'software, data, lesson, The Carpentries' # FIXME
+keywords: 'software, data, lesson, The Carpentries'
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
-life_cycle: 'pre-alpha' # FIXME
+life_cycle: 'pre-alpha'
 
 # License of the lesson
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/carpentries/workbench-template-rmd' # FIXME
+source: 'https://github.com/carpentries-incubator/statistical-probabilistic-programming-r'
 
 # Default branch of your lesson
 branch: 'main'
 
 # Who to contact if there are any issues
-contact: 'team@carpentries.org' # FIXME
+contact: 'velait@utu.fi'
 
 # Navigation ------------------------------------------------
 #
@@ -58,17 +58,25 @@ contact: 'team@carpentries.org' # FIXME
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
-- introduction.Rmd
+episodes:
+- setup.Rmd
+- bayesian-statistics.Rmd
+- sampling.Rmd
+- stan.Rmd
+- mcmc.Rmd
+- hierarchical-models.Rmd
+- model-checking.Rmd
+- advanced-topics.Rmd
+
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
