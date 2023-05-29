@@ -144,7 +144,7 @@ Take a moment to analyze the figure.
 Notice that the likelihood function is not a distribution in terms of the parameter $p$, so it doesn't sum to one. Below, we normalize it for better illustration. 
 
 
-Now that we have a posterior distribution (approximation) available, we can try to quantify it by computing features of it. The mode, average and variance and commonly employed point estimates: 
+Now that we have a posterior distribution (approximation) available, we can try to quantify it by computing features of it. The mode (maximum a posteriori, or MAP), average and variance and commonly employed point estimates: 
 
 ```{r}
 
@@ -486,8 +486,18 @@ p_marginal <- df_w_marginal %>%
 
 ## Reading 
 
-- Gelman *et al.*, Bayesian Data Analysis (3rd ed.): Ch. 1
+- Gelman *et al.*, Bayesian Data Analysis (3rd ed.): Ch. 1, 2
 - McElreath, Statistical Rethinking (2nd ed.): Ch. 2
+
+
+
+::::::::::::::::::::::::::::::::::::: instructor
+
+Here are some exercises that can be used as additional challenges. 
+
+1. 
+
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
