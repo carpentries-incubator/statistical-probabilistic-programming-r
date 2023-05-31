@@ -14,7 +14,7 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Understand the basic idea of Bayesian statistical thinking
+- Understand the basic idea of Bayesian statistical thinking.
 - Bayesian formula: prior, likelihood, posterior
 - Implement grid approximation for a Bayesian model
 

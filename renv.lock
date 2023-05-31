@@ -188,7 +188,7 @@
     },
     "StanHeaders": {
       "Package": "StanHeaders",
-      "Version": "2.26.25",
+      "Version": "2.26.26",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -196,7 +196,7 @@
         "RcppEigen",
         "RcppParallel"
       ],
-      "Hash": "929e3524e31287dab487e63018c5dab7"
+      "Hash": "6b7d971cfe619a1e9fd111bf3b438cd1"
     },
     "abind": {
       "Package": "abind",
