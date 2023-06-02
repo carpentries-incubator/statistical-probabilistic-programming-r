@@ -370,7 +370,7 @@ e.g. online setup) in the solutions blocks.</p>
   Windows
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Use PuTTY</p>
 </div>
@@ -384,7 +384,7 @@ e.g. online setup) in the solutions blocks.</p>
   MacOS
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use Terminal.app</p>
 </div>
@@ -398,7 +398,7 @@ e.g. online setup) in the solutions blocks.</p>
   Linux
   </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Use Terminal</p>
 </div>
@@ -737,7 +737,7 @@ data as described above.</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -864,7 +864,7 @@ vertical line).</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Included in the instructor’s notes.</p>
 </div>
@@ -962,9 +962,9 @@ The binomial model with a beta distribution is an example of a model
 where the analytical shape of the posterior is known.</p>
 <p><span class="math display">\[p(\theta | X) = Beta(\alpha + x, \beta +
 N - x),\]</span> where <span class="math inline">\(\alpha\)</span> and
-<span class="math inline">\(\beta\)</span> are the hyperparameters and
-<span class="math inline">\(x\)</span> the number of successes out of
-<span class="math inline">\(N\)</span> trials.</p>
+<span class="math inline">\(\beta\)</span> are the hyperparameters of
+the Beta prior and <span class="math inline">\(x\)</span> the number of
+successes out of <span class="math inline">\(N\)</span> trials.</p>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -985,7 +985,7 @@ model.</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p><span class="math display">\[\begin{align}
 p(\theta | X) &amp;\propto  p(X | \theta) p(\theta) \\
@@ -996,7 +996,7 @@ p(\theta | X) &amp;\propto  p(X | \theta) p(\theta) \\
 </div>
 </div>
 <p>Let’s generate samples from the prior and posterior distributions,
-using the handedness data of the previous episode but first redefine the
+using the handedness data of the previous episode. First redefine the
 data.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1008,11 +1008,11 @@ data.</p>
 <span><span class="co"># 7/50 are left-handed</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">7</span></span></code></pre>
 </div>
-<p>In R, the standard statistical distributions can be sampled from
-using readily available functions. For instance, the binomial, normal
-and beta distributions can be sampled, respectively, with
-<code>rbinom, rnorm</code> and <code>rbeta</code> functions. Let’s draw
-5000 samples from the prior and posterior distributions.</p>
+<p>Then, we’ll draw 5000 samples from the prior and posterior
+distributions. In R, the standard statistical distributions can be
+sampled from using readily available functions. For instance, the
+binomial, normal and beta distributions can be sampled, respectively,
+with <code>rbinom, rnorm</code> and <code>rbeta</code> functions.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1081,7 +1081,138 @@ on a larger population sample.</p>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/sampling-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-intervals"><h2 class="section-heading">Posterior intervals<a class="anchor" aria-label="anchor" href="#posterior-intervals"></a>
+<figure><img src="fig/sampling-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>When sampling the prior and posterior, it is important to draw
+sufficiently many samples to get an accurate representation of the true
+density. Typically, this means drawing at least some thousands of
+samples.</p>
+</section><section id="predictive-distributions"><h2 class="section-heading">Predictive distributions<a class="anchor" aria-label="anchor" href="#predictive-distributions"></a>
+</h2>
+<hr class="half-width">
+<p>The posterior distribution gives probabilities for the model
+parameters conditional on the data which is information regarding the
+data generative process. However, it can also be valuable to analyze
+what sort of observations might be expected to arise if more data was
+gathered. On the other hand this might be an interesting question to
+address based simply on the prior beliefs.</p>
+<p>The posterior and prior predictive distributions aim to address this
+question. They give probabilities for new observations based on the
+prior, model and currently available data. Prior predictions do not use
+the data, however.</p>
+<p>The prior predictive distribution (also known as marginal
+distribution of data) is defined as</p>
+<p><span class="math display">\[p(y) = \int p(\theta)p(y | \theta) d
+\theta.\]</span></p>
+<p>In this course, we will not be using the analytical formula or make
+derivations for any models. The key point here is to be able to simulate
+from <span class="math inline">\(p(y)\)</span>. This can be done by
+first drawing a sample from the prior <span class="math inline">\(p(\theta)\)</span> and then using this sample to
+generate data based on <span class="math inline">\(p(y |
+\theta).\)</span> Let’s generate some data based on the Beta-binomial
+model of the handedness example and plot a histogram of <span class="math inline">\(y.\)</span></p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
+<span><span class="co"># Draw from the prior</span></span>
+<span><span class="va">prior_samples2</span> <span class="op">&lt;-</span> <span class="fu">rbeta</span><span class="op">(</span>n <span class="op">=</span> <span class="va">n_samples</span>,</span>
+<span>                        shape1 <span class="op">=</span> <span class="va">a</span>,</span>
+<span>                        shape2 <span class="op">=</span> <span class="va">b</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate data based on the prior samples</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rbinom</span><span class="op">(</span><span class="va">n_samples</span>, size <span class="op">=</span> <span class="fl">50</span>, prob <span class="op">=</span> <span class="va">prior_samples2</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">p_y</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">y</span><span class="op">)</span>, </span>
+<span>                 binwidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_y</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/sampling-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="discussion1" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion1"></a>
+</h3>
+<div class="callout-content">
+<p>Discuss the logic of the sampling process.</p>
+<p>What does the distribution tell you?</p>
+<p>In the example above, we used <code>size = 50</code>. What is the
+significance of this and could we have used some other value?</p>
+<p>Play around with different parameter values.</p>
+</div>
+</div>
+</div>
+<p>The posterior predictive distribution is defined as</p>
+<p><span class="math display">\[p(\tilde{y} | y) = \int p(\tilde{y} |
+\theta)p(\theta | y) d \theta.\]</span></p>
+<div id="challenge2" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
+</h3>
+<div class="callout-content">
+<p>How do you generate samples from the posterior predictive
+distribution <span class="math inline">\(p(\tilde{y} | y)\)</span></p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2">
+  Show me the solution
+  </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div class="accordion-body">
+<p>The posterior predictive distribution can be samples as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Draw sample from the posterior <span class="math inline">\(p(\theta
+| y)\)</span>
+</li>
+<li>Generate observations based on <span class="math inline">\(p(\tilde{y} | \theta)\)</span>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<p>Let’s simulate the posterior predictive distribution.</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">7</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
+<span><span class="va">posterior_samples2</span> <span class="op">&lt;-</span> <span class="fu">rbeta</span><span class="op">(</span>n <span class="op">=</span> <span class="va">n_samples</span>,</span>
+<span>                           shape1 <span class="op">=</span> <span class="va">a</span> <span class="op">+</span> <span class="va">x</span>, </span>
+<span>                           shape2 <span class="op">=</span> <span class="va">b</span> <span class="op">+</span> <span class="va">N</span> <span class="op">-</span> <span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Generate data based on the prior samples</span></span>
+<span><span class="va">y_tilde</span> <span class="op">&lt;-</span> <span class="fu">rbinom</span><span class="op">(</span><span class="va">n_samples</span>, size <span class="op">=</span> <span class="fl">50</span>, prob <span class="op">=</span> <span class="va">posterior_samples2</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">p_y_tilde</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">y_tilde</span><span class="op">)</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">y_tilde</span><span class="op">)</span>, </span>
+<span>                 binwidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_y_tilde</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/sampling-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-intervals"><h2 class="section-heading">Posterior intervals<a class="anchor" aria-label="anchor" href="#posterior-intervals"></a>
 </h2>
 <hr class="half-width">
 <p>In Episode 1, we summarized the posterior with the posterior mode
@@ -1096,7 +1227,7 @@ would be located between the 5% and 95% percentiles.</p>
 <p>Let us now compute the percentile-based CIs for the handedness
 example, along with the posterior mode (MAP), and include them in the
 figure. The x-axis is zoomed so for clarity.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1123,13 +1254,13 @@ This warning is displayed once every 8 hours.
 Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 generated.</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/sampling-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The 90% interval in this example is 0.07, 0.21 which means that,
+<figure><img src="fig/sampling-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The 90% interval in this example is 0.07, 0.21 which means that,
 according to the analysis, there is a 90% probability that the
 proportion of left-handed people is between these values.</p>
 <p>Another approach to reporting posterior information is to find the
@@ -1139,7 +1270,7 @@ For instance, we might be interested in knowing the probability that the
 target parameter is less than 0.2, between 0.05 and 0.10, or less than
 0.1 or greater than 0.20. Such probabilities can be recovered based on
 samples simply by computing the proportion of samples in these sets.</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1149,12 +1280,12 @@ samples simply by computing the proportion of samples in these sets.</p>
 </div>
 <p>Let’s visualize these probabilities as shaded areas of the analytical
 posterior:</p>
-<figure><img src="fig/sampling-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="discussion1" class="callout discussion">
+<figure><img src="fig/sampling-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="discussion2" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion1"></a>
+<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion2"></a>
 </h3>
 <div class="callout-content">
 <p>How would you compute CIs based on an analytical posterior
@@ -1163,12 +1294,12 @@ density?</p>
 </div>
 </div>
 </div>
-<div id="challenge2" class="callout challenge">
+<div id="challenge3" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge3"></a>
 </h3>
 <div class="callout-content">
 <p>Another approach to posterior summarizing to compute the smallest
@@ -1189,7 +1320,7 @@ the 95% CIs.</p>
   Give me a hint
   </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>If you sort the posterior samples in order, each set of <span class="math inline">\(n\)</span> consecutive samples contains <span class="math inline">\(100 \cdot n/N \%\)</span> of the posterior, where
 <span class="math inline">\(N\)</span> is the total number of
@@ -1198,17 +1329,17 @@ samples.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3">
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>Let’s write the function for computing the HPDI</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1240,7 +1371,7 @@ samples.</p>
 </div>
 <p>Then we can compute the 95% HPDI and compare it to the corresponding
 CIs</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1254,8 +1385,8 @@ CIs</p>
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>          X2.5.    X97.5.    length
-HPDI 0.05466873 0.2191345 0.1644658
-CI   0.05858726 0.2259839 0.1673967</code></pre>
+HPDI 0.05363662 0.2149255 0.1612888
+CI   0.06056575 0.2254913 0.1649256</code></pre>
 </div>
 <p>Both intervals contain the same mass but the HPDI is (slightly)
 shorter.</p>
@@ -1272,19 +1403,38 @@ shorter.</p>
 </h3>
 <div class="callout-content">
 <ul>
+<li>Being able to sample from distributions make working with Bayesian
+models a lot more straight-forward</li>
+<li>Prior/posterior predictive distributions describe the type of data
+we’d expect to encounter based on prior/posterior information.</li>
 <li>The posterior distribution can be summarized with point estimates or
 computing the posterior mass in some set.</li>
+<li>The credible intervals can be computed based on samples using
+posterior quantiles</li>
+<li>Probability of a parameter being in a set can be computed as the
+proportion of samples within the particular set.</li>
 </ul>
 </div>
 </div>
 </div>
+</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+</h2>
+<hr class="half-width">
+<ul>
+<li>Gelman <em>et al.</em>, Bayesian Data Analysis (3rd ed.):
+<ul>
+<li>p. 7: Prediction</li>
+<li>p. 23: Simulation of posterior and …</li>
+</ul>
+</li>
+<li>McElreath, Statistical Rethinking (2nd ed.): Ch. 3</li>
+</ul>
 <!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- -->
-</section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
+ --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p> Last updated on 2023-05-31 | 
+<p> Last updated on 2023-06-02 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1308,14 +1458,46 @@ any links that you are not going to use.
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Learn how to use Stan</li>
+<li>Learn how to specify models in Stan</li>
+<li>How to generate samples with Stan</li>
+<li>How to process samples generated with Stan</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section id="body"><h2 class="section-heading">Body<a class="anchor" aria-label="anchor" href="#body"></a>
+<p>Stan is a high-level programming language used for statistical
+modeling and computation. It provides a flexible and efficient means the
+for inference of Bayesian models. The syntax of Stan if user-friendly
+which simplifies the implementation of complex statistical models and
+makes the language relatively approachable.</p>
+<p>Stan generates samples from the posterior of a defined statistical
+model utilizing Markov Chain Monte Carlo (MCMC) sampling, and more
+specifically its the Hamiltonian Monte Carlo variant which is a highly
+effective variant of MCMC.</p>
+<p>You can fit model that have continuous parameters. Models with
+discrete parameters such as classification models are typically
+impossible to fit, although some workarounds have been implemented.</p>
+<section id="stan-installation"><h2 class="section-heading">Stan installation<a class="anchor" aria-label="anchor" href="#stan-installation"></a>
+</h2>
+<hr class="half-width">
+<p>Follow the instruction at <a href="https://mc-stan.org/users/interfaces/" class="external-link uri">https://mc-stan.org/users/interfaces/</a> to install
+Stan.</p>
+</section><section id="basic-program-structure"><h2 class="section-heading">Basic program structure<a class="anchor" aria-label="anchor" href="#basic-program-structure"></a>
+</h2>
+<hr class="half-width">
+<ul>
+<li><p>Write the program in a separate text file</p></li>
+<li><p>Call Stan from R, command line, or several other languages. This
+creates a collection of posterior samples.</p></li>
+<li><p>Analyse the posterior samples with tools presented in the
+previous episode.</p></li>
+</ul></section><section id="example-1-binomial-model"><h2 class="section-heading">Example 1: Binomial model<a class="anchor" aria-label="anchor" href="#example-1-binomial-model"></a>
+</h2>
+<hr class="half-width"></section><section id="example-2-normal-model"><h2 class="section-heading">Example 2: normal model<a class="anchor" aria-label="anchor" href="#example-2-normal-model"></a>
+</h2>
+<hr class="half-width"></section><section id="example-3-linear-regression"><h2 class="section-heading">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
 </h2>
 <hr class="half-width">
 <div id="keypoints1" class="callout keypoints">
@@ -1327,7 +1509,7 @@ any links that you are not going to use.
 </h3>
 <div class="callout-content">
 <ul>
-<li>point 1</li>
+<li>Stan is…</li>
 </ul>
 </div>
 </div>
@@ -1455,7 +1637,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-model-checking"><p>Content from <a href="model-checking.html">Model checking</a></p>
 <hr>
-<p> Last updated on 2023-05-31 | 
+<p> Last updated on 2023-06-02 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-checking.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1479,7 +1661,11 @@ any links that you are not going to use.
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Learn how assess model fit.</li>
+<li>Learn how assess model fit</li>
+<li>Model checking</li>
+<li>Information criteria: AIC, BIC, WAIC</li>
+<li>Bayesian cross-validation</li>
+<li>Posterior predictive check</li>
 </ul>
 </div>
 </div>
