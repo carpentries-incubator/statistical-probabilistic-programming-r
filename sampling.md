@@ -20,6 +20,7 @@ exercises: 2
 - Learn how to
   - work with posterior samples
   - compute posterior intervals
+  - compute probabilities for parameter ranges
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -260,8 +261,8 @@ data.frame(HPDI = get_HPDI(samples_df$posterior, 0.95),
 
 ```{.output}
           X2.5.    X97.5.    length
-HPDI 0.05075140 0.2112742 0.1605228
-CI   0.05762804 0.2229616 0.1653336
+HPDI 0.05207308 0.2117526 0.1596795
+CI   0.06023489 0.2228195 0.1625846
 ```
 
 Both intervals contain the same mass but the HPDI is (slightly) shorter. 
