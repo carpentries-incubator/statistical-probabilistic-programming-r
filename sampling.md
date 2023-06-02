@@ -32,7 +32,7 @@ In the previous episode, we were introduced to the Bayesian formula and learned 
 Let's revisit the binomial model considered in the previous episode. The binomial model with a beta distribution is an example of a model where the analytical shape of the posterior is known. 
 
 $$p(\theta | X) = Beta(\alpha + x, \beta + N - x),$$
-where $\alpha$ and $\beta$ are the hyperparameters and $x$ the number of successes out of $N$ trials. 
+where $\alpha$ and $\beta$ are the hyperparameters of the Beta prior and $x$ the number of successes out of $N$ trials. 
 
 ::::::::::::::::::::::::::::::::::::::::: challenge
 
@@ -53,7 +53,7 @@ p(\theta | X) &\propto  p(X | \theta) p(\theta) \\
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-Let's generate samples from the prior and posterior distributions, using the handedness data of the previous episode but first redefine the data. 
+Let's generate samples from the prior and posterior distributions, using the handedness data of the previous episode. First redefine the data. 
 
 
 ```r
@@ -64,7 +64,7 @@ N <- 50
 x <- 7
 ```
 
-In R, the standard statistical distributions can be sampled from using readily available functions. For instance, the binomial, normal and beta distributions can be sampled, respectively, with `rbinom, rnorm` and `rbeta` functions. Let's draw 5000 samples from the prior and posterior distributions. 
+Then, we'll draw 5000 samples from the prior and posterior distributions. In R, the standard statistical distributions can be sampled from using readily available functions. For instance, the binomial, normal and beta distributions can be sampled, respectively, with `rbinom, rnorm` and `rbeta` functions. 
 
 
 ```r
@@ -134,6 +134,117 @@ print(p)
 
 <img src="fig/sampling-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
+
+When sampling the prior and posterior, it is important to draw sufficiently many samples to get an accurate representation of the true density. Typically, this means drawing at least some thousands of samples. 
+
+
+## Predictive distributions
+
+The posterior distribution gives probabilities for the model parameters conditional on the data which is information regarding the data generative process. However, it can also be valuable to analyze what sort of observations might be expected to arise if more data was gathered. On the other hand this might be an interesting question to address based simply on the prior beliefs. 
+
+The posterior and prior predictive distributions aim to address this question. They give probabilities for new observations based on the prior, model and currently available data. Prior predictions do not use the data, however. 
+
+The prior predictive distribution (also known as marginal distribution of data) is defined as 
+
+$$p(y) = \int p(\theta)p(y | \theta) d \theta.$$ 
+
+In this course, we will not be using the analytical formula or make derivations for any models. The key point here is to be able to simulate from $p(y)$. This can be done by first drawing a sample from the prior $p(\theta)$ and then using this sample to generate data based on $p(y | \theta).$ Let's generate some data based on the Beta-binomial model of the handedness example and plot a histogram of $y.$
+
+
+```r
+a <- 1
+b <- 10
+
+# Draw from the prior
+prior_samples2 <- rbeta(n = n_samples,
+                        shape1 = a,
+                        shape2 = b)
+
+# Generate data based on the prior samples
+y <- rbinom(n_samples, size = 50, prob = prior_samples2)
+
+
+p_y <- ggplot() +
+  geom_histogram(data = data.frame(y), 
+                 aes(x = y), 
+                 binwidth = 1)
+
+print(p_y)
+```
+
+<img src="fig/sampling-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
+
+::::::::::::::::::::::::::::::::::::::: discussion
+
+Discuss the logic of the sampling process. 
+
+What does the distribution tell you?
+
+In the example above, we used `size = 50`. What is the significance of this and could we have used some other value?
+
+Play around with different parameter values. 
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+The posterior predictive distribution is defined as 
+
+
+$$p(\tilde{y} | y) = \int p(\tilde{y} | \theta)p(\theta | y) d \theta.$$ 
+
+
+::::::::::::::::::::::::::::::::::::::: challenge
+
+How do you generate samples from the posterior predictive distribution $p(\tilde{y} | y)$
+
+
+
+:::::::::::::::::::::::::::: solution
+
+The posterior predictive distribution can be samples as follows: 
+
+1. Draw sample from the posterior $p(\theta | y)$
+2. Generate observations based on $p(\tilde{y} | \theta)$
+
+:::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+Let's simulate the posterior predictive distribution.
+
+
+```r
+x <- 7
+N <- 50
+
+a <- 1
+b <- 10
+
+posterior_samples2 <- rbeta(n = n_samples,
+                           shape1 = a + x, 
+                           shape2 = b + N - x)
+
+
+# Generate data based on the prior samples
+y_tilde <- rbinom(n_samples, size = 50, prob = posterior_samples2)
+
+
+p_y_tilde <- ggplot() +
+  geom_histogram(data = data.frame(y_tilde), 
+                 aes(x = y_tilde), 
+                 binwidth = 1)
+
+print(p_y_tilde)
+```
+
+<img src="fig/sampling-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+
+
+
+
+
 ## Posterior intervals
 
 In Episode 1, we summarized the posterior with the posterior mode (MAP), mean and variance. While these points estimates are informative and often utilized, they and not informative enough for many scenarios. 
@@ -171,7 +282,7 @@ generated.
 print(p)
 ```
 
-<img src="fig/sampling-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="fig/sampling-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 The 90% interval in this example is 0.07, 0.21 which means that, according to the analysis, there is a 90% probability that the proportion of left-handed people is between these values. 
 
@@ -187,7 +298,7 @@ p_outside_0.1_0.2 <- mean(posterior_samples < 0.1 | posterior_samples > 0.2)
 
 Let's visualize these probabilities as shaded areas of the analytical posterior:
 
-<img src="fig/sampling-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/sampling-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -261,8 +372,8 @@ data.frame(HPDI = get_HPDI(samples_df$posterior, 0.95),
 
 ```{.output}
           X2.5.    X97.5.    length
-HPDI 0.05466873 0.2191345 0.1644658
-CI   0.05858726 0.2259839 0.1673967
+HPDI 0.05363662 0.2149255 0.1612888
+CI   0.06056575 0.2254913 0.1649256
 ```
 
 Both intervals contain the same mass but the HPDI is (slightly) shorter. 
@@ -275,7 +386,18 @@ Both intervals contain the same mass but the HPDI is (slightly) shorter.
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
+- Being able to sample from distributions make working with Bayesian models a lot more straight-forward
+- Prior/posterior predictive distributions describe the type of data we'd expect to encounter based on prior/posterior information. 
 - The posterior distribution can be summarized with point estimates or computing the posterior mass in some set. 
+- The credible intervals can be computed based on samples using posterior quantiles
+- Probability of a parameter being in a set can be computed as the proportion of samples within the particular set. 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Reading 
+
+- Gelman *et al.*, Bayesian Data Analysis (3rd ed.):
+  - p. 7: Prediction
+  - p. 23: Simulation of posterior and ... 
+- McElreath, Statistical Rethinking (2nd ed.): Ch. 3
 

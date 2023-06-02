@@ -12,7 +12,11 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how assess model fit. 
+- Learn how assess model fit
+- Model checking
+- Information criteria: AIC, BIC, WAIC
+- Bayesian cross-validation
+- Posterior predictive check
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
