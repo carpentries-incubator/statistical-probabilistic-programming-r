@@ -27,6 +27,7 @@ theme_set(theme_bw(15))
 - Learn how to
   - work with posterior samples
   - compute posterior intervals
+  - compute probabilities for parameter ranges
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
