@@ -20,7 +20,7 @@ The purpose of this episode is to provide material for practicing probabilistic 
 
 
 
-# Bayesian statistics
+## Bayesian statistics
 
 ### (easy) Explanation
 In your own words, explain the following concepts 
@@ -110,7 +110,7 @@ Implement the grid approximation for standard linear regression and estimate $g$
 #### Hint
 Solve formula $h = \frac{1}{2}gt^2$ for $t$ so the model error measures time measurement error. Further, do a parameter transformation so the formula doesn't contain squares of variables.  
 
-# Working with samples
+## Working with samples
 
 ### (easy) Sampling the posterior
 
@@ -162,6 +162,22 @@ Consider the posterior distribution of the previous exercise. What is the probab
 Suppose we aim to estimate p, the proportion of left-handed people very precisely (assume true p = 0.094). Specifically, we want the 99% percentile interval of the posterior distribution of p to be only 0.05 wide. Approximately how large of a study sample do we need? Simulate, no need to do analytical calculations. Use a prior of your liking.
 
 
+### (medium) Less data means bigger prior effect
+
+Explore the effec of sample size on the location and variance of the posterior. 
+
+Instructions: 
+  - Set p ~ (0, 1) and generate data from the binomial model. Simulate a sequence of 200 throws. 
+  - Draw samples form the the analytical posterior using the first 5, 10, 15,..., 200 throws
+  - Compute the posterior mode and 90% CIs for each fit
+  - Visualize the results by generating a figure with: 
+    - the mode and CIs as the function of data size
+    - true parameter value 
+    - prior mode and CIs.
+      - Check formulas e.g. from Wikipedia
+    - true analytical posterior mode and CIs using all 200 throws
+      
+  
 ### (hard) Highest posterior density set
 
 Assume the following piece of code generates 5000 samples from a posterior distribution.
@@ -179,7 +195,7 @@ Compute the 50% highest posterior density set (not necessarily an interval!) of 
 - Starting from the highest density, scan the density values in a decreasing order. Determine the mass of the posterior corresponding to the posterior above the particular density values. What does this set represent?
 
 
-# Stan
+## Stan
 
 ### (easy) Analyze Stan programs 
 
@@ -330,8 +346,8 @@ Write a Stan program for the logistic growth model and estimate the growth rate 
 
 
 
-# MCMC 
-# Hierarchical models 
+## MCMC 
+## Hierarchical models 
 
 ###    (easy) Analyze models
 
@@ -365,8 +381,8 @@ Are the following statistical models hierarchical? If not, make modifications th
 \end{align}
 
 
-# Model checking 
-# Other topics
+## Model checking 
+## Other topics
 
 
 
