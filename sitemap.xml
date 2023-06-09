@@ -22,6 +22,9 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/bayesian-statistics.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/exercises.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html</loc>
   </url>
   <url>
@@ -52,6 +55,9 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/exercises.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/hierarchical-models.html</loc>
   </url>
   <url>
@@ -79,7 +85,16 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/model-checking.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/model-critisism.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/other-topics.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/recommended-reading.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/reference.html</loc>
@@ -112,7 +127,16 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-checking.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-critisism.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/other-topics.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/profiles.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/recommended-reading.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/reference.html</loc>
