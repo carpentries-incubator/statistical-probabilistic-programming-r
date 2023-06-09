@@ -296,7 +296,67 @@ p_between_0.05_0.1 <- mean(posterior_samples > 0.05 & posterior_samples < 0.1)
 p_outside_0.1_0.2 <- mean(posterior_samples < 0.1 | posterior_samples > 0.2)
 ```
 
+
+:::::::::::::::::::::::::::::: discussion
+What is the logic behind taking the average when computing the probabilities for different values for the parameter?
+:::::::::::::::::::::::::::::::::::::::::
+
+
 Let's visualize these probabilities as shaded areas of the analytical posterior:
+
+
+```r
+my_df <- analytical_df %>% 
+                 filter(`Analytical function` == "posterior")
+
+my_p <- ggplot(my_df) + 
+  geom_line(aes(x = p, y = value,
+                     color = `Analytical function`)) + 
+   scale_color_grafify() +
+  guides(color="none")
+
+my_breaks <- seq(0, 1, by = 0.25)
+
+p1 <- my_p + 
+  geom_area(data = my_df %>% 
+              filter(p <= 0.15) %>% 
+              mutate(area = "yes"), 
+            aes(x = p, y = value,
+                     color = `Analytical function`), 
+            alpha = 0.5) + 
+  # scale_x_continuous(breaks = c(my_breaks, 0.2)) +
+  labs(title = paste0("P(p < 0.15) = ", round(p_less_than_0.15, 3)))
+
+p2 <- my_p + 
+  geom_area(data = my_df %>% 
+              filter(p <= 0.1 & p >= 0.05) %>% 
+              mutate(area = "yes"), 
+            aes(x = p, y = value,
+                     color = `Analytical function`), 
+            alpha = 0.5) + 
+  labs(title = paste0("P(0.05 < p < 0.1) = ", round(p_between_0.05_0.1, 3)))
+
+p3 <- my_p + 
+  geom_area(data = my_df %>% 
+              filter(p >= 0.2) %>% 
+              mutate(area = "yes"), 
+            aes(x = p, y = value,
+                     color = `Analytical function`), 
+            alpha = 0.5) + 
+  geom_area(data = my_df %>% 
+              filter(p <= 0.1) %>% 
+              mutate(area = "yes"), 
+            aes(x = p, y = value,
+                     color = `Analytical function`), 
+            alpha = 0.5) +
+  labs(title = paste0("P(p < 0.1 or p > 0.2) = ", round(p_outside_0.1_0.2, 3)))
+
+
+p_area <- plot_grid(p1, p2, p3,
+               ncol = 1)
+
+print(p_area)
+```
 
 <img src="fig/sampling-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
@@ -372,11 +432,13 @@ data.frame(HPDI = get_HPDI(samples_df$posterior, 0.95),
 
 ```{.output}
           X2.5.    X97.5.    length
-HPDI 0.05439438 0.2175138 0.1631194
-CI   0.05951448 0.2249632 0.1654487
+HPDI 0.04924295 0.2136322 0.1643892
+CI   0.05716454 0.2223879 0.1652233
 ```
 
 Both intervals contain the same mass but the HPDI is (slightly) shorter. 
+
+The code of the solution is based on the HPDI implementation of the function `coda::HPDinterval`
 
 :::::::::::::::::::::::::::::::::::::
 

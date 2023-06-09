@@ -1,5 +1,5 @@
 ---
-title: 'Advanced topics'
+title: 'Other topics'
 teaching: 10
 exercises: 2
 ---
