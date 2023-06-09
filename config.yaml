@@ -11,10 +11,10 @@
 carpentry: 'incubator'
 
 # Overall title for pages.
-title: 'Statistical and Probabilistic Programming'
+title: 'Introduction to Probabilistic Programming in R'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: ~
+created:
 
 # Comma-separated list of keywords for the lesson
 keywords: 'software, data, lesson, The Carpentries'
@@ -23,7 +23,7 @@ keywords: 'software, data, lesson, The Carpentries'
 # possible values: pre-alpha, alpha, beta, stable
 life_cycle: 'pre-alpha'
 
-# License of the lesson
+# License of the lesson materials (recommended CC-BY 4.0)
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
@@ -65,9 +65,10 @@ episodes:
 - stan.Rmd
 - mcmc.Rmd
 - hierarchical-models.Rmd
-- model-checking.Rmd
-- advanced-topics.Rmd
-
+- model-critisism.Rmd
+- other-topics.Rmd
+- recommended-reading.Rmd
+- exercises.Rmd
 
 # Information for Learners
 learners:

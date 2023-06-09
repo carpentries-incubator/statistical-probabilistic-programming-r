@@ -225,12 +225,25 @@
 <div class="accordion accordion-flush" id="accordionFlushcurrent">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-headingcurrent">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
         10. exercises
         </span>
-      
+      </button>
     </div><!--/div.accordion-header-->
+        
+    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
+      <div class="accordion-body">
+        <ul><li><a href="#bayesian-statistics">Bayesian statistics</a></li>
+<li><a href="#working-with-samples">Working with samples</a></li>
+<li><a href="#stan">Stan</a></li>
+<li><a href="#mcmc">MCMC</a></li>
+<li><a href="#hierarchical-models">Hierarchical models</a></li>
+<li><a href="#model-checking">Model checking</a></li>
+<li><a href="#other-topics">Other topics</a></li>
+        </ul></div><!--/div.accordion-body-->
+    </div><!--/div.accordion-collapse-->
         
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
@@ -323,9 +336,9 @@ on the episode they refer to.</p>
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="bayesian-statistics">Bayesian statistics<a class="anchor" aria-label="anchor" href="#bayesian-statistics"></a></h1>
-<div class="section level3">
+<section id="bayesian-statistics"><h2 class="section-heading">Bayesian statistics<a class="anchor" aria-label="anchor" href="#bayesian-statistics"></a>
+</h2>
+<hr class="half-width"><div class="section level3">
 <h3 id="easy-explanation">(easy) Explanation<a class="anchor" aria-label="anchor" href="#easy-explanation"></a></h3>
 <p>In your own words, explain the following concepts</p>
 <ol style="list-style-type: decimal"><li>Posterior distribution</li>
@@ -421,10 +434,9 @@ the model error measures time measurement error. Further, do a parameter
 transformation so the formula doesn’t contain squares of variables.</p>
 </div>
 </div>
-</div>
-<div class="section level1">
-<h1 id="working-with-samples">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a></h1>
-<div class="section level3">
+</section><section id="working-with-samples"><h2 class="section-heading">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
+</h2>
+<hr class="half-width"><div class="section level3">
 <h3 id="easy-sampling-the-posterior">(easy) Sampling the posterior<a class="anchor" aria-label="anchor" href="#easy-sampling-the-posterior"></a></h3>
 <p>Assume we model the following observations <span class="math inline">\(X\)</span> with the exponential likelihood:</p>
 <div class="codewrapper sourceCode" id="cb3">
@@ -481,6 +493,19 @@ wide. Approximately how large of a study sample do we need? Simulate, no
 need to do analytical calculations. Use a prior of your liking.</p>
 </div>
 <div class="section level3">
+<h3 id="medium-less-data-means-bigger-prior-effect">(medium) Less data means bigger prior effect<a class="anchor" aria-label="anchor" href="#medium-less-data-means-bigger-prior-effect"></a></h3>
+<p>Explore the effec of sample size on the location and variance of the
+posterior.</p>
+<p>Instructions: - Set p ~ (0, 1) and generate data from the binomial
+model. Simulate a sequence of 200 throws. - Draw samples form the the
+analytical posterior using the first 5, 10, 15,…, 200 throws - Compute
+the posterior mode and 90% CIs for each fit - Visualize the results by
+generating a figure with: - the mode and CIs as the function of data
+size - true parameter value - prior mode and CIs. - Check formulas
+e.g. from Wikipedia - true analytical posterior mode and CIs using all
+200 throws</p>
+</div>
+<div class="section level3">
 <h3 id="hard-highest-posterior-density-set">(hard) Highest posterior density set<a class="anchor" aria-label="anchor" href="#hard-highest-posterior-density-set"></a></h3>
 <p>Assume the following piece of code generates 5000 samples from a
 posterior distribution.</p>
@@ -503,10 +528,9 @@ the posterior above the particular density values. What does this set
 represent?</li>
 </ul></div>
 </div>
-</div>
-<div class="section level1">
-<h1 id="stan">Stan<a class="anchor" aria-label="anchor" href="#stan"></a></h1>
-<div class="section level3">
+</section><section id="stan"><h2 class="section-heading">Stan<a class="anchor" aria-label="anchor" href="#stan"></a>
+</h2>
+<hr class="half-width"><div class="section level3">
 <h3 id="easy-analyze-stan-programs">(easy) Analyze Stan programs<a class="anchor" aria-label="anchor" href="#easy-analyze-stan-programs"></a></h3>
 <p>Write the statistical models implemented in the following Stan
 programs and give some explanation on what they model.</p>
@@ -677,13 +701,11 @@ growth rate and carrying capacity for this <strong>E. coli</strong>
 strain. Plot the marginal posteriors for <span class="math inline">\(P_0\)</span>, <span class="math inline">\(r\)</span> and <span class="math inline">\(K.\)</span> Generate a posterior of growth
 trajectories and plot it against the data.</p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="mcmc">MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a></h1>
-</div>
-<div class="section level1">
-<h1 id="hierarchical-models">Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a></h1>
-<div class="section level3">
+</section><section id="mcmc"><h2 class="section-heading">MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>
+</h2>
+<hr class="half-width"></section><section id="hierarchical-models"><h2 class="section-heading">Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>
+</h2>
+<hr class="half-width"><div class="section level3">
 <h3 id="easy-analyze-models">(easy) Analyze models<a class="anchor" aria-label="anchor" href="#easy-analyze-models"></a></h3>
 <p>Are the following statistical models hierarchical? If not, make
 modifications that turn them into hierarchical.</p>
@@ -709,13 +731,11 @@ modifications that turn them into hierarchical.</p>
   \beta &amp;\sim \Gamma(1, 1) \\
 \end{align}\]</span></p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="model-checking">Model checking<a class="anchor" aria-label="anchor" href="#model-checking"></a></h1>
-</div>
-<div class="section level1">
-<h1 id="other-topics">Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a></h1>
-<div id="keypoints1" class="callout keypoints">
+</section><section id="model-checking"><h2 class="section-heading">Model checking<a class="anchor" aria-label="anchor" href="#model-checking"></a>
+</h2>
+<hr class="half-width"></section><section id="other-topics"><h2 class="section-heading">Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a>
+</h2>
+<hr class="half-width"><div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
@@ -731,11 +751,7 @@ modifications that turn them into hierarchical.</p>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  -->
-</div>
-
-
-
-      </div> <!-- / div.lesson-content -->
+</section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/recommended-reading.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="../instructor/index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
