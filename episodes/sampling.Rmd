@@ -289,9 +289,15 @@ p_outside_0.1_0.2 <- mean(posterior_samples < 0.1 | posterior_samples > 0.2)
 
 ```
 
+
+:::::::::::::::::::::::::::::: discussion
+What is the logic behind taking the average when computing the probabilities for different values for the parameter?
+:::::::::::::::::::::::::::::::::::::::::
+
+
 Let's visualize these probabilities as shaded areas of the analytical posterior:
 
-```{r, echo = FALSE}
+```{r, echo = TRUE}
 
 my_df <- analytical_df %>% 
                  filter(`Analytical function` == "posterior")
@@ -419,6 +425,8 @@ data.frame(HPDI = get_HPDI(samples_df$posterior, 0.95),
 ```
 
 Both intervals contain the same mass but the HPDI is (slightly) shorter. 
+
+The code of the solution is based on the HPDI implementation of the function `coda::HPDinterval`
 
 :::::::::::::::::::::::::::::::::::::
 

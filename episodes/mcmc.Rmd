@@ -21,8 +21,10 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Body
-
+## Basic idea
+## Example variants
+## MCMC diagnostics
+## Examples
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
