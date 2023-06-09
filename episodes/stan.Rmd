@@ -336,60 +336,9 @@ model {
 ::::::::::::::::::::::::::::::::::::::::::::::
 
 
-## Example 4:
-
-
-:::::::::::::::::::::::::::::::::::: challenge
-
-Fill the following Stan program for logistic regression
-
-```{r}
-
-logistic_model <- "
-  data {
-    vector x;
-    int<lower=0,upper=1> y;
-  }
-  parameters {
-    alpha;
-    beta;
-  }
-  model {
-    y ~ bernoulli_logit(alpha + beta * x);
-    
-    alpha ~ ;
-    beta ~ ;
-  }
-"
-
-```
 
 
 
-::::::::::::::::::::: solution
-
-```{stan output.var="logistic_regression_solution"}
-data {
-  int<lower=0> N;
-  vector[N] x;
-  int<lower=0,upper=1> y[N];
-}
-parameters {
-  real alpha;
-  real beta;
-}
-model {
-  y ~ bernoulli_logit(alpha + beta * x);
-  
-  alpha ~ normal(0, 1);
-  beta ~ normal(0, 1);
-}
-```
-
-
-::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
