@@ -91,8 +91,8 @@ binom_samples <- sampling(binomial_model, binom_data)
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
+Chain 1: Gradient evaluation took 7e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -109,15 +109,15 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.007606 seconds (Warm-up)
-Chain 1:                0.006946 seconds (Sampling)
-Chain 1:                0.014552 seconds (Total)
+Chain 1:  Elapsed Time: 0.007786 seconds (Warm-up)
+Chain 1:                0.008824 seconds (Sampling)
+Chain 1:                0.01661 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 4e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 2: Gradient evaluation took 5e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -134,9 +134,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.007641 seconds (Warm-up)
-Chain 2:                0.006878 seconds (Sampling)
-Chain 2:                0.014519 seconds (Total)
+Chain 2:  Elapsed Time: 0.007926 seconds (Warm-up)
+Chain 2:                0.008521 seconds (Sampling)
+Chain 2:                0.016447 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 3).
@@ -159,9 +159,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.00785 seconds (Warm-up)
-Chain 3:                0.007192 seconds (Sampling)
-Chain 3:                0.015042 seconds (Total)
+Chain 3:  Elapsed Time: 0.007828 seconds (Warm-up)
+Chain 3:                0.007703 seconds (Sampling)
+Chain 3:                0.015531 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 4).
@@ -184,9 +184,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.007826 seconds (Warm-up)
-Chain 4:                0.007501 seconds (Sampling)
-Chain 4:                0.015327 seconds (Total)
+Chain 4:  Elapsed Time: 0.007751 seconds (Warm-up)
+Chain 4:                0.007083 seconds (Sampling)
+Chain 4:                0.014834 seconds (Total)
 Chain 4: 
 ```
 
@@ -204,10 +204,10 @@ Inference for Stan model: b30a4b20165ba5a239ed8d361ba485d2.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
        mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-p      0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.26  1478    1
-lp__ -22.83    0.02 0.73 -24.93 -22.97 -22.55 -22.38 -22.33  1544    1
+p      0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1573    1
+lp__ -22.84    0.02 0.75 -24.92 -22.99 -22.54 -22.37 -22.33  1478    1
 
-Samples were drawn using NUTS(diag_e) at Fri Jun  9 10:34:35 2023.
+Samples were drawn using NUTS(diag_e) at Tue Jun 13 00:59:49 2023.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -360,9 +360,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.01248 seconds (Warm-up)
-Chain 1:                0.011025 seconds (Sampling)
-Chain 1:                0.023505 seconds (Total)
+Chain 1:  Elapsed Time: 0.012547 seconds (Warm-up)
+Chain 1:                0.010689 seconds (Sampling)
+Chain 1:                0.023236 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 2).
@@ -385,15 +385,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.012496 seconds (Warm-up)
-Chain 2:                0.011088 seconds (Sampling)
-Chain 2:                0.023584 seconds (Total)
+Chain 2:  Elapsed Time: 0.012327 seconds (Warm-up)
+Chain 2:                0.011142 seconds (Sampling)
+Chain 2:                0.023469 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 5e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 3: Gradient evaluation took 4e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -410,9 +410,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.012805 seconds (Warm-up)
-Chain 3:                0.010467 seconds (Sampling)
-Chain 3:                0.023272 seconds (Total)
+Chain 3:  Elapsed Time: 0.012758 seconds (Warm-up)
+Chain 3:                0.011881 seconds (Sampling)
+Chain 3:                0.024639 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 4).
@@ -435,9 +435,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.01274 seconds (Warm-up)
-Chain 4:                0.010755 seconds (Sampling)
-Chain 4:                0.023495 seconds (Total)
+Chain 4:  Elapsed Time: 0.012516 seconds (Warm-up)
+Chain 4:                0.010945 seconds (Sampling)
+Chain 4:                0.023461 seconds (Total)
 Chain 4: 
 ```
 

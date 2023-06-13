@@ -432,8 +432,8 @@ data.frame(HPDI = get_HPDI(samples_df$posterior, 0.95),
 
 ```{.output}
           X2.5.    X97.5.    length
-HPDI 0.04924295 0.2136322 0.1643892
-CI   0.05716454 0.2223879 0.1652233
+HPDI 0.05459118 0.2183493 0.1637581
+CI   0.05805295 0.2272428 0.1691899
 ```
 
 Both intervals contain the same mass but the HPDI is (slightly) shorter. 
