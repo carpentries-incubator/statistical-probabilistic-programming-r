@@ -293,6 +293,31 @@ model {
 ```
 
 
+### (easy) Complete Stan program
+
+Fill the following Stan program for logistic regression
+
+```{r}
+
+logistic_model <- "
+  data {
+    vector x;
+    int<lower=0,upper=1> y;
+  }
+  parameters {
+    alpha;
+    beta;
+  }
+  model {
+    y ~ bernoulli_logit(alpha + beta * x);
+    
+    alpha ~ ;
+    beta ~ ;
+  }
+"
+
+```
+
 ### (medium) Estimate dice fairness
 
 Estimate the fairness of a 6 sided dice, that is, the probabilities of getting each face on a random roll. The results from 99 rolls is stored in the vector `rolls`.
@@ -316,6 +341,98 @@ y & \sim categorial(\theta) \\
 \end{align}
 
 Where $Dir$ is the Dirichlet distribution with parameter $\alpha = 1, 1, \ldots, 1.$ Plot the marginal posteriors for each $\theta_i$. Is the dice fair? Quantify this: give some probability for the hypothesis "the dice is fair" (for example, compute the probability of for $\theta_i > \theta_j$ for some $i$ and $j$). 
+### (medium) Basketbass throws
+
+Implement Beta regression in Stan that assumes data is generated from a Beta(a, b) where a, b unknown parameters.
+
+Use the program to analyze basketball free throw accuracy in the NBA based on a sample of $N=20$ players. Generate the posterior predictive distribution and compare to the full data. 
+
+
+```{r}
+## Data
+
+# Data from https://www.kaggle.com/datasets/nicklauskim/nba-per-game-stats-201920?resource=download&select=nba_2020_advanced.csv
+
+df <- read_csv("data/basketball.csv")
+
+N <- 20
+
+# remove NAS and 0, 1
+df <- df %>% 
+  filter(!is.na(FTr)) %>% 
+  filter(FTr > 0 & FTr < 1)
+
+
+# Choose random sample
+df_sample <- df[sample(1:nrow(df), N, replace = FALSE), ]
+
+````
+
+
+
+### (medium) Posterior/prior predictive check
+
+Consider linear regression with one dependent variable implemented in the Stan program:
+
+```{stan output.var="linear_model"}
+
+data {
+  int<lower=0> N; // Sample size
+  vector[N] x; // x-values
+  vector[N] y; // y-values
+}
+parameters {
+  real alpha; // intercept
+  real beta;  // slope
+  real<lower=0> sigma; // noise
+}
+
+model {
+  
+  // Likelihood
+  y ~ normal(alpha + beta * x, sigma);
+  
+  // Priors
+  alpha ~ normal(0, 1);
+  beta ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+
+```
+
+
+and the following data:
+
+```{r}
+x <- c(-1.61, 1.55, -0.14, 0.27, -1.64, 0.61, -0.17, 1.56, -0.96, 1.33, 1.72, 1.76, 1.49, -1.55, 0.69, -1.39, 1.28, 0.63, -0.96, 0.13, -1.33, 1.07, 1.01, -1.94, 1.2, 0.36, 1.38, 0.08, 1.47, 0.32)
+y <- c(-1.84, 2.06, 0.41, 1.09, -2.3, 1.22, 2.02, 4.03, 0.52, 2.76, 3.66, 0.43, 4.62, -0.03, 0.16, -0.1, 2.82, 1.63, -0.35, 0.89, 0.29, 0.78, 1.9, 0.26, 0.84, 1.06, 2.93, 3.38, 2.44, 2.48)
+
+beta <- 0.75
+alpha <- 1
+sigma <- 1
+```
+
+
+Use Stan to do the following: 
+
+1. Posterior predictive check (for same data):
+
+a) Simulate output data (response variable y) from the posterior for the same input data (predictor variable x).
+b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
+
+Tip: Stan manual page on posterior predictive distribution: https://mc-stan.org/docs/stan-users-guide/simulating-from-the-posterior-predictive-distribution.html
+
+
+2. Posterior predictions (for new data):
+a) Simulate data from the posterior of the linear model for new (different) input data (x_new).
+b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
+
+3. Prior predictive checks:
+a) Generate samples (for y) from the prior predictive distribution.
+b) Compare prior and posterior simulations for y; try both informative and uninformative priors; is there any difference?
+
+Tip: note that this can be implented in Stan but you do not necessarily need Stan to draw samples from the prior distribution.
+
 ### (hard) Write Stan program: OUP
 
 The Ornstein-Uhlenbeck process (OUP) can be used (among other things) as a part in algorithmic trading strategies. The model is a stochastic differential equation defined as
@@ -359,9 +476,44 @@ Write a Stan program for the logistic growth model and estimate the growth rate 
 
 
 ## MCMC 
+
+### (medium) Gibbs sampler
+
+Consider the distribution p(x, y) = exp{-(x^2y^2 + x^2 + y^2 -8x -8y)/2}/C, where C is a normalizing constant. It is known that the conditional distribution of x given y is the normal distribution p(x|y) = N(mu, sigma), where the mean mu = 4/(1 + y^2) and the standard deviation sigma = sqrt(1/(1 + y^2)). Due to symmetry, p(y|x) can be recovered simply by changing y's to x's in p(x|y). 
+ 
+The Gibbs sampler is a special case of the Metropolis-Hastings algorithm. It can be stated as follows:
+ 1) Choose some initial values for the parameters. Let's call them x_0 and y_0 in our case. 
+ 2) The following samples are generated as follows:
+  For i = 1, ..., N:
+    a) Draw x_i from p(x|y_{i-1})
+    b) Draw y_i from p(y|x_i)
+
+(In this notation x_i refers to the x sample at step i, y_{i-1} to the y sample at step i-1 and so on)
+ 
+Build a Gibbs sampler that draws samples from p(x, y). Visualize the resulting distribution. 
+
+
+
+### (hard) Metropolis-Hastings: Normal
+
+a) Generate data from the normal distribution. Implement a Metropolis sampler for the normal model that estimates the mean and variance. Use a normal distribution to generate the proposals.
+
+b) Run 4 chains with distinct (e.g. random) initial values and plot the chain's trajectories in parameter space along with trace plots. How does the proposal distribution's variance affect the chains and the resulting posterior samples? 
+
+#### Hint
+See https://www.statisticshowto.com/metropolis-hastings-algorithm/ for a description of Metropolis
+See Statistical Rethinking: Overthinking box p.45 for a binomial example. 
+Work with logarithms to avoid underflow
+Think of what do to with negative proposals for the variance parameter
+
+### (hard) Rhat
+
+Implement the $\hat{R}$ diagnostic and compute it for posterior samples generated from some model (e.g. the normal model of the previous exercise). Definition of the diagnostic can be found in BDA3 p. 285. 
+
+
 ## Hierarchical models 
 
-###    (easy) Analyze models
+### (easy) Analyze models
 
 Are the following statistical models hierarchical? If not, make modifications that turn them into hierarchical. 
 
@@ -393,8 +545,198 @@ Are the following statistical models hierarchical? If not, make modifications th
 \end{align}
 
 
-## Model checking 
+## Model critisism
+
+### (easy) Explanation
+
+Explain in your own words:
+a) the purpose of information criteria
+b) log pointwise predictive distribution (lppd)
+c) what is the fundamental difference between DIC/AIC and WAIC?
+
+
+
+### (medium) Posterior predictive check 
+
+Build a Stan model that estimates the mean and standard deviation of a normal distribution. Fit the model to the data in data1.txt and do a posterior predictive check (for example a visual one). What are your conclusions about the model's suitability on this data based on the PPD? What steps would you take next?
+
+Hint: you can generate the PPD in R/Python or in the generated quantities block in Stan
+
+### (hard) WAIC-based model selection 
+
+Let us consider the polynomial regression models with 0 (intercept only), 1 (linear regression), 2 (quadratic), 3 (cubic) degrees. Which of these four models best describes the provided data in terms of the WAIC?
+
+Use the provided Stan models and implement the WAIC in R/Python.
+
+Hint: See Statistical Rethinking p.220 for definition of WAIC and Overthinking box on p.210. Can also be found in p. 173 in BDA3.
+
+Data: 
+
+```{r}
+x <- c(-0.54, 0.72, 1.12, 0.57, 0.61, 0.89, -0.45, 0.66, 1.19, -1.26, -1.4, 0.28, -0.42, -1.24, 0.45, 0.6, -0.92, -1.42, 0.81, -0.41, -1.22, 1.31, -0.38, -1.22, -1.02)
+
+y <- c(0.53, 2.15, 3.23, 3.48, 5.08, 4.07, 2.23, 3.06, 4.78, 1.35, 1.24, 2.87, 1.22, -0.48, 3.48, 4.03, -0.05, -0.19, 2.31, 0.96, 1.14, 6.85, -1.1, -1.32, -0.83)
+
+df <- data.frame(x, y)
+
+```
+
+
+Stan programs: 
+
+```{stan output.var="model0"}
+// intercept only
+data{
+  int N;
+  vector[N] x;
+  vector[N] y;
+}
+
+parameters{
+  real a;
+  real<lower=0> sigma;
+}
+
+model{
+  
+  // Likelihood
+  y ~ normal(a, sigma);
+  
+  // Priors
+  a ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+```
+
+```{stan output.var="model1"}
+// linear
+data{
+  int N;
+  vector[N] x;
+  vector[N] y;
+}
+
+parameters{
+  real a;
+  real b;
+  real<lower=0> sigma;
+}
+
+model{
+  
+  // Likelihood
+  y ~ normal(a + b*x, sigma);
+  
+  // Priors
+  a ~ normal(0, 1);
+  b ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+
+```
+
+```{stan output.var="model2"}
+// quadratic
+
+data{
+  int N;
+  vector[N] x;
+  vector[N] y;
+}
+
+transformed data {
+  vector[N] x_sq;
+  for(i in 1:N) x_sq[i] = x[i]*x[i];
+}
+
+parameters{
+  real a;
+  real b;
+  real c;
+  real<lower=0> sigma;
+}
+
+model{
+  
+  // Likelihood
+  y ~ normal(a + b*x + c*x_sq, sigma);
+  
+  // Priors
+  a ~ normal(0, 1);
+  b ~ normal(0, 1);
+  c ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+```
+
+```{stan output.var="model3"}
+// cubic
+data{
+  int N;
+  vector[N] x;
+  vector[N] y;
+}
+
+transformed data {
+  vector[N] x_sq;
+  vector[N] x_cu;
+  for(i in 1:N) x_sq[i] = x[i]*x[i];
+  for(i in 1:N) x_cu[i] = x_sq[i]*x[i];
+}
+
+parameters{
+  real a;
+  real b;
+  real c;
+  real d;
+  real<lower=0> sigma;
+}
+
+model{
+  
+  // Likelihood
+  y ~ normal(a + b*x + c*x_sq + d*x_cu, sigma);
+  
+  // Priors
+  a ~ normal(0, 1);
+  b ~ normal(0, 1);
+  c ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+```
+
 ## Other topics
+
+
+### (hard) Missing observations: Brownian bridge
+
+
+A time series is of length $N=200$ is assumed to have been generated by the random walk process
+
+$$x_t \sim N(x_{t-1}, \sigma^2).$$
+However, the observations at time points $T=76, \ldots , 125$ have been lost in a fire.
+
+Write a Stan program that estimates these missing values along with the process variance $\sigma^2.$ 
+
+Plot the time series and posterior draws for the missing values in the same figure. Color the missing observations (that were not available in the inference) in a different color.
+
+
+Data can be simulated with the following piece of code: 
+```{r}
+# Brownian bridge: random walk the a portion in missing values 
+
+# Generate data
+N_obs_pre <- 75
+N_mis <- 50
+N_obs_post <- 75
+
+sigma <- 0.5
+
+y_full <- cumsum(rnorm(N_obs_pre + N_mis + N_obs_post, 0, sigma))
+y <- y_full
+y[(N_obs_pre + 1):(N_obs_pre + N_mis)] <- NA
+```
+
 
 
 
