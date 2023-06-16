@@ -297,7 +297,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Stan</h1>
-        <p> Last updated on 2023-06-14 | 
+        <p> Last updated on 2023-06-16 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -414,8 +414,8 @@ program.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
+Chain 1: Gradient evaluation took 1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -432,15 +432,15 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.00897 seconds (Warm-up)
-Chain 1:                0.010455 seconds (Sampling)
-Chain 1:                0.019425 seconds (Total)
+Chain 1:  Elapsed Time: 0.007737 seconds (Warm-up)
+Chain 1:                0.007913 seconds (Sampling)
+Chain 1:                0.01565 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 4e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 2: Gradient evaluation took 5e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -457,15 +457,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.009828 seconds (Warm-up)
-Chain 2:                0.008227 seconds (Sampling)
-Chain 2:                0.018055 seconds (Total)
+Chain 2:  Elapsed Time: 0.007793 seconds (Warm-up)
+Chain 2:                0.009258 seconds (Sampling)
+Chain 2:                0.017051 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 4e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 3: Gradient evaluation took 5e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -482,15 +482,15 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.008736 seconds (Warm-up)
-Chain 3:                0.008592 seconds (Sampling)
-Chain 3:                0.017328 seconds (Total)
+Chain 3:  Elapsed Time: 0.007711 seconds (Warm-up)
+Chain 3:                0.007207 seconds (Sampling)
+Chain 3:                0.014918 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 4e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 4: Gradient evaluation took 5e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -507,9 +507,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.008658 seconds (Warm-up)
-Chain 4:                0.008481 seconds (Sampling)
-Chain 4:                0.017139 seconds (Total)
+Chain 4:  Elapsed Time: 0.007858 seconds (Warm-up)
+Chain 4:                0.00714 seconds (Sampling)
+Chain 4:                0.014998 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>With the default setting Stan runs 4 MCMC chains with 2000 iterations
@@ -531,10 +531,10 @@ quickly review the results.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
        mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-p      0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1269    1
-lp__ -22.86    0.02 0.77 -25.04 -23.01 -22.57 -22.38 -22.33  1391    1
+p      0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1241    1
+lp__ -22.83    0.02 0.73 -24.99 -22.99 -22.54 -22.37 -22.33  1588    1
 
-Samples were drawn using NUTS(diag_e) at Wed Jun 14 10:59:08 2023.
+Samples were drawn using NUTS(diag_e) at Fri Jun 16 07:38:31 2023.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -574,7 +574,7 @@ What is the probability that <span class="math inline">\(p \in [0.05,
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -624,7 +624,7 @@ part of the data? What is the benefit of using this approach?</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
@@ -706,8 +706,8 @@ easier.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 9e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+Chain 1: Gradient evaluation took 8e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.08 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -724,9 +724,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.015398 seconds (Warm-up)
-Chain 1:                0.01437 seconds (Sampling)
-Chain 1:                0.029768 seconds (Total)
+Chain 1:  Elapsed Time: 0.011513 seconds (Warm-up)
+Chain 1:                0.012463 seconds (Sampling)
+Chain 1:                0.023976 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 2).
@@ -749,15 +749,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.015831 seconds (Warm-up)
-Chain 2:                0.011807 seconds (Sampling)
-Chain 2:                0.027638 seconds (Total)
+Chain 2:  Elapsed Time: 0.01131 seconds (Warm-up)
+Chain 2:                0.009828 seconds (Sampling)
+Chain 2:                0.021138 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 5e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 3: Gradient evaluation took 6e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -774,15 +774,15 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.017447 seconds (Warm-up)
-Chain 3:                0.014158 seconds (Sampling)
-Chain 3:                0.031605 seconds (Total)
+Chain 3:  Elapsed Time: 0.011318 seconds (Warm-up)
+Chain 3:                0.012118 seconds (Sampling)
+Chain 3:                0.023436 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 6e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 4: Gradient evaluation took 5e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -799,9 +799,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.016424 seconds (Warm-up)
-Chain 4:                0.0126 seconds (Sampling)
-Chain 4:                0.029024 seconds (Total)
+Chain 4:  Elapsed Time: 0.011406 seconds (Warm-up)
+Chain 4:                0.011072 seconds (Sampling)
+Chain 4:                0.022478 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>and plot the posterior</p>
@@ -857,7 +857,7 @@ variable.</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -907,7 +907,7 @@ variable.</p>
   Show me the solution
   </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1031,9 +1031,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/stan.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/stan.html",
-  "dateCreated": "2023-06-14",
-  "dateModified": "2023-06-14",
-  "datePublished": "2023-06-14"
+  "dateCreated": "2023-06-16",
+  "dateModified": "2023-06-16",
+  "datePublished": "2023-06-16"
 }
 
   </script><script>

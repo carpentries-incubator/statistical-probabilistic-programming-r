@@ -188,7 +188,7 @@
     },
     "StanHeaders": {
       "Package": "StanHeaders",
-      "Version": "2.26.26",
+      "Version": "2.26.27",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -196,7 +196,7 @@
         "RcppEigen",
         "RcppParallel"
       ],
-      "Hash": "6b7d971cfe619a1e9fd111bf3b438cd1"
+      "Hash": "f29d708a8e830a90d8f6d2acf1734974"
     },
     "abind": {
       "Package": "abind",
@@ -1918,7 +1918,7 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.1.8",
+      "Version": "3.1.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1944,7 +1944,7 @@
         "waldo",
         "withr"
       ],
-      "Hash": "e0eded5dd915510f8e0d6e6277506203"
+      "Hash": "bcc48d6c50770b435c655954e45672c1"
     },
     "textshaping": {
       "Package": "textshaping",

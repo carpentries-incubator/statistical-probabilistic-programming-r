@@ -200,7 +200,8 @@
         
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#body">Body</a></li>
+        <ul><li><a href="#hierachical-models">Hierachical models</a></li>
+<li><a href="#example-hierarchical-binomial-model">Example: Hierarchical binomial model</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -294,7 +295,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Hierarchical Models</h1>
-        <p> Last updated on 2023-06-14 | 
+        <p> Last updated on 2023-06-16 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -329,9 +330,111 @@
 </div>
 </div>
 </div>
-<section id="body"><h2 class="section-heading">Body<a class="anchor" aria-label="anchor" href="#body"></a>
+<div id="callout1" class="callout callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
+</h3>
+<div class="callout-content">
+<p>TODO: shrinkage</p>
+</div>
+</div>
+</div>
+<section id="hierachical-models"><h2 class="section-heading">Hierachical models<a class="anchor" aria-label="anchor" href="#hierachical-models"></a>
 </h2>
-<hr class="half-width"><div id="keypoints1" class="callout keypoints">
+<hr class="half-width"><p>Bayesian hierarchical models are a class of models suited for
+modeling scenarios where the study population consists of separate but
+related groups. Hierarchical structure refers to this organization of
+data into multiple levels or groups, where each level can have its own
+set of parameters. These parameters are connected trough a common prior
+that is also learned when fitting the model. Some or all of the
+hyperparameters of the priors are unknown model parameters and they are
+given hyperpriors.</p>
+<p>One key advantage of Bayesian hierarchical models is their ability to
+borrow strength across groups. By pooling information from multiple
+groups, these models can provide more stable estimates, especially when
+individual groups have limited data. This pooling of information is
+particularly beneficial when there are sparse observations or when data
+from different groups exhibit similar patterns.</p>
+<p>Examples of scenarios where hierarchical model could be a natural
+choice:</p>
+</section><section id="example-hierarchical-binomial-model"><h2 class="section-heading">Example: Hierarchical binomial model<a class="anchor" aria-label="anchor" href="#example-hierarchical-binomial-model"></a>
+</h2>
+<hr class="half-width"><p>Let’s take a look at a hierarchical binomial model. Let <span class="math inline">\(X = \{X_1, X_2, \ldots, X_N\}\)</span> be a set of
+observations representing the number of successes in <span class="math inline">\(n\)</span> Bernoulli trials in <span class="math inline">\(N\)</span> different scenarios. We assume that
+these scenarios are not identical, so there are <span class="math inline">\(N\)</span> unknown probability parameters, <span class="math inline">\(p_1, p_2, \ldots, p_N\)</span>. This model can be
+specified as follows.</p>
+<p><span class="math display">\[\begin{align}
+X_i &amp;\sim Binom(n, p_i) \\
+p_i &amp;\sim Beta(\alpha, \beta) \\
+\alpha, \beta &amp;\sim Gamma(2, 1).
+\end{align}\]</span></p>
+<p>The difference to the binomial model as used in the previous episodes
+is that the parameters <span class="math inline">\(p_i\)</span> have a
+prior with unknown hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta.\)</span> These hyperparameters are given a
+<span class="math inline">\(Gamma\)</span> prior and learned in the
+inference.</p>
+<div id="challenge1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
+</h3>
+<div class="callout-content">
+<p>Hierarchical models are also called partially pooled models in
+contrast to unpooled and completely pooled models. The former mean that
+the model parameters are assumed to be completely independent, while in
+the latter type the (parallel) parameters are equal. Write the unpooled
+and completely pooled variants of the hierarchical binomial model.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1">
+  Show me the solution
+  </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>Unpooled:</p>
+<p><span class="math display">\[\begin{align}
+X_i &amp;\sim Binom(n, p_i) \\
+p_i &amp;\sim Beta(2, 2) \\
+\end{align}\]</span></p>
+<p>Completely pooled:</p>
+<p><span class="math display">\[\begin{align}
+X_i &amp;\sim Binom(n, p) \\
+p &amp;\sim Beta(2, 2) \\
+\end{align}\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<p>Let’s then implement the hierarchical, along with the unpooled and
+completely pooled binomial model in Stan.</p>
+<p>Hierarchical binomial model</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">sampling</span><span class="op">(</span><span class="va">hierarchical_binomial_model</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in sampling(hierarchical_binomial_model): could not find function "sampling"</code></pre>
+</div>
+<div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
@@ -399,9 +502,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
-  "dateCreated": "2023-06-14",
-  "dateModified": "2023-06-14",
-  "datePublished": "2023-06-14"
+  "dateCreated": "2023-06-16",
+  "dateModified": "2023-06-16",
+  "datePublished": "2023-06-16"
 }
 
   </script><script>
