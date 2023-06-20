@@ -779,7 +779,7 @@
     },
     "gargle": {
       "Package": "gargle",
-      "Version": "1.5.0",
+      "Version": "1.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -797,7 +797,7 @@
         "utils",
         "withr"
       ],
-      "Hash": "c64c926cdc1a2796e609f99b53017be2"
+      "Hash": "d3a3cb2fefea5b3d4f8e0ea33c948406"
     },
     "generics": {
       "Package": "generics",
