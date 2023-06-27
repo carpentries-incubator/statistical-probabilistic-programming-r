@@ -766,3 +766,47 @@ y[(N_obs_pre + 1):(N_obs_pre + N_mis)] <- NA
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+
+### (hard) Gaussian process classification 
+
+Let $z_i \in \{0, 1\}$ be a set of $N$ binary measurements and $x_i$ the corresponding covariate values. The observations are given and plotted here: 
+
+
+<!-- Data generated with the following piece of code.  -->
+
+```{r, include=FALSE}
+set.seed(584)
+N <- 100
+x <- rnorm(N, 0, 2)
+
+f <- exp(-0.1*x^4)
+y <- log(f/(1-f))
+z <- rbinom(n = N, size = 1, prob = f) 
+
+```
+
+```{r}
+
+x <- c(1.55, -2.1, -2.27, -2.11, -2.38, 1.34, 2.09, 0.04, -1.34, 0.7, 0.13, -4.23, 0.05, -0.99, -1.05, -0.76, 0.38, -0.22, 3.24, -5.67, -0.15, -2.19, -1.8, 3.32, -0.6, -2.22, -2.87, -1.57, 0.14, -0.96, 0.7, 2.08, -0.77, 0.44, -1.33, 1.13, -3.48, -2.42, -0.48, -0.28, -0.35, -0.8, 0.72, 1.11, -4.35, 1.33, 1.41, 2.78, -1.68, -0.73, 0.19, -2.48, -3.45, -0.46, 3.38, 0.22, 0.03, -0.89, -1.77, 0, -1.02, 4.47, 1.03, 0.28, -2.02, -2.53, -3.33, -0.54, 1.76, -1.84, 5.01, 2.96, 0.09, -0.84, -0.36, 1.03, -0.24, -1.23, 0.14, 1.06, -0.75, -1.6, -2.15, 0.83, -1.41, 1.48, 0.26, -1.79, -0.38, 2.06, 1.17, 0.91, 3.31, -1.85, 3.37, 0.28, 0.84, -0.22, -0.82, -0.65)
+
+z <- c(0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+df <- data.frame(x, z)
+
+p <- ggplot(data = df) +
+  geom_point(aes(x = x, y = z))
+
+print(p)
+
+```
+
+Implement a Gaussian process based binary classifier in Stan that works as follows: 
+
+1. $z_i$ is generated as $z_i \sim \text{Bernoulli}(\text{logit}(f(x_i))),$ where $f$ is an unknown function of $x$.
+2. $f$ has a Gaussian process prior, $f \sim GP(\mu, \Sigma).$
+3. $y = \text{logit}(f) = \frac{1}{1 + \exp(-f)}$ is the probability of class 1. 
+
+Plot the posterior for the class probability $y$ as a function of x.    
+
+BONUS: why does the posterior seem to curve upward at the end of the available data range? How could you correct this behavior?    

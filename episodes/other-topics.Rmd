@@ -6,22 +6,30 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- What is MCMC?
+- What next?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Idea behind MCMC
-
-- Learn how to
-  - assess convergence
-  - implement MCMC
-
+- Other things
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Body
+## Gaussian processes
+
+- Basic idea, short example with squared exponential kernel 
+
+## Dimension reduction
+- Probabilistic PCA
+
+## Missing observations
+
+## Feature selection
+- Horseshoe prior (difficult to fit)
+
+
+
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

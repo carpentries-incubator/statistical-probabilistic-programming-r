@@ -1,5 +1,5 @@
 ---
-title: 'further-materials'
+title: 'Recommended reading'
 teaching: 10
 exercises: 2
 ---
@@ -16,12 +16,15 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Main
+## Books
 
 - Gelman
 - Statistical Rethinking
 - Bayes Rules!
 
+## Links
+
+- An applet illustrating different MCMC variants: https://chi-feng.github.io/mcmc-demo/app.html
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
