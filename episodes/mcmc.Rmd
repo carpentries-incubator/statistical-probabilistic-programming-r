@@ -16,16 +16,6 @@ library(mvtnorm)
 ``` 
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-library(tidyverse)
-library(magrittr)
-library(rstan)
-library(cowplot)
-library(grafify)
-library(mvtnorm)
-```
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
