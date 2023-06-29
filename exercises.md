@@ -372,71 +372,51 @@ df_sample <- df[sample(1:nrow(df), N, replace = FALSE), ]
 
 
 
-### (medium) Posterior/prior predictive check
 
-Consider linear regression with one dependent variable implemented in the Stan program:
+### (medium) Normal mixture
+
+
+The following Stan program `normal_mix` (from [M. Betancourt's blog](https://betanalpha.github.io/assets/case_studies/identifying_mixture_models.html#43_breaking_the_labeling_degeneracy_by_enforcing_an_ordering)) implements a one-dimensional normal mixture model with 2 components. 
 
 
 ```stan
-
 data {
-  int<lower=0> N; // Sample size
-  vector[N] x; // x-values
-  vector[N] y; // y-values
+ int<lower = 0> N;
+ vector[N] y;
 }
+
 parameters {
-  real alpha; // intercept
-  real beta;  // slope
-  real<lower=0> sigma; // noise
+  ordered[2] mu;
+  real<lower=0> sigma[2];
+  real<lower=0, upper=1> theta;
 }
 
 model {
-  
-  // Likelihood
-  y ~ normal(alpha + beta * x, sigma);
-  
-  // Priors
-  alpha ~ normal(0, 1);
-  beta ~ normal(0, 1);
-  sigma ~ gamma(2, 1);
+ sigma ~ normal(0, 2);
+ mu ~ normal(0, 2);
+ theta ~ beta(5, 5);
+ for (n in 1:N)
+   target += log_mix(theta,
+                     normal_lpdf(y[n] | mu[1], sigma[1]),
+                     normal_lpdf(y[n] | mu[2], sigma[2]));
 }
-
 ```
 
+a) Explain the Stan program: what does the ordered type mean? What does the `target +=` notation mean?
+b) Modify the program so that is generates a posterior predictive distribution. 
+c) Fit the model to the provided data and plot the predictive distribution and overlay the data. 
 
-and the following data:
+Data: 
+
+<!-- Generated with -->
+
+
+
 
 
 ```r
-x <- c(-1.61, 1.55, -0.14, 0.27, -1.64, 0.61, -0.17, 1.56, -0.96, 1.33, 1.72, 1.76, 1.49, -1.55, 0.69, -1.39, 1.28, 0.63, -0.96, 0.13, -1.33, 1.07, 1.01, -1.94, 1.2, 0.36, 1.38, 0.08, 1.47, 0.32)
-y <- c(-1.84, 2.06, 0.41, 1.09, -2.3, 1.22, 2.02, 4.03, 0.52, 2.76, 3.66, 0.43, 4.62, -0.03, 0.16, -0.1, 2.82, 1.63, -0.35, 0.89, 0.29, 0.78, 1.9, 0.26, 0.84, 1.06, 2.93, 3.38, 2.44, 2.48)
-
-beta <- 0.75
-alpha <- 1
-sigma <- 1
+X <- c(1.53, 1.16, 3.39, 1.17, 2.19, -1.72, 0.97, 1.08, 2.17, 1.36, 0.99, -0.08, -1.96, -1.06, 1.85, 2.8, 0.71, -0.56, 2.73, 3.38, -1.22, 1.22, -1.71, 0.02, 2.24, -1.57, -0.67, -0.77, 1.07, 1.21, 0.77, 1.08, 0.58, 2.33, 0.2, -1.47, 0, -0.34, 0.98, -0.66, 0.26, -0.44, -1.11, -1.66, 1.29, 0.39, 1.14, -0.96, -0.04, 0.8, 2.47, -0.32, 1.72, 1.24, -0.42, 3.36, 1.79, -0.2, -1.19, 2.01, -1.26, -0.61, 1.64, 1.76, -1.65, -0.54, 1.05, 1.39, -0.73, -1.67, -0.6, -1.15, 1.05, 2.47, -0.45, 2.93, -1.82, 1.75, -1.55, -1.63, 1.51, -1.79, -0.84, 2.11, -0.69, 1.55, -0.15, -1.55, -1.23, 1.62, 2.38, 1.21, 2.37, -0.77, -0.67, -1.52, 2.78, -0.93, 0.91, 1.13)
 ```
-
-
-Use Stan to do the following: 
-
-1. Posterior predictive check (for same data):
-
-a) Simulate output data (response variable y) from the posterior for the same input data (predictor variable x).
-b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
-
-Tip: Stan manual page on posterior predictive distribution: https://mc-stan.org/docs/stan-users-guide/simulating-from-the-posterior-predictive-distribution.html
-
-
-2. Posterior predictions (for new data):
-a) Simulate data from the posterior of the linear model for new (different) input data (x_new).
-b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
-
-3. Prior predictive checks:
-a) Generate samples (for y) from the prior predictive distribution.
-b) Compare prior and posterior simulations for y; try both informative and uninformative priors; is there any difference?
-
-Tip: note that this can be implented in Stan but you do not necessarily need Stan to draw samples from the prior distribution.
-
 
 ### (hard) Write Stan program: OUP
 
@@ -579,11 +559,97 @@ c) what is the fundamental difference between DIC/AIC and WAIC?
 
 
 
-### (medium) Posterior predictive check 
+### (medium) Posterior predictive check: normal 1 
 
 Build a Stan model that estimates the mean and standard deviation of a normal distribution. Fit the model to the data in data1.txt and do a posterior predictive check (for example a visual one). What are your conclusions about the model's suitability on this data based on the PPD? What steps would you take next?
 
 Hint: you can generate the PPD in R/Python or in the generated quantities block in Stan
+
+### (medium) Posterior/prior predictive check
+
+Consider linear regression with one dependent variable implemented in the Stan program:
+
+
+```stan
+
+data {
+  int<lower=0> N; // Sample size
+  vector[N] x; // x-values
+  vector[N] y; // y-values
+}
+parameters {
+  real alpha; // intercept
+  real beta;  // slope
+  real<lower=0> sigma; // noise
+}
+
+model {
+  
+  // Likelihood
+  y ~ normal(alpha + beta * x, sigma);
+  
+  // Priors
+  alpha ~ normal(0, 1);
+  beta ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+}
+
+```
+
+
+and the following data:
+
+
+```r
+x <- c(-1.61, 1.55, -0.14, 0.27, -1.64, 0.61, -0.17, 1.56, -0.96, 1.33, 1.72, 1.76, 1.49, -1.55, 0.69, -1.39, 1.28, 0.63, -0.96, 0.13, -1.33, 1.07, 1.01, -1.94, 1.2, 0.36, 1.38, 0.08, 1.47, 0.32)
+y <- c(-1.84, 2.06, 0.41, 1.09, -2.3, 1.22, 2.02, 4.03, 0.52, 2.76, 3.66, 0.43, 4.62, -0.03, 0.16, -0.1, 2.82, 1.63, -0.35, 0.89, 0.29, 0.78, 1.9, 0.26, 0.84, 1.06, 2.93, 3.38, 2.44, 2.48)
+
+beta <- 0.75
+alpha <- 1
+sigma <- 1
+```
+
+
+Use Stan to do the following: 
+
+1. Posterior predictive check (for same data):
+
+a) Simulate output data (response variable y) from the posterior for the same input data (predictor variable x).
+b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
+
+Tip: Stan manual page on posterior predictive distribution: https://mc-stan.org/docs/stan-users-guide/simulating-from-the-posterior-predictive-distribution.html
+
+
+2. Posterior predictions (for new data):
+a) Simulate data from the posterior of the linear model for new (different) input data (x_new).
+b) Compare the simulated and original responses that were used for model inference. There are many possible ways to compare original and simulated y, propose your own solution.
+
+3. Prior predictive checks:
+a) Generate samples (for y) from the prior predictive distribution.
+b) Compare prior and posterior simulations for y; try both informative and uninformative priors; is there any difference?
+
+Tip: note that this can be implented in Stan but you do not necessarily need Stan to draw samples from the prior distribution.
+
+
+### (hard) Posterior predictive check: normal 2
+
+Consider the following data: 
+
+<!-- Data generated with: -->
+
+
+
+```r
+X <- c(-0.05, 0.07, 0.14, 0.17, 0.25, 0.33, 0.35, 0.32, 0.41, 0.45, 0.43, 0.47, 0.48, 0.54, 0.68, 0.54, 0.45, 0.43, 0.43, 0.41, 0.29, 0.3, 0.29, 0.3, 0.28, 0.5, 0.44, 0.3, 0.21, 0.19, 0.11, 0.19, 0.34, 0.64, 0.55, 0.46, 0.38, 0.45, 0.33, 0.38, 0.2, 0.25, 0.28, 0.24, 0.25, 0.25, 0.23, 0.37, 0.21, 0.5, 0.36, 0.57, 0.56, 0.7, 0.61, 0.69, 0.5, 0.5, 0.44, 0.37, 0.42, 0.52, 0.47, 0.59, 0.65, 0.59, 0.54, 0.51, 0.58, 0.48, 0.42, 0.39, 0.57, 0.63, 0.51, 0.62, 0.54, 0.66, 0.84, 0.93, 0.85, 0.8, 0.88, 1.01, 1.16, 1.23, 1.14, 1.14, 1.02, 1.1, 1.01, 1.08, 0.91, 0.98, 1.02, 1.12, 1.19, 1.26, 1.34, 1.31)
+```
+
+Use a normal model and do a posterior predictive check to see how good of a choice the normal model is for the data. Use some statistic to do the PPD and compute the Bayesian P-value. 
+
+
+#### Hint
+
+Plot $X$ in sequential order. Do you see any structure? Does the normal model produce such structure?
+
 
 ### (hard) WAIC-based model selection 
 
@@ -799,7 +865,7 @@ p <- ggplot(data = df) +
 print(p)
 ```
 
-<img src="fig/exercises-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<img src="fig/exercises-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
 
 Implement a Gaussian process based binary classifier in Stan that works as follows: 
 

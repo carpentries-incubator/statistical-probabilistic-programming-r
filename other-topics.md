@@ -19,6 +19,7 @@ exercises: 2
 ## Gaussian processes
 
 - Basic idea, short example with squared exponential kernel 
+- In exercises there is a GP classification example. 
 
 ## Dimension reduction
 - Probabilistic PCA
@@ -28,6 +29,7 @@ exercises: 2
 ## Feature selection
 - Horseshoe prior (difficult to fit)
 
+## Differential equations
 
 
 

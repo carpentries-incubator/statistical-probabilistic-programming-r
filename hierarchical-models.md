@@ -94,9 +94,11 @@ Error in sampling(hierarchical_binomial_model): could not find function "samplin
 
 
 
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - point 1
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Reading

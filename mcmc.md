@@ -71,7 +71,7 @@ print(p)
 
 Then, we'll write some functions. Below, `pars` is of the form `c(mu, sigma)`.
 
-First the log likelihood. Remember that the likelihood is the product of likelihoods for individual data points, which after log transformation turns into a sum. 
+First the point-wise log likelihood. Remember that the likelihood is the product of likelihoods for individual data points, which after a log transformation turns into a sum. 
 
 
 ```r
@@ -80,7 +80,8 @@ log_likelihood <- function(X, pars) {
   log_lh <- dnorm(X,
                   mean = pars[1],
                   sd = pars[2],
-                  log = TRUE) %>% sum
+                  log = TRUE) %>%
+    sum
   
   return(log_lh)
   
@@ -88,7 +89,7 @@ log_likelihood <- function(X, pars) {
 ```
 
 
-Next, well define normal and Gamma priors as the priors. The 
+Next, well define normal and Gamma priors as the priors. The log posterior is the sum of log likelihood and log priors. 
 
 
 ```r
@@ -117,6 +118,7 @@ log_posterior <- function(X, pars) {
 
 The next function implements the transition density. We'll use the normal distribution for both parameters. However, as $\sigma$ cannot be negative, we'll take the absolute value to ensure positivity. 
 
+
 ```r
 generate_proposal <- function(pars_old, sd) {
   
@@ -131,7 +133,7 @@ generate_proposal <- function(pars_old, sd) {
 ```
 
 
-The next function computes the acceptance ratio. Since the normal proposal distribution is symmetric, it suffices to compute the ratio of the posteriors. 
+The next function computes the acceptance ratio. Since the normal distribution is a symmetric proposal, it suffices to compute the ratio of the posteriors. 
 
 
 ```r
@@ -190,18 +192,19 @@ metropolis_sampler <- function(X, inits, n_samples = 1000, jump_sd) {
 
 
 
-Then, we can sample. We'll run 4 chains with 5000 samples each. The transition density standard deviation is set to 0.05. 
+Then, we run the sampler. We'll use 4 chains with 5000 samples each. The transition density standard deviation is set to 0.05. 
 
 
 ```r
-# Get samples
 n_samples <- 5000
 n_chains <- 4
-warmup <- 0.5
-
 jump_sd <- 0.05
 
-# Random initials
+# Warmup 50%
+warmup <- 0.5
+
+
+# Random initials for each chain
 inits <- apply(X = matrix(c(1:n_chains)),
                MARGIN = 1,
                FUN = function(x) rnorm(2, 0, 1)) %>% 
@@ -210,7 +213,7 @@ inits <- apply(X = matrix(c(1:n_chains)),
 # Make sure sigma initial >0
 inits[, 2] <- abs(inits[, 2])
 
-# Run sampler for the different initial values
+# Run the chains
 samples <- lapply(1:nrow(inits), function(i) {
   
   my_df <- metropolis_sampler(X = X,
@@ -231,7 +234,7 @@ samples <- lapply(1:nrow(inits), function(i) {
 ```
 
 
-Plot results
+Plot results. Uncomment the line `fill = warmup` below so see the effect of removing the initial 50% of the samples. 
 
 
 ```r
@@ -242,22 +245,29 @@ samples_w <- samples %>%
 
 p_posterior <- ggplot() + 
   geom_histogram(data = samples_w,
-                 aes(x = value, fill = warmup),
+                 aes(x = value,
+                     # fill = warmup
+                     ),
                  bins = 50, alpha = 0.75, position = "identity") +
   geom_vline(data = data.frame(par = c("mu", "sigma"),
                                value = c(mu_true, sigma_true)), 
              aes(xintercept = value)) + 
   facet_wrap(~par, scales = "free")
 
-p_posterior_chains <- ggplot(samples_w) +
-  geom_histogram(aes(x = value, fill = chain),
-                 bins = 50, alpha = 0.75, 
-                 position = "identity") +
-  geom_vline(data = data.frame(par = c("mu", "sigma"),
-                               value = c(mu_true, sigma_true)), 
-             aes(xintercept = value)) + 
-  scale_fill_grafify()
+# p_posterior_chains <- ggplot(samples_l) +
+#   geom_histogram(aes(x = value, fill = chain),
+#                  bins = 50, alpha = 0.75, 
+#                  position = "identity") +
+#   geom_vline(data = data.frame(par = c("mu", "sigma"),
+#                                value = c(mu_true, sigma_true)), 
+#              aes(xintercept = value)) + 
+#   scale_fill_grafify()
+
+
+print(p_posterior)
 ```
+
+<img src="fig/mcmc-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -265,15 +275,17 @@ p_posterior_chains <- ggplot(samples_w) +
 
 Although converge is guaranteed in theory, it is not so in practice. 
 
-- Warmup/burn-in
+Like we saw above, unless the chains' initial values are in high posterior density areas, the early chain samples will bias the target distribution estimate. For this reason, it is customary to discard a proportion of the chain as "warmup." Often 50% is used and this is also the default in Stan. 
+
+
 - Sample autocorrelation, effective sample size
   - ideally, the samples would be independent
 - Mixing
 - $\hat{R}$
-- Divergent transitions
 
 
-Let's plot the generated trajectories and the true parameter value. 
+
+Let's plot the generated trajectories and the true parameter value. Here, the initial 50% of the chains are colored dim to illustrate the fact that convergence to the posterior distribution requires long enough chains.
 
 
 ```r
@@ -284,41 +296,48 @@ p_traj <- ggplot() +
   geom_path(data = samples %>% filter(warmup == FALSE),
             aes(x = mu, y = sigma, color = chain)) +
   geom_point(aes(x = mu_true, y = sigma_true),
-             size = 4, color = "red") + 
-  scale_color_grafify()
+             size = 4) + 
+  scale_color_grafify() +
+  labs(title = "Red point = true value")
 
 print(p_traj)
 ```
 
 <img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
-Here, the initial 50% of the chains are colored dim to illustrate the fact that convergence to the posterior distribution requires long enough chains. Moreover, in order to not let the initial non-converged values bias the estimate, it is customary to discard a proportion of the chain as "warmup." Often 50% is used and this is also the default in Stan. 
 
 
-Next, we'll plot the trace plots
+
+Next, we'll make the trace plots, which are comprised of the chains of individual parameters. The warmup iterations are again colored dimmer. Trace plots can give quick visual information about the chains. When there are no converge issues, the trace plots should look like "hairy caterpillars," with sample of each chain located around the same value. In this case everything look ok. A standard convergence metric is the $\hat{R}$ which compares the variances between chains and to the variance within each chain. We'll omit the definition here but, generally, value $\hat{R} \geq 1.1$  are seen as a sign of convergence issues. However, with modern samplers such as Stan, thresholds closer to 1 are recommended (https://mc-stan.org/rstan/reference/Rhat.html).
+
+Clearly convergence is reached fairly quickly after initialization, in some dozen iterations. Moreover, the chain autocorrelation low. This is desirable because it implies that the drawn samples are independent. Another popular convergence metric is the effective sample size. It quantifies the number of independent samples produced by the sampler.   
 
 
 ```r
 # Long --> wide format
-samples_wide <- samples %>% 
+samples_w <- samples %>% 
   mutate(sample = rep(1:n_samples, 4)) %>%
   gather(key = "parameter", value = "value", -c(chain, warmup, sample))
 
 # Trace plot
 p_trace <- ggplot() + 
-  geom_line(data = samples_wide,
+  geom_line(data = samples_w,
             aes(x = sample, y = value, color = chain), alpha = 0.25) + 
-  geom_line(data = samples_wide %>% filter(warmup == FALSE),
+  geom_line(data = samples_w %>% filter(warmup == FALSE),
             aes(x = sample, y = value, color = chain)) + 
   facet_wrap(chain ~ parameter,
              scales = "free",
              ncol = 2) + 
   scale_color_grafify()
+
+print(p_trace)
 ```
 
+<img src="fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
-Let's compute the number of rejected proposals to get some idea about the efficiency of the algorithm. 
+
+Let's compute the number of rejected proposals to get some idea about the efficiency of the algorithm. The less samples are rejected, the more efficient the sampler performs.  
 
 ```r
 # Proportion of post-warmup samples where the proposal was rejected
@@ -328,14 +347,14 @@ sum(table(samples %>%
 ```
 
 ```{.output}
-[1] 0.4706
+[1] 0.4549
 ```
 
 
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-Try different proposal distributions (e.g. 0.005, 0.5) standard deviations in the MCMC example above. How does this affect the inference and convergence?
+Try different proposal distributions (e.g. 0.005, 0.5) standard deviations in the MCMC example above. How does this affect the inference and convergence? Why?
 
 :::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -343,10 +362,11 @@ Try different proposal distributions (e.g. 0.005, 0.5) standard deviations in th
 
 ## Hamiltonian Monte Carlo
 
-- Idea
-- Stan throws a warning if there were convergence issues. 
-  - Divergent transitions!
+Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings algorithm implemented in Stan. The defining feature is the elaborate scheme it uses to generate proposals. Briefly, the idea is to simulate the dynamics of a particle moving in a potential landscape defined by the posterior. At each iteration, the particle is given a random momentum vector and then its dynamics are simulated forward for some time. The end of the trajectory is then taken as the proposal value. 
 
+Compared to the random walk Metropolis-Hastings we implemented in this episode, HMC is very efficient. The main advantages of HMC is its ability to explore high-dimensional spaces more effectively, making it especially useful in complex models with many parameters
+
+A type of convergence criterion exclusive to HMC are divergent transitions. In region of the parameter space where the posterior has high curvature, the simulated particle dynamics can produce spurious transitions which do not represent the posterior accurately. Such transitions are called divergent and signal that the particular area of parameter space is not explored accurately. Stan provides information about divergent transitions. 
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
@@ -362,6 +382,8 @@ Try different proposal distributions (e.g. 0.005, 0.5) standard deviations in th
 
 
 ## Reading
+
+- See interactive visualization of different MCMC algorithms: https://chi-feng.github.io/mcmc-demo/app.html
 
 - Statistical Rethinking
 - BDA3
