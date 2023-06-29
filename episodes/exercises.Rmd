@@ -436,6 +436,62 @@ b) Compare prior and posterior simulations for y; try both informative and uninf
 Tip: note that this can be implented in Stan but you do not necessarily need Stan to draw samples from the prior distribution.
 
 
+### (medium) Normal mixture
+
+
+The following Stan program `normal_mix` (from [M. Betancourt's blog](https://betanalpha.github.io/assets/case_studies/identifying_mixture_models.html#43_breaking_the_labeling_degeneracy_by_enforcing_an_ordering)) implements a one-dimensional normal mixture model with 2 components. 
+
+```{stan output.var="normal_mix"}
+data {
+ int<lower = 0> N;
+ vector[N] y;
+}
+
+parameters {
+  ordered[2] mu;
+  real<lower=0> sigma[2];
+  real<lower=0, upper=1> theta;
+}
+
+model {
+ sigma ~ normal(0, 2);
+ mu ~ normal(0, 2);
+ theta ~ beta(5, 5);
+ for (n in 1:N)
+   target += log_mix(theta,
+                     normal_lpdf(y[n] | mu[1], sigma[1]),
+                     normal_lpdf(y[n] | mu[2], sigma[2]));
+}
+```
+
+a) Explain the Stan program: what does the ordered type mean? What does the `target +=` notation mean?
+b) Modify the program so that is generates a posterior predictive distribution. 
+c) Fit the model to the provided data and plot the predictive distribution and overlay the data. 
+
+Data: 
+
+<!-- Generated with -->
+
+```{r, include=FALSE}
+set.seed(12323)
+N <- 100
+z <- rbinom(N, 1, 0.5)
+mu <- c(-1, 1.5)
+sigma <- c(0.5, 1)
+
+X <- c()
+for(i in 1:N) {
+  X[i] <- ifelse(z[i] == 1,
+            rnorm(1, mu[1], sigma[1]), 
+            rnorm(1, mu[2], sigma[2]))
+}
+```
+
+
+```{r}
+X <- c(1.53, 1.16, 3.39, 1.17, 2.19, -1.72, 0.97, 1.08, 2.17, 1.36, 0.99, -0.08, -1.96, -1.06, 1.85, 2.8, 0.71, -0.56, 2.73, 3.38, -1.22, 1.22, -1.71, 0.02, 2.24, -1.57, -0.67, -0.77, 1.07, 1.21, 0.77, 1.08, 0.58, 2.33, 0.2, -1.47, 0, -0.34, 0.98, -0.66, 0.26, -0.44, -1.11, -1.66, 1.29, 0.39, 1.14, -0.96, -0.04, 0.8, 2.47, -0.32, 1.72, 1.24, -0.42, 3.36, 1.79, -0.2, -1.19, 2.01, -1.26, -0.61, 1.64, 1.76, -1.65, -0.54, 1.05, 1.39, -0.73, -1.67, -0.6, -1.15, 1.05, 2.47, -0.45, 2.93, -1.82, 1.75, -1.55, -1.63, 1.51, -1.79, -0.84, 2.11, -0.69, 1.55, -0.15, -1.55, -1.23, 1.62, 2.38, 1.21, 2.37, -0.77, -0.67, -1.52, 2.78, -0.93, 0.91, 1.13)
+```
+
 ### (hard) Write Stan program: OUP
 
 The Ornstein-Uhlenbeck process (OUP) can be used (among other things) as a part in algorithmic trading strategies. The model is a stochastic differential equation defined as

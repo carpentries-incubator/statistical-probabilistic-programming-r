@@ -12,15 +12,25 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
+- Prior/Posterior predictive check
 - Learn how assess model fit
-- Model checking
-- Information criteria: AIC, BIC, WAIC
-- Bayesian cross-validation
-- Posterior predictive check
+  - Bayesian residuals?
+  
+- Model comparison with 
+  - AIC, BIC, WAIC
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Body
+## Posterior predictive check
+
+Gelman: "If the model fits, then replicated data generated under the model should look similar to observed data."
+
+Idea: simulate data from the posterior predictive distribution and compare it to the observed data. Discrepancies between the simulated and observed data imply shortcomings in the model. 
+
+Posterior predictive distribution presented in Episode Working with samples. 
+
+## Information criteria
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
@@ -29,3 +39,9 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+
+## Reading
+
+- Statistical Rethinking: Ch. 7
+- BDA3: p.143: 6.3 Posterior predictive checking

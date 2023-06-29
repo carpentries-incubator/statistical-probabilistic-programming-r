@@ -368,6 +368,15 @@ model {
 
 
 
+## R packages
+
+brms and rstanarm are packages that enable fitting Bayesian regression model in Stan without having to code the models yourself. 
+
+bayesplot allows generating visualizations 
+
+Example: 
+
+
 ## Reading
 
 - Installation guide: https://mc-stan.org/users/interfaces/

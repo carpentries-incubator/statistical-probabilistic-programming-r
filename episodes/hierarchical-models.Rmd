@@ -90,9 +90,11 @@ sampling(hierarchical_binomial_model)
 
 
 
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - point 1
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Reading
