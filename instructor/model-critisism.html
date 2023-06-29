@@ -208,7 +208,9 @@
         
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#body">Body</a></li>
+        <ul><li><a href="#posterior-predictive-check">Posterior predictive check</a></li>
+<li><a href="#information-criteria">Information criteria</a></li>
+<li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -293,7 +295,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Model checking</h1>
-        <p> Last updated on 2023-06-27 | 
+        <p> Last updated on 2023-06-29 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-critisism.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -322,17 +324,28 @@
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Learn how assess model fit</li>
-<li>Model checking</li>
-<li>Information criteria: AIC, BIC, WAIC</li>
-<li>Bayesian cross-validation</li>
-<li>Posterior predictive check</li>
+<ul><li>Prior/Posterior predictive check</li>
+<li>Learn how assess model fit
+<ul><li>Bayesian residuals?</li>
+</ul></li>
+<li>Model comparison with
+<ul><li>AIC, BIC, WAIC</li>
+</ul></li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section id="body"><h2 class="section-heading">Body<a class="anchor" aria-label="anchor" href="#body"></a>
+<section id="posterior-predictive-check"><h2 class="section-heading">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
+</h2>
+<hr class="half-width"><p>Gelman: “If the model fits, then replicated data generated under the
+model should look similar to observed data.”</p>
+<p>Idea: simulate data from the posterior predictive distribution and
+compare it to the observed data. Discrepancies between the simulated and
+observed data imply shortcomings in the model.</p>
+<p>Posterior predictive distribution presented in Episode Working with
+samples.</p>
+</section><section id="information-criteria"><h2 class="section-heading">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
 </h2>
 <hr class="half-width"><div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
@@ -346,11 +359,14 @@
 </ul></div>
 </div>
 </div>
-<!-- 
+</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+</h2>
+<hr class="half-width"><ul><li>Statistical Rethinking: Ch. 7</li>
+<li>BDA3: p.143: 6.3 Posterior predictive checking</li>
+</ul><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- -->
-</section></div> <!-- / div.lesson-content -->
+ --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/hierarchical-models.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="../instructor/other-topics.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
@@ -402,9 +418,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/model-critisism.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/model-critisism.html",
-  "dateCreated": "2023-06-28",
-  "dateModified": "2023-06-27",
-  "datePublished": "2023-06-28"
+  "dateCreated": "2023-06-29",
+  "dateModified": "2023-06-29",
+  "datePublished": "2023-06-29"
 }
 
   </script><script>

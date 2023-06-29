@@ -297,7 +297,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>MCMC</h1>
-        <p> Last updated on 2023-06-28 | 
+        <p> Last updated on 2023-06-29 | 
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -401,8 +401,8 @@ algorithm to sample the posterior. First we’ll simulate some data</p>
 </div>
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Then, we’ll write some functions. Below, <code>pars</code> is of the
 form <code>c(mu, sigma)</code>.</p>
-<p>First the log likelihood. Remember that the likelihood is the product
-of likelihoods for individual data points, which after log
+<p>First the point-wise log likelihood. Remember that the likelihood is
+the product of likelihoods for individual data points, which after a log
 transformation turns into a sum.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -413,13 +413,15 @@ transformation turns into a sum.</p>
 <span>  <span class="va">log_lh</span> <span class="op">&lt;-</span> <span class="fu">dnorm</span><span class="op">(</span><span class="va">X</span>,</span>
 <span>                  mean <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                  sd <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>                  log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">sum</span></span>
+<span>                  log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">sum</span></span>
 <span>  </span>
 <span>  <span class="kw">return</span><span class="op">(</span><span class="va">log_lh</span><span class="op">)</span></span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>Next, well define normal and Gamma priors as the priors. The</p>
+<p>Next, well define normal and Gamma priors as the priors. The log
+posterior is the sum of log likelihood and log priors.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -464,8 +466,8 @@ absolute value to ensure positivity.</p>
 <span><span class="op">}</span></span></code></pre>
 </div>
 <p>The next function computes the acceptance ratio. Since the normal
-proposal distribution is symmetric, it suffices to compute the ratio of
-the posteriors.</p>
+distribution is a symmetric proposal, it suffices to compute the ratio
+of the posteriors.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -522,20 +524,21 @@ model.</p>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>Then, we can sample. We’ll run 4 chains with 5000 samples each. The
-transition density standard deviation is set to 0.05.</p>
+<p>Then, we run the sampler. We’ll use 4 chains with 5000 samples each.
+The transition density standard deviation is set to 0.05.</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get samples</span></span>
-<span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
+<code class="sourceCode R"><span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
 <span><span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span><span class="va">warmup</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
-<span></span>
 <span><span class="va">jump_sd</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
 <span></span>
-<span><span class="co"># Random initials</span></span>
+<span><span class="co"># Warmup 50%</span></span>
+<span><span class="va">warmup</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Random initials for each chain</span></span>
 <span><span class="va">inits</span> <span class="op">&lt;-</span> <span class="fu">apply</span><span class="op">(</span>X <span class="op">=</span> <span class="fu">matrix</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_chains</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>               MARGIN <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>               FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">rnorm</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -544,7 +547,7 @@ transition density standard deviation is set to 0.05.</p>
 <span><span class="co"># Make sure sigma initial &gt;0</span></span>
 <span><span class="va">inits</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">abs</span><span class="op">(</span><span class="va">inits</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Run sampler for the different initial values</span></span>
+<span><span class="co"># Run the chains</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">inits</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="fu">metropolis_sampler</span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>,</span>
@@ -563,7 +566,8 @@ transition density standard deviation is set to 0.05.</p>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Plot results</p>
+<p>Plot results. Uncomment the line <code>fill = warmup</code> below so
+see the effect of removing the initial 50% of the samples.</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -575,35 +579,45 @@ transition density standard deviation is set to 0.05.</p>
 <span></span>
 <span><span class="va">p_posterior</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span>,</span>
-<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, fill <span class="op">=</span> <span class="va">warmup</span><span class="op">)</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
+<span>                     <span class="co"># fill = warmup</span></span>
+<span>                     <span class="op">)</span>,</span>
 <span>                 bins <span class="op">=</span> <span class="fl">50</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, position <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_vline</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>par <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span>,</span>
 <span>                               value <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">mu_true</span>, <span class="va">sigma_true</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>             <span class="fu">aes</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p_posterior_chains</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">samples_w</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, fill <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>,</span>
-<span>                 bins <span class="op">=</span> <span class="fl">50</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, </span>
-<span>                 position <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_vline</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>par <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span>,</span>
-<span>                               value <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">mu_true</span>, <span class="va">sigma_true</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>             <span class="fu">aes</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_fill_grafify</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span><span class="co"># p_posterior_chains &lt;- ggplot(samples_l) +</span></span>
+<span><span class="co">#   geom_histogram(aes(x = value, fill = chain),</span></span>
+<span><span class="co">#                  bins = 50, alpha = 0.75, </span></span>
+<span><span class="co">#                  position = "identity") +</span></span>
+<span><span class="co">#   geom_vline(data = data.frame(par = c("mu", "sigma"),</span></span>
+<span><span class="co">#                                value = c(mu_true, sigma_true)), </span></span>
+<span><span class="co">#              aes(xintercept = value)) + </span></span>
+<span><span class="co">#   scale_fill_grafify()</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_posterior</span><span class="op">)</span></span></code></pre>
 </div>
-</section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
 </h2>
 <hr class="half-width"><p>Although converge is guaranteed in theory, it is not so in
 practice.</p>
-<ul><li>Warmup/burn-in</li>
-<li>Sample autocorrelation, effective sample size
+<p>Like we saw above, unless the chains’ initial values are in high
+posterior density areas, the early chain samples will bias the target
+distribution estimate. For this reason, it is customary to discard a
+proportion of the chain as “warmup.” Often 50% is used and this is also
+the default in Stan.</p>
+<ul><li>Sample autocorrelation, effective sample size
 <ul><li>ideally, the samples would be independent</li>
 </ul></li>
 <li>Mixing</li>
 <li><span class="math inline">\(\hat{R}\)</span></li>
-<li>Divergent transitions</li>
-</ul><p>Let’s plot the generated trajectories and the true parameter
-value.</p>
+</ul><p>Let’s plot the generated trajectories and the true parameter value.
+Here, the initial 50% of the chains are colored dim to illustrate the
+fact that convergence to the posterior distribution requires long enough
+chains.</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -615,39 +629,54 @@ value.</p>
 <span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu</span>, y <span class="op">=</span> <span class="va">sigma</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu_true</span>, y <span class="op">=</span> <span class="va">sigma_true</span><span class="op">)</span>,</span>
-<span>             size <span class="op">=</span> <span class="fl">4</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span>
+<span>             size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Red point = true value"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_traj</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Here, the initial 50% of the chains are colored dim to illustrate the
-fact that convergence to the posterior distribution requires long enough
-chains. Moreover, in order to not let the initial non-converged values
-bias the estimate, it is customary to discard a proportion of the chain
-as “warmup.” Often 50% is used and this is also the default in Stan.</p>
-<p>Next, we’ll plot the trace plots</p>
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Next, we’ll make the trace plots, which are comprised of the chains
+of individual parameters. The warmup iterations are again colored
+dimmer. Trace plots can give quick visual information about the chains.
+When there are no converge issues, the trace plots should look like
+“hairy caterpillars,” with sample of each chain located around the same
+value. In this case everything look ok. A standard convergence metric is
+the <span class="math inline">\(\hat{R}\)</span> which compares the
+variances between chains and to the variance within each chain. We’ll
+omit the definition here but, generally, value <span class="math inline">\(\hat{R} \geq 1.1\)</span> are seen as a sign of
+convergence issues. However, with modern samplers such as Stan,
+thresholds closer to 1 are recommended (<a href="https://mc-stan.org/rstan/reference/Rhat.html" class="external-link uri">https://mc-stan.org/rstan/reference/Rhat.html</a>).</p>
+<p>Clearly convergence is reached fairly quickly after initialization,
+in some dozen iterations. Moreover, the chain autocorrelation low. This
+is desirable because it implies that the drawn samples are independent.
+Another popular convergence metric is the effective sample size. It
+quantifies the number of independent samples produced by the
+sampler.</p>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Long --&gt; wide format</span></span>
-<span><span class="va">samples_wide</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">samples_w</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fu">rep</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">chain</span>, <span class="va">warmup</span>, <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Trace plot</span></span>
 <span><span class="va">p_trace</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_wide</span>,</span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_wide</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">chain</span> <span class="op">~</span> <span class="va">parameter</span>,</span>
 <span>             scales <span class="op">=</span> <span class="st">"free"</span>,</span>
 <span>             ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Let’s compute the number of rejected proposals to get some idea about
-the efficiency of the algorithm.</p>
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s compute the number of rejected proposals to get some idea about
+the efficiency of the algorithm. The less samples are rejected, the more
+efficient the sampler performs.</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -660,7 +689,7 @@ the efficiency of the algorithm.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>[1] 0.4706</code></pre>
+<pre class="output" tabindex="0"><code>[1] 0.4549</code></pre>
 </div>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
@@ -672,17 +701,31 @@ the efficiency of the algorithm.</p>
 <div class="callout-content">
 <p>Try different proposal distributions (e.g. 0.005, 0.5) standard
 deviations in the MCMC example above. How does this affect the inference
-and convergence?</p>
+and convergence? Why?</p>
 </div>
 </div>
 </div>
 </section><section id="hamiltonian-monte-carlo"><h2 class="section-heading">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
 </h2>
-<hr class="half-width"><ul><li>Idea</li>
-<li>Stan throws a warning if there were convergence issues.
-<ul><li>Divergent transitions!</li>
-</ul></li>
-</ul><div id="keypoints1" class="callout keypoints">
+<hr class="half-width"><p>Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings
+algorithm implemented in Stan. The defining feature is the elaborate
+scheme it uses to generate proposals. Briefly, the idea is to simulate
+the dynamics of a particle moving in a potential landscape defined by
+the posterior. At each iteration, the particle is given a random
+momentum vector and then its dynamics are simulated forward for some
+time. The end of the trajectory is then taken as the proposal value.</p>
+<p>Compared to the random walk Metropolis-Hastings we implemented in
+this episode, HMC is very efficient. The main advantages of HMC is its
+ability to explore high-dimensional spaces more effectively, making it
+especially useful in complex models with many parameters</p>
+<p>A type of convergence criterion exclusive to HMC are divergent
+transitions. In region of the parameter space where the posterior has
+high curvature, the simulated particle dynamics can produce spurious
+transitions which do not represent the posterior accurately. Such
+transitions are called divergent and signal that the particular area of
+parameter space is not explored accurately. Stan provides information
+about divergent transitions.</p>
+<div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
@@ -702,9 +745,10 @@ and convergence?</p>
 </div>
 </section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
-<hr class="half-width"><ul><li>Statistical Rethinking</li>
-<li>BDA3</li>
-<li>Bayes Rules!</li>
+<hr class="half-width"><ul><li><p>See interactive visualization of different MCMC algorithms: <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a></p></li>
+<li><p>Statistical Rethinking</p></li>
+<li><p>BDA3</p></li>
+<li><p>Bayes Rules!</p></li>
 </ul><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
@@ -760,9 +804,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
-  "dateCreated": "2023-06-28",
-  "dateModified": "2023-06-28",
-  "datePublished": "2023-06-28"
+  "dateCreated": "2023-06-29",
+  "dateModified": "2023-06-29",
+  "datePublished": "2023-06-29"
 }
 
   </script><script>
