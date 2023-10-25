@@ -20,7 +20,7 @@ theme_set(theme_bw(15))
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Understand the basic idea of Bayesian statistical thinking.
+- Understand the basic idea of Bayesian statistical thinking
 - Bayesian formula: prior, likelihood, posterior
 - Implement grid approximation for a Bayesian model
 
@@ -144,7 +144,7 @@ Take a moment to analyze the figure.
 Notice that the likelihood function is not a distribution in terms of the parameter $p$, so it doesn't sum to one. Below, we normalize it for better illustration. 
 
 
-Now that we have a posterior distribution (approximation) available, we can try to quantify it by computing features of it. The mode (maximum a posteriori, or MAP), average and variance and commonly employed point estimates: 
+Now that we have a posterior distribution (approximation) available, we can try to quantify it by computing features of it. The mode, average and variance and commonly employed point estimates: 
 
 ```{r}
 
@@ -473,6 +473,104 @@ p_marginal <- df_w_marginal %>%
 
 
 
+
+## Example: Gamma model
+
+Assume the following data was generated from a Gamma(alpha, beta) distribution: 
+
+```{r}
+X <- c(0.34, 0.2, 0.22, 0.77, 0.46, 0.73, 0.24, 0.66, 0.64)
+```
+
+Estimate the parameters alpha, beta using the grid approximation. Compute the marginal posterior of alpha. 
+
+
+Let's define a grid of points for $\alpha$ and $\beta$ and make a data frame with all the pairwise combinations of the grid points. Note that since this model contains two parameters, the grid points reside in 2D space!
+
+```{r}
+delta <- 0.05
+alpha_grid <- seq(from = 0.01, to = 10, by = delta)
+beta_grid <- seq(from = 0.01, to = 20, by = delta)
+
+
+df <- expand.grid(alpha = alpha_grid, beta = beta_grid)
+
+```
+
+
+Next, we'll compute the likelihood which is the product of the likelihoods of individual observations. 
+
+```{r}
+
+# Loop over all alpha, beta combinations
+for(i in 1:nrow(df)) {
+  df[i, "likelihood"] <- prod(
+    dgamma(x = X,
+           shape = df[i, "alpha"],
+           rate = df[i, "beta"])
+    )
+}
+```
+
+Next, we'll add priors for $\alpha$ and $\beta$. They are both positive which should be reflected in the prior. A conjugate prior for the Gamma likelihood [exists](https://en.wikipedia.org/wiki/Gamma_distribution#Bayesian_inference) but we'll use simple Gamma priors with large variance.
+
+```{r}
+# Priors: alpha, beta ~ Gamma(2, .1)
+df <- df %>% 
+  mutate(prior = dgamma(x = alpha, 2, 1)*dgamma(x = alpha, 2, 1))
+
+# Posterior
+df <- df %>% 
+  mutate(posterior = prior*likelihood) %>% 
+  mutate(posterior = posterior/(sum(posterior)*delta^2)) # normalize
+
+
+# Plot
+p_joint_posterior <- df %>% 
+  ggplot() + 
+  geom_tile(aes(x = alpha, y = beta, fill = posterior)) + 
+  scale_fill_gradientn(colours = rainbow(5))
+
+print(p_joint_posterior)
+```
+
+
+Next, we'll compute the MAP, which is a point in the 2-dimensional parameter space. 
+
+```{r}
+df[which.max(df$posterior), c("alpha", "beta")]
+```
+
+However, often in addition to the parameters of interest, the model contains parameters we are not interested. For instance, if we were only interested in $\alpha$, then $\beta$ would called a 'nuisance' parameter. Nuisance parameters are part of the ('joint') posterior, but they can be discarded by integrating the joint posterior over these parameters (see BDA3: p.63 for details). A posterior integrated over some of the parameters is called a marginal posterior. 
+
+Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta$. Intuitively it can be helpful to think of marginalization as a process where all of the joint posterior mass is drawn towards the $alpha$ axis as if drawn by a gravitational force. 
+
+```{r}
+# Get marginal posterior for alpha
+alpha_posterior <- df %>% 
+  group_by(alpha) %>% 
+  summarize(posterior = sum(posterior)) %>% 
+  mutate(posterior = posterior/(sum(posterior)*delta))
+
+
+p_alpha_posterior <- alpha_posterior %>% 
+  ggplot() + 
+  geom_line(aes(x = alpha, y = posterior))
+
+print(p_alpha_posterior)
+```
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::: challenge
+
+Does the MAP of the joint posterior of $\theta = (\alpha, \beta)$ correspond to the MAPs of the marginal posteriors of $\alpha$ and $\beta$?
+
+::::::::::::: solution
+No. Why?
+:::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Likelihood determines the probability of data conditional on the model parameters
@@ -486,18 +584,8 @@ p_marginal <- df_w_marginal %>%
 
 ## Reading 
 
-- Gelman *et al.*, Bayesian Data Analysis (3rd ed.): Ch. 1, 2
+- Gelman *et al.*, Bayesian Data Analysis (3rd ed.): Ch. 1
 - McElreath, Statistical Rethinking (2nd ed.): Ch. 2
-
-
-
-::::::::::::::::::::::::::::::::::::: instructor
-
-Here are some exercises that can be used as additional challenges. 
-
-1. 
-
-:::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
