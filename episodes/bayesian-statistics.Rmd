@@ -265,8 +265,6 @@ $$\log p(X | \theta) = \sum_{i = 1}^{N} \log p(X_i | \theta)$$
 
 Implement the grid approximation the normal model with the generated data as described above.
 
-Work with logarithms to avoid underflow. 
-
 :::::::::::::::::::::: solution
 
 
@@ -277,31 +275,42 @@ df <- data.frame(mu = mu_grid)
 # Log likelihood
 for(i in 1:nrow(df)) {
   # print(i)
-  df[i, "log_likelihood"] <- sum(dnorm(x = x,
-                                   mean = df[i, "mu"], sd = sigma,
-                                   log = TRUE))
+  df[i, "likelihood"] <- prod(dnorm(x = x, mean = df[i, "mu"], sd = sigma))
 }
 
-df <- df %>% 
-  mutate(likelihood = exp(log_likelihood))
 
 # Prior: mu ~ N(0, 1)
 df <- df %>% 
-  mutate(log_prior = dnorm(x = mu,
+  mutate(prior = dnorm(x = mu,
                            mean = 0 ,
-                           sd = 1,
-                           log = TRUE)) %>% 
-  mutate(prior = exp(log_prior))
+                           sd = 1))
 
 # Posterior
 df <- df %>% 
-  mutate(log_posterior = log_prior + log_likelihood) %>% 
-  mutate(posterior = exp(log_posterior)) %>% 
+  mutate(posterior = prior * likelihood) %>% 
   mutate(posterior = posterior/(sum(posterior)*delta)) # normalize
 
-# Normalize likelihood (for better illustration)
+
+
+
+
+## Plot
+
+# Normalize likelihood
 df <- df %>% 
   mutate(likelihood = likelihood/(sum(likelihood)*delta))
+
+
+# Wide --> long format
+df_l <- df %>% 
+  gather(key = "Function", value = "value", -c("mu"))
+
+
+
+ggplot(df_l) +
+  geom_line(aes(x = mu, y = value, color = Function)) + 
+  geom_vline(xintercept = unknown_mu, linetype = "dashed") # True mu value
+
 ```
 
 ::::::::::::::::::::::
@@ -578,7 +587,7 @@ No. Why?
 - Posterior distribution quantifies the probability of parameter values conditional on the data.
 - Posterior is a compromise between the data and prior. The less data available, the bigger the effect of the prior. 
 - The grid approximation is a means for accessing posterior distributions which may be difficult to compute analytically
-
+- If the model contains more than one parameter, the posterior is multidimensional. *Marginal posterior* for a subset of the parameters can be computed by integrating over the 'nuisance' parameters. 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
