@@ -28,9 +28,14 @@ library(grafify)
 library(rstan)
 
 # Set graphical theme
-theme_set(theme_bw(15))
+theme_set(theme_bw(20))
 
-# Set color scheme
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
 ```
 
 

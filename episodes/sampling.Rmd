@@ -12,21 +12,27 @@ library(grafify)
 library(cowplot)
 theme_set(theme_bw(15))
 
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
 ```
 
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do you work with posterior samples?
-- How can the posterior information be handled?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how to
-  - work with posterior samples
-  - compute posterior intervals
+
+- Computing point estimates and posterior intervals based on posterior samples
+- Forecasting with the posterior predictive distribution
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -42,8 +48,7 @@ where $\alpha$ and $\beta$ are the hyperparameters and $x$ the number of success
 
 ::::::::::::::::::::::::::::::::::::::::: challenge
 
-Derive the analytical posterior distribution for the Beta-Binomial model. 
-
+Derive the analytical posterior distribution for the Beta-Binomial model.
 
 ::::::::::::::::::::::::::::::: solution
 
@@ -59,7 +64,7 @@ p(\theta | X) &\propto  p(X | \theta) p(\theta) \\
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-Let's generate samples from the prior and posterior distributions, using the handedness data of the previous episode. 
+Typically, the analytical posterior is not available and we'll be working with samples. We'll delve into MCMC methods in later episodes but now we can generate posterior samples based on the grid approximation. 
 
 
 ```{r}
@@ -69,64 +74,58 @@ N <- 50
 # 7/50 are left-handed
 x <- 7
 
-# Number of samples
-n_samples <- 5000
+## Grid approximation
+delta <- 0.01
+theta_grid <- seq(0, 1, by = delta)
 
-# Prior hyperparameters
-alpha <- 1
-beta <- 10
-
-# Draw random values from the prior
-prior_samples <- rbeta(n = n_samples,
-                       shape1 = alpha,
-                       shape2 = beta)
-
-# Draw random values from the posterior
-posterior_samples <- rbeta(n = n_samples,
-                           shape1 = alpha + x, 
-                           shape2 = beta + N - x)
-
-bin_samples <- data.frame(prior = prior_samples, 
-                      posterior = posterior_samples)
-
+likelihood <- dbinom(x = x, size = N, prob = theta_grid)
+alpha <- 2
+beta <- 4
+prior <- dbeta(theta_grid, 2, 4)
+posterior_unnormalized <- likelihood * prior
+posterior <- posterior_unnormalized / (sum(posterior_unnormalized)*delta)
 
 ```
 
+Posterior samples can be generated from the grid approximation as follows. Take a moment to think why this code achieves posterior samples. 
 
-Next, let's plot histograms for these samples along with the analytical densities, the normalized likelihood, and the "true" value (blue) based on a larger population sample. 
+```{r}
+# Number of samples
+n_samples <- 5000
+
+theta_samples <- sample(theta_grid, size = n_samples, replace = TRUE, prob = posterior) %>% 
+  data.frame(theta = . )
+```
+
+
+Next, let's plot histograms for these samples along with the analytical density, the normalized likelihood, and the "true" value (blue) based on a larger population sample. 
 
 ```{r, fig.width = 10}
-# Wide --> long format
-bin_samples_w <- bin_samples %>% gather(key = "Function")
 
-
-p <- ggplot(bin_samples_w) + 
-  geom_histogram(aes(x = value, y = after_stat(density),
-                     fill = Function),
-                 bins = 50, 
-                 position = "identity", alpha = 0.75)
+p <- ggplot() +
+  geom_histogram(data = theta_samples, 
+                 aes(x = theta, y = after_stat(density)),
+                 bins = 30, alpha = 0.75, 
+                 fill = posterior_color)
 
 # Add analytical distributions
-delta <- 0.001
-analytical_df <- data.frame(p = seq(0, 1, by = delta)) %>% 
-  mutate(analytical_prior = dbeta(x = p , alpha, beta), 
-         analytical_posterior = dbeta(x = p , alpha + x, beta + N - x), 
-         likelihood = dbinom(size = N, x = x, prob = p)) %>% 
-  mutate(likelihood = likelihood/(sum(likelihood)*delta)) %>% 
-  gather(key = "Function", value = "value", -p)
+analytical_df <- data.frame(theta = seq(0, 1, by = delta)) %>%
+  mutate(posterior_analytical = dbeta(x = theta , alpha + x, beta + N - x)) %>%
+  mutate(likelihood = likelihood/(sum(likelihood)*delta)) %>%
+  gather(key = "Function", value = "value", -theta)
 
 
 # Frequency in a large population sample (Hardyck, C. et al., 1976)
-p_true <- 9.6/100
+theta_true <- 9.6/100
 
-p <- p + 
-  geom_line(data = analytical_df, 
-            aes(x = p, y = value, color = Function), 
+p <- p +
+  geom_line(data = analytical_df,
+            aes(x = theta, y = value, color = Function),
             linewidth = 1) +
-  geom_vline(xintercept = p_true,
-             color = "blue", 
+  geom_vline(xintercept = theta_true,
+             color = "blue",
              linewidth = 1) +
-  scale_color_grafify() + 
+  scale_color_grafify() +
   scale_fill_grafify()
 
 print(p)
@@ -145,16 +144,16 @@ Let us now compute the percentile-based CIs for the handedness example, along wi
 ```{r, fig.width = 10}
 
 # MAP
-posterior_density <- density(posterior_samples)
+posterior_density <- density(theta_samples$theta)
 MAP <- posterior_density$x[which.max(posterior_density$y)]
 
 # 95% credible interval
-CIs <- quantile(posterior_samples, probs = c(0.025, 0.975))
+CIs <- quantile(theta_samples$theta, probs = c(0.025, 0.975))
 
 p <- p +
   geom_vline(xintercept = CIs, linetype = "dashed") + 
   geom_vline(xintercept = MAP) +
-  geom_vline(xintercept = p_true, color = "blue", size = 1) +
+  geom_vline(xintercept = theta_true, color = "blue", size = 1) +
   labs(title = "Black = MAP and CIs")
 
 print(p)
@@ -165,9 +164,9 @@ Another perspective into processing posterior information is to find the amount 
 
 ```{r}
 
-p_less_than_0.15 <- mean(posterior_samples < 0.15)
-p_between_0.05_0.1 <- mean(posterior_samples > 0.05 & posterior_samples < 0.1)
-p_outside_0.1_0.2 <- mean(posterior_samples < 0.1 | posterior_samples > 0.2)
+theta_less_than_0.15 <- mean(theta_samples$theta < 0.15)
+theta_between_0.1_0.2 <- mean(theta_samples$theta >= 0.1 & theta_samples$theta <= 0.2)
+theta_outside_0.1_0.2 <- mean(theta_samples$theta < 0.1 | theta_samples$theta > 0.2)
 
 ```
 
@@ -176,10 +175,10 @@ Let's visualize these probabilities as proportions of the analytical posterior:
 ```{r, echo = FALSE}
 
 my_df <- analytical_df %>% 
-                 filter(Function == "analytical_posterior")
+  filter(Function == "posterior_analytical")
 
 my_p <- ggplot(my_df) + 
-  geom_line(aes(x = p, y = value,
+  geom_line(aes(x = theta, y = value,
                      color = Function)) + 
    scale_color_grafify() +
   guides(color="none")
@@ -187,44 +186,43 @@ my_p <- ggplot(my_df) +
 my_breaks <- seq(0, 1, by = 0.25)
 
 p1 <- my_p + 
-  geom_area(data = my_df %>% 
-              filter(p <= 0.15) %>% 
-              mutate(area = "yes"), 
-            aes(x = p, y = value,
-                     color = Function), 
-            alpha = 0.5) + 
-  # scale_x_continuous(breaks = c(my_breaks, 0.2)) +
-  labs(title = paste0("P(p < 0.15) = ", round(p_less_than_0.15, 3)))
+    geom_area(data = my_df %>% 
+                  filter(theta <= 0.15) %>% 
+                  mutate(area = "yes"), 
+              aes(x = theta, y = value), 
+              alpha = 0.5) + 
+    # scale_x_continuous(breaks = c(my_breaks, 0.2)) +
+    labs(title = paste0("P(theta < 0.15) = ", round(theta_less_than_0.15, 3)))
 
 p2 <- my_p + 
   geom_area(data = my_df %>% 
-              filter(p <= 0.1 & p >= 0.05) %>% 
+              filter(theta <= 0.2 & theta >= 0.1) %>% 
               mutate(area = "yes"), 
-            aes(x = p, y = value,
+            aes(x = theta, y = value,
                      color = Function), 
             alpha = 0.5) + 
-  labs(title = paste0("P(0.05 < p < 0.1) = ", round(p_between_0.05_0.1, 3)))
+  labs(title = paste0("P(0.1 < p < 0.2) = ", round(theta_between_0.1_0.2, 3)))
 
 p3 <- my_p + 
   geom_area(data = my_df %>% 
-              filter(p >= 0.2) %>% 
+              filter(theta >= 0.2) %>% 
               mutate(area = "yes"), 
-            aes(x = p, y = value,
+            aes(x = theta, y = value,
                      color = Function), 
             alpha = 0.5) + 
   geom_area(data = my_df %>% 
-              filter(p <= 0.1) %>% 
+              filter(theta <= 0.1) %>% 
               mutate(area = "yes"), 
-            aes(x = p, y = value,
+            aes(x = theta, y = value,
                      color = Function), 
             alpha = 0.5) +
-  labs(title = paste0("P(p < 0.1 or p > 0.2) = ", round(p_outside_0.1_0.2, 3)))
+  labs(title = paste0("P(theta < 0.1 or theta > 0.2) = ", round(theta_outside_0.1_0.2, 3)))
 
 
 p_area <- plot_grid(p1, p2, p3,
                ncol = 1)
 
-print(p_area)
+p_area
 
 ```
 
@@ -254,52 +252,7 @@ If you sort the samples in order, each set of $n$ consecutive samples contains $
 
 :::::::::::::::::::::::::::: solution
 
-Let's write the function for computing the HPDI
-
-```{r}
-get_HPDI <- function(samples, prob) {
-  
-  # Total samples
-  n_samples <- length(samples)
-  
-  # How many samples constitute prob of the total number?
-  prob_samples <- round(prob*n_samples)
-  
-  # Sort samples
-  samples_sort <- samples %>% sort
-  
-  
-  # Each samples_sort[i:(i + prob_samples - 1)] contains prob of the total distribution mass
-  # Find the shortest such interval 
-  min_i <- lapply(1:(n_samples - prob_samples), function(i) {
-    
-    samples_sort[i + prob_samples - 1] - samples_sort[i]
-    
-  }) %>% unlist %>% which.min()
-  
-  # Get correspongind values
-  hpdi <- samples_sort[c(min_i, min_i + prob_samples)]
-  
-  return(hpdi)
-}
-```
-
-Then we can compute the 95% HPDI and compare it to the corresponding CIs
-
-```{r}
-
-
-data.frame(HPDI = get_HPDI(bin_samples$posterior, 0.95), 
-           CI = quantile(posterior_samples, probs = c(0.025, 0.975))) %>% 
-  t %>% 
-  data.frame() %>% 
-  mutate(length = X97.5. - X2.5.)
-
-
-```
-
-Both intervals contain the same mass but the HPDI is (slightly) shorter. 
-
+Solution
 :::::::::::::::::::::::::::::::::::::
 
 
