@@ -53,7 +53,7 @@ $$
 
 The proportional Bayes' formula produces an unnormalized posterior distribution which can then be normalized to access the normalized posterior. 
 
-## Example: handedness
+## Example: Binomial model
 
 Let us illustrate the use of the Bayes' theorem with an example. 
 
@@ -238,7 +238,7 @@ Play around with the parameters of the prior distributions and see how it affect
 
 The main limitation of the grid approximation method is that it becomes impractical for models with a large number of parameters. The reason is that the number of computations grows as $O \{ n^p \}$ where $n$ is the number of grid points per model parameter and $p$ the number of parameters. This quickly becomes prohibitive, and the grid approximation is seldom used in practice. The standard approach to posterior computations is to draw samples from it with Markov chain Monte Carlo (MCMC) methods, which we will go through later. In the following episodes, we will learn how to perform computations on samples drawn from a distribution and eventually implement our own MCMC algorithms. 
 
-## Example: normal model 
+## Example: Normal model 
 
 Let us implement another standard statistical model, the normal model, with the grid approximation. We'll assume that the variance of the model in known, $\sigma^2=1,$ and we'd like to learn the mean parameter $\mu.$
 
@@ -345,27 +345,7 @@ What happens if the true value of $\mu$ is not within the defined grid?
 :::::::::::::::::::::::::::::::::::::::::::::::
 
 
-::::::::::::::::::::::::::::::::::::: challenge
 
-The following data is a collection of daily milk yield (in liters) for dairy cows.
-
-```{r}
-X <- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93)
-```
-
-
-Estimate the average daily yield  $\mu$ using the normal model. 
-
-Use the grid approximation and choose some non-uniform priors.
-Plot the marginal posterior for $\mu$.
-Compute the 90% credible interval.
-What is the probability that the daily milk yield is more than 30 liters?
-
-:::::::::::::::::::::::: solution
-Solution
-::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
@@ -471,6 +451,35 @@ No. Why?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+## Posterior intervals
+
+
+## Final challenge
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+The following data is a collection of daily milk yield (in liters) for dairy cows.
+
+```{r}
+X <- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93)
+```
+
+
+Estimate the average daily yield  $\mu$ using the normal model. 
+
+Use the grid approximation and choose some non-uniform priors.
+Plot the marginal posterior for $\mu$.
+Compute the 90% credible interval.
+What is the probability that the daily milk yield is more than 30 liters?
+
+:::::::::::::::::::::::: solution
+Solution
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Likelihood determines the probability of data conditional on the model parameters
@@ -482,6 +491,8 @@ No. Why?
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 ## Reading 
 

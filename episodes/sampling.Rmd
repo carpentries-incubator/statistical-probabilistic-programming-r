@@ -22,7 +22,7 @@ posterior_color <- "#56B4E9"
 ```
 
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
 - How do you work with posterior samples?
 
@@ -133,7 +133,7 @@ print(p)
 ```
 
 
-In Episode 1, we summarized the posterior with points estimates, namely the posterior mode (MAP), mean and variance. 
+<!-- In Episode 1, we summarized the posterior with points estimates, namely the posterior mode (MAP), mean and variance.  -->
 
 The standard way of reporting posterior information is based on *credible intervals* (CI), which refer to areas of the parameter space where a certain amount of posterior mass is located. Usually CIs are computed as quantiles of posterior, so for instance the 95\% CI would be located between the 2.5\% and 97.5\% percentiles. Another approach is to compute the smallest such set that contains 95\% of the posterior, which are also called highest posterior density intervals (HPDI). 
 

@@ -4,7 +4,25 @@ teaching: 10
 exercises: 2
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+
+```{r, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(grafify)
+library(cowplot)
+theme_set(theme_bw(15))
+
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
+```
+
+
+:::::::::::::::::::::::::::::::::::::: questions
 
 - What next?
 
@@ -12,25 +30,37 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Other things
+
+- Learn more
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Gaussian processes
+Add text
 
-- Basic idea, short example with squared exponential kernel 
-- In exercises there is a GP classification example. 
 
-## Dimension reduction
-- Probabilistic PCA
+::::::::::::::::::::::::::::::::::::::::: challenge
 
-## Missing observations
+You can define a challenge here
 
-## Feature selection
-- Horseshoe prior (difficult to fit)
+::::::::::::::::::::::::::::::: solution
 
-## Differential equations
+... and a solution here
 
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+More text
+
+
+
+::::::::::::::::::::::::::::::::::::: discussion
+
+Discussion poitns
+
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
