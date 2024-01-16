@@ -61,11 +61,11 @@ contact: 'velait@utu.fi'
 episodes:
 - setup.Rmd
 - bayesian-statistics.Rmd
-- sampling.Rmd
 - stan.Rmd
 - mcmc.Rmd
 - hierarchical-models.Rmd
 - model-critisism.Rmd
+- gaussian-processes.Rmd
 - other-topics.Rmd
 - recommended-reading.Rmd
 - exercises.Rmd
