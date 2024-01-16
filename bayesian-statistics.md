@@ -19,7 +19,9 @@ exercises: 2
 - Grid approximation
 - Communicating posterior information
   - Point estimates
-  - Intervals
+  - Credible intervals
+  - Probabilities for defined sets
+- Working with posterior samples 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

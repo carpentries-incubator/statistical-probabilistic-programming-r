@@ -49,231 +49,223 @@ As the algorithm is ran long enough, convergence is guaranteed and eventually th
 
 
 
-## Example
+## Example: Banana distribution
 
-Let's look at the normal model and implement the Metropolis-Hastings algorithm to sample the posterior. First we'll simulate some data 
+Let's use the Metropolis-Hasting algorithm to generate samples from the posterior of the following statistical model: 
+
+$$X \sim N(\theta_1 + \theta_2^2, 1) \\
+\theta_1, \theta_2 \sim N(0, 1),$$
+
+Data: 
 
 
 ```r
-N <- 100
-mu_true <- -1.25
-sigma_true <- 0.6
-X <- rnorm(N, mu_true, sigma_true)
-p <- data.frame(X) %>%
-  ggplot() +
-  geom_histogram(aes(x = X),
-                 bins = 20)
-
-print(p)
+X <- c(3.78, 2.76, 2.84, 2.92, 1.3, 3.93, 3.69, 2.28, 2.81, 0.71)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
 
-Then, we'll write some functions. Below, `pars` is of the form `c(mu, sigma)`.
+Let's implement a Metropolis-Hastings sampler for the banana posterior. 
 
-First the point-wise log likelihood. Remember that the likelihood is the product of likelihoods for individual data points, which after a log transformation turns into a sum. 
+
+
+
+### Helper functions
+
+Here, we'll write some functions that take care of the different steps of the MH-algorithm. 
+
+The proposal distribution is the multivariate (2D) normal with diagonal covariance scaled by a scalar `jump_scale`. This choice amount to the random walk MH.
 
 
 ```r
-log_likelihood <- function(X, pars) {
+# Proposal generator: multivariate Normal with covariance = jump_scale*diagonal
+generate_proposal <- function(pars_now, jump_scale = 0.1) {
   
-  log_lh <- dnorm(X,
-                  mean = pars[1],
-                  sd = pars[2],
-                  log = TRUE) %>%
-    sum
+  my_n <- length(pars_now)
   
-  return(log_lh)
+  mvtnorm::rmvnorm(1,
+                   mean = pars_now,
+                   sigma = jump_scale*diag(my_n))
+}
+```
+
+This functions returns the log unnormalized posterior value at point `pars`.
+
+
+```r
+# Compute target distribution P(theta = pars).
+get_log_target_value <- function(X, pars) {
+  
+  # log(likelihood)
+  sum(
+    dnorm(X,
+          mean = pars[1] + pars[2]^2, 
+          sd = 1,
+          log = TRUE)
+      ) +
+    
+    # log(prior)
+    dnorm(pars[1], 0, 1, log = TRUE) +
+    dnorm(pars[2], 0, 1, log = TRUE)
   
 }
 ```
 
 
-Next, well define normal and Gamma priors as the priors. The log posterior is the sum of log likelihood and log priors. 
+This function computes the ratio used to determine whether or not the proposal is accepted.
 
 
 ```r
-# Priors: mu ~ normal, sigma ~ gamma  
-log_prior <- function(pars) {
-  log_mu_prior <- dnorm(x = pars[1],
-                        mean = 0, sd = 1,
-                        log = TRUE)
+# Compute ratio
+get_ratio <- function(X, pars_now, pars_proposal) {
   
-  log_sigma_prior <- dgamma(x = pars[2],
-                            shape = 2, rate = 1,
-                            log = TRUE)
+  # Proposal distribution is symmetric: 
+  # N(theta_{i} | theta_{i+1}) = N(theta_{i+1} | theta_{i}),
+  # so they cancel out!
   
-  return(log_mu_prior + log_sigma_prior)
-  
-}
-
-
-log_posterior <- function(X, pars) {
-  
-  log_likelihood(X, pars) + log_prior(pars)
-  
-}
-```
-
-
-The next function implements the transition density. We'll use the normal distribution for both parameters. However, as $\sigma$ cannot be negative, we'll take the absolute value to ensure positivity. 
-
-
-```r
-generate_proposal <- function(pars_old, sd) {
-  
-  # proposal 
-  pars_new <- rnorm(2, mean = pars_old, sd = sd)
-  
-  # make sure sigma proposal > 0
-  pars_new[2] <- abs(pars_new[2])
-  
-  return(pars_new)
-}
-```
-
-
-The next function computes the acceptance ratio. Since the normal distribution is a symmetric proposal, it suffices to compute the ratio of the posteriors. 
-
-
-```r
-# Acceptance probability
-get_ratio <- function(X, pars_old, pars_new) {
-  
-  # Ratio of posteriors
-  # No need to include ratio of proposal densities
-  # because Gaussian density is symmetric
-  r <- exp(log_posterior(X, pars_new) - log_posterior(X, pars_old))
+  r <- exp(
+    get_log_target_value(X, pars_proposal) - 
+      get_log_target_value(X, pars_now)
+    )
   
   return(r)
+  
 }
 ```
 
 
-Finally, here is the Metropolis-Hastings sampler for the normal model. 
+This function combines the helper functions above and loops over the chosen number of samples. 
 
 
 ```r
-metropolis_sampler <- function(X, inits, n_samples = 1000, jump_sd) {
+# Sampler
+MH_sampler <- function(X,
+                       inits,
+                       n_samples = 1000,
+                       jump_scale = 0.1) {
+
   
+  # Matrix for samples
   pars <- matrix(nrow = n_samples, ncol = length(inits))
-  pars[1, ] <- inits
   
+  # Set initial values
+  pars[1, ] <- inits
+
+  # Generate samples
   for(i in 2:n_samples) {
     
     # Current parameters
-    pars_old <- pars[i-1, ]
+    pars_now <- pars[i-1, ]
     
     # Proposal
-    pars_new <- generate_proposal(pars_old, jump_sd)
+    pars_proposal <- generate_proposal(pars_now, jump_scale)
     
     # Ratio
-    r <- get_ratio(X, pars_old, pars_new)
+    r <- get_ratio(X, pars_now, pars_proposal)
+    
+    r <- min(1, r)
     
     # Does the sampler move?
-    move <- runif(n = 1, min = 0, max = 1) <= r
+    move <- sample(x = c(TRUE, FALSE),
+                   size = 1,
+                   prob = c(r, 1-r))
     # OR: 
-    # move <- sample(x = c(TRUE, FALSE), size = 1, prob = c(r, 1-r))
+    # move <- runif(n = 1, min = 0, max = 1) <= r
     
     if(move) {
-      pars[i, ] <- pars_new
+      pars[i, ] <- pars_proposal
     } else {
-      pars[i, ] <- pars_old
+      pars[i, ] <- pars_now
     }
-    
-  }
   
-  pars <- data.frame(mu = pars[, 1], sigma = pars[, 2])
+  
+    }
+  
+  # Into data frame
+  pars <- data.frame(pars)
   
   return(pars) 
   
 }
 ```
 
+### Run MH
 
 
-Then, we run the sampler. We'll use 4 chains with 5000 samples each. The transition density standard deviation is set to 0.05. 
+We'll use 1000 samples with initial value (0, 5) and jump scale 0.01 and lay the sample trajectory over the true posterior density. 
 
-
-```r
-n_samples <- 5000
-n_chains <- 4
-jump_sd <- 0.05
-
-# Warmup 50%
-warmup <- 0.5
-
-
-# Random initials for each chain
-inits <- apply(X = matrix(c(1:n_chains)),
-               MARGIN = 1,
-               FUN = function(x) rnorm(2, 0, 1)) %>% 
-  t 
-
-# Make sure sigma initial >0
-inits[, 2] <- abs(inits[, 2])
-
-# Run the chains
-samples <- lapply(1:nrow(inits), function(i) {
-  
-  my_df <- metropolis_sampler(X = X,
-                              inits = c(inits[i, 1], inits[i, 2]),
-                              jump_sd = jump_sd,
-                              n_samples = n_samples) %>% 
-      data.frame()
-  
-  
-  # Add column for chain and 50% warmup
-  my_df <- my_df %>% 
-    mutate(chain = as.factor(i), 
-           warmup = c(rep(TRUE, nrow(my_df)*warmup),
-                      rep(FALSE, nrow(my_df)*(1-warmup))))
-  
-  }) %>%
-  do.call(rbind, .)
-```
-
-
-Plot results. Uncomment the line `fill = warmup` below so see the effect of removing the initial 50% of the samples. 
 
 
 ```r
-samples_w <- samples %>%
-  gather(key = "par", value = "value", -c(chain, warmup))
+set.seed(12)
+# Get samples
+samples <- MH_sampler(X,
+                      inits = c(0, 5),
+                      n_samples = 1000, 
+                      jump_scale = 0.01)
 
-# Posterior histogram
+# Add column for sample index
+samples$sample <- 1:nrow(samples)
 
-p_posterior <- ggplot() + 
-  geom_histogram(data = samples_w,
-                 aes(x = value,
-                     # fill = warmup
-                     ),
-                 bins = 50, alpha = 0.75, position = "identity") +
-  geom_vline(data = data.frame(par = c("mu", "sigma"),
-                               value = c(mu_true, sigma_true)), 
-             aes(xintercept = value)) + 
-  facet_wrap(~par, scales = "free")
+# Plot joint posterior samples
+p_MH1 <- p_grid +
+  geom_path(data = samples,
+            aes(x = X1, y = X2))
+  
 
-# p_posterior_chains <- ggplot(samples_l) +
-#   geom_histogram(aes(x = value, fill = chain),
-#                  bins = 50, alpha = 0.75, 
-#                  position = "identity") +
-#   geom_vline(data = data.frame(par = c("mu", "sigma"),
-#                                value = c(mu_true, sigma_true)), 
-#              aes(xintercept = value)) + 
-#   scale_fill_grafify()
-
-
-print(p_posterior)
+print(p_MH1)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+
+
+
+*Conclusions: ---*
+
+
+
+
+
+
 
 
 
 ## Assessing convergence
 
 Although converge is guaranteed in theory, it is not so in practice. 
+
+
+Depending on random variations, these settings may cause the issues, including the following: 
+
+1. Incomplete exploration of the target distribution. This means that the sampler visits only some of the areas with posterior mass. This can lead to a biased approximation. 
+
+2. Slow convergence. Initial values of the chain are far from most of the posterior mass, leading to bias. 
+
+3. A large proportion of the proposals is rejected, leading to inefficiency. 
+
+4. Samples are autocorrelated, meaning that consequtive samples are close to each other. Ideally the samples would be totally independent. 
+
+
+
+1. Monitoring convergence with statistics, such as effective sample size, $\hat{R}$, and divergent transitions (for Hamiltonian Monte Carlo). 
+
+2. Looking at trace plots
+
+3. Information about the model. E.g. if you use known the posterior to the multimodal.
+
+4. Running time. If your sampler takes a long time, this *can* be a sign of an issue. 
+
+5. Using Stan. Stan throws warnings automatically.
+
+The issues can be remedied with: 
+
+1. Running multiple long chains with distinct random initial values. 
+
+2. Discarding an early proportion of the chain as warmup (burn-in). Stan uses 50% by default. 
+
+3. Setting a good proposal distribution. This is easy said, but in practice not trivial at all. 
+
+
+
 
 Like we saw above, unless the chains' initial values are in high posterior density areas, the early chain samples will bias the target distribution estimate. For this reason, it is customary to discard a proportion of the chain as "warmup." Often 50% is used and this is also the default in Stan. 
 
@@ -289,6 +281,10 @@ Let's plot the generated trajectories and the true parameter value. Here, the in
 
 
 ```r
+samples <- samples %>% 
+  mutate(warmup = c(rep("FALSE", nrow(samples)/2),
+                    rep("TRUE", nrow(samples)/2)))
+
 p_traj <- ggplot() +
   geom_path(data = samples,
             aes(x = mu, y = sigma, color = chain), alpha = 0.25) +
@@ -303,7 +299,13 @@ p_traj <- ggplot() +
 print(p_traj)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+```{.error}
+Error in `geom_path()`:
+! Problem while computing aesthetics.
+ℹ Error occurred in the 1st layer.
+Caused by error:
+! object 'mu' not found
+```
 
 
 
@@ -318,7 +320,16 @@ Clearly convergence is reached fairly quickly after initialization, in some doze
 samples_w <- samples %>% 
   mutate(sample = rep(1:n_samples, 4)) %>%
   gather(key = "parameter", value = "value", -c(chain, warmup, sample))
+```
 
+```{.error}
+Error in `mutate()` at tidyr/R/gather.R:84:3:
+ℹ In argument: `sample = rep(1:n_samples, 4)`.
+Caused by error:
+! object 'n_samples' not found
+```
+
+```r
 # Trace plot
 p_trace <- ggplot() + 
   geom_line(data = samples_w,
@@ -329,11 +340,19 @@ p_trace <- ggplot() +
              scales = "free",
              ncol = 2) + 
   scale_color_grafify()
+```
 
+```{.error}
+Error in eval(expr, envir, enclos): object 'samples_w' not found
+```
+
+```r
 print(p_trace)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+```{.error}
+Error in eval(expr, envir, enclos): object 'p_trace' not found
+```
 
 
 
@@ -346,8 +365,10 @@ sum(table(samples %>%
             pull(mu))-1)/(n_chains*n_samples*(1-warmup))
 ```
 
-```{.output}
-[1] 0.3943
+```{.error}
+Error in `pull()`:
+Caused by error:
+! object 'mu' not found
 ```
 
 
@@ -357,6 +378,94 @@ sum(table(samples %>%
 Try different proposal distributions (e.g. 0.005, 0.5) standard deviations in the MCMC example above. How does this affect the inference and convergence? Why?
 
 :::::::::::::::::::::::::::::::::::::::::::::::
+
+
+# Example continued
+
+Here we'll run 4 chains with 10000 samples each and discard the first 50% of each chain as warmup. The jump scale is 0.1. 
+
+
+```r
+# Generate more chains
+n_chains <- 4
+
+# More samples
+n_samples <- 10000
+
+# Consider first p% as warmup
+warmup <- 0.5
+
+samples <- lapply(1:n_chains, function(i) {
+  
+  # Use random initial values
+  inits <- rnorm(2, 0, 5)
+  
+  chain <- MH_sampler(X, inits = inits,
+                        n_samples = n_samples, 
+                        jump_scale = 0.1)
+  
+  # Wrangle
+  colnames(chain) <- c("theta1", "theta2")
+  chain$sample <- 1:nrow(chain)
+  chain$chain <- as.factor(i)
+  chain[1:round(warmup*n_samples), "warmup"] <- TRUE
+  chain[(round(warmup*n_samples)+1):n_samples, "warmup"] <- FALSE
+  
+  return(chain)
+  
+}) %>% 
+  do.call(rbind, .)
+```
+
+
+
+```r
+# Plot
+p_joint_2 <- ggplot() +
+  # warmup samples
+  geom_path(data = samples %>%
+              filter(warmup == TRUE),
+            aes(theta1, theta2, color = chain),
+            alpha = 0.25) +
+  # post-warmup samples
+  geom_path(data = samples %>%
+              filter(warmup == FALSE),
+            aes(theta1, theta2, color = chain))
+
+print(p_joint_2)
+```
+
+<img src="fig/mcmc-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+
+Trace plots
+
+
+```r
+# Trace plots
+p_trace_2 <- ggplot() + 
+  geom_line(data = samples %>% 
+              filter(warmup == TRUE) %>% 
+              gather(key = "parameter",
+                     value = "value",
+                     -c("sample", "chain", "warmup")), 
+            aes(x = sample, y = value, color = chain), 
+            alpha = 0.25) + 
+  geom_line(data = samples %>% 
+              filter(warmup == FALSE) %>% 
+              gather(key = "parameter",
+                     value = "value",
+                     -c("sample", "chain", "warmup")), 
+            aes(x = sample, y = value, color = chain)) +
+  facet_wrap(~parameter, ncol = n_chains, 
+             scales = "free")
+
+
+print(p_trace_2)
+```
+
+<img src="fig/mcmc-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+
+
 
 
 
@@ -388,3 +497,5 @@ A type of convergence criterion exclusive to HMC are divergent transitions. In r
 - Statistical Rethinking
 - BDA3
 - Bayes Rules!
+
+
