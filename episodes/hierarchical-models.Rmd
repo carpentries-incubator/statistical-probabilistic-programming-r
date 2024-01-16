@@ -4,6 +4,21 @@ teaching: 10
 exercises: 2
 ---
 
+```{r, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(cowplot)
+library(grafify)
+theme_set(theme_bw(15))
+
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+```
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - What are Bayesian hierarchical models?
@@ -69,26 +84,342 @@ p &\sim Beta(2, 2) \\
 
 
 
+# Data
 
-Let's then implement the hierarchical, along with the unpooled and completely pooled binomial model in Stan. 
+Let's analyze human adult height in different countries. We'll use the normal model with unknown mean $\mu$ and standard deviation $\sigma$ as the generative model, and give these parameters a hierarchical treatment. 
 
-Hierarchical binomial model 
+We'll simulate some data based on measured averages and standard deviations for boys and girls in different countries. 
 
-```{stan output.var="hierarchical_binomial_model"}
+Data source: Height: Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories: a pooled analysis of 2181 population-based studies with 65 million participants. Lancet 2020, 396:1511-1524
 
+Data structure: 
+
+```{r}
+df_full <- read.csv("data/height_data.csv")
+
+str(df_full)
+```
+
+Let's subset this data to simplify the analysis:
+
+```{r}
+df_full_sub <- df_full %>% 
+  filter(
+    # 2019 measurements
+    Year == 2019,        
+    # use only a single age group
+    Age.group == 19, 
+    # Consider girls only
+    Sex == "Girls"
+    ) %>% 
+  # Select variables of interest. Use mu and sigma for mean and sd
+  select(Country, Sex, mu = Mean.height, sigma = Mean.height.standard.error)
+```
+
+Let's select 10 countries randomly
+
+```{r}
+# Select countries
+N_countries <- 10
+Countries <- sample(unique(df_full_sub$Country),
+                    size = N_countries,
+                    replace = FALSE) %>% sort
+
+df <- df_full_sub %>% filter(Country %in% Countries)
+
+df
+```
+
+
+## Simulate data
+
+Now, we can treat the values in the table above as ground truth and simulate some data based on them. Below, we'll analyze these simulated data points and see how well we can recover the "true" parameters for each country. 
+
+```{r}
+# Sample size per group 
+N <- 25
+
+# For each country, generate some random girl's heights
+Height <- lapply(1:nrow(df), function(i) {
+  
+  my_df <- df[i, ]
+  
+  data.frame(Country = my_df$Country, 
+             Sex = my_df$Sex, 
+             # Random normal values based on measured mu and sd
+             Height = rnorm(N, my_df$mu, my_df$sigma))
+
+}) %>% 
+  do.call(rbind, .)
+
+
+# Plot
+Height %>% 
+  ggplot() +
+  geom_point(aes(x = Country, y = Height, color = Sex)) + 
+  coord_flip() + 
+  labs(title = "Simulated data")
+```
+
+# Modeling
+
+Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. Let $i$ be an index that specifies the country, and $j$ index the data points. 
+
+$$X_{ij} \sim \text{N}(\mu_i, \sigma_i) \\
+\mu_i \sim \text{N}(\mu_\mu, \sigma_\mu) \\
+\sigma_i \sim \Gamma(\alpha_\sigma, \beta_\sigma) \\
+\mu_\mu \sim \text{N}(0, 100)\\
+\sigma_\mu \sim \Gamma(2, 0.1) \\
+\alpha_\sigma, \beta_\sigma  \sim \Gamma(2, 0.01)$$
+```{stan output.var="normal_hier_model"}
+data {
+  int<lower=0> G; // number of groups
+  int<lower=0> N[G]; // sample size within each group
+  vector[sum(N)] X; // concatenated observations
+}
+
+transformed data {
+  // get first and last index for each group in X
+  
+  int start_i[G];
+  int end_i[G];
+  
+  for(i in 1:G) {
+    
+    if(i == 1) {
+      start_i[1] = 1;
+    } else {
+      start_i[i] = start_i[i-1] + N[i-1];
+    }
+    
+    end_i[i] = start_i[i] + N[i]-1;
+  }
+}
+
+parameters {
+  
+  // parameters
+  vector[G] mu;
+  vector<lower=0>[G] sigma;
+  
+  // hyperparameters
+  real mu_mu;
+  real<lower=0> sigma_mu;
+  real<lower=0> alpha_sigma;
+  real<lower=0> beta_sigma;
+}
+
+
+
+model {
+  
+  // Likelihood for each group
+  for(i in 1:G) {
+    X[start_i[i]:end_i[i]] ~ normal(mu[i], sigma[i]);
+  }
+  
+  // Priors
+  mu ~ normal(mu_mu, sigma_mu);
+  sigma ~ gamma(alpha_sigma, beta_sigma);
+  
+  // Hyperpriors
+  mu_mu ~ normal(0, 100);
+  sigma_mu ~ inv_gamma(2, 0.1);
+  alpha_sigma ~ gamma(2, 0.01);
+  beta_sigma ~ gamma(2, 0.01);
+}
+
+
+generated quantities {
+  
+  real mu_tilda;
+  real<lower=0> sigma_tilda;
+  real X_tilda; 
+  
+  // Population distributions
+  mu_tilda = normal_rng(mu_mu, sigma_mu);
+  sigma_tilda = gamma_rng(alpha_sigma, beta_sigma);
+  
+  // PPD
+  X_tilda = normal_rng(mu_tilda, sigma_tilda);
+  
+} 
+
+```
+
+
+Let's call Stan. 
+
+To avoid convergence issues we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll parallelize the 4 chains. 
+
+```{r}
+stan_data <- list(G = length(unique(Height$Country)), 
+                  N = rep(N, length(Countries)), 
+                  X = Height$Height)
+
+# Parallelize 4 chains
+options(mc.cores = 4)
+
+normal_hier_fit <- rstan::sampling(normal_hier_model,
+                              stan_data, 
+                              iter = 10000,
+                              chains = 4,
+                                    # Use to get rid of divergent transitions:
+                                    control = list(adapt_delta = 0.99), 
+                            # Print messages?
+                            # refresh = 0
+                            )
+```
+
+
+# Results
+
+## Country-specific estimates
+
+Let's first compare the marginal posteriors for the country-specific estimates: 
+
+```{r}
+par_summary <- rstan::summary(normal_hier_fit, c("mu", "sigma"))$summary %>% 
+  data.frame() %>%
+  rownames_to_column(var = "par") %>%
+  separate(par, into = c("par", "country"), sep = "\\[") %>%
+  mutate(country = gsub("\\]", "", country)) %>%
+  mutate(country = Countries[as.integer(country)])
+```
+
+
+```{r, fig.height=8}
+# Plot
+par_summary %>%
+  ggplot() + 
+  geom_point(aes(x = country, y = mean),
+             color = posterior_color) +
+  geom_errorbar(aes(x = country, ymin = X2.5., ymax = X97.5.),
+                color = posterior_color) + 
+  geom_point(data = df %>% 
+               gather(key = "par",
+                      value = "value",
+                      -c(Country, Sex)), 
+             aes(x = Country, y = value)) + 
+  facet_wrap(~ par, scales = "free", ncol = 1) +
+  coord_flip() +
+  labs(title = "Blue = posterior; black = true value")
+```
+
+## Hyperparameters
+
+Let's then plot the population distribution's parameters, that is, the hyperparameters. The sample-based values are included in the plots of $\mu_\mu$ and $\sigma_\mu$ (why not for the other two hyperparameters?). 
+
+```{r}
+## Population distributions:
+population_samples_l <- rstan::extract(normal_hier_fit, c("mu_mu", "sigma_mu", "alpha_sigma", "beta_sigma")) %>% 
+  do.call(cbind, .) %>% 
+  set_colnames(c("mu_mu", "sigma_mu", "alpha_sigma", "beta_sigma")) %>% 
+  data.frame() %>% 
+  mutate(sample = 1:nrow(.)) %>% 
+  gather(key = "hyperpar", value = "value", -sample)
+
+
+ggplot() +
+  geom_histogram(data = population_samples_l, 
+                 aes(x = value),
+                 fill = posterior_color,
+                 bins = 100) + 
+  geom_vline(data = df_full_sub %>% 
+               filter(Sex == "Girls") %>% 
+               summarise(mu_mu = mean(mu), sigma_mu = sd(mu)) %>% 
+               gather(key = "hyperpar", value = "value"),
+             aes(xintercept = value)
+             )+
+  facet_wrap(~hyperpar, scales = "free")
+```
+
+## Population distribution 
+Let's then plot the population distributions and compare to the sample $\mu$'s and $\sigma$'s
+
+```{r}
+
+population_l <- rstan::extract(normal_hier_fit, c("mu_tilda", "sigma_tilda")) %>% 
+  do.call(cbind, .) %>% 
+  data.frame() %>% 
+  set_colnames( c("mu", "sigma")) %>% 
+  mutate(sample = 1:nrow(.)) %>% 
+  gather(key = "par", value = "value", -sample)
+
+
+ 
+ggplot() + 
+  geom_histogram(data = population_l,
+                 aes(x = value, y = ..density..),
+                 bins = 100, fill = posterior_color) +
+    geom_histogram(data = df_full_sub %>% 
+                     gather(key = "par", value = "value", -c(Country, Sex)) %>% 
+                     filter(Sex == "Girls"), 
+                   aes(x = value, y = ..density..), 
+                   alpha = 0.75, bins = 30) +
+  facet_wrap(~par, scales = "free") + 
+  labs(title = "Blue = posterior; black = sample")
+  
+
+
+```
+
+
+## Posterior predictive distribution
+
+Let's then plot the posterior predictive distribution. Let's overlay it with  simulated data based on all countries.
+
+```{r}
+# Sample size per group 
+N <- 25
+
+# For each country, generate some random girl's heights
+Height_all <- lapply(1:nrow(df_full_sub), function(i) {
+  
+  my_df <- df_full_sub[i, ]
+  
+  data.frame(Country = my_df$Country, 
+             Sex = my_df$Sex, 
+             # Random normal values based on measured mu and sd
+             Height = rnorm(N, my_df$mu, my_df$sigma))
+
+}) %>% 
+  do.call(rbind, .)
 ```
 
 
 
 ```{r}
 
-sampling(hierarchical_binomial_model)
+PPD <- rstan::extract(normal_hier_fit, c("X_tilda")) %>% 
+  data.frame() %>% 
+  set_colnames( c("X_tilda")) %>% 
+  mutate(sample = 1:nrow(.))
+
+
+ggplot() + 
+  geom_histogram(data = PPD, 
+                 aes(x = X_tilda, y = ..density..),
+                 bins = 100,
+                 fill = posterior_color) +
+  geom_histogram(data = Height_all, 
+                 aes(x = Height, y = ..density..), 
+                 alpha = 0.75, 
+                 bins = 100)
+
 
 ```
 
 
 
 
+
+
+
+
+# Extensions
+
+We analyzed girl's heights in a few countries and modeled them hierarchically. You could make the structure richer in many ways, for instance by adding hierarchy between sexes, continents, or developed/developing countries etc. 
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

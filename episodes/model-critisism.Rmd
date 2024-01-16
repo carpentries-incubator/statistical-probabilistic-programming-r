@@ -4,6 +4,25 @@ teaching: 10
 exercises: 2
 ---
 
+```{r setup,  message=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rstan)
+library(tidyverse)
+library(magrittr)
+library(grafify)
+
+theme_set(theme_bw(20))
+
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
+```
+
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - What is model checking?
@@ -28,9 +47,227 @@ Gelman: "If the model fits, then replicated data generated under the model shoul
 
 Idea: simulate data from the posterior predictive distribution and compare it to the observed data. Discrepancies between the simulated and observed data imply shortcomings in the model. 
 
-Posterior predictive distribution presented in Episode Working with samples. 
 
-## Information criteria
+# Data
+
+Let's analyze the following data with the Normal model. 
+
+```{r, echo = FALSE}
+## Data ********************** ####
+
+N <- 88
+location <- 0
+scale <- 1
+
+df <- rcauchy(N, location, scale) %>% data.frame(X = .)
+
+p_data <- df %>% 
+  ggplot(aes(x = X)) + 
+  geom_histogram(bins = 100)
+
+print(p_data)
+```
+
+
+# Normal model
+
+Here we fit the normal model and generate posterior predictions $X_{rep}$. Notice, that this is slightly different from the posterior predictive distribution $\tilde{X}$. The former consists of replications of the original data, in this case `r N` observations, the latter doesn't specify the sample size. 
+
+```{stan output.var="normal_model"}
+data {
+  int<lower=0> N;
+  vector[N] X;
+}
+
+parameters {
+  real<lower=0> sigma;
+  real mu;
+}
+
+model {
+  
+  // Likelihood (vectorized)
+  X ~ normal(mu, sigma);
+  
+  // Prior
+  mu ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+  
+}
+
+generated quantities {
+  vector[N] X_rep;
+
+  // Posterior predictive density
+  for(i in 1:N) {
+    X_rep[i] = normal_rng(mu, sigma);
+  }
+  
+}
+
+
+```
+
+
+
+```{r}
+
+normal_fit <- sampling(normal_model,
+                       list(N = N, X = df$X), 
+                       refresh = 0)
+
+# Extract samples
+X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% data.frame() %>%
+  mutate(sample = 1:nrow(.))
+
+```
+
+
+
+Below is a comparison of 12 samples of $\tilde{X}$ against the data (the panel titles correspond to MCMC sample numbers). The large discrepancy between the data and posterior predictions indicates that something is wrong with our model. It seems like the normal model misestimates the tails of the data, and that, likely, the normal model is a poor choice for such data in any case.
+```{r}
+
+# Subset
+X_rep_sub <- X_rep %>% filter(sample %in%
+                                    sample(X_rep$sample,
+                                       12,
+                                       replace = FALSE))
+
+# Wide --> long
+X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
+
+p_hist <- ggplot() +
+  geom_histogram(data = X_rep_sub_l,
+                 aes(x = value
+                     # y = after_stat(density)
+                     ),
+               bins = 40, fill = posterior_color) +
+  facet_wrap(~sample, scales = "free") +
+  geom_histogram(data = df,
+                 aes(x = X
+                     # y = after_stat(density)
+                     ),
+                 bins = 100)
+
+
+print(p_hist)
+```
+
+
+Let's quantify the discrepancy using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = `r round(max(df$X), 3)`. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
+
+
+```{r}
+## Compute X_rep max
+rep_maxs <- X_rep %>%
+  select(-sample) %>%
+  apply(MARGIN = 1, FUN = max) %>%
+  data.frame(max = ., sample = 1:length(.))
+
+ggplot() +
+  geom_histogram(data = rep_maxs,
+                 aes(x = max),
+                 bins = 50, fill = posterior_color) +
+  geom_vline(xintercept = max(df$X)) +
+  labs(title = "Max value of the replicate data sets")
+
+```
+
+The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data. In this case, the value is $ppp =$ `r mean(rep_maxs$max < max(df$X))` indicating that the model is, indeed, a poor choice for the data. 
+
+
+# Cauchy model
+
+Let's do a similar analysis utilizing the Cauchy model, which displays considerably longer tails. 
+
+The code is essentially copy paste from above, with the distinction of the Stan program. 
+
+```{stan output.var="cauchy_model"}
+data {
+  int<lower=0> N;
+  vector[N] X;
+}
+
+parameters {
+  // Scale
+  real<lower=0> sigma;
+  // location
+  real mu;
+}
+
+model {
+  
+  // Likelihood (vectorized)
+  // location = mu and scale = sigma
+  X ~ cauchy(mu, sigma);
+  
+  // Prior
+  mu ~ normal(0, 1);
+  sigma ~ gamma(2, 1);
+  
+}
+
+generated quantities {
+  vector[N] X_rep;
+  for(i in 1:N) {
+    X_rep[i] = cauchy_rng(mu, sigma);
+  }
+}
+
+```
+
+
+
+```{r}
+cauchy_fit <- sampling(cauchy_model, list(N = N, X = df$X), 
+                       refresh = 500)
+
+X_rep <- rstan::extract(cauchy_fit, "X_rep")[[1]] %>% data.frame() %>%
+  mutate(sample = 1:nrow(.))
+
+# Subset
+X_rep_sub <- X_rep %>% filter(sample %in%
+                                sample(X_rep$sample,
+                                       12,
+                                       replace = FALSE))
+
+# Wide --> long
+X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
+
+
+ggplot() +
+  geom_histogram(data = X_rep_sub_l,
+                 aes(x = value
+                     # y = after_stat(density)
+                 ),
+                 bins = 40, fill = posterior_color) +
+  facet_wrap(~sample, scales = "free") +
+  geom_histogram(data = df,
+                 aes(x = X
+                     # y = after_stat(density)
+                 ),
+                 bins = 100)
+```
+The figure below contains again the distribution of maximum value for each replicate set. The $ppp$ is large, indicating no issues with the suitability of the model on the data. 
+
+```{r}
+## Compute ppp
+rep_maxs <- X_rep %>%
+  select(-sample) %>%
+  apply(MARGIN = 1, FUN = max) %>%
+  data.frame(max = ., sample = 1:length(.))
+
+ggplot() +
+  geom_histogram(data = rep_maxs,
+                 aes(x = max),
+                 bins = 100000, fill = posterior_color) +
+  geom_vline(xintercept = max(df$X)) +
+  labs(title = paste0("ppp = ", mean(rep_maxs$max > max(df$X)))) +
+  # set plot limits to aid with visualizations
+  coord_cartesian(xlim = c(0, 1000)) 
+
+
+```
 
 
 

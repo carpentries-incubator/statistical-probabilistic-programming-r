@@ -32,7 +32,9 @@ posterior_color <- "#56B4E9"
 - Grid approximation
 - Communicating posterior information
   - Point estimates
-  - Intervals
+  - Credible intervals
+  - Probabilities for defined sets
+- Working with posterior samples 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
