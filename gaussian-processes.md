@@ -1,5 +1,5 @@
 ---
-title: 'Other topics'
+title: 'Gaussian processes'
 teaching: 10
 exercises: 2
 ---
@@ -10,14 +10,14 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What next?
+- What are Gaussian processes?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
 
-- Learn more
+- Non-parameteric regression
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -33,7 +33,6 @@ You can define a challenge here
 
 ... and a solution here
 
-
 ::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -44,7 +43,7 @@ More text
 
 ::::::::::::::::::::::::::::::::::::: discussion
 
-Discussion poitns
+Discussion points
 
 :::::::::::::::::::::::::::::::::::::::::::::::
 

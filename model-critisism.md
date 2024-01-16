@@ -33,6 +33,8 @@ Posterior predictive distribution presented in Episode Working with samples.
 ## Information criteria
 
 
+
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - point 1
