@@ -8,7 +8,7 @@
         extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
       },
       tex2jax: {
-        inlineMath: [ ['$','$'], ['\\(', '\\)']],
+        inlineMath: [['\\(', '\\)']],
         displayMath: [ ['$$','$$'], ['\\[', '\\]'] ],
         processEscapes: true
       }
@@ -18,17 +18,17 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-6">
       <div class="large-logo">
-        <img alt="Carpentries Incubator" src="assets/images/incubator-logo.svg"><abbr class="icon" title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught." style="text-decoration: unset">
-           
-          <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link" style="color: #383838">Pre-Alpha
-            <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="color: #FF4955; border-radius: 5px"></i>
+        <img alt="Carpentries Incubator" src="assets/images/incubator-logo.svg"><abbr class="badge badge-light" title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught." style="background-color: #FF4955; border-radius: 5px">
+          <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link" style="color: #000">
+            <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
+            Pre-Alpha
           </a>
           <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
         </abbr>
         
       </div>
     </div>
-    <div class="selector-container ">
+    <div class="selector-container">
       
       
       <div class="dropdown">
@@ -40,7 +40,7 @@
     </div>
   </div>
   <hr></header><nav class="navbar navbar-expand-xl navbar-light bg-white bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
       <span class="menu-title">Menu</span>
     </button>
@@ -51,7 +51,7 @@
     </div>
     <div class="search-icon-sm">
       <!-- TODO: do not show until we have search
-      <i role="img" aria-label="search button" data-feather="search"></i>
+        <i role="img" aria-label="search button" data-feather="search"></i>
       -->
     </div>
     <div class="desktop-nav">
@@ -86,19 +86,21 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 30%" class="percentage">
-    30%
+<aside class="col-md-12 lesson-progress"><div style="width: 20%" class="percentage">
+    20%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 30%" aria-valuenow="30" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 20%" aria-valuenow="20" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
       <div class="row">
         <!-- START: inst/pkgdown/templates/navbar.html -->
-  <div id="sidebar-col" class="col-lg-4">
-    <div id="sidebar" class="sidebar">
-      <nav aria-labelledby="flush-headingEleven"><button role="button" aria-label="close menu" alt="close menu" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle"><i class="search-icon" data-feather="x" role="img"></i></button>
+<div id="sidebar-col" class="col-lg-4">
+  <div id="sidebar" class="sidebar">
+      <nav aria-labelledby="flush-headingEleven"><button role="button" aria-label="close menu" alt="close menu" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle" data-collapse="Collapse " data-episodes="Episodes ">
+          <i class="search-icon" data-feather="x" role="img"></i>
+        </button>
         <div class="sidebar-inner">
           <div class="row mobile-row">
             <div class="col">
@@ -154,16 +156,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="bayesian-statistics.html">2. Bayesian Statistics</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush4">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading4">
-        <a href="sampling.html">3. Working with samples</a>
+        <a href="bayesian-statistics.html">2. Basics of Bayesian statistics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -175,7 +168,7 @@
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        4. Stan
+        3. Stan
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -183,10 +176,13 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#basic-program-structure">Basic program structure</a></li>
-<li><a href="#example-1-binomial-model">Example 1: Binomial model</a></li>
+<li><a href="#example-1-beta-binomial-model">Example 1: Beta-binomial model</a></li>
+<li><a href="#additional-stan-blocks">Additional Stan blocks</a></li>
+<li><a href="#stan-shortcuts">Stan shortcuts</a></li>
 <li><a href="#example-2-normal-model">Example 2: normal model</a></li>
 <li><a href="#example-3-linear-regression">Example 3: Linear regression</a></li>
-<li><a href="#r-packages">R packages</a></li>
+<li><a href="#example-4-random-walk">Example 4: Random walk</a></li>
+<li><a href="#resources">Resources</a></li>
 <li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -194,10 +190,19 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="mcmc.html">4. MCMC</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="mcmc.html">5. MCMC</a>
+        <a href="hierarchical-models.html">5. Hierarchical Models</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -206,7 +211,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="hierarchical-models.html">6. Hierarchical Models</a>
+        <a href="model-critisism.html">6. Model checking</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -215,7 +220,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="model-critisism.html">7. Model checking</a>
+        <a href="gaussian-processes.html">7. Gaussian processes</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -276,6 +281,7 @@
               </div>
             </div>
             <hr class="half-width resources"><a href="aio.html">See all in one page</a>
+            
 
             <hr class="d-none d-sm-block d-md-none"><div class="d-grid gap-1">
             
@@ -289,24 +295,30 @@
         <!-- START: inst/pkgdown/templates/content-instructor.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="sampling.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="bayesian-statistics.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="mcmc.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="sampling.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous: Working with samples</a>
-        <a class="chapter-link float-end" href="mcmc.html" rel="next">Next: MCMC... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link" href="bayesian-statistics.html" rel="prev">
+          <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
+          Previous: Basics of Bayesian
+        </a>
+        <a class="chapter-link float-end" href="mcmc.html" rel="next">
+          Next: MCMC... 
+          <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
+        </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Stan</h1>
-        <p> Last updated on 2023-07-11 | 
+        <p>Last updated on 2024-01-16 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
         
         
         <div class="text-end">
-          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right"> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
 
         
@@ -336,39 +348,52 @@
 </div>
 </div>
 </div>
-<p>Stan is a high-level programming language that can be used for
-sampling from the posterior distribution of a statistical model. It
-provides a flexible and efficient means the for inference of Bayesian
-models. Stan generates samples from the posterior of a defined
-statistical model utilizing Markov Chain Monte Carlo (MCMC) sampling,
-and more specifically its the Hamiltonian Monte Carlo variant which is a
-highly effective variant of MCMC.</p>
+<p>Stan is a programming language that can be used to generate samples
+from the posterior distribution. Stan does this by utilizing a Markov
+Chain Monte Carlo (MCMC) algorithm, and more specifically a variant of
+it called Hamiltonian Monte Carlo.</p>
+<p>The next episode is devoted to MCMC but in this one we will learn how
+to run it using Stan.</p>
 <p>Follow the instruction at <a href="https://mc-stan.org/users/interfaces/" class="external-link uri">https://mc-stan.org/users/interfaces/</a> to install Stan on
 your local computer.</p>
+<p>While Stan makes model specifying a statistical model relatively easy
+and automates the sampling, the bottle-neck of fitting is not fully
+removed. In theory, MCMC methods will always converge to the target
+distribution (posterior for us). However, in practice, convergence
+issues can arise. Luckily‚ Stan produces warnings automatically which
+can be used in assessing model convergence.</p>
 <section id="basic-program-structure"><h2 class="section-heading">Basic program structure<a class="anchor" aria-label="anchor" href="#basic-program-structure"></a>
 </h2>
-<hr class="half-width"><ul><li><p>Write the program in a separate text file</p></li>
-<li><p>Call Stan from R, command line, or several other languages. This
-creates a collection of posterior samples.</p></li>
-<li><p>Analyse the posterior samples with tools presented in the
-previous episode.</p></li>
-</ul><p>Next, let’s write the models we have previously worked with in
-Stan.</p>
-</section><section id="example-1-binomial-model"><h2 class="section-heading">Example 1: Binomial model<a class="anchor" aria-label="anchor" href="#example-1-binomial-model"></a>
-</h2>
 <hr class="half-width"><p>A Stan program is structured into several blocks that define the
-statistical model and specify the algorithm for inference. A Stan
-program typically (but not necessarily) includes the following
-blocks:</p>
+statistical model. A Stan program typically (but not necessarily) will
+include the following blocks:</p>
 <ol style="list-style-type: decimal"><li><p>Data block: This block is used to declare the input data fed into
 the model. It specifies the types and dimensions of the data variables
 used in the model.</p></li>
-<li><p>Parameters block: In this block, the model’s parameters, that are
-inferred, are declared.</p></li>
-<li><p>Model block: The model block contains the specification of the
-statistical model, consisting of the likelihood and the prior
-distributions.</p></li>
-</ol><div class="codewrapper sourceCode" id="cb1">
+<li><p>Parameters block: In this block, the model’s parameters are
+declared.</p></li>
+<li><p>Model block: The likelihood and prior distributions are included
+here in the form of sampling statements.</p></li>
+</ol><p>It is recommended that you specify the Stan programs in a separate
+text files and call it from R (or other supported interface). The
+extension of the file must be <code>.stan</code>.</p>
+</section><section id="example-1-beta-binomial-model"><h2 class="section-heading">Example 1: Beta-binomial model<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
+</h2>
+<hr class="half-width"><p>The following Stan program specifies the Beta-binomial model. There
+program consists of data, parameters, and model blocks.</p>
+<p>The data variables are the total sample size <span class="math inline">\(N\)</span> and the outcome of a binary variable
+(coin flip, handedness etc.). The declared data type in <code>int</code>
+for integer and the variables have a lower bound 1 and 0 for <span class="math inline">\(N\)</span> and <span class="math inline">\(x\)</span>, respectively. Notice that each line
+ends with a semicolon.</p>
+<p>In the parameters block we declare <span class="math inline">\(\theta\)</span>, the probability for a success.
+Since this parameter is a probability, it is restricted between 0 and
+1.</p>
+<p>In the model block, the likelihood is specified with the sampling
+statement <code>x ~ binomial(N, theta)</code>. This line includes the
+binomial distribution <span class="math inline">\(Bin(x | N,
+theta)\)</span> in the target distribution. The prior could be set
+similarly but omitting it implies a uniform prior.</p>
+<div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span>{</span>
@@ -377,30 +402,29 @@ distributions.</p></li>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">parameters</span>{</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; p;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; theta;</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">model</span>{</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Likelihood</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    x ~ binomial(N, p);</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    x ~ binomial(N, theta);</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Uniform prior for p</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Uniform prior for theta</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre>
 </div>
-<p>Notice that the types of each data variable and parameter needs to be
-specified. Moreover, it is helpful to specify the ranges the variables
-can get. For example, a variable that can only get positive values can
-be specified with a <code>&lt;lower=0&gt;</code> after the type
-specification.</p>
-<p>The sampling statement <code>x ~ binomial(N, p);</code> in the model
-block defines that the likelihood for the data is the binomial
-distribution. No prior distribution is specified for the parameter <span class="math inline">\(p\)</span> which implicitly imposes a uniform
-distribution.</p>
-<p>Next, let’s define the data as a list and then call the Stan
-program.</p>
+<p>Once the Stan program has been saved we need to compile it. In R,
+this is done by running</p>
 <div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binomial_model</span> <span class="op">&lt;-</span> <span class="fu">stan_model</span><span class="op">(</span><span class="st">"binomial_model.stan"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Once the program has been compiled, it can be used to generate the
+posterior samples with the function <code>sampling()</code>. The data
+needs to be defined as a list. While running, Stan prints progress.</p>
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -412,10 +436,10 @@ program.</p>
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>
-SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 1).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 9e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
+Chain 1: Gradient evaluation took 6e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -432,15 +456,15 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.009389 seconds (Warm-up)
-Chain 1:                0.010054 seconds (Sampling)
-Chain 1:                0.019443 seconds (Total)
+Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 1:                0.004 seconds (Sampling)
+Chain 1:                0.008 seconds (Total)
 Chain 1: 
 
-SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 2).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 6e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 2: Gradient evaluation took 1e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -457,15 +481,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.009714 seconds (Warm-up)
-Chain 2:                0.009341 seconds (Sampling)
-Chain 2:                0.019055 seconds (Total)
+Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 2:                0.003 seconds (Sampling)
+Chain 2:                0.007 seconds (Total)
 Chain 2: 
 
-SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 3).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 5e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 3: Gradient evaluation took 1e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -482,15 +506,15 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.009481 seconds (Warm-up)
-Chain 3:                0.008681 seconds (Sampling)
-Chain 3:                0.018162 seconds (Total)
+Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 3:                0.003 seconds (Sampling)
+Chain 3:                0.007 seconds (Total)
 Chain 3: 
 
-SAMPLING FOR MODEL 'b30a4b20165ba5a239ed8d361ba485d2' NOW (CHAIN 4).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 5e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 4: Gradient evaluation took 1e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -507,17 +531,17 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.009964 seconds (Warm-up)
-Chain 4:                0.009363 seconds (Sampling)
-Chain 4:                0.019327 seconds (Total)
+Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 4:                0.003 seconds (Sampling)
+Chain 4:                0.007 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>With the default setting Stan runs 4 MCMC chains with 2000 iterations
 (more about this in Episode 5 on MCMC). Running
-<code>binom_samples</code> prints a posterior summary for the model
-parameter <span class="math inline">\(p\)</span> that allows you to
-quickly review the results.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<code>binom_samples</code> prints a summary for the model parameter
+<span class="math inline">\(p\)</span> allowing quick reviewing of
+result.</p>
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -526,15 +550,15 @@ quickly review the results.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>Inference for Stan model: b30a4b20165ba5a239ed8d361ba485d2.
+<pre class="output" tabindex="0"><code>Inference for Stan model: anon_model.
 4 chains, each with iter=2000; warmup=1000; thin=1; 
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
-       mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-p      0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1354    1
-lp__ -22.83    0.02 0.68 -24.78 -23.00 -22.56 -22.38 -22.33  1729    1
+        mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.25  1377    1
+lp__  -22.81    0.02 0.70 -24.78 -22.96 -22.54 -22.38 -22.33  1416    1
 
-Samples were drawn using NUTS(diag_e) at Tue Jul 11 01:36:51 2023.
+Samples were drawn using NUTS(diag_e) at Tue Jan 16 07:57:22 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -543,11 +567,11 @@ convergence, Rhat=1).</code></pre>
 <code>summary(binom_samples)$summary</code>.</p>
 <p>Often, however, it is necessary to work with the individual samples.
 These can be extracted as follows:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p_samples</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">binom_samples</span>, <span class="st">"p"</span><span class="op">)</span><span class="op">[[</span><span class="st">"p"</span><span class="op">]</span><span class="op">]</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">p_samples</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">binom_samples</span>, <span class="st">"theta"</span><span class="op">)</span><span class="op">[[</span><span class="st">"theta"</span><span class="op">]</span><span class="op">]</span></span></code></pre>
 </div>
 <p>Now we can use the methods presented in the previous Episode to
 compute posterior summaries, credible intervals and to generate
@@ -560,38 +584,66 @@ figures.</p>
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
 </h3>
 <div class="callout-content">
-<p>(Revision)</p>
 <p>Compute the 95% credible intervals for the samples drawn with Stan.
-What is the probability that <span class="math inline">\(p \in [0.05,
-0.15]\)</span>? Plot a histogram of the posterior samples.</p>
+What is the probability that <span class="math inline">\(theta \in
+(0.05, 0.15)\)</span>? Plot a histogram of the posterior samples.</p>
 </div>
 </div>
 </div>
 <div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
-  <h4 class="accordion-header" id="headingSolution1">
-  Show me the solution
-  </h4>
+  <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">CI95</span> <span class="op">&lt;-</span> <span class="fu">quantile</span><span class="op">(</span><span class="va">p_samples</span>, probs <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">p_between_0.05_0.15</span> <span class="op">&lt;-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">p_samples</span><span class="op">&gt;</span><span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">p_samples</span><span class="op">&lt;</span><span class="fl">0.15</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p_samples</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">CI95</span> <span class="op">&lt;-</span> <span class="fu">quantile</span><span class="op">(</span><span class="va">theta_samples</span>, probs <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/stan-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">theta_between_0.05_0.15</span> <span class="op">&lt;-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">theta_samples</span><span class="op">&gt;</span><span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">theta_samples</span><span class="op">&lt;</span><span class="fl">0.15</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_samples</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'p' not found</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -603,14 +655,7 @@ What is the probability that <span class="math inline">\(p \in [0.05,
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
 </h3>
 <div class="callout-content">
-<p>It recommended that the Stan program is specified in a separate text
-file that is then called from R. Copy the binomial model from above into
-a text file and save it as <code>binomial.stan</code>. Then call it from
-R with <code>binomial_model &lt;- stan_model("binomial.stan")</code> and
-generate samples with
-<code>rstan::sampling(binomial_model, stan_data)</code>.</p>
-<p>Try setting a <span class="math inline">\(Beta\)</span> prior for
-p. </p>
+<p>Try modifying the Stan program so that you add a <span class="math inline">\(Beta(\alpha, \beta)\)</span> prior for <span class="math inline">\(\theta\)</span>.</p>
 <p>Can you modify the Stan program further so that you can set the
 hyperparameters <span class="math inline">\(\alpha, \beta\)</span> as
 part of the data? What is the benefit of using this approach?</p>
@@ -620,28 +665,42 @@ part of the data? What is the benefit of using this approach?</p>
 <div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2">
-  Show me the solution
-  </h4>
+  <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
-setting the hyperparameter values as part of data. This way several
-hyperparameters can be tried out quickly, without modifying the Stan
-file.</p>
+setting the hyperparameter values as part of data. This way
+hyperparameters can be changed without modifying the Stan file.</p>
 </div>
 </div>
 </div>
 </div>
-<p>Let’s use this Stan program to fit the handedness data encountered in
-the previous episodes.</p>
+</section><section id="additional-stan-blocks"><h2 class="section-heading">Additional Stan blocks<a class="anchor" aria-label="anchor" href="#additional-stan-blocks"></a>
+</h2>
+<hr class="half-width"><p>Functions For user-defined functions Must be the first block!</p>
+<p>Transformed data Transformations of the data variables</p>
+<p>Transformed parameters Transformations of the parameters Remember
+Jacobian in the model block!</p>
+<p>Generated quantities Define quantities based on data and model
+parameters Produces a posterior</p>
+</section><section id="stan-shortcuts"><h2 class="section-heading">Stan shortcuts<a class="anchor" aria-label="anchor" href="#stan-shortcuts"></a>
+</h2>
+<hr class="half-width"><ul><li>Modeling: rstanarm, brms; Plotting: bayesplot; Summaries and
+convergence: ShinyStan</li>
+<li>Syntax similar to standard R
+<ul><li>Linear model: fit &lt;- stan_glm(y ~ x, data = df, family =
+gaussian)</li>
+</ul></li>
+</ul><p>We will not use these! We will learn to Write Stan programs from
+scratch → flexibility Access and manipulate the output Generate
+visualization</p>
 </section><section id="example-2-normal-model"><h2 class="section-heading">Example 2: normal model<a class="anchor" aria-label="anchor" href="#example-2-normal-model"></a>
 </h2>
 <hr class="half-width"><p>Next, let’s implement the normal model in Stan. First generate some
 data with unknown mean and standard deviation parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span></p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -658,30 +717,30 @@ data with unknown mean and standard deviation parameters <span class="math inlin
 </div>
 <p>Then the stan program, which the following piece of code stores as
 <code>normal_model</code>.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood is vectorized!</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  X ~ normal(mu, sigma);</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood is vectorized!</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  X ~ normal(mu, sigma);</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
 </div>
 <p>Notice that the likelihood in the model block is vectorized.
 Alternatively, one could write a for loop that samples each data point
@@ -692,7 +751,7 @@ recommended. However, when writing complex models it may be useful to
 initially write the model in an unvectorized format so debugging is
 easier.</p>
 <p>Let’s again fit the model on the data</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -704,10 +763,10 @@ easier.</p>
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>
-SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 1).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 1e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -724,15 +783,15 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.015273 seconds (Warm-up)
-Chain 1:                0.014938 seconds (Sampling)
-Chain 1:                0.030211 seconds (Total)
+Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
+Chain 1:                0.007 seconds (Sampling)
+Chain 1:                0.014 seconds (Total)
 Chain 1: 
 
-SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 2).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 7e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+Chain 2: Gradient evaluation took 1e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -749,15 +808,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.016567 seconds (Warm-up)
-Chain 2:                0.012423 seconds (Sampling)
-Chain 2:                0.02899 seconds (Total)
+Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
+Chain 2:                0.006 seconds (Sampling)
+Chain 2:                0.013 seconds (Total)
 Chain 2: 
 
-SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 3).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 7e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+Chain 3: Gradient evaluation took 2e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -774,15 +833,15 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.023083 seconds (Warm-up)
-Chain 3:                0.012424 seconds (Sampling)
-Chain 3:                0.035507 seconds (Total)
+Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
+Chain 3:                0.007 seconds (Sampling)
+Chain 3:                0.014 seconds (Total)
 Chain 3: 
 
-SAMPLING FOR MODEL 'ce5e697fa501eb08497df31f1fdce3a0' NOW (CHAIN 4).
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 7e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+Chain 4: Gradient evaluation took 1e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -799,13 +858,13 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.016061 seconds (Warm-up)
-Chain 4:                0.012884 seconds (Sampling)
-Chain 4:                0.028945 seconds (Total)
+Chain 4:  Elapsed Time: 0.007 seconds (Warm-up)
+Chain 4:                0.006 seconds (Sampling)
+Chain 4:                0.013 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>and plot the posterior</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -835,7 +894,9 @@ Chain 4: </code></pre>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/stan-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="example-3-linear-regression"><h2 class="section-heading">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
+<figure><img src="fig/stan-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="example-3-linear-regression"><h2 class="section-heading">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
+</h2>
+<hr class="half-width"></section><section id="example-4-random-walk"><h2 class="section-heading">Example 4: Random walk<a class="anchor" aria-label="anchor" href="#example-4-random-walk"></a>
 </h2>
 <hr class="half-width"><div id="challenge3" class="callout challenge">
 <div class="callout-square">
@@ -853,36 +914,34 @@ variable.</p>
 <div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
-  <h4 class="accordion-header" id="headingSolution3">
-  Show me the solution
-  </h4>
+  <h4 class="accordion-header" id="headingSolution3">Show me the solution</h4>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] x; <span class="co">// x-values</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> beta;  <span class="co">// slope</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  y ~ normal(alpha + beta * x, sigma);</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] x; <span class="co">// x-values</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> beta;  <span class="co">// slope</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  y ~ normal(alpha + beta * x, sigma);</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
 </div>
 </div>
 </div>
@@ -903,38 +962,36 @@ variable.</p>
 <div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
-  <h4 class="accordion-header" id="headingSolution4">
-  Show me the solution
-  </h4>
+  <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
 </button>
 <div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; M; <span class="co">// Number of features</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N, M] x; <span class="co">// x-values</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[M] beta;  <span class="co">// slopes</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  y ~ normal(alpha + x * beta, sigma);</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; M; <span class="co">// Number of features</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N, M] x; <span class="co">// x-values</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[M] beta;  <span class="co">// slopes</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  y ~ normal(alpha + x * beta, sigma);</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
 </div>
 </div>
 </div>
@@ -961,52 +1018,62 @@ implemented.</p></li>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Keypoints<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
+<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
 </h3>
 <div class="callout-content">
 <ul><li>Stan is…</li>
 </ul></div>
 </div>
 </div>
-</section><section id="r-packages"><h2 class="section-heading">R packages<a class="anchor" aria-label="anchor" href="#r-packages"></a>
+</section><section id="resources"><h2 class="section-heading">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
 </h2>
-<hr class="half-width"><p>brms and rstanarm are packages that enable fitting Bayesian
-regression model in Stan without having to code the models yourself.</p>
-<p>bayesplot allows generating visualizations</p>
-<p>Example:</p>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+<hr class="half-width"><ul><li>Official release paper <a href="https://www.jstatsoft.org/article/view/v076i01" class="external-link uri">https://www.jstatsoft.org/article/view/v076i01</a>
+</li>
+<li>User’s guide <a href="https://mc-stan.org/docs/2_18/stan-users-guide/" class="external-link uri">https://mc-stan.org/docs/2_18/stan-users-guide/</a>
+</li>
+<li>Function’s reference <a href="https://mc-stan.org/docs/functions-reference/" class="external-link uri">https://mc-stan.org/docs/functions-reference/</a>
+</li>
+<li>Reference manual <a href="https://mc-stan.org/docs/reference-manual/" class="external-link uri">https://mc-stan.org/docs/reference-manual/</a>
+</li>
+<li>Stan forum <a href="https://discourse.mc-stan.org" class="external-link uri">https://discourse.mc-stan.org</a>
+</li>
+<li>Case studies <a href="https://mc-stan.org/users/documentation/case-studies" class="external-link uri">https://mc-stan.org/users/documentation/case-studies</a>
+</li>
+</ul></section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
-<hr class="half-width"><ul><li>Installation guide: <a href="https://mc-stan.org/users/interfaces/" class="external-link uri">https://mc-stan.org/users/interfaces/</a>
-</li>
-<li>User’s manual: <a href="https://mc-stan.org/docs/stan-users-guide/index.html" class="external-link uri">https://mc-stan.org/docs/stan-users-guide/index.html</a>
-</li>
-<li>Bayes Rules!: Chp. 6.2 <a href="https://www.bayesrulesbook.com/chapter-6.html#markov-chains-via-rstan" class="external-link uri">https://www.bayesrulesbook.com/chapter-6.html#markov-chains-via-rstan</a>
-</li>
+<hr class="half-width"><ul><li>BDA3: Ch. 12.6, Appendix C</li>
+<li>Bayes Rules!: Ch. 6.2</li>
 </ul><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="sampling.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="bayesian-statistics.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="mcmc.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="sampling.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous: Working with samples</a>
-        <a class="chapter-link float-end" href="mcmc.html" rel="next">Next: MCMC... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link" href="bayesian-statistics.html" rel="prev">
+          <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
+          Previous: Basics of Bayesian
+        </a>
+        <a class="chapter-link float-end" href="mcmc.html" rel="next">
+          Next: MCMC... 
+          <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
+        </a>
       </div>
     </nav></div> <!-- / div.primary-content.col-xs-12 -->
 <!-- END:   inst/pkgdown/templates/content-instructor.html-->
 
       </div><!--/div.row-->
       		<footer class="row footer mx-md-3"><hr><div class="col-md-6">
-				<p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
+        <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit on GitHub</a>
         
 	
-        | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a> 
+        | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:velait@utu.fi">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
@@ -1014,15 +1081,13 @@ any links that you are not going to use.
         
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
-        <p><a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">Template licensed under CC-BY 4.0</a> by <a href="https://carpentries.org" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper" class="external-link">sandpaper (0.12.5)</a>,
-        <a href="https://github.com/carpentries/pegboard" class="external-link">pegboard (0.5.3)</a>,
-      and <a href="https://github.com/carpentries/varnish/tree/0.2.17" class="external-link">varnish (0.2.17)</a>.</p>
+        <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.3" class="external-link">pegboard (0.7.3)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
 		<a href="#top">
-			<i class="search-icon" data-feather="arrow-up" role="img" aria-label="Back to top"></i><br><span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top
+      <i class="search-icon" data-feather="arrow-up" role="img" aria-label="Back To Top"></i><br><!-- <span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top --><span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top
 		</a>
 	</div>
   <script type="application/ld+json">
@@ -1030,6 +1095,7 @@ any links that you are not going to use.
   "@context": "https://schema.org",
   "@type": "TrainingMaterial",
   "@id": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html",
+  "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, The Carpentries",
@@ -1037,9 +1103,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html",
-  "dateCreated": "2023-06-29",
-  "dateModified": "2023-07-11",
-  "datePublished": "2023-08-08"
+  "dateCreated": "2024-01-16",
+  "dateModified": "2024-01-16",
+  "datePublished": "2024-01-16"
 }
 
   </script><script>

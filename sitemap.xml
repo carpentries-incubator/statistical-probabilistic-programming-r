@@ -25,6 +25,9 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/exercises.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/gaussian-processes.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/exercises.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/gaussian-processes.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/hierarchical-models.html</loc>

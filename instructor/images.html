@@ -15,7 +15,7 @@
         extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
       },
       tex2jax: {
-        inlineMath: [ ['$','$'], ['\\(', '\\)']],
+        inlineMath: [['\\(', '\\)']],
         displayMath: [ ['$$','$$'], ['\\[', '\\]'] ],
         processEscapes: true
       }
@@ -33,17 +33,17 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-6">
       <div class="large-logo">
-        <img alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><abbr class="icon" title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught." style="text-decoration: unset">
-           
-          <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link" style="color: #383838">Pre-Alpha
-            <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="color: #FF4955; border-radius: 5px"></i>
+        <img alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><abbr class="badge badge-light" title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught." style="background-color: #FF4955; border-radius: 5px">
+          <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link" style="color: #000">
+            <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
+            Pre-Alpha
           </a>
           <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
         </abbr>
         
       </div>
     </div>
-    <div class="selector-container ">
+    <div class="selector-container">
       
       
       <div class="dropdown">
@@ -57,7 +57,7 @@
     </div>
   </div>
   <hr></header><nav class="navbar navbar-expand-xl navbar-light bg-white bottom-nav incubator" aria-label="Main Navigation"><div class="container-fluid nav-container">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
       <span class="navbar-toggler-icon"></span>
       <span class="menu-title">Menu</span>
     </button>
@@ -69,7 +69,7 @@
     </div>
     <div class="search-icon-sm">
       <!-- TODO: do not show until we have search
-      <i role="img" aria-label="search button" data-feather="search"></i>
+        <i role="img" aria-label="search button" data-feather="search"></i>
       -->
     </div>
     <div class="desktop-nav">
@@ -92,7 +92,10 @@
           <button class="nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             More <i data-feather="chevron-down"></i>
           </button>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+<hr>
+<li><a class="dropdown-item" href="reference.html">Reference</a></li>
+          </ul>
 </li>
       </ul>
 </div>
@@ -119,9 +122,11 @@
 </aside><div class="container">
       <div class="row">
         <!-- START: inst/pkgdown/templates/navbar.html -->
-  <div id="sidebar-col" class="col-lg-4">
-    <div id="sidebar" class="sidebar">
-      <nav aria-labelledby="flush-headingEleven"><button role="button" aria-label="close menu" alt="close menu" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle"><i class="search-icon" data-feather="x" role="img"></i></button>
+<div id="sidebar-col" class="col-lg-4">
+  <div id="sidebar" class="sidebar">
+      <nav aria-labelledby="flush-headingEleven"><button role="button" aria-label="close menu" alt="close menu" aria-expanded="true" aria-controls="sidebar" class="collapse-toggle" data-collapse="Collapse " data-episodes="Episodes ">
+          <i class="search-icon" data-feather="x" role="img"></i>
+        </button>
         <div class="sidebar-inner">
           <div class="row mobile-row">
             <div class="col">
@@ -189,7 +194,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="bayesian-statistics.html">2. Bayesian Statistics</a>
+        <a href="bayesian-statistics.html">2. Basics of Bayesian statistics</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -201,7 +206,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="sampling.html">3. Working with samples</a>
+        <a href="stan.html">3. Stan</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -213,7 +218,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="stan.html">4. Stan</a>
+        <a href="mcmc.html">4. MCMC</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -225,7 +230,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="mcmc.html">5. MCMC</a>
+        <a href="hierarchical-models.html">5. Hierarchical Models</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -237,7 +242,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="hierarchical-models.html">6. Hierarchical Models</a>
+        <a href="model-critisism.html">6. Model checking</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -249,7 +254,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="model-critisism.html">7. Model checking</a>
+        <a href="gaussian-processes.html">7. Gaussian processes</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -318,7 +323,8 @@
                       <li>
                         <a href="../instructor/images.html">Extract All Images</a>
                       </li>
-                      
+                      <hr>
+<li><a class="dropdown-item" href="reference.html">Reference</a></li>
                     </ul>
 </div>
                 </div>
@@ -326,6 +332,7 @@
             </div>
             <hr class="half-width resources">
 <a href="../instructor/aio.html">See all in one page</a>
+            
 
             <hr class="d-none d-sm-block d-md-none">
 <div class="d-grid gap-1">
@@ -348,30 +355,26 @@
         
         
 <section id="setup"><h2 class="section-heading"><a href="setup.html">Setup</a></h2>
-<hr class="half-width"></section><section id="bayesian-statistics"><h2 class="section-heading"><a href="bayesian-statistics.html">Bayesian Statistics</a></h2>
+<hr class="half-width"></section><section id="bayesian-statistics"><h2 class="section-heading"><a href="bayesian-statistics.html">Basics of Bayesian statistics</a></h2>
 <hr class="half-width">
 <h3 id="bayesian-statistics-figure-1">Figure 1</h3>
-<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
 <h3 id="bayesian-statistics-figure-2">Figure 2</h3>
-<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
 <h3 id="bayesian-statistics-figure-3">Figure 3</h3>
-<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="sampling"><h2 class="section-heading"><a href="sampling.html">Working with samples</a></h2>
-<hr class="half-width">
-<h3 id="sampling-figure-1">Figure 1</h3>
-<figure><img src="../fig/sampling-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="sampling-figure-2">Figure 2</h3>
-<figure><img src="../fig/sampling-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="sampling-figure-3">Figure 3</h3>
-<figure><img src="../fig/sampling-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="sampling-figure-4">Figure 4</h3>
-<figure><img src="../fig/sampling-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="sampling-figure-5">Figure 5</h3>
-<figure><img src="../fig/sampling-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="stan"><h2 class="section-heading"><a href="stan.html">Stan</a></h2>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="bayesian-statistics-figure-4">Figure 4</h3>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="bayesian-statistics-figure-5">Figure 5</h3>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="bayesian-statistics-figure-6">Figure 6</h3>
+<p>Plotting a histogram of these samples against the grid approximation
+displays that these are indeed approximating the same distribution
+<img src="../fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" class="figure"></p>
+<hr></section><section id="stan"><h2 class="section-heading"><a href="stan.html">Stan</a></h2>
 <hr class="half-width">
 <h3 id="stan-figure-1">Figure 1</h3>
-<figure><img src="../fig/stan-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="stan-figure-2">Figure 2</h3>
-<figure><img src="../fig/stan-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">MCMC</a></h2>
+<figure><img src="../fig/stan-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">MCMC</a></h2>
 <hr class="half-width">
 <h3 id="mcmc-figure-1">Figure 1</h3>
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
@@ -382,12 +385,11 @@
 <h3 id="mcmc-figure-4">Figure 4</h3>
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical Models</a></h2>
 <hr class="half-width"></section><section id="model-critisism"><h2 class="section-heading"><a href="model-critisism.html">Model checking</a></h2>
+<hr class="half-width"></section><section id="gaussian-processes"><h2 class="section-heading"><a href="gaussian-processes.html">Gaussian processes</a></h2>
 <hr class="half-width"></section><section id="other-topics"><h2 class="section-heading"><a href="other-topics.html">Other topics</a></h2>
 <hr class="half-width"></section><section id="recommended-reading"><h2 class="section-heading"><a href="recommended-reading.html">Recommended reading</a></h2>
 <hr class="half-width"></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">exercises</a></h2>
-<hr class="half-width">
-<h3 id="exercises-figure-1">Figure 1</h3>
-<figure><img src="../fig/exercises-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section>
+<hr class="half-width"></section>
 </div>
     </main>
 </div>
@@ -397,30 +399,28 @@
 <!--/div.row-->
       		<footer class="row footer mx-md-3"><hr>
 <div class="col-md-6">
-				<p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
+        <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/README.md" class="external-link">Edit on GitHub</a>
         
 	
-        | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a> 
+        | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:velait@utu.fi">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
 			<div class="col-md-6">
         
-        <p>Materials licensed under <a href="../LICENSE.html">CC-BY 4.0</a> by the authors</p>
+        <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
-        <p><a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">Template licensed under CC-BY 4.0</a> by <a href="https://carpentries.org" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper" class="external-link">sandpaper (0.12.5)</a>,
-        <a href="https://github.com/carpentries/pegboard" class="external-link">pegboard (0.5.3)</a>,
-      and <a href="https://github.com/carpentries/varnish/tree/0.2.17" class="external-link">varnish (0.2.17)</a>.</p>
+        <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.3" class="external-link">pegboard (0.7.3)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
 	<div id="to-top">
 		<a href="#top">
-			<i class="search-icon" data-feather="arrow-up" role="img" aria-label="Back to top"></i><br><span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top
+      <i class="search-icon" data-feather="arrow-up" role="img" aria-label="Back To Top"></i><br><!-- <span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top --><span class="d-none d-sm-none d-md-none d-lg-none d-xl-block">Back</span> To Top
 		</a>
 	</div>
   <script type="application/ld+json">
@@ -428,6 +428,7 @@
   "@context": "https://schema.org",
   "@type": "TrainingMaterial",
   "@id": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/images.html",
+  "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, The Carpentries",
@@ -435,9 +436,9 @@
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/images.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/images.html",
-  "dateCreated": "2023-06-29",
-  "dateModified": "2023-08-08",
-  "datePublished": "2023-08-08"
+  "dateCreated": "2024-01-16",
+  "dateModified": "2024-01-16",
+  "datePublished": "2024-01-16"
 }
 
   </script><script>
