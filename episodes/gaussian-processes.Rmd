@@ -1,0 +1,71 @@
+---
+title: 'Gaussian processes'
+teaching: 10
+exercises: 2
+---
+
+
+```{r, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(grafify)
+library(cowplot)
+theme_set(theme_bw(15))
+
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
+```
+
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- What are Gaussian processes?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+
+- Non-parameteric regression
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Add text
+
+
+::::::::::::::::::::::::::::::::::::::::: challenge
+
+You can define a challenge here
+
+::::::::::::::::::::::::::::::: solution
+
+... and a solution here
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+More text
+
+
+
+::::::::::::::::::::::::::::::::::::: discussion
+
+Discussion poitns
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- point 1
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
