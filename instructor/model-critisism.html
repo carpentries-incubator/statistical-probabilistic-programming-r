@@ -203,8 +203,6 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#posterior-predictive-check">Posterior predictive check</a></li>
-<li><a href="#information-criteria">Information criteria</a></li>
-<li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -353,11 +351,305 @@ model should look similar to observed data.”</p>
 <p>Idea: simulate data from the posterior predictive distribution and
 compare it to the observed data. Discrepancies between the simulated and
 observed data imply shortcomings in the model.</p>
-<p>Posterior predictive distribution presented in Episode Working with
-samples.</p>
-</section><section id="information-criteria"><h2 class="section-heading">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
-</h2>
-<hr class="half-width"><div id="keypoints1" class="callout keypoints">
+</section><div class="section level1">
+<h1 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h1>
+<p>Let’s analyze the following data with the Normal model.</p>
+<figure><img src="../fig/model-critisism-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<div class="section level1">
+<h1 id="normal-model">Normal model<a class="anchor" aria-label="anchor" href="#normal-model"></a></h1>
+<p>Here we fit the normal model and generate posterior predictions <span class="math inline">\(X_{rep}\)</span>. Notice, that this is slightly
+different from the posterior predictive distribution <span class="math inline">\(\tilde{X}\)</span>. The former consists of
+replications of the original data, in this case 88 observations, the
+latter doesn’t specify the sample size.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood (vectorized)</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  X ~ normal(mu, sigma);</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Prior</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X_rep;</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Posterior predictive density</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    X_rep[i] = normal_rng(mu, sigma);</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">normal_fit</span> <span class="op">&lt;-</span> <span class="fu">sampling</span><span class="op">(</span><span class="va">normal_model</span>,</span>
+<span>                       <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, X <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">X</span><span class="op">)</span>, </span>
+<span>                       refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract samples</span></span>
+<span><span class="va">X_rep</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">normal_fit</span>, <span class="st">"X_rep"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Below is a comparison of 12 samples of <span class="math inline">\(\tilde{X}\)</span> against the data (the panel
+titles correspond to MCMC sample numbers). The large discrepancy between
+the data and posterior predictions indicates that something is wrong
+with our model. It seems like the normal model misestimates the tails of
+the data, and that, likely, the normal model is a poor choice for such
+data in any case.</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Subset</span></span>
+<span><span class="va">X_rep_sub</span> <span class="op">&lt;-</span> <span class="va">X_rep</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">sample</span> <span class="op">%in%</span></span>
+<span>                                    <span class="fu">sample</span><span class="op">(</span><span class="va">X_rep</span><span class="op">$</span><span class="va">sample</span>,</span>
+<span>                                       <span class="fl">12</span>,</span>
+<span>                                       replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Wide --&gt; long</span></span>
+<span><span class="va">X_rep_sub_l</span> <span class="op">&lt;-</span> <span class="va">X_rep_sub</span> <span class="op">%&gt;%</span> <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"key"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">sample</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_hist</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">X_rep_sub_l</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span></span>
+<span>                     <span class="co"># y = after_stat(density)</span></span>
+<span>                     <span class="op">)</span>,</span>
+<span>               bins <span class="op">=</span> <span class="fl">40</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">sample</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X</span></span>
+<span>                     <span class="co"># y = after_stat(density)</span></span>
+<span>                     <span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_hist</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/model-critisism-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s quantify the discrepancy using the maximum of the data as a
+test statistic. The maximum of the original data is max(<span class="math inline">\(X\)</span>) = 92.469. The following histogram
+shows this value (vertical line) against the maximum compute for each
+replicate data set <span class="math inline">\(\tilde{X}\)</span>.</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Compute X_rep max</span></span>
+<span><span class="va">rep_maxs</span> <span class="op">&lt;-</span> <span class="va">X_rep</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">apply</span><span class="op">(</span>MARGIN <span class="op">=</span> <span class="fl">1</span>, FUN <span class="op">=</span> <span class="va">max</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>max <span class="op">=</span> <span class="va">.</span>, sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">rep_maxs</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">max</span><span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">50</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu">max</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Max value of the replicate data sets"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/model-critisism-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The proportion of replications <span class="math inline">\(X_{rep}\)</span> that produce at least as extreme
+values as the data is called the posterior predictive p-value (<span class="math inline">\(ppp\)</span>). The <span class="math inline">\(ppp\)</span> quantifies the evidence for the
+suitability of the model for the data. In this case, the value is <span class="math inline">\(ppp =\)</span> 1 indicating that the model is,
+indeed, a poor choice for the data.</p>
+</div>
+<div class="section level1">
+<h1 id="cauchy-model">Cauchy model<a class="anchor" aria-label="anchor" href="#cauchy-model"></a></h1>
+<p>Let’s do a similar analysis utilizing the Cauchy model, which
+displays considerably longer tails.</p>
+<p>The code is essentially copy paste from above, with the distinction
+of the Stan program.</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Scale</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// location</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood (vectorized)</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// location = mu and scale = sigma</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  X ~ cauchy(mu, sigma);</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Prior</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] X_rep;</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    X_rep[i] = cauchy_rng(mu, sigma);</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cauchy_fit</span> <span class="op">&lt;-</span> <span class="fu">sampling</span><span class="op">(</span><span class="va">cauchy_model</span>, <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, X <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">X</span><span class="op">)</span>, </span>
+<span>                       refresh <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 6e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 0.016 seconds (Warm-up)
+Chain 1:                0.016 seconds (Sampling)
+Chain 1:                0.032 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 4e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 0.016 seconds (Warm-up)
+Chain 2:                0.014 seconds (Sampling)
+Chain 2:                0.03 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 4e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 0.016 seconds (Warm-up)
+Chain 3:                0.016 seconds (Sampling)
+Chain 3:                0.032 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 3e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 0.016 seconds (Warm-up)
+Chain 4:                0.015 seconds (Sampling)
+Chain 4:                0.031 seconds (Total)
+Chain 4: </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X_rep</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">cauchy_fit</span>, <span class="st">"X_rep"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Subset</span></span>
+<span><span class="va">X_rep_sub</span> <span class="op">&lt;-</span> <span class="va">X_rep</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">sample</span> <span class="op">%in%</span></span>
+<span>                                <span class="fu">sample</span><span class="op">(</span><span class="va">X_rep</span><span class="op">$</span><span class="va">sample</span>,</span>
+<span>                                       <span class="fl">12</span>,</span>
+<span>                                       replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Wide --&gt; long</span></span>
+<span><span class="va">X_rep_sub_l</span> <span class="op">&lt;-</span> <span class="va">X_rep_sub</span> <span class="op">%&gt;%</span> <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"key"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">sample</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">X_rep_sub_l</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span></span>
+<span>                     <span class="co"># y = after_stat(density)</span></span>
+<span>                 <span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">40</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">sample</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X</span></span>
+<span>                     <span class="co"># y = after_stat(density)</span></span>
+<span>                 <span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
+</div>
+<p><img src="../fig/model-critisism-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure">
+The figure below contains again the distribution of maximum value for
+each replicate set. The <span class="math inline">\(ppp\)</span> is
+large, indicating no issues with the suitability of the model on the
+data.</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Compute ppp</span></span>
+<span><span class="va">rep_maxs</span> <span class="op">&lt;-</span> <span class="va">X_rep</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">apply</span><span class="op">(</span>MARGIN <span class="op">=</span> <span class="fl">1</span>, FUN <span class="op">=</span> <span class="va">max</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>max <span class="op">=</span> <span class="va">.</span>, sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">rep_maxs</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">max</span><span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100000</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu">max</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"ppp = "</span>, <span class="fu">mean</span><span class="op">(</span><span class="va">rep_maxs</span><span class="op">$</span><span class="va">max</span> <span class="op">&gt;</span> <span class="fu">max</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># set plot limits to aid with visualizations</span></span>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span> </span></code></pre>
+</div>
+<figure><img src="../fig/model-critisism-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
@@ -369,14 +661,19 @@ samples.</p>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
-<hr class="half-width"><ul><li>Statistical Rethinking: Ch. 7</li>
+<div class="section level2">
+<h2 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
+<ul><li>Statistical Rethinking: Ch. 7</li>
 <li>BDA3: p.143: 6.3 Posterior predictive checking</li>
 </ul><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- --></section></div> <!-- / div.lesson-content -->
+ --></div>
+</div>
+
+
+
+      </div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/hierarchical-models.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="../instructor/gaussian-processes.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>

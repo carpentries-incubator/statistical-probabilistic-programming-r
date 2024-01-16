@@ -195,7 +195,6 @@
       <div class="accordion-body">
         <ul><li><a href="#hierachical-models">Hierachical models</a></li>
 <li><a href="#example-hierarchical-binomial-model">Example: Hierarchical binomial model</a></li>
-<li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -395,7 +394,7 @@ and completely pooled variants of the hierarchical binomial model.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Unpooled:</p>
 <p><span class="math display">\[\begin{align}
@@ -411,25 +410,399 @@ p &amp;\sim Beta(2, 2) \\
 </div>
 </div>
 </div>
-<p>Let’s then implement the hierarchical, along with the unpooled and
-completely pooled binomial model in Stan.</p>
-<p>Hierarchical binomial model</p>
+</section><div class="section level1">
+<h1 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h1>
+<p>Let’s analyze human adult height in different countries. We’ll use
+the normal model with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> as the generative model, and give
+these parameters a hierarchical treatment.</p>
+<p>We’ll simulate some data based on measured averages and standard
+deviations for boys and girls in different countries.</p>
+<p>Data source: Height: Height and body-mass index trajectories of
+school-aged children and adolescents from 1985 to 2019 in 200 countries
+and territories: a pooled analysis of 2181 population-based studies with
+65 million participants. Lancet 2020, 396:1511-1524</p>
+<p>Data structure:</p>
 <div class="codewrapper sourceCode" id="cb1">
-<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"></code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">sampling</span><span class="op">(</span><span class="va">hierarchical_binomial_model</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">df_full</span> <span class="op">&lt;-</span> <span class="fu">read.csv</span><span class="op">(</span><span class="st">"data/height_data.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">str</span><span class="op">(</span><span class="va">df_full</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in sampling(hierarchical_binomial_model): could not find function "sampling"</code></pre>
+<pre class="output" tabindex="0"><code>'data.frame':	210000 obs. of  8 variables:
+ $ Country                                   : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
+ $ Sex                                       : chr  "Boys" "Boys" "Boys" "Boys" ...
+ $ Year                                      : int  1985 1985 1985 1985 1985 1985 1985 1985 1985 1985 ...
+ $ Age.group                                 : int  5 6 7 8 9 10 11 12 13 14 ...
+ $ Mean.height                               : num  103 109 115 120 125 ...
+ $ Mean.height.lower.95..uncertainty.interval: num  92.9 99.9 106.3 112.2 117.9 ...
+ $ Mean.height.upper.95..uncertainty.interval: num  114 118 123 128 132 ...
+ $ Mean.height.standard.error                : num  5.3 4.72 4.27 3.92 3.66 ...</code></pre>
 </div>
+<p>Let’s subset this data to simplify the analysis:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_full_sub</span> <span class="op">&lt;-</span> <span class="va">df_full</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">filter</span><span class="op">(</span></span>
+<span>    <span class="co"># 2019 measurements</span></span>
+<span>    <span class="va">Year</span> <span class="op">==</span> <span class="fl">2019</span>,        </span>
+<span>    <span class="co"># use only a single age group</span></span>
+<span>    <span class="va">Age.group</span> <span class="op">==</span> <span class="fl">19</span>, </span>
+<span>    <span class="co"># Consider girls only</span></span>
+<span>    <span class="va">Sex</span> <span class="op">==</span> <span class="st">"Girls"</span></span>
+<span>    <span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="co"># Select variables of interest. Use mu and sigma for mean and sd</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">Country</span>, <span class="va">Sex</span>, mu <span class="op">=</span> <span class="va">Mean.height</span>, sigma <span class="op">=</span> <span class="va">Mean.height.standard.error</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Let’s select 10 countries randomly</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Select countries</span></span>
+<span><span class="va">N_countries</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">Countries</span> <span class="op">&lt;-</span> <span class="fu">sample</span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">df_full_sub</span><span class="op">$</span><span class="va">Country</span><span class="op">)</span>,</span>
+<span>                    size <span class="op">=</span> <span class="va">N_countries</span>,</span>
+<span>                    replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">sort</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df_full_sub</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">Country</span> <span class="op">%in%</span> <span class="va">Countries</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>                Country   Sex       mu     sigma
+1               Albania Girls 162.2286 0.7286584
+2               Bahamas Girls 163.4605 1.5458758
+3               Bolivia Girls 155.5752 0.9389964
+4              DR Congo Girls 156.3007 0.8423344
+5      French Polynesia Girls 166.5187 1.0898402
+6                  Iran Girls 161.1837 0.4042259
+7               Liberia Girls 156.5414 0.8957401
+8                 Malta Girls 162.9505 3.7687254
+9                Tuvalu Girls 163.5701 1.0383303
+10 United Arab Emirates Girls 160.5303 0.8292111</code></pre>
+</div>
+<div class="section level2">
+<h2 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a></h2>
+<p>Now, we can treat the values in the table above as ground truth and
+simulate some data based on them. Below, we’ll analyze these simulated
+data points and see how well we can recover the “true” parameters for
+each country.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Sample size per group </span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
+<span></span>
+<span><span class="co"># For each country, generate some random girl's heights</span></span>
+<span><span class="va">Height</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>Country <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Country</span>, </span>
+<span>             Sex <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Sex</span>, </span>
+<span>             <span class="co"># Random normal values based on measured mu and sd</span></span>
+<span>             Height <span class="op">=</span> <span class="fu">rnorm</span><span class="op">(</span><span class="va">N</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">mu</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Plot</span></span>
+<span><span class="va">Height</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Country</span>, y <span class="op">=</span> <span class="va">Height</span>, color <span class="op">=</span> <span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulated data"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+</div>
+<div class="section level1">
+<h1 id="modeling">Modeling<a class="anchor" aria-label="anchor" href="#modeling"></a></h1>
+<p>Let’s build a normal model that uses partial pooling for the country
+means and standard deviations. The model can be written as follows. Let
+<span class="math inline">\(i\)</span> be an index that specifies the
+country, and <span class="math inline">\(j\)</span> index the data
+points.</p>
+<p><span class="math display">\[X_{ij} \sim \text{N}(\mu_i, \sigma_i) \\
+\mu_i \sim \text{N}(\mu_\mu, \sigma_\mu) \\
+\sigma_i \sim \Gamma(\alpha_\sigma, \beta_\sigma) \\
+\mu_\mu \sim \text{N}(0, 100)\\
+\sigma_\mu \sim \Gamma(2, 0.1) \\
+\alpha_\sigma, \beta_\sigma  \sim \Gamma(2, 0.01)\]</span></p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; G; <span class="co">// number of groups</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N[G]; <span class="co">// sample size within each group</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[sum(N)] X; <span class="co">// concatenated observations</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// get first and last index for each group in X</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> start_i[G];</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> end_i[G];</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(i == <span class="dv">1</span>) {</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      start_i[<span class="dv">1</span>] = <span class="dv">1</span>;</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      start_i[i] = start_i[i<span class="dv">-1</span>] + N[i<span class="dv">-1</span>];</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    end_i[i] = start_i[i] + N[i]-<span class="dv">1</span>;</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">// parameters</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[G] mu;</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[G] sigma;</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">// hyperparameters</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu_mu;</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_mu;</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha_sigma;</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; beta_sigma;</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Likelihood for each group</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    X[start_i[i]:end_i[i]] ~ normal(mu[i], sigma[i]);</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  mu ~ normal(mu_mu, sigma_mu);</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  sigma ~ gamma(alpha_sigma, beta_sigma);</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Hyperpriors</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  mu_mu ~ normal(<span class="dv">0</span>, <span class="dv">100</span>);</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  sigma_mu ~ inv_gamma(<span class="dv">2</span>, <span class="fl">0.1</span>);</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  alpha_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  beta_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> mu_tilda;</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_tilda;</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> X_tilda; </span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Population distributions</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  mu_tilda = normal_rng(mu_mu, sigma_mu);</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  sigma_tilda = gamma_rng(alpha_sigma, beta_sigma);</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="co">// PPD</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  X_tilda = normal_rng(mu_tilda, sigma_tilda);</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>} </span></code></pre>
+</div>
+<p>Let’s call Stan.</p>
+<p>To avoid convergence issues we’ll use 10000 iterations and set
+<code>adapt_delta = 0.99</code>. Moreover, we’ll parallelize the 4
+chains.</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">stan_data</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span>G <span class="op">=</span> <span class="fu">length</span><span class="op">(</span><span class="fu">unique</span><span class="op">(</span><span class="va">Height</span><span class="op">$</span><span class="va">Country</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                  N <span class="op">=</span> <span class="fu">rep</span><span class="op">(</span><span class="va">N</span>, <span class="fu">length</span><span class="op">(</span><span class="va">Countries</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                  X <span class="op">=</span> <span class="va">Height</span><span class="op">$</span><span class="va">Height</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Parallelize 4 chains</span></span>
+<span><span class="fu">options</span><span class="op">(</span>mc.cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">normal_hier_fit</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">normal_hier_model</span>,</span>
+<span>                              <span class="va">stan_data</span>, </span>
+<span>                              iter <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>                              chains <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                    <span class="co"># Use to get rid of divergent transitions:</span></span>
+<span>                                    control <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span>, </span>
+<span>                            <span class="co"># Print messages?</span></span>
+<span>                            <span class="co"># refresh = 0</span></span>
+<span>                            <span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level1">
+<h1 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a></h1>
+<div class="section level2">
+<h2 id="country-specific-estimates">Country-specific estimates<a class="anchor" aria-label="anchor" href="#country-specific-estimates"></a></h2>
+<p>Let’s first compare the marginal posteriors for the country-specific
+estimates:</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">par_summary</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">normal_hier_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">rownames_to_column</span><span class="op">(</span>var <span class="op">=</span> <span class="st">"par"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">separate</span><span class="op">(</span><span class="va">par</span>, into <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"par"</span>, <span class="st">"country"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\\["</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\]"</span>, <span class="st">""</span>, <span class="va">country</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="va">Countries</span><span class="op">[</span><span class="fu">as.integer</span><span class="op">(</span><span class="va">country</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot</span></span>
+<span><span class="va">par_summary</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">country</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>,</span>
+<span>             color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_errorbar</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">country</span>, ymin <span class="op">=</span> <span class="va">X2.5.</span>, ymax <span class="op">=</span> <span class="va">X97.5.</span><span class="op">)</span>,</span>
+<span>                color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span>               <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"par"</span>,</span>
+<span>                      value <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>                      <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">Country</span>, <span class="va">Sex</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Country</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Blue = posterior; black = true value"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<div class="section level2">
+<h2 id="hyperparameters">Hyperparameters<a class="anchor" aria-label="anchor" href="#hyperparameters"></a></h2>
+<p>Let’s then plot the population distribution’s parameters, that is,
+the hyperparameters. The sample-based values are included in the plots
+of <span class="math inline">\(\mu_\mu\)</span> and <span class="math inline">\(\sigma_\mu\)</span> (why not for the other two
+hyperparameters?).</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Population distributions:</span></span>
+<span><span class="va">population_samples_l</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">normal_hier_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"mu_mu"</span>, <span class="st">"sigma_mu"</span>, <span class="st">"alpha_sigma"</span>, <span class="st">"beta_sigma"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">cbind</span>, <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">set_colnames</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"mu_mu"</span>, <span class="st">"sigma_mu"</span>, <span class="st">"alpha_sigma"</span>, <span class="st">"beta_sigma"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"hyperpar"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">sample</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">population_samples_l</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span><span class="op">)</span>,</span>
+<span>                 fill <span class="op">=</span> <span class="va">posterior_color</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_vline</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_full_sub</span> <span class="op">%&gt;%</span> </span>
+<span>               <span class="fu">filter</span><span class="op">(</span><span class="va">Sex</span> <span class="op">==</span> <span class="st">"Girls"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>               <span class="fu">summarise</span><span class="op">(</span>mu_mu <span class="op">=</span> <span class="fu">mean</span><span class="op">(</span><span class="va">mu</span><span class="op">)</span>, sigma_mu <span class="op">=</span> <span class="fu">sd</span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>               <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"hyperpar"</span>, value <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span>
+<span>             <span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">hyperpar</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<div class="section level2">
+<h2 id="population-distribution">Population distribution<a class="anchor" aria-label="anchor" href="#population-distribution"></a></h2>
+<p>Let’s then plot the population distributions and compare to the
+sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline">\(\sigma\)</span>’s</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">population_l</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">normal_hier_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"mu_tilda"</span>, <span class="st">"sigma_tilda"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">cbind</span>, <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">set_colnames</span><span class="op">(</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"par"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">sample</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span> </span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">population_l</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_full_sub</span> <span class="op">%&gt;%</span> </span>
+<span>                     <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"par"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">Country</span>, <span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>                     <span class="fu">filter</span><span class="op">(</span><span class="va">Sex</span> <span class="op">==</span> <span class="st">"Girls"</span><span class="op">)</span>, </span>
+<span>                   <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>, </span>
+<span>                   alpha <span class="op">=</span> <span class="fl">0.75</span>, bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Blue = posterior; black = sample"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(density)` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+</div>
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<div class="section level2">
+<h2 id="posterior-predictive-distribution">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a></h2>
+<p>Let’s then plot the posterior predictive distribution. Let’s overlay
+it with simulated data based on all countries.</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Sample size per group </span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
+<span></span>
+<span><span class="co"># For each country, generate some random girl's heights</span></span>
+<span><span class="va">Height_all</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">df_full_sub</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="va">df_full_sub</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>Country <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Country</span>, </span>
+<span>             Sex <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Sex</span>, </span>
+<span>             <span class="co"># Random normal values based on measured mu and sd</span></span>
+<span>             Height <span class="op">=</span> <span class="fu">rnorm</span><span class="op">(</span><span class="va">N</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">mu</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PPD</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">normal_hier_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"X_tilda"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">set_colnames</span><span class="op">(</span> <span class="fu">c</span><span class="op">(</span><span class="st">"X_tilda"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">PPD</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X_tilda</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>,</span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>                 fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">Height_all</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Height</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>, </span>
+<span>                 alpha <span class="op">=</span> <span class="fl">0.75</span>, </span>
+<span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+</div>
+<div class="section level1">
+<h1 id="extensions">Extensions<a class="anchor" aria-label="anchor" href="#extensions"></a></h1>
+<p>We analyzed girl’s heights in a few countries and modeled them
+hierarchically. You could make the structure richer in many ways, for
+instance by adding hierarchy between sexes, continents, or
+developed/developing countries etc.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -442,12 +815,18 @@ completely pooled binomial model in Stan.</p>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
-<hr class="half-width"><!-- 
+<div class="section level2">
+<h2 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
+<!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- --></section></div> <!-- / div.lesson-content -->
+ -->
+</div>
+</div>
+
+
+
+      </div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="mcmc.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="model-critisism.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>

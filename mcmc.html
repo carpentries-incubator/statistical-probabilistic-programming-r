@@ -185,10 +185,8 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#metropolis-hastings-algorithm">Metropolis-Hastings algorithm</a></li>
-<li><a href="#example">Example</a></li>
+<li><a href="#example-banana-distribution">Example: Banana distribution</a></li>
 <li><a href="#assessing-convergence">Assessing convergence</a></li>
-<li><a href="#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
-<li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -388,231 +386,205 @@ current value, <span class="math inline">\(\theta^{i+1} =
 <p>As the algorithm is ran long enough, convergence is guaranteed and
 eventually the samples will start approximating the posterior
 distribution.</p>
-</section><section id="example"><h2 class="section-heading">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</section><section id="example-banana-distribution"><h2 class="section-heading">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
 </h2>
-<hr class="half-width"><p>Let’s look at the normal model and implement the Metropolis-Hastings
-algorithm to sample the posterior. First we’ll simulate some data</p>
+<hr class="half-width"><p>Let’s use the Metropolis-Hasting algorithm to generate samples from
+the posterior of the following statistical model:</p>
+<p><span class="math display">\[X \sim N(\theta_1 + \theta_2^2, 1) \\
+\theta_1, \theta_2 \sim N(0, 1),\]</span></p>
+<p>Data:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
-<span><span class="va">mu_true</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1.25</span></span>
-<span><span class="va">sigma_true</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span>
-<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">rnorm</span><span class="op">(</span><span class="va">N</span>, <span class="va">mu_true</span>, <span class="va">sigma_true</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X</span><span class="op">)</span>,</span>
-<span>                 bins <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">3.78</span>, <span class="fl">2.76</span>, <span class="fl">2.84</span>, <span class="fl">2.92</span>, <span class="fl">1.3</span>, <span class="fl">3.93</span>, <span class="fl">3.69</span>, <span class="fl">2.28</span>, <span class="fl">2.81</span>, <span class="fl">0.71</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/mcmc-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Then, we’ll write some functions. Below, <code>pars</code> is of the
-form <code>c(mu, sigma)</code>.</p>
-<p>First the point-wise log likelihood. Remember that the likelihood is
-the product of likelihoods for individual data points, which after a log
-transformation turns into a sum.</p>
+<p>Let’s implement a Metropolis-Hastings sampler for the banana
+posterior.</p>
+<div class="section level3">
+<h3 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a></h3>
+<p>Here, we’ll write some functions that take care of the different
+steps of the MH-algorithm.</p>
+<p>The proposal distribution is the multivariate (2D) normal with
+diagonal covariance scaled by a scalar <code>jump_scale</code>. This
+choice amount to the random walk MH.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">log_likelihood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="co"># Proposal generator: multivariate Normal with covariance = jump_scale*diagonal</span></span>
+<span><span class="va">generate_proposal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars_now</span>, <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
-<span>  <span class="va">log_lh</span> <span class="op">&lt;-</span> <span class="fu">dnorm</span><span class="op">(</span><span class="va">X</span>,</span>
-<span>                  mean <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>                  sd <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>                  log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="va">sum</span></span>
+<span>  <span class="va">my_n</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">pars_now</span><span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="kw">return</span><span class="op">(</span><span class="va">log_lh</span><span class="op">)</span></span>
-<span>  </span>
+<span>  <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">1</span>,</span>
+<span>                   mean <span class="op">=</span> <span class="va">pars_now</span>,</span>
+<span>                   sigma <span class="op">=</span> <span class="va">jump_scale</span><span class="op">*</span><span class="fu">diag</span><span class="op">(</span><span class="va">my_n</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>Next, well define normal and Gamma priors as the priors. The log
-posterior is the sum of log likelihood and log priors.</p>
+<p>This functions returns the log unnormalized posterior value at point
+<code>pars</code>.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Priors: mu ~ normal, sigma ~ gamma  </span></span>
-<span><span class="va">log_prior</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">log_mu_prior</span> <span class="op">&lt;-</span> <span class="fu">dnorm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>                        mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                        log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Compute target distribution P(theta = pars).</span></span>
+<span><span class="va">get_log_target_value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
-<span>  <span class="va">log_sigma_prior</span> <span class="op">&lt;-</span> <span class="fu">dgamma</span><span class="op">(</span>x <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>                            shape <span class="op">=</span> <span class="fl">2</span>, rate <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                            log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="kw">return</span><span class="op">(</span><span class="va">log_mu_prior</span> <span class="op">+</span> <span class="va">log_sigma_prior</span><span class="op">)</span></span>
-<span>  </span>
-<span><span class="op">}</span></span>
-<span></span>
-<span></span>
-<span><span class="va">log_posterior</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="fu">log_likelihood</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">+</span> <span class="fu">log_prior</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
+<span>  <span class="co"># log(likelihood)</span></span>
+<span>  <span class="fu">sum</span><span class="op">(</span></span>
+<span>    <span class="fu">dnorm</span><span class="op">(</span><span class="va">X</span>,</span>
+<span>          mean <span class="op">=</span> <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">pars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span>, </span>
+<span>          sd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>          log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op">+</span></span>
+<span>    </span>
+<span>    <span class="co"># log(prior)</span></span>
+<span>    <span class="fu">dnorm</span><span class="op">(</span><span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">0</span>, <span class="fl">1</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">dnorm</span><span class="op">(</span><span class="va">pars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="fl">0</span>, <span class="fl">1</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>The next function implements the transition density. We’ll use the
-normal distribution for both parameters. However, as <span class="math inline">\(\sigma\)</span> cannot be negative, we’ll take the
-absolute value to ensure positivity.</p>
+<p>This function computes the ratio used to determine whether or not the
+proposal is accepted.</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">generate_proposal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars_old</span>, <span class="va">sd</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="co"># Compute ratio</span></span>
+<span><span class="va">get_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_now</span>, <span class="va">pars_proposal</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
-<span>  <span class="co"># proposal </span></span>
-<span>  <span class="va">pars_new</span> <span class="op">&lt;-</span> <span class="fu">rnorm</span><span class="op">(</span><span class="fl">2</span>, mean <span class="op">=</span> <span class="va">pars_old</span>, sd <span class="op">=</span> <span class="va">sd</span><span class="op">)</span></span>
+<span>  <span class="co"># Proposal distribution is symmetric: </span></span>
+<span>  <span class="co"># N(theta_{i} | theta_{i+1}) = N(theta_{i+1} | theta_{i}),</span></span>
+<span>  <span class="co"># so they cancel out!</span></span>
 <span>  </span>
-<span>  <span class="co"># make sure sigma proposal &gt; 0</span></span>
-<span>  <span class="va">pars_new</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">abs</span><span class="op">(</span><span class="va">pars_new</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">exp</span><span class="op">(</span></span>
+<span>    <span class="fu">get_log_target_value</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_proposal</span><span class="op">)</span> <span class="op">-</span> </span>
+<span>      <span class="fu">get_log_target_value</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_now</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="kw">return</span><span class="op">(</span><span class="va">pars_new</span><span class="op">)</span></span>
+<span>  <span class="kw">return</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
+<span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>The next function computes the acceptance ratio. Since the normal
-distribution is a symmetric proposal, it suffices to compute the ratio
-of the posteriors.</p>
+<p>This function combines the helper functions above and loops over the
+chosen number of samples.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Acceptance probability</span></span>
-<span><span class="va">get_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_old</span>, <span class="va">pars_new</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="co"># Sampler</span></span>
+<span><span class="va">MH_sampler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>,</span>
+<span>                       <span class="va">inits</span>,</span>
+<span>                       <span class="va">n_samples</span> <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>                       <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
 <span>  </span>
-<span>  <span class="co"># Ratio of posteriors</span></span>
-<span>  <span class="co"># No need to include ratio of proposal densities</span></span>
-<span>  <span class="co"># because Gaussian density is symmetric</span></span>
-<span>  <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">exp</span><span class="op">(</span><span class="fu">log_posterior</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_new</span><span class="op">)</span> <span class="op">-</span> <span class="fu">log_posterior</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_old</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="kw">return</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre>
-</div>
-<p>Finally, here is the Metropolis-Hastings sampler for the normal
-model.</p>
-<div class="codewrapper sourceCode" id="cb6">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">metropolis_sampler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">inits</span>, <span class="va">n_samples</span> <span class="op">=</span> <span class="fl">1000</span>, <span class="va">jump_sd</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
+<span>  <span class="co"># Matrix for samples</span></span>
 <span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu">matrix</span><span class="op">(</span>nrow <span class="op">=</span> <span class="va">n_samples</span>, ncol <span class="op">=</span> <span class="fu">length</span><span class="op">(</span><span class="va">inits</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">pars</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">inits</span></span>
 <span>  </span>
+<span>  <span class="co"># Set initial values</span></span>
+<span>  <span class="va">pars</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">inits</span></span>
+<span></span>
+<span>  <span class="co"># Generate samples</span></span>
 <span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">n_samples</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    </span>
 <span>    <span class="co"># Current parameters</span></span>
-<span>    <span class="va">pars_old</span> <span class="op">&lt;-</span> <span class="va">pars</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>, <span class="op">]</span></span>
+<span>    <span class="va">pars_now</span> <span class="op">&lt;-</span> <span class="va">pars</span><span class="op">[</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span>, <span class="op">]</span></span>
 <span>    </span>
 <span>    <span class="co"># Proposal</span></span>
-<span>    <span class="va">pars_new</span> <span class="op">&lt;-</span> <span class="fu">generate_proposal</span><span class="op">(</span><span class="va">pars_old</span>, <span class="va">jump_sd</span><span class="op">)</span></span>
+<span>    <span class="va">pars_proposal</span> <span class="op">&lt;-</span> <span class="fu">generate_proposal</span><span class="op">(</span><span class="va">pars_now</span>, <span class="va">jump_scale</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="co"># Ratio</span></span>
-<span>    <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">get_ratio</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_old</span>, <span class="va">pars_new</span><span class="op">)</span></span>
+<span>    <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">get_ratio</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_now</span>, <span class="va">pars_proposal</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">min</span><span class="op">(</span><span class="fl">1</span>, <span class="va">r</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="co"># Does the sampler move?</span></span>
-<span>    <span class="va">move</span> <span class="op">&lt;-</span> <span class="fu">runif</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="va">r</span></span>
+<span>    <span class="va">move</span> <span class="op">&lt;-</span> <span class="fu">sample</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                   size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   prob <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">r</span>, <span class="fl">1</span><span class="op">-</span><span class="va">r</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="co"># OR: </span></span>
-<span>    <span class="co"># move &lt;- sample(x = c(TRUE, FALSE), size = 1, prob = c(r, 1-r))</span></span>
+<span>    <span class="co"># move &lt;- runif(n = 1, min = 0, max = 1) &lt;= r</span></span>
 <span>    </span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="va">move</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">pars</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars_new</span></span>
+<span>      <span class="va">pars</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars_proposal</span></span>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>      <span class="va">pars</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars_old</span></span>
+<span>      <span class="va">pars</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars_now</span></span>
 <span>    <span class="op">}</span></span>
-<span>    </span>
-<span>  <span class="op">}</span></span>
 <span>  </span>
-<span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>mu <span class="op">=</span> <span class="va">pars</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, sigma <span class="op">=</span> <span class="va">pars</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>  </span>
+<span>    <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># Into data frame</span></span>
+<span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">return</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> </span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>Then, we run the sampler. We’ll use 4 chains with 5000 samples each.
-The transition density standard deviation is set to 0.05.</p>
-<div class="codewrapper sourceCode" id="cb7">
+</div>
+<div class="section level3">
+<h3 id="run-mh">Run MH<a class="anchor" aria-label="anchor" href="#run-mh"></a></h3>
+<p>We’ll use 1000 samples with initial value (0, 5) and jump scale 0.01
+and lay the sample trajectory over the true posterior density.</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
-<span><span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span><span class="va">jump_sd</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
+<code class="sourceCode R"><span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">12</span><span class="op">)</span></span>
+<span><span class="co"># Get samples</span></span>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">MH_sampler</span><span class="op">(</span><span class="va">X</span>,</span>
+<span>                      inits <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>                      n_samples <span class="op">=</span> <span class="fl">1000</span>, </span>
+<span>                      jump_scale <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Warmup 50%</span></span>
-<span><span class="va">warmup</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
+<span><span class="co"># Add column for sample index</span></span>
+<span><span class="va">samples</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="co"># Random initials for each chain</span></span>
-<span><span class="va">inits</span> <span class="op">&lt;-</span> <span class="fu">apply</span><span class="op">(</span>X <span class="op">=</span> <span class="fu">matrix</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_chains</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>               MARGIN <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>               FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">rnorm</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="va">t</span> </span>
-<span></span>
-<span><span class="co"># Make sure sigma initial &gt;0</span></span>
-<span><span class="va">inits</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">abs</span><span class="op">(</span><span class="va">inits</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Run the chains</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">inits</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co"># Plot joint posterior samples</span></span>
+<span><span class="va">p_MH1</span> <span class="op">&lt;-</span> <span class="va">p_grid</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="fu">metropolis_sampler</span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>,</span>
-<span>                              inits <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">inits</span><span class="op">[</span><span class="va">i</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">inits</span><span class="op">[</span><span class="va">i</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                              jump_sd <span class="op">=</span> <span class="va">jump_sd</span>,</span>
-<span>                              n_samples <span class="op">=</span> <span class="va">n_samples</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>      <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
-<span>  </span>
-<span>  <span class="co"># Add column for chain and 50% warmup</span></span>
-<span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="va">my_df</span> <span class="op">%&gt;%</span> </span>
-<span>    <span class="fu">mutate</span><span class="op">(</span>chain <span class="op">=</span> <span class="fu">as.factor</span><span class="op">(</span><span class="va">i</span><span class="op">)</span>, </span>
-<span>           warmup <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="cn">TRUE</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">my_df</span><span class="op">)</span><span class="op">*</span><span class="va">warmup</span><span class="op">)</span>,</span>
-<span>                      <span class="fu">rep</span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">my_df</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">warmup</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_MH1</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Plot results. Uncomment the line <code>fill = warmup</code> below so
-see the effect of removing the initial 50% of the samples.</p>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">samples_w</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"par"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">chain</span>, <span class="va">warmup</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Posterior histogram</span></span>
-<span></span>
-<span><span class="va">p_posterior</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span>,</span>
-<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>,</span>
-<span>                     <span class="co"># fill = warmup</span></span>
-<span>                     <span class="op">)</span>,</span>
-<span>                 bins <span class="op">=</span> <span class="fl">50</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, position <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_vline</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>par <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span>,</span>
-<span>                               value <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">mu_true</span>, <span class="va">sigma_true</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>             <span class="fu">aes</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># p_posterior_chains &lt;- ggplot(samples_l) +</span></span>
-<span><span class="co">#   geom_histogram(aes(x = value, fill = chain),</span></span>
-<span><span class="co">#                  bins = 50, alpha = 0.75, </span></span>
-<span><span class="co">#                  position = "identity") +</span></span>
-<span><span class="co">#   geom_vline(data = data.frame(par = c("mu", "sigma"),</span></span>
-<span><span class="co">#                                value = c(mu_true, sigma_true)), </span></span>
-<span><span class="co">#              aes(xintercept = value)) + </span></span>
-<span><span class="co">#   scale_fill_grafify()</span></span>
-<span></span>
-<span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">p_posterior</span><span class="op">)</span></span></code></pre>
+<figure><img src="fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><em>Conclusions: —</em></p>
 </div>
-<figure><img src="fig/mcmc-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
+</section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
 </h2>
 <hr class="half-width"><p>Although converge is guaranteed in theory, it is not so in
 practice.</p>
-<p>Like we saw above, unless the chains’ initial values are in high
+<p>Depending on random variations, these settings may cause the issues,
+including the following:</p>
+<ol style="list-style-type: decimal"><li><p>Incomplete exploration of the target distribution. This means
+that the sampler visits only some of the areas with posterior mass. This
+can lead to a biased approximation.</p></li>
+<li><p>Slow convergence. Initial values of the chain are far from most
+of the posterior mass, leading to bias.</p></li>
+<li><p>A large proportion of the proposals is rejected, leading to
+inefficiency.</p></li>
+<li><p>Samples are autocorrelated, meaning that consequtive samples are
+close to each other. Ideally the samples would be totally
+independent.</p></li>
+<li><p>Monitoring convergence with statistics, such as effective sample
+size, <span class="math inline">\(\hat{R}\)</span>, and divergent
+transitions (for Hamiltonian Monte Carlo).</p></li>
+<li><p>Looking at trace plots</p></li>
+<li><p>Information about the model. E.g. if you use known the posterior
+to the multimodal.</p></li>
+<li><p>Running time. If your sampler takes a long time, this
+<em>can</em> be a sign of an issue.</p></li>
+<li><p>Using Stan. Stan throws warnings automatically.</p></li>
+</ol><p>The issues can be remedied with:</p>
+<ol style="list-style-type: decimal"><li><p>Running multiple long chains with distinct random initial
+values.</p></li>
+<li><p>Discarding an early proportion of the chain as warmup (burn-in).
+Stan uses 50% by default.</p></li>
+<li><p>Setting a good proposal distribution. This is easy said, but in
+practice not trivial at all.</p></li>
+</ol><p>Like we saw above, unless the chains’ initial values are in high
 posterior density areas, the early chain samples will bias the target
 distribution estimate. For this reason, it is customary to discard a
 proportion of the chain as “warmup.” Often 50% is used and this is also
@@ -626,11 +598,15 @@ the default in Stan.</p>
 Here, the initial 50% of the chains are colored dim to illustrate the
 fact that convergence to the posterior distribution requires long enough
 chains.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p_traj</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>warmup <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"FALSE"</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>                    <span class="fu">rep</span><span class="op">(</span><span class="st">"TRUE"</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_traj</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu</span>, y <span class="op">=</span> <span class="va">sigma</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># Post warmup samples</span></span>
@@ -643,7 +619,16 @@ chains.</p>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_traj</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Next, we’ll make the trace plots, which are comprised of the chains
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in `geom_path()`:
+! Problem while computing aesthetics.
+ℹ Error occurred in the 1st layer.
+Caused by error:
+! object 'mu' not found</code></pre>
+</div>
+<p>Next, we’ll make the trace plots, which are comprised of the chains
 of individual parameters. The warmup iterations are again colored
 dimmer. Trace plots can give quick visual information about the chains.
 When there are no converge issues, the trace plots should look like
@@ -660,16 +645,28 @@ is desirable because it implies that the drawn samples are independent.
 Another popular convergence metric is the effective sample size. It
 quantifies the number of independent samples produced by the
 sampler.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Long --&gt; wide format</span></span>
 <span><span class="va">samples_w</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fu">rep</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">chain</span>, <span class="va">warmup</span>, <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Trace plot</span></span>
+<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">chain</span>, <span class="va">warmup</span>, <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in `mutate()` at tidyr/R/gather.R:84:3:
+ℹ In argument: `sample = rep(1:n_samples, 4)`.
+Caused by error:
+! object 'n_samples' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Trace plot</span></span>
 <span><span class="va">p_trace</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -678,14 +675,28 @@ sampler.</p>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">chain</span> <span class="op">~</span> <span class="va">parameter</span>,</span>
 <span>             scales <span class="op">=</span> <span class="st">"free"</span>,</span>
 <span>             ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s compute the number of rejected proposals to get some idea about
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'samples_w' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'p_trace' not found</code></pre>
+</div>
+<p>Let’s compute the number of rejected proposals to get some idea about
 the efficiency of the algorithm. The less samples are rejected, the more
 efficient the sampler performs.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -695,9 +706,11 @@ efficient the sampler performs.</p>
 <span>            <span class="fu">pull</span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n_chains</span><span class="op">*</span><span class="va">n_samples</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">warmup</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>[1] 0.3943</code></pre>
+<pre class="error" tabindex="0"><code>Error in `pull()`:
+Caused by error:
+! object 'mu' not found</code></pre>
 </div>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
@@ -713,9 +726,91 @@ and convergence? Why?</p>
 </div>
 </div>
 </div>
-</section><section id="hamiltonian-monte-carlo"><h2 class="section-heading">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
-</h2>
-<hr class="half-width"><p>Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings
+</section><div class="section level1">
+<h1 id="example-continued">Example continued<a class="anchor" aria-label="anchor" href="#example-continued"></a></h1>
+<p>Here we’ll run 4 chains with 10000 samples each and discard the first
+50% of each chain as warmup. The jump scale is 0.1.</p>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Generate more chains</span></span>
+<span><span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
+<span></span>
+<span><span class="co"># More samples</span></span>
+<span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<span></span>
+<span><span class="co"># Consider first p% as warmup</span></span>
+<span><span class="va">warmup</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
+<span></span>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_chains</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># Use random initial values</span></span>
+<span>  <span class="va">inits</span> <span class="op">&lt;-</span> <span class="fu">rnorm</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">chain</span> <span class="op">&lt;-</span> <span class="fu">MH_sampler</span><span class="op">(</span><span class="va">X</span>, inits <span class="op">=</span> <span class="va">inits</span>,</span>
+<span>                        n_samples <span class="op">=</span> <span class="va">n_samples</span>, </span>
+<span>                        jump_scale <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Wrangle</span></span>
+<span>  <span class="fu">colnames</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"theta1"</span>, <span class="st">"theta2"</span><span class="op">)</span></span>
+<span>  <span class="va">chain</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span></span>
+<span>  <span class="va">chain</span><span class="op">$</span><span class="va">chain</span> <span class="op">&lt;-</span> <span class="fu">as.factor</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="va">chain</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu">round</span><span class="op">(</span><span class="va">warmup</span><span class="op">*</span><span class="va">n_samples</span><span class="op">)</span>, <span class="st">"warmup"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
+<span>  <span class="va">chain</span><span class="op">[</span><span class="op">(</span><span class="fu">round</span><span class="op">(</span><span class="va">warmup</span><span class="op">*</span><span class="va">n_samples</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n_samples</span>, <span class="st">"warmup"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
+<span>  </span>
+<span>  <span class="kw">return</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot</span></span>
+<span><span class="va">p_joint_2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># warmup samples</span></span>
+<span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span></span>
+<span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span><span class="va">theta1</span>, <span class="va">theta2</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>,</span>
+<span>            alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># post-warmup samples</span></span>
+<span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span></span>
+<span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span><span class="va">theta1</span>, <span class="va">theta2</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_joint_2</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/mcmc-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Trace plots</p>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Trace plots</span></span>
+<span><span class="va">p_trace_2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
+<span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>              <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>,</span>
+<span>                     value <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>                     <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"chain"</span>, <span class="st">"warmup"</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, </span>
+<span>            alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
+<span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>              <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>,</span>
+<span>                     value <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>                     <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"chain"</span>, <span class="st">"warmup"</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">parameter</span>, ncol <span class="op">=</span> <span class="va">n_chains</span>, </span>
+<span>             scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace_2</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/mcmc-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="section level2">
+<h2 id="hamiltonian-monte-carlo">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a></h2>
+<p>Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings
 algorithm implemented in Stan. The defining feature is the elaborate
 scheme it uses to generate proposals. Briefly, the idea is to simulate
 the dynamics of a particle moving in a potential landscape defined by
@@ -751,16 +846,22 @@ about divergent transitions.</p>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
-<hr class="half-width"><ul><li><p>See interactive visualization of different MCMC algorithms: <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a></p></li>
+</div>
+<div class="section level2">
+<h2 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
+<ul><li><p>See interactive visualization of different MCMC algorithms: <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a></p></li>
 <li><p>Statistical Rethinking</p></li>
 <li><p>BDA3</p></li>
 <li><p>Bayes Rules!</p></li>
 </ul><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- --></section></div> <!-- / div.lesson-content -->
+ --></div>
+</div>
+
+
+
+      </div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="stan.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="hierarchical-models.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
