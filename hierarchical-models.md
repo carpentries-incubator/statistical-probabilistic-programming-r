@@ -133,17 +133,17 @@ df
 ```
 
 ```{.output}
-                Country   Sex       mu     sigma
-1               Albania Girls 162.2286 0.7286584
-2               Bahamas Girls 163.4605 1.5458758
-3               Bolivia Girls 155.5752 0.9389964
-4              DR Congo Girls 156.3007 0.8423344
-5      French Polynesia Girls 166.5187 1.0898402
-6                  Iran Girls 161.1837 0.4042259
-7               Liberia Girls 156.5414 0.8957401
-8                 Malta Girls 162.9505 3.7687254
-9                Tuvalu Girls 163.5701 1.0383303
-10 United Arab Emirates Girls 160.5303 0.8292111
+        Country   Sex       mu     sigma
+1      Bulgaria Girls 164.5764 3.8323766
+2        Canada Girls 164.7299 0.4985881
+3          Chad Girls 162.1242 0.8894219
+4      Colombia Girls 157.9637 0.6141761
+5         Congo Girls 158.7799 0.8692321
+6      Djibouti Girls 159.8240 4.4305086
+7    Montenegro Girls 169.9609 0.8887514
+8        Panama Girls 158.1865 0.9293961
+9  South Africa Girls 158.5787 0.5028328
+10       Uganda Girls 158.5280 0.6183227
 ```
 
 

@@ -147,8 +147,8 @@ Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 1e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 3: Gradient evaluation took 2e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -166,8 +166,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.007 seconds (Total)
+Chain 3:                0.004 seconds (Sampling)
+Chain 3:                0.008 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -210,10 +210,10 @@ Inference for Stan model: anon_model.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.25  1377    1
-lp__  -22.81    0.02 0.70 -24.78 -22.96 -22.54 -22.38 -22.33  1416    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1348    1
+lp__  -22.82    0.02 0.72 -24.94 -22.96 -22.54 -22.38 -22.33  1645    1
 
-Samples were drawn using NUTS(diag_e) at Tue Jan 16 07:57:22 2024.
+Samples were drawn using NUTS(diag_e) at Wed Jan 17 09:09:47 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -393,8 +393,8 @@ normal_samples <- rstan::sampling(normal_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 1: Gradient evaluation took 5e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -412,14 +412,14 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.007 seconds (Sampling)
-Chain 1:                0.014 seconds (Total)
+Chain 1:                0.005 seconds (Sampling)
+Chain 1:                0.012 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -462,14 +462,14 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 3:                0.007 seconds (Sampling)
-Chain 3:                0.014 seconds (Total)
+Chain 3:                0.006 seconds (Sampling)
+Chain 3:                0.013 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 1e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 4: Gradient evaluation took 2e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -487,8 +487,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.013 seconds (Total)
+Chain 4:                0.007 seconds (Sampling)
+Chain 4:                0.014 seconds (Total)
 Chain 4: 
 ```
 

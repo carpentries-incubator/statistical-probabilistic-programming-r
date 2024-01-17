@@ -152,8 +152,8 @@ gp_samples <- rstan::sampling(gp_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.00045 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.5 seconds.
+Chain 1: Gradient evaluation took 0.000443 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.43 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -169,9 +169,9 @@ Chain 1: Iteration:  1 / 100 [  1%]  (Warmup)
 Chain 1: Iteration: 51 / 100 [ 51%]  (Sampling)
 Chain 1: Iteration: 100 / 100 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 3.104 seconds (Warm-up)
-Chain 1:                2.111 seconds (Sampling)
-Chain 1:                5.215 seconds (Total)
+Chain 1:  Elapsed Time: 0.213 seconds (Warm-up)
+Chain 1:                0.992 seconds (Sampling)
+Chain 1:                1.205 seconds (Total)
 Chain 1: 
 ```
 
@@ -181,11 +181,16 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
 ```{.warning}
+Warning: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+https://mc-stan.org/misc/warnings.html#bfmi-low
+```
+
+```{.warning}
 Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ```{.warning}
-Warning: The largest R-hat is 2.11, indicating chains have not mixed.
+Warning: The largest R-hat is 2.13, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat
 ```
@@ -319,8 +324,8 @@ gp_cholesky_samples <- rstan::sampling(gp_cholesky_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.000193 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.93 seconds.
+Chain 1: Gradient evaluation took 0.000182 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.82 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -331,15 +336,15 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.821 seconds (Warm-up)
-Chain 1:                0.723 seconds (Sampling)
-Chain 1:                1.544 seconds (Total)
+Chain 1:  Elapsed Time: 0.827 seconds (Warm-up)
+Chain 1:                0.707 seconds (Sampling)
+Chain 1:                1.534 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 4e-05 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
+Chain 2: Gradient evaluation took 4.1e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.41 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -350,9 +355,9 @@ Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.804 seconds (Warm-up)
-Chain 2:                0.715 seconds (Sampling)
-Chain 2:                1.519 seconds (Total)
+Chain 2:  Elapsed Time: 0.819 seconds (Warm-up)
+Chain 2:                0.708 seconds (Sampling)
+Chain 2:                1.527 seconds (Total)
 Chain 2: 
 ```
 Fitting is completed in a few seconds with no warnings. Let's check the results
