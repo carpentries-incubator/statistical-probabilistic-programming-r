@@ -20,57 +20,66 @@ exercises: 2
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-
-## Hierachical models
-
-Bayesian hierarchical models are a class of models suited for scenarios where the study population consists of separate but related groups. For instance, analyzing student performance in different schools, income levels within different regions, or animal behavior within different populations are scenarios are scenarios where such models would be appropriate.  
-
-A non-hierarchical model becomes hierarchical once the parameters of a prior are set as unknown and a prior is given to them. These hyperparameters and hyperpriors can be thought to exist on another level of hierarchy, hence the name. 
-
-As an example, consider the beta-binomial model presented in Episode 2. It was used to estimate the prevalence of left-handedness based on a sample of 50 students If we had some additional information, such as the study majors, we could include this information in the model, like so
-
+Bayesian hierarchical models are a class of models suited for scenarios where the study population consists of separate but related groups. For instance, analyzing student performance in different schools, income levels within various regions, or animal behavior within distinct populations are scenarios where such models might be appropriate.
+This structure can be incorporated into a model by including group-wise parameters, each with a prior that, in turn, contains unknown parameters that also receive a prior. In other words, the prior parameters, hyperparameters, are given a prior, a hyperprior, and the hyperparameters are learned in the fitting process. The hyperparameters and hyperpriors can be thought to exist on another level of hierarchy, hence the name.
+As an example, consider the beta-binomial model presented in Episode 2. It was used to estimate the prevalence of left-handedness based on a sample of 50 students. If we had additional information, such as study majors, we could include this information in the model, like so:
 $$X_g \sim \text{Bin}(N_g, \theta_g) \\
 \theta_g \sim \text{Beta}(\alpha, \beta) \\
 \alpha, \beta \sim \Gamma(2, 0.1).$$
 
-Here the subscript $g$ indices the groups for the majors. The group-specific prevalences for left-handedness $\theta_g$ are all given the Beta prior with hyperparameters $\alpha, \beta$ that are random variables. The final line denotes the hyperprior $\Gamma(2, 0.1)$ that controls the prior beliefs about the hyperparameters. 
 
-Now, the students are modeled as identical within the groups, but no longer on the whole. On the other hand, there is some similarity between the groups, since they have a common prior, that is learned. 
+Here, the subscript $g$ indexes the study major groups. The group-specific prevalences for left-handedness $\theta_g$ are given a beta prior with hyperparameters $\alpha, \beta$ that are random variables. The final line denotes the hyperprior $\Gamma(2, 0.1)$ that controls the prior beliefs about the hyperparameters.
 
-These three different modeling approaches are also called unpooled, partially pooled (hierarchical), and completely pooled model. 
+In this hierarchical beta-binomial model, students are modeled as identical within the groups but no longer on the population level. On the other hand, there is an assumed similarity between the groups since they share a common prior. It is said that the groups are partially pooled, as they are not equal but not entirely independent either.
 
-One key advantage of Bayesian hierarchical models is their ability to borrow strength across groups. By pooling information from multiple groups, these models can provide more stable estimates, especially when individual groups have limited data. 
+One key advantage of Bayesian hierarchical models is their ability to borrow strength across groups. By pooling information from multiple groups, these models can provide more stable estimates, especially when only limited data is available.
 
-Another difference to non-hierarchical models is that the prior, or the **population distribution** of the parameters is learned in the process. The population distribution can give insights about the parameter variation in larger context, that is, for groups we have no data on. For instance, if we had gathered data on the handedness of students majoring in natural sciences, the population distribution could give some insight about the students in humanities and social sciences. 
+
+Another difference from non-hierarchical models is that the prior, or the **population distribution** of the parameters, is learned in the process. The population distribution can provide insights into parameter variation in a larger context, for groups where we have no data. For instance, if we had gathered data on the handedness of students majoring in natural sciences, the population distribution could offer insights into students in humanities and social sciences as well.
+
+In the following example, we'll conduct a hierarchical analysis of human heights in different countries.
+
+
+
 
 
 # Example: human height 
 
 Let's analyze human adult height in different countries. We'll use the normal model with unknown mean $\mu$ and standard deviation $\sigma$ as the generative model, and give these parameters the hierarchical treatment. 
 
-We'll simulate some data based on measured averages and standard deviations for boys and girls in different countries. The simulations are based on data in: Height: Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories: a pooled analysis of 2181 population-based studies with 65 million participants. Lancet 2020, 396:1511-1524
+We'll analyze simulated data based on actual measurements in different countries. The simulations are based on data in: Height: Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories: a pooled analysis of 2181 population-based studies with 65 million participants. Lancet 2020, 396:1511-1524
 
-We'll analyze these simulated data points and see how well we can recover the "true" parameters for each country. 
-
-First, read the data and check its structure. 
+First, let's read the data and check its structure. 
 
 
 ```r
 height <- read.csv("data/height_data.csv")
 
-str(height)
+head(height)
 ```
 
 ```{.output}
-'data.frame':	210000 obs. of  8 variables:
- $ Country                                   : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
- $ Sex                                       : chr  "Boys" "Boys" "Boys" "Boys" ...
- $ Year                                      : int  1985 1985 1985 1985 1985 1985 1985 1985 1985 1985 ...
- $ Age.group                                 : int  5 6 7 8 9 10 11 12 13 14 ...
- $ Mean.height                               : num  103 109 115 120 125 ...
- $ Mean.height.lower.95..uncertainty.interval: num  92.9 99.9 106.3 112.2 117.9 ...
- $ Mean.height.upper.95..uncertainty.interval: num  114 118 123 128 132 ...
- $ Mean.height.standard.error                : num  5.3 4.72 4.27 3.92 3.66 ...
+      Country  Sex Year Age.group Mean.height
+1 Afghanistan Boys 1985         5    103.3152
+2 Afghanistan Boys 1985         6    109.2357
+3 Afghanistan Boys 1985         7    114.7595
+4 Afghanistan Boys 1985         8    120.0023
+5 Afghanistan Boys 1985         9    125.0773
+6 Afghanistan Boys 1985        10    130.0964
+  Mean.height.lower.95..uncertainty.interval
+1                                   92.91241
+2                                   99.91444
+3                                  106.31005
+4                                  112.20252
+5                                  117.88036
+6                                  123.38137
+  Mean.height.upper.95..uncertainty.interval Mean.height.standard.error
+1                                   113.7128                   5.295555
+2                                   118.2826                   4.718901
+3                                   123.0034                   4.270250
+4                                   127.5500                   3.924385
+5                                   132.1538                   3.662401
+6                                   136.7418                   3.465345
 ```
 
 Let's subset this data to simplify the analysis and focus on the height of adult women measured in 2019.
@@ -106,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-    Country   Sex Mean.height Mean.height.standard.error
-1   Bermuda Girls    166.1101                  4.3531671
-2  Bulgaria Girls    164.5764                  3.8323766
-3  Cambodia Girls    154.7495                  0.7493882
-4  DR Congo Girls    156.3007                  0.8423344
-5   Lao PDR Girls    153.0991                  0.9402629
-6    Mexico Girls    157.9019                  0.5283058
-7   Namibia Girls    160.2561                  0.8504509
-8      Oman Girls    158.4350                  0.8546351
-9   Romania Girls    164.7308                  0.7011577
-10 Slovenia Girls    167.1976                  0.2571058
+        Country   Sex Mean.height Mean.height.standard.error
+1       Bahrain Girls    158.2908                  0.9403578
+2        Cyprus Girls    160.5529                  1.3654321
+3      Dominica Girls    166.8885                  1.2966654
+4         Gabon Girls    160.0452                  0.9829053
+5        Latvia Girls    168.8066                  1.4775853
+6       Lesotho Girls    156.7208                  0.7995027
+7     Swaziland Girls    158.9214                  0.8919865
+8    Tajikistan Girls    158.1218                  0.6408059
+9       Tokelau Girls    166.0754                  1.1101078
+10 Turkmenistan Girls    162.8271                  0.7846984
 ```
 
 
@@ -152,11 +161,9 @@ height_sim %>%
 
 <img src="fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-Each point in the figure represents an individual. The data is simulated based on the measured mean and standard error in the respective countries. 
-
 ## Modeling
 
-Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. We'll use $g$ to index the country, and $i$ for the data points.
+Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. We'll use $g$ to index the country, and $i$ for individuals.
 
 \begin{align}
 X_{gi} &\sim \text{N}(\mu_g, \sigma_g) \\
@@ -168,7 +175,7 @@ X_{gi} &\sim \text{N}(\mu_g, \sigma_g) \\
 \end{align}
 
 
-Here is the Stan program for the hierarchical normal model. The data points are input as a concatenated vector as this would allow using data with uneven sample sizes. The country-specific start and end indices are computed in the transformed data block. The parameters block contains the declarations of vectors for the means and standard deviations, along with the hyperparameters. The hyperparameter subscripts denote the parameter they are assigned to. The generated quantities block generates samples from the population distributions of $\mu$ and $\sigma$ and a posterior predictive distribution. 
+Here is the Stan program for the hierarchical normal model. The data points are input as a concatenated vector `X` as this would allow using data with uneven sample sizes. The country-specific start and end indices are computed in the transformed data block. The parameters block contains the declarations of vectors for the means and standard deviations, along with the hyperparameters. The hyperparameter subscripts denote the parameter they are assigned to so, for instance, $\sigma_{\mu}$ is the standard deviation of the mean parameter $\mu$. The generated quantities block generates samples from the population distributions of $\mu$ and $\sigma$ and a posterior predictive distribution. 
 
 
 
@@ -245,7 +252,7 @@ generated quantities {
 ```
 
 
-Now we can call Stan and fit the model. Hierarchical models can often encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll run the 2 chains in parallel by setting `cores = 2`. 
+Now we can call Stan and fit the model. Hierarchical models can often encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
 
 
 ```r
@@ -260,10 +267,23 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
                                     # Use to get rid of divergent transitions:
                                     control = list(adapt_delta = 0.99), 
                               cores = 2,
-                            # Print messages?
+                            # Track progress every 5000 iterations
                             refresh = 5000
                             )
 ```
+
+
+
+<!-- Non-pooled analysis -->
+
+
+
+
+
+<!-- Fit -->
+
+
+
 
 
 ## Results
@@ -286,11 +306,11 @@ par_summary <- rstan::summary(normal_hier_fit, c("mu", "sigma"))$summary %>%
 
 ```r
 # Plot
-par_summary %>%
+
   ggplot() + 
-  geom_point(aes(x = country, y = mean),
+  geom_point(data = par_summary, aes(x = country, y = mean),
              color = posterior_color) +
-  geom_errorbar(aes(x = country, ymin = X2.5., ymax = X97.5.),
+  geom_errorbar(data = par_summary, aes(x = country, ymin = X2.5., ymax = X97.5.),
                 color = posterior_color) + 
   geom_point(data = height_women10 %>% 
                rename_with(~ c('mu', 'sigma'), 3:4) %>% 
@@ -303,7 +323,15 @@ par_summary %>%
   labs(title = "Blue = posterior; black = true value")
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+
+
+
+:::::::::::::::::::::::::::::: challenge
+
+Experiment with the data and fit. Explore the effect of sample size, unequal sample sizes between countries, and the amount of countries, for example. 
+
+::::::::::::::::::::::::::::::::::::::::
 
 
 ## Hyperparameters
@@ -337,7 +365,7 @@ ggplot() +
   facet_wrap(~hyperpar, scales = "free")
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 ## Population distributions 
 
@@ -376,7 +404,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 generated.
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 
 ## Posterior predictive distribution
@@ -425,7 +453,7 @@ ggplot() +
                  bins = 100)
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
 
 
