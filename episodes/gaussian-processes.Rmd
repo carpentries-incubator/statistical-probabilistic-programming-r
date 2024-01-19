@@ -30,11 +30,20 @@ posterior_color <- "#56B4E9"
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-
 - Non-parameteric regression
 
-
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+Gaussian processes (GPs) represent a class of stochastic (random) processes widely employed for non-parametric regression.
+Formally, a Gaussian process $GP(\mu, \Sigma)$ is characterized as a collection of random variables $X$ such that any finite subset of $X$ follows a multivariate normal distribution with mean $\mu$ and covariance $\Sigma$. Generating a sample from a GP yields a function.
+GPs are valuable in modeling, as they can be used as priors for functions. Take, for instance, the modeling of crop yields as a function of fertilizer use. Presumably, there exists a non-linear trend between these variables, as insufficient or excessive fertilizer may lead to suboptimal yields. In the absence of a mechanistic model, GPs can function as a prior for the relationship $f$ between fertilizer and yield. In its simplest form, measured yields could be modeled as noisy observations from $f$:
+$$ f(x) \sim GP(\mu, \Sigma),$$
+
+where $x$ represents the amount of fertilizer used. 
+
+As with all priors, the chosen hyperparameters $\mu, \, \Sigma$ influence the inference. The mean parameter $\mu$ defines the average level of the process, while the covariance function $\Sigma$ exerts a more defining effect on the process characteristics. The squared exponential kernel $K_{SE}(x, x’) = \alpha^2 \exp^{ \frac{(x - x’)^2}{2 \lambda} }$ stands out as a frequently used example of a covariance function. The parameter $\alpha$ sets the variance of the process, and $\lambda$ determines the scale of the correlation; increasing $\lambda$ increases the correlation between $x$ and $x’$.
+
+In the following section, we'll explore some simple examples that leverage Gaussian processes.
 
 # Gaussian process regression
 
