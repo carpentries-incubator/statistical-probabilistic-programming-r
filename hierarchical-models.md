@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-        Country   Sex Mean.height Mean.height.standard.error
-1       Bahrain Girls    158.2908                  0.9403578
-2        Cyprus Girls    160.5529                  1.3654321
-3      Dominica Girls    166.8885                  1.2966654
-4         Gabon Girls    160.0452                  0.9829053
-5        Latvia Girls    168.8066                  1.4775853
-6       Lesotho Girls    156.7208                  0.7995027
-7     Swaziland Girls    158.9214                  0.8919865
-8    Tajikistan Girls    158.1218                  0.6408059
-9       Tokelau Girls    166.0754                  1.1101078
-10 Turkmenistan Girls    162.8271                  0.7846984
+             Country   Sex Mean.height Mean.height.standard.error
+1        Afghanistan Girls    156.1131                  0.8191507
+2            Austria Girls    166.9267                  0.8705255
+3  Equatorial Guinea Girls    158.0496                  4.5007320
+4          Indonesia Girls    154.3552                  0.5208758
+5              Libya Girls    162.5617                  1.4746635
+6          Lithuania Girls    167.6299                  1.3223906
+7   Marshall Islands Girls    154.7573                  1.3629893
+8        Puerto Rico Girls    163.0573                  1.5854620
+9          Singapore Girls    161.3047                  0.9502302
+10            Zambia Girls    157.3152                  0.6805332
 ```
 
 
