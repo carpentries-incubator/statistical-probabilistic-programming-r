@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-             Country   Sex Mean.height Mean.height.standard.error
-1        Afghanistan Girls    156.1131                  0.8191507
-2            Austria Girls    166.9267                  0.8705255
-3  Equatorial Guinea Girls    158.0496                  4.5007320
-4          Indonesia Girls    154.3552                  0.5208758
-5              Libya Girls    162.5617                  1.4746635
-6          Lithuania Girls    167.6299                  1.3223906
-7   Marshall Islands Girls    154.7573                  1.3629893
-8        Puerto Rico Girls    163.0573                  1.5854620
-9          Singapore Girls    161.3047                  0.9502302
-10            Zambia Girls    157.3152                  0.6805332
+      Country   Sex Mean.height Mean.height.standard.error
+1      Canada Girls    164.7299                  0.4985881
+2  Costa Rica Girls    160.3577                  1.0143440
+3        Iraq Girls    158.7487                  1.0298655
+4      Israel Girls    162.2225                  0.7928922
+5  Kyrgyzstan Girls    160.2019                  0.8355103
+6        Mali Girls    161.9892                  0.6265029
+7  Mauritania Girls    160.0617                  1.3026757
+8     Uruguay Girls    161.5585                  0.7967392
+9  Uzbekistan Girls    160.2883                  0.7363217
+10   Zimbabwe Girls    159.8491                  0.7322471
 ```
 
 

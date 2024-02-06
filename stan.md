@@ -97,8 +97,8 @@ binom_samples <- sampling(binomial_model, binom_data)
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 6e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 1: Gradient evaluation took 5e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -116,8 +116,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 1:                0.004 seconds (Sampling)
-Chain 1:                0.008 seconds (Total)
+Chain 1:                0.003 seconds (Sampling)
+Chain 1:                0.007 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -141,8 +141,8 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
 Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 2:                0.004 seconds (Sampling)
-Chain 2:                0.008 seconds (Total)
+Chain 2:                0.003 seconds (Sampling)
+Chain 2:                0.007 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -166,8 +166,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 3:                0.004 seconds (Sampling)
-Chain 3:                0.008 seconds (Total)
+Chain 3:                0.003 seconds (Sampling)
+Chain 3:                0.007 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -191,8 +191,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 4:                0.003 seconds (Sampling)
-Chain 4:                0.007 seconds (Total)
+Chain 4:                0.004 seconds (Sampling)
+Chain 4:                0.008 seconds (Total)
 Chain 4: 
 ```
 
@@ -210,10 +210,10 @@ Inference for Stan model: anon_model.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1452    1
-lp__  -22.83    0.02 0.70 -24.86 -23.00 -22.56 -22.38 -22.33  1879    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1562    1
+lp__  -22.81    0.02 0.70 -24.80 -22.96 -22.54 -22.38 -22.33  1858    1
 
-Samples were drawn using NUTS(diag_e) at Tue Jan 30 00:29:20 2024.
+Samples were drawn using NUTS(diag_e) at Tue Feb  6 00:28:00 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -393,8 +393,8 @@ normal_samples <- rstan::sampling(normal_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 1: Gradient evaluation took 5e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -412,8 +412,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.007 seconds (Sampling)
-Chain 1:                0.014 seconds (Total)
+Chain 1:                0.006 seconds (Sampling)
+Chain 1:                0.013 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -462,8 +462,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 3:                0.007 seconds (Sampling)
-Chain 3:                0.014 seconds (Total)
+Chain 3:                0.006 seconds (Sampling)
+Chain 3:                0.013 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -487,8 +487,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.013 seconds (Total)
+Chain 4:                0.007 seconds (Sampling)
+Chain 4:                0.014 seconds (Total)
 Chain 4: 
 ```
 

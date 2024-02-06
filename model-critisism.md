@@ -125,7 +125,7 @@ print(p_hist)
 <img src="fig/model-critisism-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 
-Let's quantify the discrepancy using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 34.374. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
+Let's quantify the discrepancy using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 45.04. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
 
 
 
@@ -146,7 +146,7 @@ ggplot() +
 
 <img src="fig/model-critisism-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data. In this case, the value is $ppp =$ 0.86375 indicating that the model is, indeed, a poor choice for the data. 
+The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data. In this case, the value is $ppp =$ 1 indicating that the model is, indeed, a poor choice for the data. 
 
 
 # Cauchy model
@@ -214,15 +214,15 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.017 seconds (Warm-up)
-Chain 1:                0.018 seconds (Sampling)
-Chain 1:                0.035 seconds (Total)
+Chain 1:  Elapsed Time: 0.016 seconds (Warm-up)
+Chain 1:                0.017 seconds (Sampling)
+Chain 1:                0.033 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 3e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 2: Gradient evaluation took 4e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -233,15 +233,15 @@ Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.016 seconds (Warm-up)
-Chain 2:                0.017 seconds (Sampling)
+Chain 2:  Elapsed Time: 0.017 seconds (Warm-up)
+Chain 2:                0.016 seconds (Sampling)
 Chain 2:                0.033 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 4e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 3: Gradient evaluation took 3e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -252,15 +252,15 @@ Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.016 seconds (Warm-up)
-Chain 3:                0.016 seconds (Sampling)
+Chain 3:  Elapsed Time: 0.017 seconds (Warm-up)
+Chain 3:                0.015 seconds (Sampling)
 Chain 3:                0.032 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 3e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 4: Gradient evaluation took 4e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -272,8 +272,8 @@ Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.016 seconds (Warm-up)
-Chain 4:                0.015 seconds (Sampling)
-Chain 4:                0.031 seconds (Total)
+Chain 4:                0.017 seconds (Sampling)
+Chain 4:                0.033 seconds (Total)
 Chain 4: 
 ```
 
