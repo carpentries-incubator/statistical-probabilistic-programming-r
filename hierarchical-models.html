@@ -86,11 +86,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 44%" class="percentage">
-    44%
+<aside class="col-md-12 lesson-progress"><div style="width: 31%" class="percentage">
+    31%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 44%" aria-valuenow="44" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 31%" aria-valuenow="31" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -183,12 +183,25 @@
 <div class="accordion accordion-flush" id="accordionFlushcurrent">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-headingcurrent">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
         5. Hierarchical Models
         </span>
-      
+      </button>
     </div><!--/div.accordion-header-->
+        
+    <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
+      <div class="accordion-body">
+        <ul><li><a href="#example-human-height">Example: human height</a></li>
+<li><a href="#results">Results</a></li>
+<li><a href="#hyperparameters">Hyperparameters</a></li>
+<li><a href="#population-distributions">Population distributions</a></li>
+<li><a href="#posterior-predictive-distribution">Posterior predictive distribution</a></li>
+<li><a href="#extensions">Extensions</a></li>
+<li><a href="#reading">Reading</a></li>
+        </ul></div><!--/div.accordion-body-->
+    </div><!--/div.accordion-collapse-->
         
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
@@ -287,7 +300,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Hierarchical Models</h1>
-        <p>Last updated on 2024-02-06 |
+        <p>Last updated on 2024-02-12 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -367,9 +380,9 @@ offer insights into students in humanities and social sciences as
 well.</p>
 <p>In the following example, we’ll conduct a hierarchical analysis of
 human heights in different countries.</p>
-<div class="section level1">
-<h1 id="example-human-height">Example: human height<a class="anchor" aria-label="anchor" href="#example-human-height"></a></h1>
-<p>Let’s analyze human adult height in different countries. We’ll use
+<section id="example-human-height"><h2 class="section-heading">Example: human height<a class="anchor" aria-label="anchor" href="#example-human-height"></a>
+</h2>
+<hr class="half-width"><p>Let’s analyze human adult height in different countries. We’ll use
 the normal model with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> as the generative model, and give
 these parameters the hierarchical treatment.</p>
 <p>We’ll analyze simulated data based on actual measurements in
@@ -448,20 +461,20 @@ height of adult women measured in 2019.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>      Country   Sex Mean.height Mean.height.standard.error
-1      Canada Girls    164.7299                  0.4985881
-2  Costa Rica Girls    160.3577                  1.0143440
-3        Iraq Girls    158.7487                  1.0298655
-4      Israel Girls    162.2225                  0.7928922
-5  Kyrgyzstan Girls    160.2019                  0.8355103
-6        Mali Girls    161.9892                  0.6265029
-7  Mauritania Girls    160.0617                  1.3026757
-8     Uruguay Girls    161.5585                  0.7967392
-9  Uzbekistan Girls    160.2883                  0.7363217
-10   Zimbabwe Girls    159.8491                  0.7322471</code></pre>
+<pre class="output" tabindex="0"><code>       Country   Sex Mean.height Mean.height.standard.error
+1    Argentina Girls    161.2204                  0.6207879
+2       Bhutan Girls    155.1526                  1.1308066
+3     Botswana Girls    162.0620                  1.0115264
+4       Gambia Girls    161.7282                  0.9603018
+5   Montenegro Girls    169.9609                  0.8887514
+6  New Zealand Girls    164.6600                  0.4656146
+7   Seychelles Girls    162.4656                  0.8525184
+8    Swaziland Girls    158.9214                  0.8919865
+9      Tunisia Girls    161.6855                  0.9464602
+10     Uruguay Girls    161.5585                  0.7967392</code></pre>
 </div>
-<div class="section level2">
-<h2 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a></h2>
+<div class="section level3">
+<h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a></h3>
 <p>Now, we can treat the values in the table above as ground truth and
 simulate some data based on them. Let’s generate <span class="math inline">\(N=25\)</span> samples for each country from the
 normal model with <span class="math inline">\(\mu =
@@ -495,8 +508,8 @@ normal model with <span class="math inline">\(\mu =
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulated data"</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-<div class="section level2">
-<h2 id="modeling">Modeling<a class="anchor" aria-label="anchor" href="#modeling"></a></h2>
+<div class="section level3">
+<h3 id="modeling">Modeling<a class="anchor" aria-label="anchor" href="#modeling"></a></h3>
 <p>Let’s build a normal model that uses partial pooling for the country
 means and standard deviations. The model can be written as follows.
 We’ll use <span class="math inline">\(g\)</span> to index the country,
@@ -619,9 +632,9 @@ speed up the inference by running 2 chains in parallel by setting
 <!-- Non-pooled analysis -->
 <!-- Fit -->
 </div>
-<div class="section level2">
-<h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a></h2>
-<div class="section level3">
+</section><section id="results"><h2 class="section-heading">Results<a class="anchor" aria-label="anchor" href="#results"></a>
+</h2>
+<hr class="half-width"><div class="section level3">
 <h3 id="country-specific-estimates">Country-specific estimates<a class="anchor" aria-label="anchor" href="#country-specific-estimates"></a></h3>
 <p>Let’s first compare the marginal posteriors for the country-specific
 estimates:</p>
@@ -672,10 +685,9 @@ example.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="hyperparameters">Hyperparameters<a class="anchor" aria-label="anchor" href="#hyperparameters"></a></h2>
-<p>Let’s then plot the population distribution’s parameters, that is,
+</section><section id="hyperparameters"><h2 class="section-heading">Hyperparameters<a class="anchor" aria-label="anchor" href="#hyperparameters"></a>
+</h2>
+<hr class="half-width"><p>Let’s then plot the population distribution’s parameters, that is,
 the hyperparameters. The sample-based values are included in the plots
 of <span class="math inline">\(\mu_\mu\)</span> and <span class="math inline">\(\sigma_\mu\)</span> (why not for the other two
 hyperparameters?).</p>
@@ -707,10 +719,9 @@ hyperparameters?).</p>
 <span>             <span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">hyperpar</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-<div class="section level2">
-<h2 id="population-distributions">Population distributions<a class="anchor" aria-label="anchor" href="#population-distributions"></a></h2>
-<p>Let’s then plot the population distributions and compare to the
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="population-distributions"><h2 class="section-heading">Population distributions<a class="anchor" aria-label="anchor" href="#population-distributions"></a>
+</h2>
+<hr class="half-width"><p>Let’s then plot the population distributions and compare to the
 sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline">\(\sigma\)</span>’s</p>
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -747,10 +758,9 @@ This warning is displayed once every 8 hours.
 Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 generated.</code></pre>
 </div>
-<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-<div class="section level2">
-<h2 id="posterior-predictive-distribution">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a></h2>
-<p>Finally, let’s plot the posterior predictive distribution. Let’s
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-predictive-distribution"><h2 class="section-heading">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
+</h2>
+<hr class="half-width"><p>Finally, let’s plot the posterior predictive distribution. Let’s
 overlay it with the simulated data based on all countries.</p>
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -794,10 +804,9 @@ overlay it with the simulated data based on all countries.</p>
 <span>                 alpha <span class="op">=</span> <span class="fl">0.75</span>, </span>
 <span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-<div class="section level2">
-<h2 id="extensions">Extensions<a class="anchor" aria-label="anchor" href="#extensions"></a></h2>
-<p>We analyzed women’s heights in a few countries and modeled them
+<figure><img src="fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="extensions"><h2 class="section-heading">Extensions<a class="anchor" aria-label="anchor" href="#extensions"></a>
+</h2>
+<hr class="half-width"><p>We analyzed women’s heights in a few countries and modeled them
 hierarchically. You could make the structure richer in many ways, for
 instance by adding hierarchy between sexes, continents,
 developed/developing countries etc.</p>
@@ -818,19 +827,12 @@ model parameters in the whole population.</li>
 </ul></div>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
-<!-- 
+</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+</h2>
+<hr class="half-width"><!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- -->
-</div>
-</div>
-
-
-
-      </div> <!-- / div.lesson-content -->
+ --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="mcmc.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="model-critisism.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
@@ -887,9 +889,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
-  "dateCreated": "2024-01-19",
-  "dateModified": "2024-02-06",
-  "datePublished": "2024-02-06"
+  "dateCreated": "2024-02-12",
+  "dateModified": "2024-02-12",
+  "datePublished": "2024-02-12"
 }
 
   </script><script>
