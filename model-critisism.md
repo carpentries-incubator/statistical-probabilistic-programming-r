@@ -28,15 +28,15 @@ This episode focuses on model checking, a crucial step in Bayesian data analysis
 
 Firstly, we'll delve into posterior predictive checks, a method that involves comparing a fitted model's predictions with observed data.
 
-Next, we'll examine information criteria, a tool that helps strike a balance between model complexity and goodness-of-fit.
+Next, we'll examine information criteria, a tool that measures the balance between model complexity and goodness-of-fit.
 
-Finally, we'll wrap up the episode with an exploration of Bayesian cross-validation.
+We'll end the episode with an exploration of Bayesian cross-validation.
 
 Throughout the episode, we'll use the same simulated dataset for examples. 
 
 ## Data
 
-For data, we're using $N=88$ univariate numerical data 
+For data, we're using $N=88$ univariate numerical data. Looking at a histogram, it's evident that the data is approximately symmetrically distributed around 0. However, there is some dispersion in the values, suggesting that the tails might be longer than those of the normal distribution. Next, we'll compare the suitability of the normal and Cauchy distributions on this data. 
 
 
 
@@ -58,31 +58,31 @@ For data, we're using $N=88$ univariate numerical data
 
 ## Posterior predictive check
 
-Gelman: "If the model fits, then replicated data generated under the model should look similar to observed data."
+The idea of posterior predictive checking is to use the posterior predictive distribution to simulate a replicate data set and compare it to the observed data. The reasoning behind this approach is, as formulated in BDA3 p.143, "If the model fits, then replicated data generated under the model should look similar to observed data."
 
-The idea of posterior predictive checking is to use the posterior predictive distribution to simulate a replicate data set and compare it to the observed data. Discrepancies between the simulated and observed data can imply shortcomings in the model. Comparison between simulated and actual data can be done in different ways. Visual check is one option but a more approach is to compute the posterior predictive p-value (ppp). 
+Any qualitative discrepancies between the simulated and observed data can imply shortcomings in the model that do not match the properties of the data or the domain. Comparison between simulated and actual data can be done in different ways. Visual check is one option but a more rigorous approach is to compute the posterior predictive p-value (ppp), which measures how well the the model can reproduce the observed data. 
 
-Difference to posterior predictive... 
+The posterior predictive check, utilizing ppp, can be formulated as follows: 
 
-1. Fit a Bayesian Model:
- Develop and fit a Bayesian model to observed data.
-2. Generate Posterior Predictive Samples:
- Use the posterior distribution of model parameters to simulate new datasets.
-3. Compare Simulated Data:
- Assess how well the simulated datasets align with the observed data using statistical measures or graphical tools.
-4. Assess Model Fit:
- Evaluate the model's appropriateness based on the comparison results.
-5. Iterate or Modify:
-  Iterate or modify the model if needed to enhance its performance.
+
+1. Generate replicate data:
+  Use the posterior predictive distribution to simulate new datasets $X^{rep}$ with characteristics matching the observed data. In our example, this amounts to generating a large number of replications with sample size $N=88$. 
+2. Choose test quantity $T(X)$:
+  Choose an aspect of the data that you wish to check. We'll use the maximum value of the data as the test quantity and compute it for the observed data and for each replication: $T(X^{rep})$. 
+3. Compute ppp:
+  The posterior predictive p-value defined as the probability $Pr(T(X^{rep}) \geq T(X) | X)$, that is the probability that the predictions produce test quantities at least as extreme as those found in the data. Using samples, it is computed as the proportion of replicate data sets with $T$ not smaller than that of $T(X)$. 
   
-Posterior predictive checking ensures the model's ability to generate data resembling observed patterns, aiding in model refinement and validation.
+
+A small ppp-value would indicate that the model doesn't capture the properties of the data.
 
 
-
+Next, we'll perform a posterior predictive check on the example data and compare the results for the normal and Cauchy models. 
 
 ### Normal model
 
-Here we fit the normal model and generate posterior predictions $X_{rep}$. Notice, that this is slightly different from the posterior predictive distribution $\tilde{X}$. The former consists of replications of the original data, in this case 88 observations, the latter doesn't specify the sample size. 
+
+We'll use a basic Stan program for the normal model and produce the replicate data in the generated quantities block. Notice that `X_rep` is a vector with length equal to the sample size $N$. The values of `X_rep` are generated in a loop. Notice that a single posterior value of $(\mu, \sigma)$ is used for each evaluation of the generated quantities block; the values do not change in the iterations of the for loop. 
+
 
 
 ```stan
@@ -95,10 +95,8 @@ parameters {
   real mu;
 }
 model {
-  // Likelihood
   X ~ normal(mu, sigma);
   
-  // Prior
   mu ~ normal(0, 1);
   sigma ~ gamma(2, 1);
 }
@@ -106,7 +104,6 @@ model {
 generated quantities {
   vector[N] X_rep;
 
-  // Posterior predictive density
   for(i in 1:N) {
     X_rep[i] = normal_rng(mu, sigma);
   }
@@ -116,13 +113,16 @@ generated quantities {
 
 
 
+Fit model and extract replicates. 
+
 
 ```r
+# Fit
 normal_fit <- sampling(normal_model,
                        list(N = N, X = df$X), 
                        refresh = 0)
 
-# Extract samples
+# Extract 
 X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% 
   data.frame() %>%
   mutate(sample = 1:nrow(.))
@@ -130,48 +130,18 @@ X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>%
 
 
 
-Below is a comparison of 12 samples of $\tilde{X}$ against the data (the panel titles correspond to MCMC sample numbers). The large discrepancy between the data and posterior predictions indicates that something is wrong with our model. It seems like the normal model misestimates the tails of the data, and that, likely, the normal model is a poor choice for such data in any case.
-
-
-```r
-# Subset
-X_rep_sub <- X_rep %>% filter(sample %in%
-                                    sample(X_rep$sample,
-                                       12,
-                                       replace = FALSE))
-
-# Wide --> long
-X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
-
-p_norm_hist <- ggplot() +
-  geom_histogram(data = X_rep_sub_l,
-                 aes(x = value
-                     # y = after_stat(density)
-                     ),
-               bins = 50,
-               fill = posterior_color, alpha = 0.8) +
-  facet_wrap(~sample, scales = "free") +
-  geom_histogram(data = df,
-                 aes(x = X
-                     # y = after_stat(density)
-                     ),
-                 bins = 50,
-                 alpha = 0.8)
-
-
-print(p_norm_hist)
-```
+Below is a comparison of 12 samples of $X^{rep}$ against the data (the panel titles correspond to MCMC sample numbers). The discrepancy between the data and replicates indicates an issue with the model choice. It seems like the normal model underestimates the data tails.
 
 <img src="fig/model-critisism-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
-It's visually apparent that there is a discrepancy between the posterior replications and data. 
 
-Let's quantify this using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 43.481. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
+
+Let's quantify this discrepancy by computing the ppp using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 43.481. The following histogram shows this value (vertical line) against the maximum computed for each replicate data set $X^{rep}$. 
 
 
 
 ```r
-## Compute X_rep max
+# Compute X_rep max
 rep_maxs <- X_rep %>%
   select(-sample) %>%
   apply(MARGIN = 1, FUN = max) %>%
@@ -187,14 +157,14 @@ ggplot() +
 
 <img src="fig/model-critisism-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data with higher $ppp$ implying a lesser conflict. In this case, the value is $ppp =$ 1 which means that the maximum was as at least as large as in the data in0% replications.
+The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data with higher $ppp$ implying a lesser conflict. In this case, the value is $ppp =$ 1 which means that the maximum was as at least as large as in the data in 0% replications. This indicates strong evidence that the normal model is a poor choice for the data. 
 
 
 ### Cauchy model
 
 Let's do a similar analysis utilizing the Cauchy model, and compute the $ppp$ for this model. 
 
-The code is essentially copy-pasted from above, with the distinction of the Stan program.
+The code used is essentially copy-pasted from above, with the distinction of the Stan program.
 
 
 ```stan
@@ -202,26 +172,19 @@ data {
   int<lower=0> N;
   vector[N] X;
 }
-
 parameters {
   // Scale
   real<lower=0> sigma;
   // location
   real mu;
 }
-
 model {
-  
-  // Likelihood (vectorized)
   // location = mu and scale = sigma
   X ~ cauchy(mu, sigma);
   
-  // Prior
   mu ~ normal(0, 1);
   sigma ~ gamma(2, 1);
-  
 }
-
 generated quantities {
   vector[N] X_rep;
   for(i in 1:N) {
@@ -232,45 +195,11 @@ generated quantities {
 ```
 
 
-
-
-```r
-cauchy_fit <- sampling(cauchy_model, list(N = N, X = df$X), 
-                       refresh = 0)
-
-X_rep <- rstan::extract(cauchy_fit, "X_rep")[[1]] %>% data.frame() %>%
-  mutate(sample = 1:nrow(.))
-
-# Subset
-X_rep_sub <- X_rep %>% filter(sample %in%
-                                sample(X_rep$sample,
-                                       12,
-                                       replace = FALSE))
-
-# Wide --> long
-X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
-
-
-p_cauchy_hist <- ggplot() +
-  geom_histogram(data = X_rep_sub_l,
-                 aes(x = value
-                     # y = after_stat(density)
-                 ),
-                 bins = 50, fill = posterior_color) +
-  facet_wrap(~sample, scales = "free") +
-  geom_histogram(data = df,
-                 aes(x = X
-                     # y = after_stat(density)
-                 ),
-                 bins = 50)
-
-print(p_cauchy_hist)
-```
+With the cauchy model there is little discrepancy between the data and replicate data:
 
 <img src="fig/model-critisism-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
-The figure below contains again the distribution of maximum value for each replicate sets. Here the visually apparent differences present in the previous section are less apparent. 
 
-The $ppp$ is large, indicating no issues with the suitability of the model on the data. 
+The maximum observed value is close to the average of the distribution of maximum value for replicate sets. Moreoever, the $ppp$ is large, indicating no issues with the suitability of the model on the data. 
 
 
 ```r
@@ -293,7 +222,19 @@ ggplot() +
 <img src="fig/model-critisism-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 
+
 ## Information criteria
+
+
+Information criteria are statistics used in model selection and comparison within both framework of Bayesian and classical frequentist statistics. The aim of these criteria is to estimate out-of-sample predictive accuracy, and to provide a principled approach to assess the relative performance of competing models.
+
+The Widely Applicable Information Criterion (WAIC) is an of information criteria that was developed within the Bayesian paradigm. WAIC is computed using the log pointwise predictive density, lppd, and a penalization term, $p_{WAIC}$: 
+
+$$WAIC = -2(\text{lppd} - p_{WAIC}).$$
+
+The log pointwise predictive density is computed as $\sum_{i=1}^N \log(\frac{1}{S} \sum_{s=1}^S p(X_i | \theta^s), $, where $X_i, \,i=1,\ldots,N$ are data points and $S$ the number of posterior samples. Since the predictive density is computed on the data used to fit the model, the estimate may be over-confident. The penalization term $p_{WAIC} = \sum_{i=1}^N \text{Var}(\log p(y_i | \theta^s))$ correct for this bias
+
+Lower WAIC values imply better fit. 
 
 Let's then compare the normal and Cauchy models with the WAIC. First we'll need to fit both models on the data. 
 
@@ -320,7 +261,6 @@ Then we can write a function that compute the WAIC.
 ```r
 WAIC <- function(samples, data, model){
   
-  
   # Loop over data points
   pp_dens <- lapply(1:length(data), function(i) {
     
@@ -343,8 +283,6 @@ WAIC <- function(samples, data, model){
                 location = my_mu,
                 scale = my_sigma)
       }
-      
-      
       
     }) %>%
       unlist()
@@ -496,7 +434,7 @@ normal_full_lpd <- lapply(1, function(dummy) {
 
 # Same for Cauchy:
 cauchy_loo_lpds <- lapply(1:N, function(i) {
-  print(i)
+  
   # Subset data
   my_X <- X[-i]
   my_x <- X[i]
@@ -519,100 +457,7 @@ cauchy_loo_lpds <- lapply(1:N, function(i) {
   
 }) %>%
   do.call(rbind, .)
-```
 
-```{.output}
-[1] 1
-[1] 2
-[1] 3
-[1] 4
-[1] 5
-[1] 6
-[1] 7
-[1] 8
-[1] 9
-[1] 10
-[1] 11
-[1] 12
-[1] 13
-[1] 14
-[1] 15
-[1] 16
-[1] 17
-[1] 18
-[1] 19
-[1] 20
-[1] 21
-[1] 22
-[1] 23
-[1] 24
-[1] 25
-[1] 26
-[1] 27
-[1] 28
-[1] 29
-[1] 30
-[1] 31
-[1] 32
-[1] 33
-[1] 34
-[1] 35
-[1] 36
-[1] 37
-[1] 38
-[1] 39
-[1] 40
-[1] 41
-[1] 42
-[1] 43
-[1] 44
-[1] 45
-[1] 46
-[1] 47
-[1] 48
-[1] 49
-[1] 50
-[1] 51
-[1] 52
-[1] 53
-[1] 54
-[1] 55
-[1] 56
-[1] 57
-[1] 58
-[1] 59
-[1] 60
-[1] 61
-[1] 62
-[1] 63
-[1] 64
-[1] 65
-[1] 66
-[1] 67
-[1] 68
-[1] 69
-[1] 70
-[1] 71
-[1] 72
-[1] 73
-[1] 74
-[1] 75
-[1] 76
-[1] 77
-[1] 78
-[1] 79
-[1] 80
-[1] 81
-[1] 82
-[1] 83
-[1] 84
-[1] 85
-[1] 86
-[1] 87
-[1] 88
-```
-
-```r
 cauchy_full_lpd <- lapply(1, function(dummy) {
   
   # Fit model
