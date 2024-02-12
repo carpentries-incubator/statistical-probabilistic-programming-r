@@ -1,7 +1,7 @@
 ---
 title: 'Gaussian processes'
-teaching: 10
-exercises: 2
+teaching: 60
+exercises: 1
 ---
 
 
@@ -10,39 +10,50 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What are Gaussian processes?
+- How to do probabilistic non-parameteric regression?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Non-parameteric regression
+- Learn to perform Gaussian process regression with Stan
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 Gaussian processes (GPs) represent a class of stochastic (random) processes widely employed for non-parametric regression.
-Formally, a Gaussian process $GP(\mu, \Sigma)$ is characterized as a collection of random variables $X$ such that any finite subset of $X$ follows a multivariate normal distribution with mean $\mu$ and covariance $\Sigma$. Generating a sample from a GP yields a function.
-GPs are valuable in modeling, as they can be used as priors for functions. Take, for instance, the modeling of crop yields as a function of fertilizer use. Presumably, there exists a non-linear trend between these variables, as insufficient or excessive fertilizer may lead to suboptimal yields. In the absence of a mechanistic model, GPs can function as a prior for the relationship $f$ between fertilizer and yield. In its simplest form, measured yields could be modeled as noisy observations from $f$:
+
+Formally, a Gaussian process $GP(\mu, \Sigma)$ is characterized as a collection of random variables $X$ such that any finite subset $X_I \subset X$ follows a multivariate normal distribution with mean $\mu$ and covariance $\Sigma$. Generating a sample from a GP yields a random function $X_I \to \mathbb{R}$, and this feature
+enables using GPs as prior distributions for functions.
+
+As an example, consider the modeling of crop yields as a function of fertilizer use. Presumably, there exists a non-linear trend between these variables, as insufficient or excessive fertilizer may lead to suboptimal yields. In the absence of a parametric mechanistic model, GPs can function as a prior for the relationship $f$ between fertilizer and yield. In its simplest form, measured yields could be modeled as noisy observations from $f$:
 $$ f(x) \sim GP(\mu, \Sigma),$$
 
 where $x$ represents the amount of fertilizer used. 
 
-As with all priors, the chosen hyperparameters $\mu, \, \Sigma$ influence the inference. The mean parameter $\mu$ defines the average level of the process, while the covariance function $\Sigma$ exerts a more defining effect on the process characteristics. The squared exponential kernel $K_{SE}(x, x’) = \alpha^2 \exp^{ \frac{(x - x’)^2}{2 \lambda} }$ stands out as a frequently used example of a covariance function. The parameter $\alpha$ sets the variance of the process, and $\lambda$ determines the scale of the correlation; increasing $\lambda$ increases the correlation between $x$ and $x’$.
+As with all priors, the chosen hyperparameters (here $\mu, \, \Sigma$) influence the inference. The mean parameter $\mu$ defines the average level of the process, while the covariance function $\Sigma$ exerts a more defining effect on the process characteristics.
 
-In the following section, we'll explore some simple examples that leverage Gaussian processes.
+Perhaps the most frequently used covariance function is the squared exponential kernel $K_{SE}(x, x’) = \alpha^2 \exp^{ \frac{(x - x’)^2}{2 \lambda} }$. The parameter $\alpha$ sets the variance of the process, and $\lambda$ determines the scale of the correlation; increasing $\lambda$ increases the correlation between $x$ and $x’$. In the figure below, we've plotted some realizations from a GP with $\mu = (0, 0, \ldots, 0)$ and squared exponential covariance function with $\alpha = 1$ and $\lambda = 25$. The input space $X_I$ is the integers between 0 and 100. 
 
-# Gaussian process regression
 
-Let's look at the $N = 5$ available data points. 
+<img src="fig/gaussian-processes-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+
+:::::::::::::::::::: challenge
+Generate samples from the GP above with different values of $\alpha$ and $\lambda$ to get intuition about the role of these hyperparameters.
+::::::::::::::::::::::::::::::
+
+
+Next, we'll explore some simple examples that leverage Gaussian processes.
+
+## Gaussian process regression
+
+Assume we have 5 data available and wed like to estimate a trend in the data. 
 
 
 ```r
-N <- 5
+df <- data.frame(x = c(-2.76, 2.46, -1.52, -4.34, 4.54,  1),
+                 y = c(-0.81, -0.85, 0.76, -0.41, -1.48,  0.2))
 
-x <- c(-2.76, 2.46, -1.52, -4.34, 4.54)
-y <- c(-0.81, -0.85, 0.76, -0.41, -1.48)
-
-df <- data.frame(x, y)
+N <- nrow(df)
 
 # Plot data
 p_data <- df %>% 
@@ -52,23 +63,11 @@ p_data <- df %>%
 p_data
 ```
 
-<img src="fig/gaussian-processes-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+<img src="fig/gaussian-processes-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
-Let's assume these are noisy observations from some unknown function $f$ and try to estimate this function by giving $f$ a Gaussian process prior. In other words, 
+Let's assume these are noisy observations from some unknown function $f$ and try to estimate this function by giving $f$ a Gaussian process prior with the squared exponential covariance function. 
 
-$$y \sim N(f, \sigma^2) \\
-f \sim GP(\mu, K_{SE}(\lambda, \alpha)).$$
-
-Above, $K_{SE}(\lambda, \alpha)$ is the squared exponential covariance kernel, which gives the covariance of input points $x_1$ and $x_2$: 
-
-$$K_{SE}(x_1, x_2 ,\lambda, \alpha) = \alpha^2 \exp \left(-\frac{(x_1-x_2)^2}{2 \lambda^2} \right)$$
-
-
-length-scale $\lambda$ and variance $\alpha^2$. The mean parameter is a zero-vector: $\mu = (0, 0, 0, 0, 0)$. 
-
-This model is implemented in the Stan program `gp_sq_exp_pred.stan`.
-
-In the inference, we'll learn the value of $f$ at the data locations and on a grid of values specified next
+The covariance function should be computed using the data points $x$ and all those locations where we want to predict the value of $f$. Let's predict the $f$ on a grid of points spanning the interval (-5, 5). The grid points are stored in vector `x_pred`
 
 
 ```r
@@ -76,25 +75,25 @@ N_pred <- 200
 x_pred <- seq(-5, 5, length.out = N_pred)
 ```
 
+Next we'll build the Stan program. The model structure is simple; the model block defines the likelihood as the normal distribution with an unknown mean: `y ~ normal(f[1:N_data], sigma);`. Notice that this is a vectorized statement so the mean of each $y_i$ equals $f_i$. 
 
-Let's compile the model and generate the samples. The inference takes time (some minutes) even though there is only a single chain and 1000 iterations (obviously this is not enough!). There are also some convergence issues. Nevertheless, let's look at the output.
+The parameter vector `f` contains the values of $f$ corresponding to the data points and then concatenated the values corresponding to the prediction locations. The covariance function is computed in the transformed data block, where first a vector of concatenated data and prediction locations is build.
+
+Take a moment to digest the structure of the Stan program. 
 
 
 ```stan
-
 data {
-  
   // Data
   int<lower=1> N_data;
   real y[N_data];
   real x_data[N_data];
   
-  
   // GP hyperparameters
   real<lower=0> alpha;
   real<lower=0> lambda;
   
-  // Observation error
+  // Observation erro
   real<lower=0> sigma;
   
   // Prediction points
@@ -113,26 +112,19 @@ transformed data {
 
   // Covariance function
   K = gp_exp_quad_cov(x, alpha, lambda);
-  
-  
-  
-  // Trick: 
+
   // Add nugget on diagonal for numerical stability
   for (n in 1:N) {
     K[n, n] = K[n, n] + 1e-6;
   }
 
-
 }
 parameters {
   vector[N] f;
 }
-
 model {
-
   // Likelihood
   y ~ normal(f[1:N_data], sigma);
-
   // GP
   f ~ multi_normal(rep_vector(0, N), K);
 
@@ -143,49 +135,27 @@ model {
 
 
 
+Let's fit the model. 
+
+
+
 ```r
+# Fit
 gp_samples <- rstan::sampling(gp_model,
                        list(N_data = N,
                             x_data = as.array(df$x),
                             y = as.array(df$y),
-                            lambda = 0.75,
+                            lambda = 1,
                             alpha = 1,
                             sigma = 0.1,
                             N_pred = N_pred,
                             x_pred = x_pred),
-                       chains = 1, iter = 100, 
-                       refresh = 500)
-```
-
-```{.output}
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
-Chain 1: 
-Chain 1: Gradient evaluation took 0.00049 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.9 seconds.
-Chain 1: Adjust your expectations accordingly!
-Chain 1: 
-Chain 1: 
-Chain 1: WARNING: There aren't enough warmup iterations to fit the
-Chain 1:          three stages of adaptation as currently configured.
-Chain 1:          Reducing each adaptation stage to 15%/75%/10% of
-Chain 1:          the given number of warmup iterations:
-Chain 1:            init_buffer = 7
-Chain 1:            adapt_window = 38
-Chain 1:            term_buffer = 5
-Chain 1: 
-Chain 1: Iteration:  1 / 100 [  1%]  (Warmup)
-Chain 1: Iteration: 51 / 100 [ 51%]  (Sampling)
-Chain 1: Iteration: 100 / 100 [100%]  (Sampling)
-Chain 1: 
-Chain 1:  Elapsed Time: 4.449 seconds (Warm-up)
-Chain 1:                7.108 seconds (Sampling)
-Chain 1:                11.557 seconds (Total)
-Chain 1: 
+                       chains = 1, iter = 1000, 
+                       refresh = 0)
 ```
 
 ```{.warning}
-Warning: There were 13 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+Warning: There were 407 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
@@ -194,7 +164,7 @@ Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ```{.warning}
-Warning: The largest R-hat is 2.11, indicating chains have not mixed.
+Warning: The largest R-hat is 2.12, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat
 ```
@@ -212,16 +182,17 @@ https://mc-stan.org/misc/warnings.html#tail-ess
 ```
 
 
+The inference takes time (minutes) even though we only use (an insufficient) single chain and 1000 iterations. There are also some convergence issues. Let's ignore these at this point, and look at the output.
+
+
 
 ```r
 f_samples <- rstan::extract(gp_samples, "f")[["f"]] %>% 
   t %>% data.frame() %>% 
-  mutate(x = c(df$x, x_pred))
+  mutate(x = c(df$x, x_pred)) # data and prediction locations
 
 f_samples_l <- f_samples %>% 
   gather(key = "sample", value = "f", -x)
-
-
 
 p_f <- ggplot() +
   geom_line(
@@ -234,20 +205,32 @@ p_f <- ggplot() +
 print(p_f)
 ```
 
-<img src="fig/gaussian-processes-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="fig/gaussian-processes-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+
+
+The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Note that each posterior sample corresponds to a function. This distribution essentially encapsulates the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. The posterior in certain regions, however, seems a bit strange. For example, the posterior between the farthest two data points on the right contains most of the mass above the line connecting the points. This is likely a symptom of the convergence issues. 
+
+:::::::::::::::::::::::::::::: challenge
+In the figure above, where is the posterior uncertainty the highest and why? What controls the uncertainty at the locations of the data? If the made the prediction range wider, say, from -10 to 10, what would look like at the extremes?
+
+
+::::::::::::::::::::::: solution
+Uncertainty grows at locations away from the data points and starts to resemble the prior. Posterior far from the data would be centered around 0 and have variance $\alpha^2$. 
+::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::
+
 
 ## Cholesky parameterization
 
-It is generally recommended, that an alternative parameterization for GPs is used [link]. This makes the inference considerable more efficient. 
+It is generally recommended, that GPs are used with the Cholesky parameterization. This considerable improves in inference and enhanced convergence. In essence, this parameterization suggests that if $\eta$ follows a multivariate normal distribution with zero mean and identity covariance, then expressing $f$ as $f = \mu + L\eta$ defines a GP with mean $\mu$ and covariance $LL^T = K$. The left-hand side of the formula, $LL^T$ is the Cholesky decomposition of $K$.
+ 
 
-Briefly, the idea of this parameterization is to write $f = \mu + L\eta$, where $\mu$ is the GP mean, $LL^T = K$ is the Cholesky decomposition of the covariance function, and $\eta \sim N(0, 1)$ . 
-
-The Stan program `gp_sq_exp_pred_cholesky.stan` implements this parameterization. Let's compile and fit this model on the same data.
+The Stan program below implements this parameterization. Let's compile and fit this model on the same data.
 
 
 ```stan
 data {
-  
   // Data
   int<lower=1> N_data;
   real y[N_data];
@@ -257,7 +240,6 @@ data {
   real<lower=0> alpha;
   real<lower=0> lambda;
   
-  // Observation error
   real<lower=0> sigma;
   
   // Prediction points
@@ -265,7 +247,6 @@ data {
   real x_pred[N_pred];
 }
 transformed data {
-
   int<lower=1> N = N_data + N_pred;
   
   real x[N];
@@ -274,7 +255,6 @@ transformed data {
   
   x[1:N_data] = x_data;
   x[(N_data+1):N] = x_pred;
-
 
   // Covariance function
   K = gp_exp_quad_cov(x, alpha, lambda);
@@ -292,22 +272,20 @@ parameters {
 }
 
 transformed parameters {
-  // Signal
+  // mu = (0, 0, ..., 0)
   vector[N] f = L*eta;
 }
 model {
-
   // Likelihood
   y ~ normal(f[1:N_data], sigma);
-
   // GP
   eta ~ normal(0, 1);
-  
 }
 
 ```
 
 
+Fitting is completed in a few seconds with no convergence issues: 
 
 
 ```r
@@ -315,57 +293,17 @@ gp_cholesky_samples <- rstan::sampling(gp_cholesky_model,
                        list(N_data = N,
                             x_data = as.array(df$x),
                             y = as.array(df$y),
-                            lambda = 0.75,
+                            lambda = 1,
                             alpha = 1,
                             sigma = 0.1,
                             N_pred = N_pred,
                             x_pred = x_pred),
-                       chains = 2, iter = 2000, 
-                       refresh = 500)
+                       chains = 1, iter = 2000, 
+                       refresh = 0)
 ```
 
-```{.output}
 
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
-Chain 1: 
-Chain 1: Gradient evaluation took 0.000187 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.87 seconds.
-Chain 1: Adjust your expectations accordingly!
-Chain 1: 
-Chain 1: 
-Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1: Iteration:  500 / 2000 [ 25%]  (Warmup)
-Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
-Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 1: 
-Chain 1:  Elapsed Time: 0.82 seconds (Warm-up)
-Chain 1:                0.704 seconds (Sampling)
-Chain 1:                1.524 seconds (Total)
-Chain 1: 
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
-Chain 2: 
-Chain 2: Gradient evaluation took 4e-05 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.4 seconds.
-Chain 2: Adjust your expectations accordingly!
-Chain 2: 
-Chain 2: 
-Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2: Iteration:  500 / 2000 [ 25%]  (Warmup)
-Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
-Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 2: 
-Chain 2:  Elapsed Time: 0.797 seconds (Warm-up)
-Chain 2:                0.498 seconds (Sampling)
-Chain 2:                1.295 seconds (Total)
-Chain 2: 
-```
-Fitting is completed in a few seconds with no warnings. Let's check the results
-
+Let's check the results
 
 
 ```r
@@ -375,8 +313,6 @@ f_cholesky_samples <- rstan::extract(gp_cholesky_samples, "f")[["f"]] %>%
 
 f_cholesky_samples_l <- f_cholesky_samples %>% 
   gather(key = "sample", value = "f", -x)
-
-
 
 p_cholesky_f <- ggplot() +
   geom_line(
@@ -389,170 +325,27 @@ p_cholesky_f <- ggplot() +
 print(p_cholesky_f)
 ```
 
-<img src="fig/gaussian-processes-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
-
-
-# 2D Gaussian processes
-
-The input space of a GP can have any dimensionality $D$, $x \in \mathbb{R}^D.$ Conceptually, nothing changes. In the covariance function the distance between points $(x_1 - x_2)$ is simply computed using the Eucledian distance (Pythagorean theorem) between $x_1, x_2 \in \mathbb{R}^D$. Next we'll analyze some data using a 2D GP.
-
-Assume that we have data on 50 randomly chosen homestay apartments in a city center. We know the coordinates $(x_1, x_2)$ on map and the amount of rentals last year $y$ for these apartments. We'd like to estimate popularity of different city areas based on this data. 
-
-The data looks like this: 
-
-
-
-The model we are using is specified as follows: 
-
-$$y \sim Poisson(\phi) \\
-\phi = \exp(a + f) \\
-f \sim GP(\mu, K_{SE}(\alpha, \lambda)) \\
-a \sim N(0, 1)$$
-
-Here, $\phi$ is the average rental rate for a given point on map. The parameter $a$ functions as an intercept. We'll estimate $\phi$ for a 2D grid specified as follows: 
-
-
-
-```r
-by <- 0.25
-x_pred <- expand.grid(x = seq(range(x)[1]-2*by, range(x)[2]+2*by, by = by), 
-                      y = seq(range(y)[1]-2*by, range(y)[2]+2*by, by = by))
-```
-
-Let's call Stan. The program uses the Cholesky parameterization and generates the predicted values of $\phi$ in the generated quantities block. 
-
-
-```stan
-data {
-  int<lower=1> N_data;
-  int<lower=1> D;
-  
-  vector[D] x_data[N_data]; // x,y-coordinates
-  int y[N_data]; // yearly rentals
-
-  int<lower=1> N_pred;
-  vector[D] x_pred[N_pred];
-  
-  real<lower=0> length_scale;
-  real<lower=0> alpha;
-
-  
-}
-
-transformed data {
-  
-  int<lower=1> N = N_data + N_pred;
-  vector[D] x[N_data + N_pred];
-  vector[N] mu;
-  real nugget = 1e-9;
-  
-  matrix[N, N] K;
-  matrix[N, N] L;
-  
-  mu = rep_vector(0, N);
-  
-  for(i in 1:N_data) x[i] = x_data[i];
-  for(i in 1:N_pred) x[i + N_data] = x_pred[i];
-  
-
-  
-  K = cov_exp_quad(x, alpha, length_scale);
-  
-  for (n in 1:N)
-    K[n, n] = K[n, n] + nugget;
-
-  L = cholesky_decompose(K);
-  
-}
-
-
-parameters {
-  vector[N] eta;
-
-  // intercept
-  real a;
-}
-
-transformed parameters {
-  vector[N] f = mu + L*eta;
-}
-
-
-
-model {
-  
-  y ~ poisson_log(a + f[1:N_data]);
-  
-  eta ~ std_normal();
-  a ~ normal(0, 1);
-
-}
-generated quantities {
-  
-  vector[N_pred] phi;
-  
-  for(i in 1:N_pred) {
-    phi[i] = exp(a + f[N_data + i]);
-  }
-
-}
-
-```
+<img src="fig/gaussian-processes-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
 
 
+:::::::::::::::::::::::: challenge
 
+The logistic regression models a binary variable $y \in \{0, 1\}$ as a function of $x \in \mathbb{R}$ as follows:
 
-```r
-samples <- rstan::sampling(gp_2d_poisson_model, 
-         list(N_data = N,
-              D = 2,
-              N_pred = nrow(x_pred), 
-              x_pred = x_pred,
-              x_data = df[, c("x", "y")],
-              y = df$rentals,
-              length_scale = 2, 
-              alpha = 1), 
-         chains = 2, iter = 2000, 
-         cores = 2, refresh = 500
-         )
-```
+$$ y \sim \text{Bernoulli}(\theta) \\ 
+\theta = \frac{1}{1 + e^{-(\alpha + \beta x)}},$$ where $\alpha, \beta$ are real numbers and $\theta$ is the probability of $y = 1$.
 
-Again, the fitting takes some time, as there are >1000 points where $f$ is estimated.  (GPs scale in $O\{n^3\}$, that is, badly).
+The model can be used to estimate, for instance, the probability of passing an exam ($y=1$) based on the number of study hours $x$. Presumably, low study hours give low probability for passing. On the other hand, too much study may induce exhaustion and compromise performance.
 
-The figure below displays the posterior average of $\phi$ along with the data points. The rental hotspot of the city seems to be at approximately (-2, 3). 
+Using the following data, estimate the probability of passing as a function of study hours. 
 
+FIXME data
 
+Modify the logistic regression so that the term $\beta x$ is replaced with a non-parametric function $f$. Give $f$ a GP prior with squared exponential covariance function and appropriate hyperparameters. Use a normal prior $N(0, 1)$ for the baseline parameter $\alpha$. 
 
-```r
-phi_summary <- rstan::summary(samples, "phi")$summary %>%
-  data.frame() %>% 
-  mutate(x = c(x_pred$x),
-         y = c(x_pred$y)) 
-
-p_phi_posterior_mean <- ggplot() +
-  geom_tile(data = phi_summary,
-            aes(x, y, fill = mean)) +
-  geom_point(data = df,
-             aes(x, y), size = 3) +
-  geom_point(data = df,
-            aes(x, y, color = rentals)) +
-  scale_fill_gradientn(colors = rainbow(5)) + 
-  scale_color_gradientn(colors = rainbow(5))
-  
-print(p_phi_posterior_mean)
-```
-
-<img src="fig/gaussian-processes-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
-
-
-
-
-
-
-
-
+::::::::::::::::::::::::::::::::::
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

@@ -43,7 +43,7 @@ In the following example, we'll conduct a hierarchical analysis of human heights
 
 
 
-# Example: human height 
+## Example: human height 
 
 Let's analyze human adult height in different countries. We'll use the normal model with unknown mean $\mu$ and standard deviation $\sigma$ as the generative model, and give these parameters the hierarchical treatment. 
 
@@ -115,21 +115,21 @@ height_women10
 ```
 
 ```{.output}
-      Country   Sex Mean.height Mean.height.standard.error
-1      Canada Girls    164.7299                  0.4985881
-2  Costa Rica Girls    160.3577                  1.0143440
-3        Iraq Girls    158.7487                  1.0298655
-4      Israel Girls    162.2225                  0.7928922
-5  Kyrgyzstan Girls    160.2019                  0.8355103
-6        Mali Girls    161.9892                  0.6265029
-7  Mauritania Girls    160.0617                  1.3026757
-8     Uruguay Girls    161.5585                  0.7967392
-9  Uzbekistan Girls    160.2883                  0.7363217
-10   Zimbabwe Girls    159.8491                  0.7322471
+       Country   Sex Mean.height Mean.height.standard.error
+1    Argentina Girls    161.2204                  0.6207879
+2       Bhutan Girls    155.1526                  1.1308066
+3     Botswana Girls    162.0620                  1.0115264
+4       Gambia Girls    161.7282                  0.9603018
+5   Montenegro Girls    169.9609                  0.8887514
+6  New Zealand Girls    164.6600                  0.4656146
+7   Seychelles Girls    162.4656                  0.8525184
+8    Swaziland Girls    158.9214                  0.8919865
+9      Tunisia Girls    161.6855                  0.9464602
+10     Uruguay Girls    161.5585                  0.7967392
 ```
 
 
-## Simulate data
+### Simulate data
 
 Now, we can treat the values in the table above as ground truth and simulate some data based on them. Let's generate $N=25$ samples for each country from the normal model with $\mu = \text{Mean.height}$ and $\sigma = \text{Mean.height.standard.error}$.
 
@@ -161,7 +161,7 @@ height_sim %>%
 
 <img src="fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-## Modeling
+### Modeling
 
 Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. We'll use $g$ to index the country, and $i$ for individuals.
 
@@ -275,8 +275,6 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
 
 
 <!-- Non-pooled analysis -->
-
-
 
 
 

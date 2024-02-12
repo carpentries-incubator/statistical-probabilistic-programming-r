@@ -379,26 +379,14 @@ Do a posterior predictive check by use lag-1 autocorrelation as the test statist
 Hint: lag-1 autocorrelation is simply the Pearson correlation between $x_{1:(N-1)}$ and $x_{2:N}$ 
 
 
-## 5.3 Bayesian cross-validation 
-
-In Episodede XX, we computed the posterior predictive p-value for the Normal and Cauchy models for a data set. Now, do Bayesian leave-one-out cross-validation to compare these model from another perspective. 
-
-Build Stan programs for Normal and Cauchy models and compute the Bayesian LOO-CV effective number of parameters, as defined in equation 7.15 on p.175 in BDA3. What can you deduce from these values?
-
-
-As your data, use $X=\{-0.48, -0.17, 0, 0.74, 0.9, -3.72, -0.39, -3.62, -2.54, 2.17,\\ -2.02, -0.15, 0.53, -1.1, 0.16, -0.91, 0.88, -0.03, 1.66, -12.49,  \\ -2.66, 0.53, -0.68, -3.8, 4.07, 3.49, -0.46, 3.71, -1.12, 0.06, 1.81, \\ 3.84, 0.83, -0.23, 0.31, -0.21, -1.52, 0.44, 0.56, 0.32, 1.91, 0.93, \\ -0.36, -0.57, -2.96, -6.35, 1.28, -1.13, 0.33, 0.8, 7.83, -1.78, \\ -0.64, -2.6, 0.29, 3.13, -1.36, 1.2, -8.12, 0.75, 0.21, 1.44, 0, 48.37, \\ -0.81, -5.03, 2.51, 0.04, -2.65, 0.37, -1.85, 6.98, 0.32, -0.76, -0.34, \\ -0.26, 0.54, 1.09, 1.17, 1.62, 3.7, 16.54, -0.03, -0.79, 0.75, 0.33, -2.74, 1.08 \}$.
 
 
 
 
 
-## 5.4. WAIC 
 
-Compute WAIC for the Normal and Cauchy models using the data $X$ of the previous exercise. Are the implications in line with 3. and the Episodede example?
 
-Hint: 
-The required computations are similar those in 5.3 so code can be recycled.
-BDA3: See p. 174 for definition of WAIC.
+
 
 
 
@@ -454,7 +442,7 @@ $$
 
 Set $K1$ to squared exponential covariance function and $K2$ to exponential covariance. The point of $f_{trend}$ is to capture the longer term trend in the data, while $f_{noise}$ target shorter-term variations around the trend. 
 
-Set the hyperparameters $\alpha_{1}, \alpha_{2}$ and $\lambda_{1}, \lambda_{2}$ appropriately. 
+Set the hyperparameters $\alpha_{1}, \alpha_{2}$ and $\lambda_{1}, \lambda_{1,2}$ appropriately. 
 
 Is such a model appropriate for predicting stock prices into the future?
 
