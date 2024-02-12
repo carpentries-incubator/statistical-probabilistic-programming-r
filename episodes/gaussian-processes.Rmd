@@ -1,7 +1,7 @@
 ---
 title: 'Gaussian processes'
 teaching: 60
-exercises: 0
+exercises: 1
 ---
 
 
@@ -99,7 +99,7 @@ Generate samples from the GP above with different values of $\alpha$ and $\lambd
 
 Next, we'll explore some simple examples that leverage Gaussian processes.
 
-# Gaussian process regression
+## Gaussian process regression
 
 Assume we have 5 data available and wed like to estimate a trend in the data. 
 
@@ -229,7 +229,7 @@ print(p_f)
 ```
 
 
-The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Note that each posterior sample corresponds to a function. This distribution essentially encapsulates the model's interpretation of the underlying trend within the data. 
+The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Note that each posterior sample corresponds to a function. This distribution essentially encapsulates the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. The posterior in certain regions, however, seems a bit strange. For example, the posterior between the farthest two data points on the right contains most of the mass above the line connecting the points. This is likely a symptom of the convergence issues. 
 
 :::::::::::::::::::::::::::::: challenge
 In the figure above, where is the posterior uncertainty the highest and why? What controls the uncertainty at the locations of the data? If the made the prediction range wider, say, from -10 to 10, what would look like at the extremes?
@@ -322,7 +322,7 @@ gp_cholesky_samples <- rstan::sampling(gp_cholesky_model,
 ```
 
 
- Let's check the results
+Let's check the results
 
 ```{r}
 f_cholesky_samples <- rstan::extract(gp_cholesky_samples, "f")[["f"]] %>% 
@@ -343,6 +343,8 @@ p_cholesky_f <- ggplot() +
 print(p_cholesky_f)
 
 ```
+
+
 
 
 :::::::::::::::::::::::: challenge

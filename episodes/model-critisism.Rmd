@@ -32,44 +32,77 @@ posterior_color <- "#56B4E9"
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Prior/Posterior predictive check
-- Learn how assess model fit
-  - Bayesian residuals?
-  
+
 - Model comparison with 
   - AIC, BIC, WAIC
-
+  
+- Bayesian cross-validation
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Posterior predictive check
+This episode focuses on model checking, a crucial step in Bayesian data analysis when dealing with competing models that require systematic comparison. We'll explore three different approaches for this purpose.
 
-Gelman: "If the model fits, then replicated data generated under the model should look similar to observed data."
+Firstly, we'll delve into posterior predictive checks, a method that involves comparing a fitted model's predictions with observed data.
 
-Idea: simulate data from the posterior predictive distribution and compare it to the observed data. Discrepancies between the simulated and observed data imply shortcomings in the model. 
+Next, we'll examine information criteria, a tool that helps strike a balance between model complexity and goodness-of-fit.
 
+Finally, we'll wrap up the episode with an exploration of Bayesian cross-validation.
 
-# Data
+Throughout the episode, we'll use the same simulated dataset for examples. 
 
-Let's analyze the following data with the Normal model. 
+## Data
+
+For data, we're using $N=88$ univariate numerical data 
+
 
 ```{r, echo = FALSE}
-## Data ********************** ####
+# Generate data
 
+# seed <- sample(1:1000, 1)
+set.seed(215)
 N <- 88
 location <- 0
 scale <- 1
 
-df <- rcauchy(N, location, scale) %>% data.frame(X = .)
+X <- rcauchy(N, location, scale) %>% round(., 3)
+df <- data.frame(X)
+
+print(X)
 
 p_data <- df %>% 
-  ggplot(aes(x = X)) + 
-  geom_histogram(bins = 100)
+  ggplot() + 
+  geom_histogram(aes(x = X), 
+                 bins = 100)
 
 print(p_data)
 ```
 
 
-# Normal model
+## Posterior predictive check
+
+Gelman: "If the model fits, then replicated data generated under the model should look similar to observed data."
+
+The idea of posterior predictive checking is to use the posterior predictive distribution to simulate a replicate data set and compare it to the observed data. Discrepancies between the simulated and observed data can imply shortcomings in the model. Comparison between simulated and actual data can be done in different ways. Visual check is one option but a more approach is to compute the posterior predictive p-value (ppp). 
+
+Difference to posterior predictive... 
+
+1. Fit a Bayesian Model:
+ Develop and fit a Bayesian model to observed data.
+2. Generate Posterior Predictive Samples:
+ Use the posterior distribution of model parameters to simulate new datasets.
+3. Compare Simulated Data:
+ Assess how well the simulated datasets align with the observed data using statistical measures or graphical tools.
+4. Assess Model Fit:
+ Evaluate the model's appropriateness based on the comparison results.
+5. Iterate or Modify:
+  Iterate or modify the model if needed to enhance its performance.
+  
+Posterior predictive checking ensures the model's ability to generate data resembling observed patterns, aiding in model refinement and validation.
+
+
+
+
+### Normal model
 
 Here we fit the normal model and generate posterior predictions $X_{rep}$. Notice, that this is slightly different from the posterior predictive distribution $\tilde{X}$. The former consists of replications of the original data, in this case `r N` observations, the latter doesn't specify the sample size. 
 
@@ -78,21 +111,17 @@ data {
   int<lower=0> N;
   vector[N] X;
 }
-
 parameters {
   real<lower=0> sigma;
   real mu;
 }
-
 model {
-  
-  // Likelihood (vectorized)
+  // Likelihood
   X ~ normal(mu, sigma);
   
   // Prior
   mu ~ normal(0, 1);
   sigma ~ gamma(2, 1);
-  
 }
 
 generated quantities {
@@ -102,22 +131,20 @@ generated quantities {
   for(i in 1:N) {
     X_rep[i] = normal_rng(mu, sigma);
   }
-  
 }
-
 
 ```
 
 
 
 ```{r}
-
 normal_fit <- sampling(normal_model,
                        list(N = N, X = df$X), 
                        refresh = 0)
 
 # Extract samples
-X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% data.frame() %>%
+X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% 
+  data.frame() %>%
   mutate(sample = 1:nrow(.))
 
 ```
@@ -125,6 +152,7 @@ X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% data.frame() %>%
 
 
 Below is a comparison of 12 samples of $\tilde{X}$ against the data (the panel titles correspond to MCMC sample numbers). The large discrepancy between the data and posterior predictions indicates that something is wrong with our model. It seems like the normal model misestimates the tails of the data, and that, likely, the normal model is a poor choice for such data in any case.
+
 ```{r}
 
 # Subset
@@ -136,25 +164,28 @@ X_rep_sub <- X_rep %>% filter(sample %in%
 # Wide --> long
 X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
 
-p_hist <- ggplot() +
+p_norm_hist <- ggplot() +
   geom_histogram(data = X_rep_sub_l,
                  aes(x = value
                      # y = after_stat(density)
                      ),
-               bins = 40, fill = posterior_color) +
+               bins = 50,
+               fill = posterior_color, alpha = 0.8) +
   facet_wrap(~sample, scales = "free") +
   geom_histogram(data = df,
                  aes(x = X
                      # y = after_stat(density)
                      ),
-                 bins = 100)
+                 bins = 50,
+                 alpha = 0.8)
 
 
-print(p_hist)
+print(p_norm_hist)
 ```
 
+It's visually apparent that there is a discrepancy between the posterior replications and data. 
 
-Let's quantify the discrepancy using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = `r round(max(df$X), 3)`. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
+Let's quantify this using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = `r round(max(df$X), 3)`. The following histogram shows this value (vertical line) against the maximum compute for each replicate data set $\tilde{X}$. 
 
 
 ```{r}
@@ -173,14 +204,14 @@ ggplot() +
 
 ```
 
-The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data. In this case, the value is $ppp =$ `r mean(rep_maxs$max < max(df$X))` indicating that the model is, indeed, a poor choice for the data. 
+The proportion of replications $X_{rep}$ that produce at least as extreme values as the data is called the posterior predictive p-value ($ppp$). The $ppp$ quantifies the evidence for the suitability of the model for the data with higher $ppp$ implying a lesser conflict. In this case, the value is $ppp =$ `r mean(rep_maxs$max < max(df$X))` which means that the maximum was as at least as large as in the data in`r 100*(1 -  mean(rep_maxs$max < max(df$X)))`% replications.
 
 
-# Cauchy model
+### Cauchy model
 
-Let's do a similar analysis utilizing the Cauchy model, which displays considerably longer tails. 
+Let's do a similar analysis utilizing the Cauchy model, and compute the $ppp$ for this model. 
 
-The code is essentially copy paste from above, with the distinction of the Stan program. 
+The code is essentially copy-pasted from above, with the distinction of the Stan program.
 
 ```{stan output.var="cauchy_model"}
 data {
@@ -220,7 +251,7 @@ generated quantities {
 
 ```{r}
 cauchy_fit <- sampling(cauchy_model, list(N = N, X = df$X), 
-                       refresh = 500)
+                       refresh = 0)
 
 X_rep <- rstan::extract(cauchy_fit, "X_rep")[[1]] %>% data.frame() %>%
   mutate(sample = 1:nrow(.))
@@ -235,20 +266,25 @@ X_rep_sub <- X_rep %>% filter(sample %in%
 X_rep_sub_l <- X_rep_sub %>% gather(key = "key", value = "value", -sample)
 
 
-ggplot() +
+p_cauchy_hist <- ggplot() +
   geom_histogram(data = X_rep_sub_l,
                  aes(x = value
                      # y = after_stat(density)
                  ),
-                 bins = 40, fill = posterior_color) +
+                 bins = 50, fill = posterior_color) +
   facet_wrap(~sample, scales = "free") +
   geom_histogram(data = df,
                  aes(x = X
                      # y = after_stat(density)
                  ),
-                 bins = 100)
+                 bins = 50)
+
+print(p_cauchy_hist)
+
 ```
-The figure below contains again the distribution of maximum value for each replicate set. The $ppp$ is large, indicating no issues with the suitability of the model on the data. 
+The figure below contains again the distribution of maximum value for each replicate sets. Here the visually apparent differences present in the previous section are less apparent. 
+
+The $ppp$ is large, indicating no issues with the suitability of the model on the data. 
 
 ```{r}
 ## Compute ppp
@@ -260,12 +296,273 @@ rep_maxs <- X_rep %>%
 ggplot() +
   geom_histogram(data = rep_maxs,
                  aes(x = max),
-                 bins = 100000, fill = posterior_color) +
+                 bins = 10000, fill = posterior_color) +
   geom_vline(xintercept = max(df$X)) +
   labs(title = paste0("ppp = ", mean(rep_maxs$max > max(df$X)))) +
   # set plot limits to aid with visualizations
   coord_cartesian(xlim = c(0, 1000)) 
 
+
+```
+
+
+## Information criteria
+
+Let's then compare the normal and Cauchy models with the WAIC. First we'll need to fit both models on the data. 
+
+```{r}
+stan_data <- list(N = N, X = df$X)
+
+# Fit
+normal_fit <- sampling(normal_model, stan_data,
+                       refresh = 0)
+cauchy_fit <- sampling(cauchy_model, stan_data, 
+                       refresh = 0)
+
+
+# Extract samples
+normal_samples <- rstan::extract(normal_fit, c("mu", "sigma")) %>% data.frame
+cauchy_samples <- rstan::extract(cauchy_fit, c("mu", "sigma")) %>% data.frame
+```
+
+
+Then we can write a function that compute the WAIC. 
+
+```{r}
+WAIC <- function(samples, data, model){
+  
+  
+  # Loop over data points
+  pp_dens <- lapply(1:length(data), function(i) {
+    
+    my_x <- data[i]
+    
+    # Loop over posterior samples  
+    point_pp_dens <- lapply(1:nrow(samples), function(S) {
+      
+      my_mu <- samples[S, "mu"]
+      my_sigma <- samples[S, "sigma"]
+      
+      if(model == "normal") {
+        # Model: y ~ normal(mu, sigma)
+        dnorm(x = my_x,
+              mean = my_mu,
+              sd = my_sigma)
+      } else if(model == "cauchy") {
+        # Model: y ~ cauchy(mu, sigma)
+        dcauchy(x = my_x,
+                location = my_mu,
+                scale = my_sigma)
+      }
+      
+      
+      
+    }) %>%
+      unlist()
+    
+    return(point_pp_dens)
+    
+  }) %>%
+    do.call(rbind, .)
+  
+  
+  # See BDA3 p.169
+  lppd <- apply(X = pp_dens,
+                MARGIN = 1, 
+                FUN = function(x) log(mean(x))) %>% 
+    sum
+  
+  # See BDA3 p.173
+  bias <- apply(X = pp_dens,
+                MARGIN = 1, 
+                FUN = function(x) var(log(x))) %>% 
+    sum
+  
+  # WAIC
+  waic = -2*(lppd - bias)
+  
+  return(waic)
+}
+```
+
+Applying this function to the posterior samples, we'll recover a lower value for the Cauchy model, implying a better fit on the data. 
+
+```{r}
+WAIC(normal_samples, df$X, model = "normal")
+WAIC(cauchy_samples, df$X, model = "cauchy")
+```
+
+
+## Bayesian cross-validation
+
+Idea in Bayesian cross-validation is.... 
+
+
+Helper function that computes.. 
+
+```{r}
+# Get log predictive density for a point x,
+# given data X and posterior samples
+# See BDA3 p.175
+get_lpd <- function(x, X, samples, model) {
+  
+  # Loop over posterior samples  
+  pp_dens <- lapply(1:nrow(samples), function(S) {
+    
+    if(model == "normal") {
+      # Normal(x | mu, sigma^2)
+      dnorm(x = x,
+            mean = samples[S, "mu"],
+            sd = samples[S, "sigma"])
+    } else if (model == "cauchy") {
+      # Cauchy(x | location = mu, scale = sigma^2)
+      dcauchy(x = x,
+              location = samples[S, "mu"],
+              scale = samples[S, "sigma"])
+    }
+    
+    
+  }) %>%
+    unlist()
+  
+  lpd <- log(mean(pp_dens))
+  
+  return(lpd)
+}
+```
+
+
+Now we can perform CV
+
+```{r}
+# Loop over data partitions
+normal_loo_lpds <- lapply(1:N, function(i) {
+  
+  # Training set
+  my_X <- X[-i]
+  
+  # Test set
+  my_x <- X[i]
+  
+  # Fit model
+  my_normal_fit <- sampling(normal_model,
+                            list(N = length(my_X),
+                                 X = my_X),
+                            refresh = 0 # omits output
+                            ) 
+  
+  # Get data
+  my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
+    do.call(cbind, .) %>% 
+    set_colnames(c("mu", "sigma"))
+  
+  # Get lpd
+  my_lpd <- get_lpd(my_x, my_X, my_samples, "normal")
+  
+  data.frame(i, lpd = my_lpd, model = "normal_loo")
+  
+}) %>%
+  do.call(rbind, .)
+
+# Predictive density for data points using full data in training
+normal_full_lpd <- lapply(1, function(dummy) {
+  
+  # Fit model
+  my_normal_fit <- sampling(normal_model,
+                            list(N = length(X),
+                                 X = X), 
+                            refresh = 0)
+  
+  # Get data
+  my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
+    do.call(cbind, .) %>% 
+    set_colnames(c("mu", "sigma"))
+  
+  # Compute lpds
+  lpds <- lapply(1:N, function(i) {
+    
+    my_lpd <- get_lpd(X[i], X, my_samples, "normal")
+    
+    data.frame(i, lpd = my_lpd, model = "normal")
+  }) %>% do.call(rbind, .)
+  
+  return(lpds)
+}) %>%
+  do.call(rbind, .)
+
+
+# Same for Cauchy:
+cauchy_loo_lpds <- lapply(1:N, function(i) {
+  print(i)
+  # Subset data
+  my_X <- X[-i]
+  my_x <- X[i]
+  
+  # Fit model
+  my_normal_fit <- sampling(cauchy_model,
+                            list(N = length(my_X),
+                                 X = my_X), 
+                            refresh = 0)
+  
+  # Get data
+  my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
+    do.call(cbind, .) %>% 
+    set_colnames(c("mu", "sigma"))
+  
+  # Get lpd
+  my_lpd <- get_lpd(my_x, my_X, my_samples, "cauchy")
+  
+  data.frame(i, lpd = my_lpd, model = "cauchy_loo")
+  
+}) %>%
+  do.call(rbind, .)
+
+cauchy_full_lpd <- lapply(1, function(dummy) {
+  
+  # Fit model
+  my_cachy_fit <- sampling(cauchy_model,
+                           list(N = length(X),
+                                X = X), 
+                           refresh = 0)
+  
+  # Get data
+  my_samples <- rstan::extract(my_cachy_fit, c("mu", "sigma")) %>% 
+    do.call(cbind, .) %>% 
+    set_colnames(c("mu", "sigma"))
+  
+  # Compute lpds
+  lpds <- lapply(1:N, function(i) {
+    
+    my_lpd <- get_lpd(X[i], X, my_samples, "cauchy")
+    
+    data.frame(i, lpd = my_lpd, model = "cauchy")
+  }) %>% do.call(rbind, .)
+  
+  return(lpds)
+}) %>%
+  do.call(rbind, .)
+```
+
+
+```{r}
+# Combine
+lpds <- rbind(normal_loo_lpds, 
+              normal_full_lpd, 
+              cauchy_loo_lpds,
+              cauchy_full_lpd)
+
+lpd_summary <- lpds %>% 
+  group_by(model) %>% 
+  summarize(lppd = sum(lpd))
+
+
+# Effective number of parameters
+p_loo_cv_normal <- lpd_summary[lpd_summary$model == "normal", "lppd"] - lpd_summary[lpd_summary$model == "normal_loo", "lppd"]
+p_loo_cv_cauchy <- lpd_summary[lpd_summary$model == "cauchy", "lppd"] - lpd_summary[lpd_summary$model == "cauchy_loo", "lppd"]
+
+
+paste0("Effective number of parameters, normal = ", p_loo_cv_normal)
+paste0("Effective number of parameters, cauchy = ", p_loo_cv_cauchy)
 
 ```
 

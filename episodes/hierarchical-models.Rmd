@@ -56,7 +56,7 @@ In the following example, we'll conduct a hierarchical analysis of human heights
 
 
 
-# Example: human height 
+## Example: human height 
 
 Let's analyze human adult height in different countries. We'll use the normal model with unknown mean $\mu$ and standard deviation $\sigma$ as the generative model, and give these parameters the hierarchical treatment. 
 
@@ -101,7 +101,7 @@ height_women10
 ```
 
 
-## Simulate data
+### Simulate data
 
 Now, we can treat the values in the table above as ground truth and simulate some data based on them. Let's generate $N=25$ samples for each country from the normal model with $\mu = \text{Mean.height}$ and $\sigma = \text{Mean.height.standard.error}$.
 
@@ -130,7 +130,7 @@ height_sim %>%
   labs(title = "Simulated data")
 ```
 
-## Modeling
+### Modeling
 
 Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. We'll use $g$ to index the country, and $i$ for individuals.
 
@@ -242,8 +242,6 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
 
 
 <!-- Non-pooled analysis -->
-
-
 
 ```{stan output.var="normal_pooled_model", echo = FALSE, eval=FALSE}
 data {
