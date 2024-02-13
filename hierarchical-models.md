@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-       Country   Sex Mean.height Mean.height.standard.error
-1    Argentina Girls    161.2204                  0.6207879
-2       Bhutan Girls    155.1526                  1.1308066
-3     Botswana Girls    162.0620                  1.0115264
-4       Gambia Girls    161.7282                  0.9603018
-5   Montenegro Girls    169.9609                  0.8887514
-6  New Zealand Girls    164.6600                  0.4656146
-7   Seychelles Girls    162.4656                  0.8525184
-8    Swaziland Girls    158.9214                  0.8919865
-9      Tunisia Girls    161.6855                  0.9464602
-10     Uruguay Girls    161.5585                  0.7967392
+            Country   Sex Mean.height Mean.height.standard.error
+1           Albania Girls    162.2286                  0.7286584
+2           Belgium Girls    163.4017                  0.5750024
+3      Cook Islands Girls    167.3086                  1.0003661
+4       El Salvador Girls    156.3896                  0.9402363
+5        Kyrgyzstan Girls    160.2019                  0.8355103
+6  Marshall Islands Girls    154.7573                  1.3629893
+7          Portugal Girls    161.2271                  0.8050183
+8       Puerto Rico Girls    163.0573                  1.5854620
+9          Suriname Girls    162.2639                  1.8005810
+10       Uzbekistan Girls    160.2883                  0.7363217
 ```
 
 
