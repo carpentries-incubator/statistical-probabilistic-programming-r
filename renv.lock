@@ -26,14 +26,14 @@
     },
     "DBI": {
       "Package": "DBI",
-      "Version": "1.2.1",
+      "Version": "1.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "9b4993e98e0e19da84c168460c032fef"
+      "Hash": "164809cd72e1d5160b4cb3aa57f510fe"
     },
     "Formula": {
       "Package": "Formula",
