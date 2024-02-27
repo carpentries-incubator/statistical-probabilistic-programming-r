@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-       Country   Sex Mean.height Mean.height.standard.error
-1      Croatia Girls    166.8031                  0.7661097
-2        Gabon Girls    160.0452                  0.9829053
-3        Ghana Girls    158.8551                  0.8002225
-4    Guatemala Girls    150.9140                  0.7607978
-5         Iran Girls    161.1837                  0.4042259
-6   Madagascar Girls    153.0638                  0.9674112
-7      Namibia Girls    160.2561                  0.8504509
-8  Netherlands Girls    170.3612                  1.0355356
-9         Oman Girls    158.4350                  0.8546351
-10 Philippines Girls    154.1442                  0.4989937
+          Country   Sex Mean.height Mean.height.standard.error
+1          Belize Girls    158.1201                  1.4026324
+2         Croatia Girls    166.8031                  0.7661097
+3  Czech Republic Girls    167.9635                  0.7051805
+4         Finland Girls    166.4751                  0.6462776
+5           Niger Girls    159.8149                  0.9080398
+6           Qatar Girls    160.7157                  0.9695944
+7           Samoa Girls    163.8160                  1.0240736
+8      Tajikistan Girls    158.1218                  0.6408059
+9       Venezuela Girls    160.0370                  1.0813162
+10          Yemen Girls    154.7561                  0.8311695
 ```
 
 
