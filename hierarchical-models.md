@@ -115,17 +115,28 @@ height_women10
 ```
 
 ```{.output}
-          Country   Sex Mean.height Mean.height.standard.error
-1          Belize Girls    158.1201                  1.4026324
-2         Croatia Girls    166.8031                  0.7661097
-3  Czech Republic Girls    167.9635                  0.7051805
-4         Finland Girls    166.4751                  0.6462776
-5           Niger Girls    159.8149                  0.9080398
-6           Qatar Girls    160.7157                  0.9695944
-7           Samoa Girls    163.8160                  1.0240736
-8      Tajikistan Girls    158.1218                  0.6408059
-9       Venezuela Girls    160.0370                  1.0813162
-10          Yemen Girls    154.7561                  0.8311695
+                            Country   Sex Mean.height
+1                         Argentina Girls    161.2204
+2                  French Polynesia Girls    166.5187
+3                            Greece Girls    165.8131
+4                             India Girls    155.1782
+5                              Iraq Girls    158.7487
+6                             Malta Girls    162.9505
+7  Micronesia (Federated States of) Girls    159.6585
+8                            Poland Girls    165.7761
+9                      Saudi Arabia Girls    158.8377
+10                     Turkmenistan Girls    162.8271
+   Mean.height.standard.error
+1                   0.6207879
+2                   1.0898402
+3                   0.7586989
+4                   0.3209988
+5                   1.0298655
+6                   3.7687254
+7                   1.1282196
+8                   0.6035404
+9                   0.7242448
+10                  0.7846984
 ```
 
 
