@@ -445,7 +445,7 @@ parameter space and can be specified as follows:</p>
 </ol><p>Now, we’ll implement the grid approximation for the handedness
 example in R.</p>
 <div class="section level3">
-<h3 id="example-handedness-with-the-grid-approximation">Example: Handedness with the grid approximation<a class="anchor" aria-label="anchor" href="#example-handedness-with-the-grid-approximation"></a></h3>
+<h3 id="example-binomial-model">Example: Binomial model<a class="anchor" aria-label="anchor" href="#example-binomial-model"></a></h3>
 <p>First, we’ll define the data variables and the grid of parameter
 values</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -507,7 +507,8 @@ with the prior and posterior.</p>
 <span>       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">Function</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">expression</span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span></span></code></pre>
 </div>
@@ -740,7 +741,8 @@ axis, as if drawn by a gravitational force.</p>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">alpha</span>, y <span class="op">=</span> <span class="va">posterior</span><span class="op">)</span>, </span>
 <span>            color <span class="op">=</span> <span class="va">posterior_color</span>, </span>
-<span>            linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>            linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">expression</span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p_alpha_posterior</span></span></code></pre>
 </div>

@@ -385,7 +385,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Windows</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Use PuTTY</p>
 </div>
@@ -397,7 +397,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">MacOS</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use Terminal.app</p>
 </div>
@@ -409,7 +409,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Linux</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Use Terminal</p>
 </div>
@@ -572,7 +572,7 @@ parameter space and can be specified as follows:</p>
 <p>Now, we’ll implement the grid approximation for the handedness
 example in R.</p>
 <div class="section level3">
-<h3 id="example-handedness-with-the-grid-approximation">Example: Handedness with the grid approximation<a class="anchor" aria-label="anchor" href="#example-handedness-with-the-grid-approximation"></a>
+<h3 id="example-binomial-model">Example: Binomial model<a class="anchor" aria-label="anchor" href="#example-binomial-model"></a>
 </h3>
 <p>First, we’ll define the data variables and the grid of parameter
 values</p>
@@ -635,7 +635,8 @@ with the prior and posterior.</p>
 <span>       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">Function</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">expression</span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span></span></code></pre>
 </div>
@@ -870,7 +871,8 @@ axis, as if drawn by a gravitational force.</p>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">alpha</span>, y <span class="op">=</span> <span class="va">posterior</span><span class="op">)</span>, </span>
 <span>            color <span class="op">=</span> <span class="va">posterior_color</span>, </span>
-<span>            linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>            linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">expression</span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p_alpha_posterior</span></span></code></pre>
 </div>
@@ -1008,7 +1010,6 @@ any links that you are not going to use.
 <h3 class="card-title">Questions</h3>
 <ul>
 <li>What is Stan?</li>
-<li>How to efficiently generate samples from a posterior?</li>
 </ul>
 </div>
 </div>
@@ -1017,66 +1018,73 @@ any links that you are not going to use.
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
+<p>Learn how to: - implement statistical models in Stan - generate
+posterior samples with Stan - extract and process samples generated with
+Stan</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Stan, a programming language, is as a tool for generating samples
+from the posterior distribution. It achieves this by applying a Markov
+Chain Monte Carlo (MCMC) algorithm, specifically a variant known as
+Hamiltonian Monte Carlo. In the next episode, we will delve into MCMC,
+but for now, our focus is on understanding how to execute it using
+Stan.</p>
+<p>To get started, follow the instructions provided at <a href="https://mc-stan.org/users/interfaces/" class="external-link uri">https://mc-stan.org/users/interfaces/</a> to install Stan on
+your local computer.</p>
+<div id="callout1" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title">Callout</h3>
+<div class="callout-content">
 <ul>
-<li>Install Stan and get it running</li>
-<li>Learn how to specify models in Stan</li>
-<li>How to generate samples with Stan</li>
-<li>How to process samples generated with Stan</li>
+<li>With Stan, you can fit model that have continuous parameters. Models
+with discrete parameters such as most classification models are
+typically impossible to fit, although some workarounds have been
+implemented.</li>
 </ul>
 </div>
 </div>
 </div>
-</div>
-</div>
-<p>Stan is a programming language that can be used to generate samples
-from the posterior distribution. Stan does this by utilizing a Markov
-Chain Monte Carlo (MCMC) algorithm, and more specifically a variant of
-it called Hamiltonian Monte Carlo.</p>
-<p>The next episode is devoted to MCMC but in this one we will learn how
-to run it using Stan.</p>
-<p>Follow the instruction at <a href="https://mc-stan.org/users/interfaces/" class="external-link uri">https://mc-stan.org/users/interfaces/</a> to install Stan on
-your local computer.</p>
-<p>While Stan makes model specifying a statistical model relatively easy
-and automates the sampling, the bottle-neck of fitting is not fully
-removed. In theory, MCMC methods will always converge to the target
-distribution (posterior for us). However, in practice, convergence
-issues can arise. Luckily‚ Stan produces warnings automatically which
-can be used in assessing model convergence.</p>
 <section id="basic-program-structure"><h2 class="section-heading">Basic program structure<a class="anchor" aria-label="anchor" href="#basic-program-structure"></a>
 </h2>
 <hr class="half-width">
-<p>A Stan program is structured into several blocks that define the
-statistical model. A Stan program typically (but not necessarily) will
-include the following blocks:</p>
+<p>A Stan program is organized into several blocks that collectively
+define the model. Typically, a Stan program includes at least the
+following blocks:</p>
 <ol style="list-style-type: decimal">
-<li><p>Data block: This block is used to declare the input data fed into
+<li><p>Data: This block is used to declare the input data provided to
 the model. It specifies the types and dimensions of the data variables
-used in the model.</p></li>
-<li><p>Parameters block: In this block, the model’s parameters are
+incorporated into the model.</p></li>
+<li><p>Parameters: In this block, the model parameters are
 declared.</p></li>
-<li><p>Model block: The likelihood and prior distributions are included
-here in the form of sampling statements.</p></li>
+<li><p>Model: The likelihood and prior distributions are included here
+through sampling statements.</p></li>
 </ol>
-<p>It is recommended that you specify the Stan programs in a separate
-text files and call it from R (or other supported interface). The
-extension of the file must be <code>.stan</code>.</p>
-</section><section id="example-1-beta-binomial-model"><h2 class="section-heading">Example 1: Beta-binomial model<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
-</h2>
-<hr class="half-width">
-<p>The following Stan program specifies the Beta-binomial model. There
-program consists of data, parameters, and model blocks.</p>
+<p>For best practices, it is recommended to specify Stan programs in
+separate text files with a .stan extension, which can then be called
+from R or other supported interfaces.</p>
+<div class="section level3">
+<h3 id="example-1-beta-binomial-model">Example 1: Beta-binomial model<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
+</h3>
+<p>The following Stan program specifies the Beta-binomial model, and
+consists of data, parameters, and model blocks.</p>
 <p>The data variables are the total sample size <span class="math inline">\(N\)</span> and the outcome of a binary variable
-(coin flip, handedness etc.). The declared data type in <code>int</code>
-for integer and the variables have a lower bound 1 and 0 for <span class="math inline">\(N\)</span> and <span class="math inline">\(x\)</span>, respectively. Notice that each line
+(coin flip, handedness etc.). The declared data type is <code>int</code>
+for integer, and the variables have a lower bound 1 and 0 for <span class="math inline">\(N\)</span> and <span class="math inline">\(x\)</span>, respectively. Notice that each line
 ends with a semicolon.</p>
 <p>In the parameters block we declare <span class="math inline">\(\theta\)</span>, the probability for a success.
-Since this parameter is a probability, it is restricted between 0 and
-1.</p>
+Since this parameter is a probability, it is a real number restricted
+between 0 and 1.</p>
 <p>In the model block, the likelihood is specified with the sampling
 statement <code>x ~ binomial(N, theta)</code>. This line includes the
 binomial distribution <span class="math inline">\(Bin(x | N,
-theta)\)</span> in the target distribution. The prior could be set
-similarly but omitting it implies a uniform prior.</p>
+theta)\)</span> in the target distribution. The prior is set similarly,
+and omitting the prior implies a uniform prior.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1094,11 +1102,12 @@ similarly but omitting it implies a uniform prior.</p>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    <span class="co">// Likelihood</span></span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    x ~ binomial(N, theta);</span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    </span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="co">// Uniform prior for theta</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="co">// Prior is uniform</span></span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  }</span></code></pre>
 </div>
 <p>Once the Stan program has been saved we need to compile it. In R,
-this is done by running</p>
+this is done by running the following line, where
+<code>"binomial_model.stan"</code> is the path of the program.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1106,15 +1115,16 @@ this is done by running</p>
 <code class="sourceCode R"><span><span class="va">binomial_model</span> <span class="op">&lt;-</span> <span class="fu">stan_model</span><span class="op">(</span><span class="st">"binomial_model.stan"</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Once the program has been compiled, it can be used to generate the
-posterior samples with the function <code>sampling()</code>. The data
-needs to be defined as a list. While running, Stan prints progress.</p>
+posterior samples by calling the function <code>sampling()</code>. The
+data needs to be defined as a list.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binom_data</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span>, x <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">binom_samples</span> <span class="op">&lt;-</span> <span class="fu">sampling</span><span class="op">(</span><span class="va">binomial_model</span>, <span class="va">binom_data</span><span class="op">)</span></span></code></pre>
+<span><span class="va">binom_samples</span> <span class="op">&lt;-</span> <span class="fu">sampling</span><span class="op">(</span>object <span class="op">=</span> <span class="va">binomial_model</span>,</span>
+<span>                          data <span class="op">=</span> <span class="va">binom_data</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1191,8 +1201,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.007 seconds (Total)
+Chain 3:                0.004 seconds (Sampling)
+Chain 3:                0.008 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -1220,11 +1230,14 @@ Chain 4:                0.003 seconds (Sampling)
 Chain 4:                0.007 seconds (Total)
 Chain 4: </code></pre>
 </div>
-<p>With the default setting Stan runs 4 MCMC chains with 2000 iterations
-(more about this in Episode 5 on MCMC). Running
-<code>binom_samples</code> prints a summary for the model parameter
-<span class="math inline">\(p\)</span> allowing quick reviewing of
-result.</p>
+<p>With the default settings, Stan executes 4 MCMC chains, each with
+2000 iterations (more about this in the next episode on MCMC). During
+the run, Stan provides progress information, aiding in estimating the
+running time, particularly for complex models or extensive datasets. In
+this case the sampling took only a fraction of a second.</p>
+<p>When running <code>binom_samples</code>, a summary for the model
+parameter <span class="math inline">\(p\)</span> is printed,
+facilitating a quick review of the results.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1239,10 +1252,10 @@ result.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.15    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1251    1
-lp__  -22.86    0.02 0.74 -24.97 -23.03 -22.58 -22.37 -22.33  1477    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1596    1
+lp__  -22.83    0.02 0.70 -24.87 -23.00 -22.56 -22.38 -22.33  1313    1
 
-Samples were drawn using NUTS(diag_e) at Mon Mar  4 10:26:49 2024.
+Samples were drawn using NUTS(diag_e) at Mon Mar  4 12:04:01 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1255,7 +1268,7 @@ These can be extracted as follows:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p_samples</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">binom_samples</span>, <span class="st">"theta"</span><span class="op">)</span><span class="op">[[</span><span class="st">"theta"</span><span class="op">]</span><span class="op">]</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">theta_samples</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">binom_samples</span>, <span class="st">"theta"</span><span class="op">)</span><span class="op">[[</span><span class="st">"theta"</span><span class="op">]</span><span class="op">]</span></span></code></pre>
 </div>
 <p>Now we can use the methods presented in the previous Episode to
 compute posterior summaries, credible intervals and to generate
@@ -1269,7 +1282,7 @@ figures.</p>
 </h3>
 <div class="callout-content">
 <p>Compute the 95% credible intervals for the samples drawn with Stan.
-What is the probability that <span class="math inline">\(theta \in
+What is the probability that <span class="math inline">\(\theta \in
 (0.05, 0.15)\)</span>? Plot a histogram of the posterior samples.</p>
 </div>
 </div>
@@ -1285,48 +1298,18 @@ What is the probability that <span class="math inline">\(theta \in
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">CI95</span> <span class="op">&lt;-</span> <span class="fu">quantile</span><span class="op">(</span><span class="va">theta_samples</span>, probs <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb10">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">theta_between_0.05_0.15</span> <span class="op">&lt;-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">theta_samples</span><span class="op">&gt;</span><span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">theta_samples</span><span class="op">&lt;</span><span class="fl">0.15</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb12">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_samples</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">CI95</span> <span class="op">&lt;-</span> <span class="fu">quantile</span><span class="op">(</span><span class="va">theta_samples</span>, probs <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">theta_between_0.05_0.15</span> <span class="op">&lt;-</span> <span class="fu">mean</span><span class="op">(</span><span class="va">theta_samples</span><span class="op">&gt;</span><span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">theta_samples</span><span class="op">&lt;</span><span class="fl">0.15</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_samples</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'theta_samples' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb14">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'p' not found</code></pre>
-</div>
+<figure><img src="../fig/stan-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 </div>
 </div>
@@ -1355,8 +1338,10 @@ part of the data? What is the benefit of using this approach?</p>
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
-setting the hyperparameter values as part of data. This way
-hyperparameters can be changed without modifying the Stan file.</p>
+setting the hyperparameter values as part of data. This makes it
+possible to change the hyperparameters without modifying the Stan
+file.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1364,34 +1349,55 @@ hyperparameters can be changed without modifying the Stan file.</p>
 </section><section id="additional-stan-blocks"><h2 class="section-heading">Additional Stan blocks<a class="anchor" aria-label="anchor" href="#additional-stan-blocks"></a>
 </h2>
 <hr class="half-width">
-<p>Functions For user-defined functions Must be the first block!</p>
-<p>Transformed data Transformations of the data variables</p>
-<p>Transformed parameters Transformations of the parameters Remember
-Jacobian in the model block!</p>
-<p>Generated quantities Define quantities based on data and model
-parameters Produces a posterior</p>
-</section><section id="stan-shortcuts"><h2 class="section-heading">Stan shortcuts<a class="anchor" aria-label="anchor" href="#stan-shortcuts"></a>
-</h2>
-<hr class="half-width">
-<ul>
-<li>Modeling: rstanarm, brms; Plotting: bayesplot; Summaries and
-convergence: ShinyStan</li>
-<li>Syntax similar to standard R
-<ul>
-<li>Linear model: fit &lt;- stan_glm(y ~ x, data = df, family =
-gaussian)</li>
-</ul>
-</li>
-</ul>
-<p>We will not use these! We will learn to Write Stan programs from
-scratch → flexibility Access and manipulate the output Generate
-visualization</p>
+<p>In addition the data, parameters, and model blocks there are
+additional blocks that can be included in the program.</p>
+<ol style="list-style-type: decimal">
+<li><p>Functions: For user-defined functions. This block must be the
+first in the Stan program. It allows users to define custom
+functions.</p></li>
+<li><p>Transformed data: This block is used for transformations of the
+data variables. It is often employed to preprocess or modify the input
+data before it is used in the main model. Common tasks include
+standardization, scaling, or other data adjustments.</p></li>
+<li><p>Transformed parameters: In this block, transformations of the
+parameters are defined. If transformed parameters are used on the
+left-hand side of sampling statements in the model block, the Jacobian
+adjustment for the posterior density needs to be included in the model
+block as well.</p></li>
+<li><p>Generated quantities: This block is used to define quantities
+based on both data and model parameters. These quantities are not part
+of the model but are useful for post-processing.</p></li>
+</ol>
+<p>Examples of usage will be included in subsequent illustrations.</p>
+<div id="callout2" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title">Callout</h3>
+<div class="callout-content">
+<p>There are tools like Bayesplot, rstanarm, and brms built on top of
+Stan that make it easier to use many common statistical models and tools
+for analyzing and visualizing results. However, we won’t use these much
+in this course. The idea is that learning Stan from the basics helps you
+understand Bayesian modeling better. It lets you have more control over
+your models and helps you learn how to build, fix, and improve them. So,
+by working directly with Stan and its details, you’ll get better at
+making your own models and doing more customized Bayesian analyses later
+on. Furthermore, top-down tools can later be adopted with more
+confidence as you will understand what is happening under the proverbial
+hood.</p>
+</div>
+</div>
+</div>
 </section><section id="example-2-normal-model"><h2 class="section-heading">Example 2: normal model<a class="anchor" aria-label="anchor" href="#example-2-normal-model"></a>
 </h2>
 <hr class="half-width">
 <p>Next, let’s implement the normal model in Stan. First generate some
-data with unknown mean and standard deviation parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span></p>
-<div class="codewrapper sourceCode" id="cb16">
+data <span class="math inline">\(X\)</span> with unknown mean and
+standard deviation parameters <span class="math inline">\(\mu\)</span>
+and <span class="math inline">\(\sigma\)</span></p>
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1406,48 +1412,51 @@ data with unknown mean and standard deviation parameters <span class="math inlin
 <span>           mean <span class="op">=</span> <span class="va">unknown_mu</span>,</span>
 <span>           sd <span class="op">=</span> <span class="va">unknown_sigma</span><span class="op">)</span> </span></code></pre>
 </div>
-<p>Then the stan program, which the following piece of code stores as
-<code>normal_model</code>.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<p>The Stan program for the normal model is specified in the next code
+chunk. It introduces a new data type (vector) and leverages
+vectorization in the likelihood statement. Toward the end of the
+program, a generated quantities block is included, generating new data
+(X_tilde) to estimate what unseen data points might look like. This
+resulting distribution is referred to as the posterior predictive
+distribution. The way this works is by generating a random realization
+from the normal distribution for each posterior sample of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>}</span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>}</span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  </span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  <span class="co">// likelihood is vectorized!</span></span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>  X ~ normal(mu, sigma);</span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>  </span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>  </span>
-<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>}</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="co">// Likelihood is vectorized!</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  X ~ normal(mu, sigma);</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  </span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  sigma ~ inv_gamma(<span class="dv">1</span>, <span class="dv">1</span>);</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>}</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>  <span class="dt">real</span> X_tilde;</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>  X_tilde = normal_rng(mu, sigma);</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>}</span></code></pre>
 </div>
-<p>Notice that the likelihood in the model block is vectorized.
-Alternatively, one could write a for loop that samples each data point
-individually from the likelihood:
-<code>X[i] ~normal(\mu, \sigma)</code>. This would be an inefficient way
-of implementing the likelihood function and vectorization is
-recommended. However, when writing complex models it may be useful to
-initially write the model in an unvectorized format so debugging is
-easier.</p>
-<p>Let’s again fit the model on the data</p>
-<div class="codewrapper sourceCode" id="cb18">
+<p>Instead of vectorizing the likelihood, one could write a for loop
+with sampling statements for each individual data point, such as
+<code>X[i] ~ normal(\mu, \sigma)</code>. However, this approach would
+result in an inefficient implementation, and vectorization is generally
+recommended for improved performance. Nevertheless, when dealing with
+complex models, it may be useful to initially write the model in an
+unvectorized format to facilitate easier debugging.</p>
+<p>Let’s again fit the model to the data</p>
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Call Stan</span></span>
-<span><span class="va">normal_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">normal_model</span>, </span>
+<code class="sourceCode R"><span><span class="va">normal_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">normal_model</span>, </span>
 <span>                                  <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, X <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1474,9 +1483,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.006 seconds (Sampling)
-Chain 1:                0.013 seconds (Total)
+Chain 1:  Elapsed Time: 0.009 seconds (Warm-up)
+Chain 1:                0.007 seconds (Sampling)
+Chain 1:                0.016 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -1524,9 +1533,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 3:                0.005 seconds (Sampling)
-Chain 3:                0.012 seconds (Total)
+Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 3:                0.007 seconds (Sampling)
+Chain 3:                0.015 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -1549,13 +1558,15 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.009 seconds (Warm-up)
 Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.014 seconds (Total)
+Chain 4:                0.015 seconds (Total)
 Chain 4: </code></pre>
 </div>
-<p>and plot the posterior</p>
-<div class="codewrapper sourceCode" id="cb20">
+<p>Next, we’ll extract posterior samples and generate a plot for the
+joint, and marginal posteriors. The true unknown parameter values are
+included in the plots in red.</p>
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1585,9 +1596,22 @@ Chain 4: </code></pre>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/stan-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="example-3-linear-regression"><h2 class="section-heading">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
-</h2>
-<hr class="half-width"></section><section id="example-4-random-walk"><h2 class="section-heading">Example 4: Random walk<a class="anchor" aria-label="anchor" href="#example-4-random-walk"></a>
+<figure><img src="../fig/stan-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s also plot the posterior predictive distribution:</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PPD</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">normal_samples</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"X_tilde"</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>X_tilde <span class="op">=</span> <span class="va">.</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_PPD</span> <span class="op">&lt;-</span> <span class="va">PPD</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X_tilde</span><span class="op">)</span>, </span>
+<span>                 bins <span class="op">=</span> <span class="fl">40</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p_PPD</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/stan-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="example-3-linear-regression"><h2 class="section-heading">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
 </h2>
 <hr class="half-width">
 <div id="challenge3" class="callout challenge">
@@ -1600,6 +1624,9 @@ Chain 4: </code></pre>
 <div class="callout-content">
 <p>Write a Stan program for linear regression with one dependent
 variable.</p>
+<p>Generate data from the linear model and use the Stan program to
+estimate the intercept <span class="math inline">\(\alpha\)</span>,
+slope <span class="math inline">\(\beta\)</span> and noise term <span class="math inline">\(\sigma\)</span>.</p>
 </div>
 </div>
 </div>
@@ -1610,30 +1637,30 @@ variable.</p>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="dt">vector</span>[N] x; <span class="co">// x-values</span></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>}</span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="dt">real</span> beta;  <span class="co">// slope</span></span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>}</span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  </span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
-<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>  y ~ normal(alpha + beta * x, sigma);</span>
-<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>  </span>
-<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="dt">vector</span>[N] x; <span class="co">// x-values</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="dt">real</span> beta;  <span class="co">// slope</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>}</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>  </span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>  y ~ normal(alpha + beta * x, sigma);</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>  </span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>  sigma ~ inv_gamma(<span class="dv">1</span>, <span class="dv">1</span>);</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>}</span></code></pre>
 </div>
 </div>
 </div>
@@ -1647,7 +1674,7 @@ variable.</p>
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge4"></a>
 </h3>
 <div class="callout-content">
-<p>Write a Stan program for linear regression with <span class="math inline">\(M\)</span> dependent variables.</p>
+<p>Modify the program for linear regression so it facilitates <span class="math inline">\(M\)</span> dependent variables.</p>
 </div>
 </div>
 </div>
@@ -1658,51 +1685,34 @@ variable.</p>
 </button>
 <div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; M; <span class="co">// Number of features</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>  <span class="dt">matrix</span>[N, M] x; <span class="co">// x-values</span></span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
-<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>}</span>
-<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
-<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>  <span class="dt">vector</span>[M] beta;  <span class="co">// slopes</span></span>
-<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
-<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>}</span>
-<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a></span>
-<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>  </span>
-<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
-<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a>  y ~ normal(alpha + x * beta, sigma);</span>
-<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>  </span>
-<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N; <span class="co">// Sample size</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; M; <span class="co">// Number of features</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="dt">matrix</span>[N, M] x; <span class="co">// x-values</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="dt">vector</span>[N] y; <span class="co">// y-values</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>}</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="dt">real</span> alpha; <span class="co">// intercept</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="dt">vector</span>[M] beta;  <span class="co">// slopes</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; <span class="co">// noise</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>}</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  </span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  y ~ normal(alpha + x * beta, sigma);</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  </span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>  alpha ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>  beta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>  sigma ~ inv_gamma(<span class="dv">1</span>, <span class="dv">1</span>);</span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>}</span></code></pre>
 </div>
 </div>
-</div>
-</div>
-</div>
-<div id="callout1" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<div class="section level3 callout-title callout-inner">
-<h3 class="callout-title">Callout</h3>
-<div class="callout-content">
-<ul>
-<li><p>With Stan, you can fit model that have continuous parameters.
-Models with discrete parameters such as most classification models are
-typically impossible to fit, although some workarounds have been
-implemented.</p></li>
-<li><p>Bayesplot, rstanarm, brms</p></li>
-</ul>
 </div>
 </div>
 </div>
@@ -1715,7 +1725,11 @@ implemented.</p></li>
 </h3>
 <div class="callout-content">
 <ul>
-<li>Stan is…</li>
+<li>Stan is a powerful tool for generating posterior distribution
+samples.</li>
+<li>A Stan program is specified in a separate text file that consists of
+code blocks, with the data, parameters, and model blocks being the most
+crucial ones.</li>
 </ul>
 </div>
 </div>
