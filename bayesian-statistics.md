@@ -108,7 +108,7 @@ Specifying a probabilistic model can be simple, but a common bottleneck in Bayes
 
 Now, we'll implement the grid approximation for the handedness example in R.
 
-### Example: Handedness with the grid approximation
+### Example: Binomial model
 
 First, we'll define the data variables and the grid of parameter values
 
@@ -162,7 +162,8 @@ p1 <- ggplot(df_l,
        aes(x = theta, y = value, color = Function)) + 
   geom_point(size = 2) +
   geom_line(linewidth = 1) +
-  scale_color_grafify()
+  scale_color_grafify() + 
+  labs(x = expression(theta))
 
 p1
 ```
@@ -355,7 +356,8 @@ p_alpha_posterior <- alpha_posterior %>%
   ggplot() + 
   geom_line(aes(x = alpha, y = posterior), 
             color = posterior_color, 
-            linewidth = 1)
+            linewidth = 1) +
+  labs(x = expression(alpha))
 
 p_alpha_posterior
 ```
