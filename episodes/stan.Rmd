@@ -27,49 +27,54 @@ posterior_color <- "#56B4E9"
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - What is Stan?
-- How to efficiently generate samples from a posterior?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Install Stan and get it running
-- Learn how to specify models in Stan
-- How to generate samples with Stan
-- How to process samples generated with Stan 
+Learn how to:
+- implement statistical models in Stan
+- generate posterior samples with Stan
+- extract and process samples generated with Stan 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Stan is a programming language that can be used to generate samples from the posterior distribution. Stan does this by utilizing a Markov Chain Monte Carlo (MCMC) algorithm, and more specifically a variant of it called Hamiltonian Monte Carlo.
+Stan, a programming language, is as a tool for generating samples from the posterior distribution. It achieves this by applying a Markov Chain Monte Carlo (MCMC) algorithm, specifically a variant known as Hamiltonian Monte Carlo. In the next episode, we will delve into MCMC, but for now, our focus is on understanding how to execute it using Stan.
 
-The next episode is devoted to MCMC but in this one we will learn how to run it using Stan.
+To get started, follow the instructions provided at https://mc-stan.org/users/interfaces/ to install Stan on your local computer.
 
-Follow the instruction at https://mc-stan.org/users/interfaces/ to install Stan on your local computer. 
 
-While Stan makes model specifying a statistical model relatively easy and automates the sampling, the bottle-neck of fitting is not fully removed. In theory, MCMC methods will always converge to the target distribution (posterior for us). However, in practice, convergence issues can arise. Luckily‚ Stan produces warnings automatically which can be used in assessing model convergence. 
+::::::::::::::::::::::::::::::::::: callout
+
+- With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+
 
 
 ## Basic program structure
 
-A Stan program is structured into several blocks that define the statistical model. A Stan program typically (but not necessarily) will include the following blocks:
+A Stan program is organized into several blocks that collectively define the model. Typically, a Stan program includes at least the following blocks:
 
-1. Data block: This block is used to declare the input data fed into the model. It specifies the types and dimensions of the data variables used in the model.
+1. Data: This block is used to declare the input data provided to the model. It specifies the types and dimensions of the data variables incorporated into the model.
 
-2. Parameters block: In this block, the model's parameters are declared. 
+2. Parameters: In this block, the model parameters are declared. 
 
-3. Model block: The likelihood and prior distributions are included here in the form of sampling statements. 
+3. Model: The likelihood and prior distributions are included here through sampling statements. 
 
-It is recommended that you specify the Stan programs in a separate text files and call it from R (or other supported interface). The extension of the file must be `.stan`. 
+For best practices, it is recommended to specify Stan programs in separate text files with a .stan extension, which can then be called from R or other supported interfaces.
 
-## Example 1: Beta-binomial model
+
+### Example 1: Beta-binomial model
   
-The following Stan program specifies the Beta-binomial model. There program consists of data, parameters, and model blocks. 
+The following Stan program specifies the Beta-binomial model, and consists of data, parameters, and model blocks. 
 
-The data variables are the total sample size $N$ and the outcome of a binary variable (coin flip, handedness etc.). The declared data type in `int` for integer and the variables have a lower bound 1 and 0 for $N$ and $x$, respectively.  Notice that each line ends with a semicolon.
+The data variables are the total sample size $N$ and the outcome of a binary variable (coin flip, handedness etc.). The declared data type is `int` for integer, and the variables have a lower bound 1 and 0 for $N$ and $x$, respectively.  Notice that each line ends with a semicolon.
 
-In the parameters block we declare $\theta$, the probability for a success. Since this parameter is a probability, it is restricted between 0 and 1.
+In the parameters block we declare $\theta$, the probability for a success. Since this parameter is a probability, it is a real number restricted between 0 and 1.
 
-In the model block, the likelihood is specified with the sampling statement `x ~ binomial(N, theta)`. This line includes the binomial distribution $Bin(x | N, theta)$ in the target distribution. The prior could be set similarly but omitting it implies a uniform prior. 
+In the model block, the likelihood is specified with the sampling statement `x ~ binomial(N, theta)`. This line includes the binomial distribution $Bin(x | N, theta)$ in the target distribution. The prior is set similarly, and omitting the prior implies a uniform prior. 
   
 
 ```{stan output.var="binomial_model"}
@@ -87,26 +92,29 @@ In the model block, the likelihood is specified with the sampling statement `x ~
     // Likelihood
     x ~ binomial(N, theta);
     
-    // Uniform prior for theta
+    // Prior is uniform
   }
 ```
 
-Once the Stan program has been saved we need to compile it. In R, this is done by running
+Once the Stan program has been saved we need to compile it. In R, this is done by running the following line, where `"binomial_model.stan"` is the path of the program. 
 
 ```{r, eval=FALSE}
 binomial_model <- stan_model("binomial_model.stan")
 ```
 
-Once the program has been compiled, it can be used to generate the posterior samples with the function `sampling()`. The data needs to be defined as a list. While running, Stan prints progress.
+Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be defined as a list. 
 
 ```{r, message=FALSE}
 binom_data <- list(N = 50, x = 7)
 
-binom_samples <- sampling(binomial_model, binom_data)
+binom_samples <- sampling(object = binomial_model,
+                          data = binom_data)
 ```
 
 
-With the default setting Stan runs 4 MCMC chains with 2000 iterations (more about this in Episode 5 on MCMC). Running `binom_samples` prints a summary for the model parameter $p$  allowing quick reviewing of result. 
+With the default settings, Stan executes 4 MCMC chains, each with 2000 iterations (more about this in the next episode on MCMC). During the run, Stan provides progress information, aiding in estimating the running time, particularly for complex models or extensive datasets. In this case the sampling took only a fraction of a second. 
+
+When running `binom_samples`, a summary for the model parameter $p$ is printed, facilitating a quick review of the results.
 
 ```{r}
 binom_samples
@@ -118,7 +126,7 @@ This summary can also be accessed as a matrix with `summary(binom_samples)$summa
 Often, however, it is necessary to work with the individual samples. These can be extracted as follows:
 
 ```{r}
-p_samples <- extract(binom_samples, "theta")[["theta"]]
+theta_samples <- extract(binom_samples, "theta")[["theta"]]
 ```
 
 Now we can use the methods presented in the previous Episode to compute posterior summaries, credible intervals and to generate figures. 
@@ -126,7 +134,7 @@ Now we can use the methods presented in the previous Episode to compute posterio
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-Compute the 95% credible intervals for the samples drawn with Stan. What is the probability that $theta \in (0.05, 0.15)$? Plot a histogram of the posterior samples. 
+Compute the 95% credible intervals for the samples drawn with Stan. What is the probability that $\theta \in (0.05, 0.15)$? Plot a histogram of the posterior samples. 
 
 
 ::::::::::::::::::::: solution
@@ -162,7 +170,7 @@ Can you modify the Stan program further so that you can set the hyperparameters 
 
 ::::::::::::::::::::: solution
 
-If the data block is modified so that it declares the hyperparameters as data (e.g. `real<lower=0> alpha;`), it enables setting the hyperparameter values as part of data. This way hyperparameters can be changed without modifying the Stan file. 
+If the data block is modified so that it declares the hyperparameters as data (e.g. `real<lower=0> alpha;`), it enables setting the hyperparameter values as part of data. This makes it possible to change the hyperparameters without modifying the Stan file. 
 
 
 ::::::::::::::::::::::::::::::
@@ -171,39 +179,27 @@ If the data block is modified so that it declares the hyperparameters as data (e
 
 ## Additional Stan blocks
 
-Functions
-For user-defined functions
-Must be the first block!
+In addition the data, parameters, and model blocks there are additional blocks that can be included in the program. 
 
-Transformed data
-Transformations of the data variables
+1. Functions: For user-defined functions. This block must be the first in the Stan program. It allows users to define custom functions.
 
-Transformed parameters
-Transformations of the parameters
-Remember Jacobian in the model block!
+2. Transformed data: This block is used for transformations of the data variables. It is often employed to preprocess or modify the input data before it is used in the main model. Common tasks include standardization, scaling, or other data adjustments.
 
-Generated quantities
-Define quantities based on data and model parameters
-Produces a posterior
+3. Transformed parameters: In this block, transformations of the parameters are defined. If transformed parameters are used on the left-hand side of sampling statements in the model block, the Jacobian adjustment for the posterior density needs to be included in the model block as well. 
+
+4. Generated quantities: This block is used to define quantities based on both data and model parameters. These quantities are not part of the model but are useful for post-processing. 
+
+Examples of usage will be included in subsequent illustrations. 
 
 
-## Stan shortcuts
+::::::::::::::::::::::::::::::::::: callout
 
-- Modeling: rstanarm, brms; Plotting: bayesplot; Summaries and convergence: ShinyStan
-- Syntax similar to standard R 
-  - Linear model: fit <- stan_glm(y ~ x, data = df, family = gaussian)
-
-
-We will not use these!
-We will learn to	
-Write Stan programs from scratch → flexibility
-Access and manipulate the output
-Generate visualization
-
+There are tools like Bayesplot, rstanarm, and brms built on top of Stan that make it easier to use many common statistical models and tools for analyzing and visualizing results. However, we won't use these much in this course. The idea is that learning Stan from the basics helps you understand Bayesian modeling better. It lets you have more control over your models and helps you learn how to build, fix, and improve them. So, by working directly with Stan and its details, you'll get better at making your own models and doing more customized Bayesian analyses later on. Furthermore, top-down tools can later be adopted with more confidence as you will understand what is happening under the proverbial hood. 
+:::::::::::::::::::::::::::::::::::::::::::
 
 ## Example 2: normal model
 
-Next, let's implement the normal model in Stan. First generate some data with unknown mean and standard deviation parameters $\mu$ and $\sigma$
+Next, let's implement the normal model in Stan. First generate some data $X$ with unknown mean and standard deviation parameters $\mu$ and $\sigma$
 
 ```{r}
 # Sample size
@@ -220,49 +216,45 @@ X <- rnorm(n = N,
 ```
 
 
-Then the stan program, which the following piece of code stores as `normal_model`.
+The Stan program for the normal model is specified in the next code chunk. It introduces a new data type (vector) and leverages vectorization in the likelihood statement. Toward the end of the program, a generated quantities block is included, generating new data (X_tilde) to estimate what unseen data points might look like. This resulting distribution is referred to as the posterior predictive distribution. The way this works is by generating a random realization from the normal distribution for each posterior sample of $\mu$ and $\sigma$.
+
+
 
 ```{stan output.var="normal_model"}
-
 data {
   int<lower=0> N;
   vector[N] X;
 }
-
 parameters {
   real mu;
   real<lower=0> sigma;
 }
-
 model {
-  
-  // likelihood is vectorized!
+  // Likelihood is vectorized!
   X ~ normal(mu, sigma);
   
   // Priors
   mu ~ normal(0, 1);
-  sigma ~ gamma(2, 1);
-  
+  sigma ~ inv_gamma(1, 1);
 }
-
-
+generated quantities {
+  real X_tilde;
+  X_tilde = normal_rng(mu, sigma);
+}
 ```
 
 
-Notice that the likelihood in the model block is vectorized. Alternatively, one could write a for loop that samples each data point individually from the likelihood: `X[i] ~normal(\mu, \sigma)`. This would be an inefficient way of implementing the likelihood function and vectorization is recommended. However, when writing complex models it may be useful to initially write the model in an unvectorized format so debugging is easier.  
+Instead of vectorizing the likelihood, one could write a for loop with sampling statements for each individual data point, such as `X[i] ~ normal(\mu, \sigma)`. However, this approach would result in an inefficient implementation, and vectorization is generally recommended for improved performance. Nevertheless, when dealing with complex models, it may be useful to initially write the model in an unvectorized format to facilitate easier debugging.
 
-Let's again fit the model on the data 
+Let's again fit the model to the data 
 
 ```{r, message=FALSE}
-
-# Call Stan
 normal_samples <- rstan::sampling(normal_model, 
                                   list(N = N, X = X))
-
 ```
 
 
- and plot the posterior
+Next, we'll extract posterior samples and generate a plot for the joint, and marginal posteriors. The true unknown parameter values are included in the plots in red. 
 ```{r}
 # Extract parameter samples
 par_samples <- extract(normal_samples, c("mu", "sigma")) %>% 
@@ -292,14 +284,29 @@ print(p)
 ```
 
 
+Let's also plot the posterior predictive distribution: 
+
+```{r}
+PPD <- extract(normal_samples, c("X_tilde"))[[1]] %>% 
+  data.frame(X_tilde = . )
+
+p_PPD <- PPD %>% 
+  ggplot() + 
+  geom_histogram(aes(x = X_tilde), 
+                 bins = 40, fill = posterior_color)
+
+print(p_PPD)
+```
+
+
+
 ## Example 3: Linear regression
-## Example 4: Random walk
-
-
 
 :::::::::::::::::::::::::::::::::::: challenge
 
 Write a Stan program for linear regression with one dependent variable. 
+
+Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$ and noise term $\sigma$.
 
 ::::::::::::::::::::: solution
 
@@ -323,7 +330,7 @@ model {
   // Priors
   alpha ~ normal(0, 1);
   beta ~ normal(0, 1);
-  sigma ~ gamma(2, 1);
+  sigma ~ inv_gamma(1, 1);
 }
 
 ```
@@ -336,7 +343,7 @@ model {
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-Write a Stan program for linear regression with $M$ dependent variables. 
+Modify the program for linear regression so it facilitates $M$ dependent variables. 
 
 ::::::::::::::::::::: solution
 
@@ -362,9 +369,8 @@ model {
   // Priors
   alpha ~ normal(0, 1);
   beta ~ normal(0, 1);
-  sigma ~ gamma(2, 1);
+  sigma ~ inv_gamma(1, 1);
 }
-
 
 ```
 
@@ -384,25 +390,12 @@ model {
 
 
 
-
-
-
-::::::::::::::::::::::::::::::::::: callout
-
-- With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
-
-- Bayesplot, rstanarm, brms
-
-:::::::::::::::::::::::::::::::::::::::::::
-
-
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Stan is...
+- Stan is a powerful tool for generating posterior distribution samples. 
+- A Stan program is specified in a separate text file that consists of code blocks, with the data, parameters, and model blocks being the most crucial ones.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-
 
 
 
