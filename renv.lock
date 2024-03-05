@@ -539,7 +539,7 @@
       "Package": "curl",
       "Version": "5.2.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "carpentries",
       "Requirements": [
         "R"
       ],
