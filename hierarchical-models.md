@@ -115,28 +115,17 @@ height_women10
 ```
 
 ```{.output}
-                            Country   Sex Mean.height
-1                         Argentina Girls    161.2204
-2                  French Polynesia Girls    166.5187
-3                            Greece Girls    165.8131
-4                             India Girls    155.1782
-5                              Iraq Girls    158.7487
-6                             Malta Girls    162.9505
-7  Micronesia (Federated States of) Girls    159.6585
-8                            Poland Girls    165.7761
-9                      Saudi Arabia Girls    158.8377
-10                     Turkmenistan Girls    162.8271
-   Mean.height.standard.error
-1                   0.6207879
-2                   1.0898402
-3                   0.7586989
-4                   0.3209988
-5                   1.0298655
-6                   3.7687254
-7                   1.1282196
-8                   0.6035404
-9                   0.7242448
-10                  0.7846984
+                    Country   Sex Mean.height Mean.height.standard.error
+1    Bosnia and Herzegovina Girls    167.4704                  1.2545376
+2  Central African Republic Girls    159.6510                  1.5441872
+3              Cook Islands Girls    167.3086                  1.0003661
+4                    Gambia Girls    161.7282                  0.9603018
+5                   Lebanon Girls    163.6705                  0.8815132
+6                      Niue Girls    167.0323                  1.3099410
+7                    Panama Girls    158.1865                  0.9293961
+8                    Poland Girls    165.7761                  0.6035404
+9     Saint Kitts and Nevis Girls    162.7824                  1.3227775
+10     Syrian Arab Republic Girls    159.3795                  4.4451877
 ```
 
 
