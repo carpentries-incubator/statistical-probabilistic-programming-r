@@ -46,7 +46,7 @@ To get started, follow the instructions provided at https://mc-stan.org/users/in
 
 ::::::::::::::::::::::::::::::::::: callout
 
-- With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
+With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
 
 :::::::::::::::::::::::::::::::::::::::::::
 
