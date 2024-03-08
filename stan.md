@@ -31,7 +31,7 @@ To get started, follow the instructions provided at https://mc-stan.org/users/in
 
 ::::::::::::::::::::::::::::::::::: callout
 
-- With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
+With Stan, you can fit model that have continuous parameters. Models with discrete parameters such as most classification models are typically impossible to fit, although some workarounds have been implemented. 
 
 :::::::::::::::::::::::::::::::::::::::::::
 
@@ -122,14 +122,14 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 1:                0.004 seconds (Sampling)
-Chain 1:                0.008 seconds (Total)
+Chain 1:                0.003 seconds (Sampling)
+Chain 1:                0.007 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -147,8 +147,8 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
 Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.004 seconds (Sampling)
+Chain 2:                0.008 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -218,10 +218,10 @@ Inference for Stan model: anon_model.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1592    1
-lp__  -22.84    0.02 0.71 -24.78 -23.01 -22.55 -22.38 -22.33  1745    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1367    1
+lp__  -22.87    0.02 0.75 -25.05 -23.04 -22.56 -22.38 -22.33  1464    1
 
-Samples were drawn using NUTS(diag_e) at Tue Mar  5 00:27:40 2024.
+Samples were drawn using NUTS(diag_e) at Fri Mar  8 10:26:06 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -388,8 +388,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.006 seconds (Sampling)
-Chain 1:                0.013 seconds (Total)
+Chain 1:                0.007 seconds (Sampling)
+Chain 1:                0.014 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -412,9 +412,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
 Chain 2:                0.007 seconds (Sampling)
-Chain 2:                0.015 seconds (Total)
+Chain 2:                0.014 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -437,8 +437,8 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 3:                0.007 seconds (Sampling)
+Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 3:                0.006 seconds (Sampling)
 Chain 3:                0.014 seconds (Total)
 Chain 3: 
 
@@ -463,8 +463,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.014 seconds (Total)
+Chain 4:                0.007 seconds (Sampling)
+Chain 4:                0.015 seconds (Total)
 Chain 4: 
 ```
 
