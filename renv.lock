@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.3",
     "Repositories": [
       {
         "Name": "carpentries",
@@ -1411,7 +1411,7 @@
       "Package": "openssl",
       "Version": "2.1.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "carpentries",
       "Requirements": [
         "askpass"
       ],
@@ -1870,7 +1870,7 @@
       "Package": "stringi",
       "Version": "1.8.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "carpentries",
       "Requirements": [
         "R",
         "stats",
@@ -1921,14 +1921,14 @@
     },
     "systemfonts": {
       "Package": "systemfonts",
-      "Version": "1.0.5",
+      "Version": "1.0.6",
       "Source": "Repository",
       "Repository": "carpentries",
       "Requirements": [
         "R",
         "cpp11"
       ],
-      "Hash": "15b594369e70b975ba9f064295983499"
+      "Hash": "6d538cff441f0f1f36db2209ac7495ac"
     },
     "testthat": {
       "Package": "testthat",

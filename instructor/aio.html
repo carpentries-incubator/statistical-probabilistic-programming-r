@@ -344,7 +344,7 @@
         
 <section id="aio-setup"><p>Content from <a href="setup.html">Setup</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/setup.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -385,7 +385,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Windows</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Use PuTTY</p>
 </div>
@@ -397,7 +397,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">MacOS</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Use Terminal.app</p>
 </div>
@@ -409,7 +409,7 @@ e.g. online setup) in the solutions blocks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Linux</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Use Terminal</p>
 </div>
@@ -422,7 +422,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -994,7 +994,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -1041,12 +1041,10 @@ your local computer.</p>
 <div class="section level3 callout-title callout-inner">
 <h3 class="callout-title">Callout</h3>
 <div class="callout-content">
-<ul>
-<li>With Stan, you can fit model that have continuous parameters. Models
+<p>With Stan, you can fit model that have continuous parameters. Models
 with discrete parameters such as most classification models are
 typically impossible to fit, although some workarounds have been
-implemented.</li>
-</ul>
+implemented.</p>
 </div>
 </div>
 </div>
@@ -1151,14 +1149,14 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 1:                0.004 seconds (Sampling)
-Chain 1:                0.008 seconds (Total)
+Chain 1:                0.003 seconds (Sampling)
+Chain 1:                0.007 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -1176,8 +1174,8 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
 Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.004 seconds (Sampling)
+Chain 2:                0.008 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1252,10 +1250,10 @@ facilitating a quick review of the results.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1592    1
-lp__  -22.84    0.02 0.71 -24.78 -23.01 -22.55 -22.38 -22.33  1745    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1367    1
+lp__  -22.87    0.02 0.75 -25.05 -23.04 -22.56 -22.38 -22.33  1464    1
 
-Samples were drawn using NUTS(diag_e) at Tue Mar  5 00:27:40 2024.
+Samples were drawn using NUTS(diag_e) at Fri Mar  8 10:26:06 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1292,7 +1290,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1334,7 +1332,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
@@ -1484,8 +1482,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.006 seconds (Sampling)
-Chain 1:                0.013 seconds (Total)
+Chain 1:                0.007 seconds (Sampling)
+Chain 1:                0.014 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -1508,9 +1506,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
 Chain 2:                0.007 seconds (Sampling)
-Chain 2:                0.015 seconds (Total)
+Chain 2:                0.014 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1533,8 +1531,8 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 3:                0.007 seconds (Sampling)
+Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 3:                0.006 seconds (Sampling)
 Chain 3:                0.014 seconds (Total)
 Chain 3: 
 
@@ -1559,8 +1557,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.014 seconds (Total)
+Chain 4:                0.007 seconds (Sampling)
+Chain 4:                0.015 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>Next, we’ll extract posterior samples and generate a plot for the
@@ -1635,7 +1633,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Show me the solution</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1683,7 +1681,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1762,7 +1760,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">MCMC</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -1777,7 +1775,7 @@ any links that you are not going to use.
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>What is MCMC?</li>
+<li>How can the posterior distribution be sampled?</li>
 </ul>
 </div>
 </div>
@@ -1787,43 +1785,41 @@ any links that you are not going to use.
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li><p>Idea behind MCMC</p></li>
-<li>
-<p>Learn how to</p>
-<ul>
-<li>assess convergence</li>
-<li>implement MCMC</li>
-</ul>
-</li>
+<li>Learn the basic idea of the Metropolis-Hasting algorithm</li>
+<li>Know how to assess MCMC convergence</li>
+<li>Be able to implement a random walk Metropolis-Hasting algorithm</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>Computing the posterior analytically poses an insurmountable
-challenge in the general case. Even if we were aware of the analytical
-form, marginalizing it to recover posteriors for the individual model
-parameters would still be difficult. In Episode 3, we saw that drawing
-conclusions about the inference could be achieved relatively easily by
-working on samples from the posterior distribution. However, obtaining
-such samples from the posterior distribution is a non-trivial task,
-unless the analytical posterior is known. In this episode, we will delve
-into Markov chain Monte Carlo methods (MCMC) that are the most
-extensively employed solution for generating these samples.</p>
+<p>In the general case, computing the posterior distribution
+analytically for a probabilistic model poses an insurmountable
+challenge. Moreover, even if the analytical form were available,
+marginalizing it could still be difficult. For these reasons,
+approximation methods need to be relied upon. In Episode 2, we saw that
+drawing conclusions about the inference could be achieved effortlessly
+by working with samples drawn from the posterior distribution. The topic
+of this episode, Markov chain Monte Carlo (MCMC) methods, is a means for
+generating such samples and the most extensively employed solution for
+fitting probabilistic models.</p>
 <section id="metropolis-hastings-algorithm"><h2 class="section-heading">Metropolis-Hastings algorithm<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
 </h2>
 <hr class="half-width">
 <p>MCMC methods draw samples from the posterior distribution by
 constructing sequences (chains) of values in the parameter space that
 ultimately converge to the posterior. While there are other variants of
-MCMC, on this course we will mainly focus on the Metropolis-Hasting
-algorithm outlined below</p>
+MCMC, on this course we will mainly focus on the Metropolis-Hasting (MH)
+algorithm outlined below. As this algorithm is ran long enough,
+convergence to posterior (or to other specified target density) is
+guaranteed and eventually the samples will start approximating the
+posterior distribution.</p>
 <p>A chain starts at some initial value <span class="math inline">\(\theta^{0}\)</span>, which can be random or based
-on some more informed criterion. The only precondition is that <span class="math inline">\(p(\theta^{0} | X) &gt; 0\)</span>. Then a
-transition distribution <span class="math inline">\(T_i\)</span> is used
-to generate a proposal for the subsequent value. An often-used solution
-is the normal distribution centered at the current value, <span class="math inline">\(\theta^* \sim N(\theta^{i}, \sigma^2)\)</span>.
+on some more informed criterion. The only precondition is that <span class="math inline">\(p(\theta^{0} | X) &gt; 0\)</span>. A transition
+distribution <span class="math inline">\(T_i\)</span> is used to
+generate a proposal for the subsequent value. An often-used solution is
+the normal distribution centered at the current value, <span class="math inline">\(\theta^* \sim N(\theta^{i}, \sigma^2)\)</span>.
 This is where the term “Markov chain” comes from, each element is
 generated based on only the previous one.</p>
 <p>Next, the generated proposal <span class="math inline">\(\theta^*\)</span> is either accepted or rejected.
@@ -1834,63 +1830,57 @@ proposals towards higher posterior densities should be favored over
 proposals toward low density areas. The solution is to compute the
 ratio</p>
 <p><span class="math display">\[r = \frac{p(\theta^* | X) / T_i(\theta^*
-| \theta^{i})}{p(\theta^i | X) / T_i(\theta^{i} | \theta^{*})}.\]</span>
-In situations where the transition density is symmetric, such as with
+| \theta^{i})}{p(\theta^i | X) / T_i(\theta^{i} | \theta^{*})},\]</span>
+and use is as the probability to move to the proposed value. In other
+words, the next element in the chain is <span class="math inline">\(\theta^{i+1} = \theta^*\)</span> with probability
+<span class="math inline">\(\max(r, 1)\)</span>, and with probability
+<span class="math inline">\(1-r\)</span>, the proposal is rejected and
+the chain stays at the current value, <span class="math inline">\(\theta^{i+1} = \theta^{i}.\)</span> This approach
+induces directional randomness in the chain; proposals towards higher
+density areas are generally accepted but transitions away from it are
+also possible.</p>
+<p>In situations where the transition density is symmetric, such as with
 the normal distribution, <span class="math inline">\(r\)</span> reduces
-simply to the ratio of the posterior values.</p>
-<p>The next element in the chain is then chosen: with probability <span class="math inline">\(r\)</span> the chain moves to the proposal, <span class="math inline">\(\theta^{i+1} = \theta^*\)</span> and with
-probability <span class="math inline">\(1-r\)</span> stays at the
-current value, <span class="math inline">\(\theta^{i+1} =
-\theta^{i}.\)</span></p>
-<p>As the algorithm is ran long enough, convergence is guaranteed and
-eventually the samples will start approximating the posterior
-distribution.</p>
-</section><section id="example-banana-distribution"><h2 class="section-heading">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
-</h2>
-<hr class="half-width">
-<p>Let’s use the Metropolis-Hasting algorithm to generate samples from
-the posterior of the following statistical model:</p>
+simply to the ratio of the posterior values, and all proposals toward
+higher posterior density areas are accepted.</p>
+<div class="section level3">
+<h3 id="example-banana-distribution">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
+</h3>
+<p>Let’s implement the MH algorithm and use it to generate posterior
+samples of the following statistical model:</p>
 <p><span class="math display">\[X \sim N(\theta_1 + \theta_2^2, 1) \\
 \theta_1, \theta_2 \sim N(0, 1),\]</span></p>
-<p>Data:</p>
+<div class="section level4">
+<h4 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a>
+</h4>
+<p>Let’s begin by writing some helper functions that carry out the
+incremental steps of the MH algorithm.</p>
+<p>First, we need to be able to generate the proposals. Let’s use the
+multivariate (2D) normal with diagonal covariance scaled by a scalar
+<code>jump_scale</code>.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">3.78</span>, <span class="fl">2.76</span>, <span class="fl">2.84</span>, <span class="fl">2.92</span>, <span class="fl">1.3</span>, <span class="fl">3.93</span>, <span class="fl">3.69</span>, <span class="fl">2.28</span>, <span class="fl">2.81</span>, <span class="fl">0.71</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">generate_proposal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars_now</span>, <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Number of parameters</span></span>
+<span>  <span class="va">my_n</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">pars_now</span><span class="op">)</span></span>
+<span>  <span class="co"># Random draw from multivariate normal</span></span>
+<span>  <span class="va">theta_star</span> <span class="op">&lt;-</span> <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">1</span>,</span>
+<span>                                 mean <span class="op">=</span> <span class="va">pars_now</span>,</span>
+<span>                                 sigma <span class="op">=</span> <span class="va">jump_scale</span><span class="op">*</span><span class="fu">diag</span><span class="op">(</span><span class="va">my_n</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw">return</span><span class="op">(</span><span class="va">theta_star</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 </div>
-<p>Let’s implement a Metropolis-Hastings sampler for the banana
-posterior.</p>
-<div class="section level3">
-<h3 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a>
-</h3>
-<p>Here, we’ll write some functions that take care of the different
-steps of the MH-algorithm.</p>
-<p>The proposal distribution is the multivariate (2D) normal with
-diagonal covariance scaled by a scalar <code>jump_scale</code>. This
-choice amount to the random walk MH.</p>
+<p>Running MH also requires computing the (unnormalized) posterior
+density at the proposed parameter values. This functions returns the log
+posterior value at point <code>pars</code>. The density is computed on
+log scale to avoid issues with numerical precision.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Proposal generator: multivariate Normal with covariance = jump_scale*diagonal</span></span>
-<span><span class="va">generate_proposal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars_now</span>, <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="va">my_n</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">pars_now</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">1</span>,</span>
-<span>                   mean <span class="op">=</span> <span class="va">pars_now</span>,</span>
-<span>                   sigma <span class="op">=</span> <span class="va">jump_scale</span><span class="op">*</span><span class="fu">diag</span><span class="op">(</span><span class="va">my_n</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre>
-</div>
-<p>This functions returns the log unnormalized posterior value at point
-<code>pars</code>.</p>
-<div class="codewrapper sourceCode" id="cb3">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Compute target distribution P(theta = pars).</span></span>
-<span><span class="va">get_log_target_value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">get_log_target_value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co"># log(likelihood)</span></span>
 <span>  <span class="fu">sum</span><span class="op">(</span></span>
@@ -1906,39 +1896,36 @@ choice amount to the random walk MH.</p>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>This function computes the ratio used to determine whether or not the
-proposal is accepted.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<p>Then, we’ll write a function that computes the acceptance ratio <span class="math inline">\(r\)</span>. Since the proposal is symmetric, the
+expression reduces to the ratio of the posterior densities of the
+proposed and current parameter values. Notice that a ratio on a log
+scale is equal to the difference of logarithms.</p>
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute ratio</span></span>
 <span><span class="va">get_ratio</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_now</span>, <span class="va">pars_proposal</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="co"># Proposal distribution is symmetric: </span></span>
-<span>  <span class="co"># N(theta_{i} | theta_{i+1}) = N(theta_{i+1} | theta_{i}),</span></span>
-<span>  <span class="co"># so they cancel out!</span></span>
-<span>  </span>
 <span>  <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">exp</span><span class="op">(</span></span>
 <span>    <span class="fu">get_log_target_value</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_proposal</span><span class="op">)</span> <span class="op">-</span> </span>
 <span>      <span class="fu">get_log_target_value</span><span class="op">(</span><span class="va">X</span>, <span class="va">pars_now</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">return</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
-<span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<p>This function combines the helper functions above and loops over the
-chosen number of samples.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<p>Finally, we can wrap the helpers in a function that loops over the
+algorithm steps.</p>
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Sampler</span></span>
-<span><span class="va">MH_sampler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>,</span>
-<span>                       <span class="va">inits</span>,</span>
-<span>                       <span class="va">n_samples</span> <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>                       <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">MH_sampler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span>, <span class="co"># Data</span></span>
+<span>                       <span class="va">inits</span>, <span class="co"># Initial values</span></span>
+<span>                       <span class="va">n_samples</span> <span class="op">=</span> <span class="fl">1000</span>, <span class="co"># Number of iterations</span></span>
+<span>                       <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="co"># Proposal jump variance</span></span>
+<span>                       <span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  </span>
 <span>  <span class="co"># Matrix for samples</span></span>
@@ -1947,7 +1934,7 @@ chosen number of samples.</p>
 <span>  <span class="co"># Set initial values</span></span>
 <span>  <span class="va">pars</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">inits</span></span>
 <span></span>
-<span>  <span class="co"># Generate samples</span></span>
+<span>  <span class="co"># Generate samples </span></span>
 <span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">n_samples</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    </span>
 <span>    <span class="co"># Current parameters</span></span>
@@ -1973,9 +1960,7 @@ chosen number of samples.</p>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>      <span class="va">pars</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars_now</span></span>
 <span>    <span class="op">}</span></span>
-<span>  </span>
-<span>  </span>
-<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="co"># Into data frame</span></span>
 <span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
@@ -1985,21 +1970,33 @@ chosen number of samples.</p>
 <span><span class="op">}</span></span></code></pre>
 </div>
 </div>
-<div class="section level3">
-<h3 id="run-mh">Run MH<a class="anchor" aria-label="anchor" href="#run-mh"></a>
+<div class="section level4">
+<h4 id="run-mh">Run MH<a class="anchor" aria-label="anchor" href="#run-mh"></a>
+</h4>
+<p>Now we can try out our MH implementation. Let’s use the simulated
+data points stored in vector <code>X</code>:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<p>We’ll use 1000 samples with initial value (0, 5) and jump scale 0.01
-and lay the sample trajectory over the true posterior density.</p>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">3.78</span>, <span class="fl">2.76</span>, <span class="fl">2.84</span>, <span class="fl">2.92</span>, <span class="fl">1.3</span>, <span class="fl">3.93</span>, <span class="fl">3.69</span>, <span class="fl">2.28</span>, <span class="fl">2.81</span>, <span class="fl">0.71</span><span class="op">)</span></span></code></pre>
+</div>
+<p>We’ll generate 1000 samples with initial value (0, 5) and jump scale
+0.01. The trajectory of samples is plotted over the posterior density
+computed with the grid approximation.</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">12</span><span class="op">)</span></span>
-<span><span class="co"># Get samples</span></span>
+<span></span>
+<span><span class="co"># Draw samples</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">MH_sampler</span><span class="op">(</span><span class="va">X</span>,</span>
 <span>                      inits <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>,</span>
 <span>                      n_samples <span class="op">=</span> <span class="fl">1000</span>, </span>
 <span>                      jump_scale <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">colnames</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"theta1"</span>, <span class="st">"theta2"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add column for sample index</span></span>
 <span><span class="va">samples</span><span class="op">$</span><span class="va">sample</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span></span>
@@ -2007,182 +2004,27 @@ and lay the sample trajectory over the true posterior density.</p>
 <span><span class="co"># Plot joint posterior samples</span></span>
 <span><span class="va">p_MH1</span> <span class="op">&lt;-</span> <span class="va">p_grid</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span>,</span>
-<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X1</span>, y <span class="op">=</span> <span class="va">X2</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta1</span>, y <span class="op">=</span> <span class="va">theta2</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_MH1</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><em>Conclusions: —</em></p>
-</div>
-</section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
-</h2>
-<hr class="half-width">
-<p>Although converge is guaranteed in theory, it is not so in
-practice.</p>
-<p>Depending on random variations, these settings may cause the issues,
-including the following:</p>
-<ol style="list-style-type: decimal">
-<li><p>Incomplete exploration of the target distribution. This means
-that the sampler visits only some of the areas with posterior mass. This
-can lead to a biased approximation.</p></li>
-<li><p>Slow convergence. Initial values of the chain are far from most
-of the posterior mass, leading to bias.</p></li>
-<li><p>A large proportion of the proposals is rejected, leading to
-inefficiency.</p></li>
-<li><p>Samples are autocorrelated, meaning that consequtive samples are
-close to each other. Ideally the samples would be totally
-independent.</p></li>
-<li><p>Monitoring convergence with statistics, such as effective sample
-size, <span class="math inline">\(\hat{R}\)</span>, and divergent
-transitions (for Hamiltonian Monte Carlo).</p></li>
-<li><p>Looking at trace plots</p></li>
-<li><p>Information about the model. E.g. if you use known the posterior
-to the multimodal.</p></li>
-<li><p>Running time. If your sampler takes a long time, this
-<em>can</em> be a sign of an issue.</p></li>
-<li><p>Using Stan. Stan throws warnings automatically.</p></li>
-</ol>
-<p>The issues can be remedied with:</p>
-<ol style="list-style-type: decimal">
-<li><p>Running multiple long chains with distinct random initial
-values.</p></li>
-<li><p>Discarding an early proportion of the chain as warmup (burn-in).
-Stan uses 50% by default.</p></li>
-<li><p>Setting a good proposal distribution. This is easy said, but in
-practice not trivial at all.</p></li>
-</ol>
-<p>Like we saw above, unless the chains’ initial values are in high
-posterior density areas, the early chain samples will bias the target
-distribution estimate. For this reason, it is customary to discard a
-proportion of the chain as “warmup.” Often 50% is used and this is also
-the default in Stan.</p>
-<ul>
-<li>Sample autocorrelation, effective sample size
-<ul>
-<li>ideally, the samples would be independent</li>
-</ul>
-</li>
-<li>Mixing</li>
-<li><span class="math inline">\(\hat{R}\)</span></li>
-</ul>
-<p>Let’s plot the generated trajectories and the true parameter value.
-Here, the initial 50% of the chains are colored dim to illustrate the
-fact that convergence to the posterior distribution requires long enough
-chains.</p>
-<div class="codewrapper sourceCode" id="cb7">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>warmup <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"FALSE"</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,</span>
-<span>                    <span class="fu">rep</span><span class="op">(</span><span class="st">"TRUE"</span>, <span class="fu">nrow</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">p_traj</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span>,</span>
-<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu</span>, y <span class="op">=</span> <span class="va">sigma</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Post warmup samples</span></span>
-<span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu</span>, y <span class="op">=</span> <span class="va">sigma</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mu_true</span>, y <span class="op">=</span> <span class="va">sigma_true</span><span class="op">)</span>,</span>
-<span>             size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Red point = true value"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">print</span><span class="op">(</span><span class="va">p_traj</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `geom_path()`:
-! Problem while computing aesthetics.
-ℹ Error occurred in the 1st layer.
-Caused by error:
-! object 'mu' not found</code></pre>
-</div>
-<p>Next, we’ll make the trace plots, which are comprised of the chains
-of individual parameters. The warmup iterations are again colored
-dimmer. Trace plots can give quick visual information about the chains.
-When there are no converge issues, the trace plots should look like
-“hairy caterpillars,” with sample of each chain located around the same
-value. In this case everything look ok. A standard convergence metric is
-the <span class="math inline">\(\hat{R}\)</span> which compares the
-variances between chains and to the variance within each chain. We’ll
-omit the definition here but, generally, value <span class="math inline">\(\hat{R} \geq 1.1\)</span> are seen as a sign of
-convergence issues. However, with modern samplers such as Stan,
-thresholds closer to 1 are recommended (<a href="https://mc-stan.org/rstan/reference/Rhat.html" class="external-link uri">https://mc-stan.org/rstan/reference/Rhat.html</a>).</p>
-<p>Clearly convergence is reached fairly quickly after initialization,
-in some dozen iterations. Moreover, the chain autocorrelation low. This
-is desirable because it implies that the drawn samples are independent.
-Another popular convergence metric is the effective sample size. It
-quantifies the number of independent samples produced by the
-sampler.</p>
-<div class="codewrapper sourceCode" id="cb9">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Long --&gt; wide format</span></span>
-<span><span class="va">samples_w</span> <span class="op">&lt;-</span> <span class="va">samples</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fu">rep</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"parameter"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">chain</span>, <span class="va">warmup</span>, <span class="va">sample</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `mutate()` at tidyr/R/gather.R:84:3:
-ℹ In argument: `sample = rep(1:n_samples, 4)`.
-Caused by error:
-! object 'n_samples' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb11">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Trace plot</span></span>
-<span><span class="va">p_trace</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span>,</span>
-<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples_w</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">chain</span> <span class="op">~</span> <span class="va">parameter</span>,</span>
-<span>             scales <span class="op">=</span> <span class="st">"free"</span>,</span>
-<span>             ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">scale_color_grafify</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'samples_w' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'p_trace' not found</code></pre>
-</div>
-<p>Let’s compute the number of rejected proposals to get some idea about
-the efficiency of the algorithm. The less samples are rejected, the more
-efficient the sampler performs.</p>
-<div class="codewrapper sourceCode" id="cb15">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Proportion of post-warmup samples where the proposal was rejected</span></span>
-<span><span class="fu">sum</span><span class="op">(</span><span class="fu">table</span><span class="op">(</span><span class="va">samples</span> <span class="op">%&gt;%</span></span>
-<span>            <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>            <span class="fu">pull</span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n_chains</span><span class="op">*</span><span class="va">n_samples</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">warmup</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `pull()`:
-Caused by error:
-! object 'mu' not found</code></pre>
-</div>
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Looking at the figure, a few observations become evident. Firstly,
+despite the chosen initial value being moderately distant from the
+high-density areas of the posterior, the algorithm quickly converges to
+the target region. This rapid convergence is due to the fact that
+proposals toward higher density areas are favored, in fact they are
+always accepted when using normal density proposals. However, it’s
+important to note that such swift convergence is not guaranteed in all
+scenarios. In cases with a high number of model parameters, there’s an
+increased likelihood of the sampler taking ‘wrong’ directions, a
+phenomenon known as the curse of dimensionality. The sampler, before
+convergence, may introduce bias to the posterior approximation.</p>
+<p>Secondly, the posterior is not fully explored; no samples are
+generated from the lower mode in the figure. This highlights a crucial
+point: even if the sampler has converged, it doesn’t necessarily imply
+that the drawn samples provide a representative picture of the
+target.</p>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -2191,28 +2033,93 @@ Caused by error:
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
 </h3>
 <div class="callout-content">
-<p>Try different proposal distributions (e.g. 0.005, 0.5) standard
-deviations in the MCMC example above. How does this affect the inference
-and convergence? Why?</p>
+<p>Consider how you could address the two issues raised above:</p>
+<ol style="list-style-type: decimal">
+<li>Initial unconverged samples introduce a bias.</li>
+<li>The sampler may not have explored the target distribution
+properly.</li>
+</ol>
+<p>Try different proposal distributions variances in the MCMC example
+above by changing <code>jump_scale</code>. How does this affect the
+inference and convergence? Why?</p>
 </div>
 </div>
 </div>
-</section><div class="section level1">
-<h1 id="example-continued">Example continued<a class="anchor" aria-label="anchor" href="#example-continued"></a>
-</h1>
-<p>Here we’ll run 4 chains with 10000 samples each and discard the first
-50% of each chain as warmup. The jump scale is 0.1.</p>
-<div class="codewrapper sourceCode" id="cb17">
+</div>
+</div>
+</section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
+</h2>
+<hr class="half-width">
+<p>Although converge of the MCMC is guaranteed in theory, in practice,
+this is not always the case. Monitoring convergence is crucial whenever
+MCMC is utilized, to ensure that the recovered results are reliable.</p>
+<p>Depending on the used model, initial values, amount of data, among
+other things can cause convergence issues. Above, we mentioned two
+common complications and here we will list a few more, along with
+actions that can alleviate the issues.</p>
+<ol style="list-style-type: decimal">
+<li><p>Slow convergence. Initial values of the chain are far from most
+of the target mass, and early iteration bias the approximation. Another
+cause for slow convergence is that the proposals are not distinct enough
+from the current value, and the sampler moves too slowly.</p></li>
+<li><p>Incomplete exploration of the target distribution. This means
+that the sampler doesn’t spend enough time at all significant posterior
+areas.</p></li>
+<li><p>A large proportion of the proposals is rejected. When the
+proposal distribution generates proposals too far from the current
+value, the proposals are rejected and the sampler stands still for many
+iterations. This leads to inefficiency.</p></li>
+<li><p>Samples are autocorrelated, meaning that consecutive samples are
+close to each other. Ideally, we’d like to generate independent samples
+from the target. High sample autocorrelation can be caused by several
+factors, including the ones mentioned in the previous points.</p></li>
+</ol>
+<p>These issues can be remedied with:</p>
+<ol style="list-style-type: decimal">
+<li><p>Running multiple long chains with distinct or random initial
+values.</p></li>
+<li><p>Discarding an early proportion of the chain as warmup
+(burn-in).</p></li>
+<li><p>Setting a good proposal distribution. This is easy said, but in
+practice not trivial at all.</p></li>
+</ol>
+<p>It also important to somehow be able to monitor whether or not the
+sampler has converged. This can be done with statistics, such as
+<em>effective sample size</em> and <span class="math inline">\(\hat{R}\)</span>. Effective sample size estimates
+how many independent samples have been generated. Ideally, this number
+should be close to the total number of iterations the sampler has been
+ran. <span class="math inline">\(\hat{R}\)</span> on the other hand
+measures chain mixing, that is, how well the chains agree with each
+other. It is computed by comparing the variance within each chain to the
+total variance of all samples. Usually, values of <span class="math inline">\(\hat{R} &gt; 1.1\)</span> are considered as
+signaling convergence issues.</p>
+<p>Besides statistics, visually evaluation of the sample can be useful.
+<em>Trace plots</em> refer to graphs where the marginal posterior
+samples are plotted against sample number. Trace plots can be used to
+investigate convergence and mixing properties, and can reveal, for
+example, multimodality.</p>
+<p>In Stan, many of the above-mentioned points have been automatized. By
+default, Stan runs 4 chains with 2000 iterations each, and discards the
+initial 50% as warm-up. Moreover, it computes <span class="math inline">\(\hat{R}\)</span>, effective sample size, and other
+statistics and throws warnings in case or issues.</p>
+<div class="section level3">
+<h3 id="example-continued">Example continued<a class="anchor" aria-label="anchor" href="#example-continued"></a>
+</h3>
+<p>In light of the above information, let’s re-fit the model of the
+previous example. Now, we’ll run 4 chains with random initial values,
+10000 samples each, and discard the first 50% of each chain as warm-up.
+We’ll use 0.1 as the proposal variance.</p>
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Generate more chains</span></span>
+<code class="sourceCode R"><span><span class="co"># Number of chains</span></span>
 <span><span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span></span>
-<span><span class="co"># More samples</span></span>
+<span><span class="co"># Number of samples</span></span>
 <span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
 <span></span>
-<span><span class="co"># Consider first p% as warmup</span></span>
+<span><span class="co"># Consider first p% samples as warmup</span></span>
 <span><span class="va">warmup</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_chains</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -2236,7 +2143,9 @@ and convergence? Why?</p>
 <span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb18">
+<p>Now it’s evident that the sample trajectories explore the entire
+posterior distribution:</p>
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2254,8 +2163,8 @@ and convergence? Why?</p>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_joint_2</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/mcmc-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Trace plots</p>
-<div class="codewrapper sourceCode" id="cb19">
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s see what the trace plots look like.</p>
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2274,15 +2183,18 @@ and convergence? Why?</p>
 <span>                     value <span class="op">=</span> <span class="st">"value"</span>,</span>
 <span>                     <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"chain"</span>, <span class="st">"warmup"</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">parameter</span>, ncol <span class="op">=</span> <span class="va">n_chains</span>, </span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">parameter</span>,</span>
+<span>             ncol <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>             scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace_2</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/mcmc-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="section level2">
-<h2 id="hamiltonian-monte-carlo">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
+<figure><img src="../fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
+</div>
+</section><section id="hamiltonian-monte-carlo"><h2 class="section-heading">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
 </h2>
+<hr class="half-width">
 <p>Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings
 algorithm implemented in Stan. The defining feature is the elaborate
 scheme it uses to generate proposals. Briefly, the idea is to simulate
@@ -2300,7 +2212,7 @@ high curvature, the simulated particle dynamics can produce spurious
 transitions which do not represent the posterior accurately. Such
 transitions are called divergent and signal that the particular area of
 parameter space is not explored accurately. Stan provides information
-about divergent transitions.</p>
+about divergent transitions automatically.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -2310,37 +2222,28 @@ about divergent transitions.</p>
 </h3>
 <div class="callout-content">
 <ul>
-<li><p>MCMC is ….</p></li>
-<li>
-<p>Convergence should be monitored</p>
-<ul>
-<li>mixing: <span class="math inline">\(\hat{R}\)</span>
-</li>
-<li>divergent transitions</li>
-</ul>
-</li>
+<li>Markov chain Monte Carlo methods can be used to generate samples
+from a posterior distribution.</li>
+<li>MCMC convergence should always be monitored.</li>
 </ul>
 </div>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
+<hr class="half-width">
 <ul>
 <li><p>See interactive visualization of different MCMC algorithms: <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a></p></li>
-<li><p>Statistical Rethinking</p></li>
-<li><p>BDA3</p></li>
-<li><p>Bayes Rules!</p></li>
+<li><p>Bayesian Data Analysis (3rd ed.): Ch. 11-12</p></li>
+<li><p>Statistical Rethinking (2nd ed.): Ch. 9</p></li>
+<li><p>Bayes Rules!: Ch. 6-7</p></li>
 </ul>
 <!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- -->
-</div>
-</div></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical Models</a></p>
+ --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical Models</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -2501,17 +2404,28 @@ height of adult women measured in 2019.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                    Country   Sex Mean.height Mean.height.standard.error
-1    Bosnia and Herzegovina Girls    167.4704                  1.2545376
-2  Central African Republic Girls    159.6510                  1.5441872
-3              Cook Islands Girls    167.3086                  1.0003661
-4                    Gambia Girls    161.7282                  0.9603018
-5                   Lebanon Girls    163.6705                  0.8815132
-6                      Niue Girls    167.0323                  1.3099410
-7                    Panama Girls    158.1865                  0.9293961
-8                    Poland Girls    165.7761                  0.6035404
-9     Saint Kitts and Nevis Girls    162.7824                  1.3227775
-10     Syrian Arab Republic Girls    159.3795                  4.4451877</code></pre>
+<pre class="output" tabindex="0"><code>                            Country   Sex Mean.height
+1                           Algeria Girls    162.3472
+2                        Azerbaijan Girls    161.3749
+3                             Benin Girls    158.4004
+4                            Bhutan Girls    155.1526
+5            Bosnia and Herzegovina Girls    167.4704
+6                     Cote d'Ivoire Girls    158.6524
+7                  French Polynesia Girls    166.5187
+8                           Jamaica Girls    164.3193
+9  Micronesia (Federated States of) Girls    159.6585
+10            Sao Tome and Principe Girls    159.8105
+   Mean.height.standard.error
+1                   0.9525429
+2                   0.8882764
+3                   0.6171393
+4                   1.1308066
+5                   1.2545376
+6                   0.9254438
+7                   1.0898402
+8                   0.9400244
+9                   1.1282196
+10                  1.0950750</code></pre>
 </div>
 <div class="section level3">
 <h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a>
@@ -2886,7 +2800,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-model-critisism"><p>Content from <a href="model-critisism.html">Model checking</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-critisism.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3478,7 +3392,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-gaussian-processes"><p>Content from <a href="gaussian-processes.html">Gaussian processes</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/gaussian-processes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 61 minutes</p>
@@ -3677,7 +3591,7 @@ build.</p>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: There were 385 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre class="warning" tabindex="0"><code>Warning: There were 491 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="codewrapper">
@@ -3688,7 +3602,7 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 1.59, indicating chains have not mixed.
+<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 1.9, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat</code></pre>
 </div>
@@ -3760,7 +3674,7 @@ look like at the extremes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Uncertainty grows at locations away from the data points and starts
 to resemble the prior. Posterior far from the data would be centered
@@ -3924,7 +3838,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Other topics</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/other-topics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3974,7 +3888,7 @@ any links that you are not going to use.
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>… and a solution here</p>
 </div>
@@ -4009,7 +3923,7 @@ any links that you are not going to use.
 </div>
 </div></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2024-03-05 |
+<p>Last updated on 2024-03-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -4540,7 +4454,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.3" class="external-link">pegboard (0.7.3)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.4" class="external-link">pegboard (0.7.4)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -4562,9 +4476,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
-  "dateCreated": "2024-03-04",
-  "dateModified": "2024-03-05",
-  "datePublished": "2024-03-05"
+  "dateCreated": "2024-03-08",
+  "dateModified": "2024-03-08",
+  "datePublished": "2024-03-08"
 }
 
   </script><script>
