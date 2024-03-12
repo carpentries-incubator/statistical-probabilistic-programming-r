@@ -115,28 +115,17 @@ height_women10
 ```
 
 ```{.output}
-                            Country   Sex Mean.height
-1                           Algeria Girls    162.3472
-2                        Azerbaijan Girls    161.3749
-3                             Benin Girls    158.4004
-4                            Bhutan Girls    155.1526
-5            Bosnia and Herzegovina Girls    167.4704
-6                     Cote d'Ivoire Girls    158.6524
-7                  French Polynesia Girls    166.5187
-8                           Jamaica Girls    164.3193
-9  Micronesia (Federated States of) Girls    159.6585
-10            Sao Tome and Principe Girls    159.8105
-   Mean.height.standard.error
-1                   0.9525429
-2                   0.8882764
-3                   0.6171393
-4                   1.1308066
-5                   1.2545376
-6                   0.9254438
-7                   1.0898402
-8                   0.9400244
-9                   1.1282196
-10                  1.0950750
+                 Country   Sex Mean.height Mean.height.standard.error
+1         American Samoa Girls    167.5515                  1.7370975
+2                 Belize Girls    158.1201                  1.4026324
+3                Bolivia Girls    155.5752                  0.9389964
+4  China (Hong Kong SAR) Girls    160.6181                  1.1540006
+5                   Cuba Girls    160.1349                  0.9253287
+6               Dominica Girls    166.8885                  1.2966654
+7             Luxembourg Girls    165.0690                  1.3778094
+8                 Mexico Girls    157.9019                  0.5283058
+9                  Nauru Girls    157.8221                  0.9113909
+10                Zambia Girls    157.3152                  0.6805332
 ```
 
 
