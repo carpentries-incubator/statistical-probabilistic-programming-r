@@ -344,7 +344,7 @@
         
 <section id="aio-setup"><p>Content from <a href="setup.html">Setup</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/setup.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -422,7 +422,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -513,7 +513,7 @@ about the matter.</p>
   <h3 class="accordion-header" id="headingInstructor1">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div>Instructor Note</h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
@@ -719,7 +719,7 @@ example.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -894,7 +894,7 @@ the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</spa
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>No. Why?</p>
 </div>
@@ -994,7 +994,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -1038,8 +1038,9 @@ your local computer.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div class="section level3 callout-title callout-inner">
-<h3 class="callout-title">Callout</h3>
+<div class="callout-inner">
+<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
+</h3>
 <div class="callout-content">
 <p>With Stan, you can fit model that have continuous parameters. Models
 with discrete parameters such as most classification models are
@@ -1155,8 +1156,8 @@ Chain 1:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -1250,10 +1251,10 @@ facilitating a quick review of the results.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.15    0.00 0.05   0.07   0.12   0.15   0.19   0.26  1447    1
-lp__  -22.83    0.02 0.72 -24.92 -22.98 -22.56 -22.38 -22.33  1438    1
+theta   0.15    0.00 0.05   0.07   0.11   0.15   0.19   0.26  1321    1
+lp__  -22.85    0.02 0.69 -24.73 -23.04 -22.59 -22.39 -22.33  1454    1
 
-Samples were drawn using NUTS(diag_e) at Tue Mar 12 00:27:36 2024.
+Samples were drawn using NUTS(diag_e) at Tue Mar 19 00:29:48 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1290,7 +1291,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1332,7 +1333,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
@@ -1371,8 +1372,9 @@ of the model but are useful for post-processing.</p></li>
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div class="section level3 callout-title callout-inner">
-<h3 class="callout-title">Callout</h3>
+<div class="callout-inner">
+<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout2"></a>
+</h3>
 <div class="callout-content">
 <p>There are tools like Bayesplot, rstanarm, and brms built on top of
 Stan that make it easier to use many common statistical models and tools
@@ -1463,8 +1465,8 @@ unvectorized format to facilitate easier debugging.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 6e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -1481,15 +1483,15 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 1:                0.007 seconds (Sampling)
-Chain 1:                0.014 seconds (Total)
+Chain 1:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 1:                0.008 seconds (Sampling)
+Chain 1:                0.016 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 3e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -1507,8 +1509,8 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
 Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 2:                0.007 seconds (Sampling)
-Chain 2:                0.014 seconds (Total)
+Chain 2:                0.006 seconds (Sampling)
+Chain 2:                0.013 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1556,9 +1558,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 4:                0.007 seconds (Sampling)
-Chain 4:                0.014 seconds (Total)
+Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 4:                0.008 seconds (Sampling)
+Chain 4:                0.016 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>Next, we’ll extract posterior samples and generate a plot for the
@@ -1633,7 +1635,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Show me the solution</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1681,7 +1683,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1760,7 +1762,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">MCMC</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -2243,7 +2245,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical Models</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -2404,17 +2406,17 @@ height of adult women measured in 2019.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                 Country   Sex Mean.height Mean.height.standard.error
-1         American Samoa Girls    167.5515                  1.7370975
-2                 Belize Girls    158.1201                  1.4026324
-3                Bolivia Girls    155.5752                  0.9389964
-4  China (Hong Kong SAR) Girls    160.6181                  1.1540006
-5                   Cuba Girls    160.1349                  0.9253287
-6               Dominica Girls    166.8885                  1.2966654
-7             Luxembourg Girls    165.0690                  1.3778094
-8                 Mexico Girls    157.9019                  0.5283058
-9                  Nauru Girls    157.8221                  0.9113909
-10                Zambia Girls    157.3152                  0.6805332</code></pre>
+<pre class="output" tabindex="0"><code>      Country   Sex Mean.height Mean.height.standard.error
+1     Bahrain Girls    158.2908                  0.9403578
+2      Gambia Girls    161.7282                  0.9603018
+3     Grenada Girls    165.9887                  1.4713666
+4  Kazakhstan Girls    161.7446                  0.8071626
+5       Kenya Girls    159.4338                  0.6680202
+6     Lesotho Girls    156.7208                  0.7995027
+7      Poland Girls    165.7761                  0.6035404
+8    Portugal Girls    161.2271                  0.8050183
+9       Samoa Girls    163.8160                  1.0240736
+10   Slovenia Girls    167.1976                  0.2571058</code></pre>
 </div>
 <div class="section level3">
 <h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a>
@@ -2789,7 +2791,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-model-critisism"><p>Content from <a href="model-critisism.html">Model checking</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-critisism.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3381,7 +3383,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-gaussian-processes"><p>Content from <a href="gaussian-processes.html">Gaussian processes</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/gaussian-processes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 61 minutes</p>
@@ -3580,7 +3582,7 @@ build.</p>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: There were 315 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre class="warning" tabindex="0"><code>Warning: There were 397 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="codewrapper">
@@ -3591,7 +3593,7 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 2.12, indicating chains have not mixed.
+<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 2.11, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat</code></pre>
 </div>
@@ -3663,7 +3665,7 @@ look like at the extremes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Uncertainty grows at locations away from the data points and starts
 to resemble the prior. Posterior far from the data would be centered
@@ -3827,7 +3829,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Other topics</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/other-topics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3877,7 +3879,7 @@ any links that you are not going to use.
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>… and a solution here</p>
 </div>
@@ -3912,7 +3914,7 @@ any links that you are not going to use.
 </div>
 </div></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2024-03-12 |
+<p>Last updated on 2024-03-19 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -4443,7 +4445,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.4" class="external-link">pegboard (0.7.4)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.3" class="external-link">sandpaper (0.16.3)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.4" class="external-link">pegboard (0.7.4)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -4466,8 +4468,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "dateCreated": "2024-03-08",
-  "dateModified": "2024-03-12",
-  "datePublished": "2024-03-12"
+  "dateModified": "2024-03-19",
+  "datePublished": "2024-03-19"
 }
 
   </script><script>
