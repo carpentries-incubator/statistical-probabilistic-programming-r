@@ -155,7 +155,7 @@ gp_samples <- rstan::sampling(gp_model,
 ```
 
 ```{.warning}
-Warning: There were 315 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+Warning: There were 397 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
@@ -164,7 +164,7 @@ Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ```{.warning}
-Warning: The largest R-hat is 2.12, indicating chains have not mixed.
+Warning: The largest R-hat is 2.11, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat
 ```

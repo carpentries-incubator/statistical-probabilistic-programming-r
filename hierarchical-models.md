@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-                 Country   Sex Mean.height Mean.height.standard.error
-1         American Samoa Girls    167.5515                  1.7370975
-2                 Belize Girls    158.1201                  1.4026324
-3                Bolivia Girls    155.5752                  0.9389964
-4  China (Hong Kong SAR) Girls    160.6181                  1.1540006
-5                   Cuba Girls    160.1349                  0.9253287
-6               Dominica Girls    166.8885                  1.2966654
-7             Luxembourg Girls    165.0690                  1.3778094
-8                 Mexico Girls    157.9019                  0.5283058
-9                  Nauru Girls    157.8221                  0.9113909
-10                Zambia Girls    157.3152                  0.6805332
+      Country   Sex Mean.height Mean.height.standard.error
+1     Bahrain Girls    158.2908                  0.9403578
+2      Gambia Girls    161.7282                  0.9603018
+3     Grenada Girls    165.9887                  1.4713666
+4  Kazakhstan Girls    161.7446                  0.8071626
+5       Kenya Girls    159.4338                  0.6680202
+6     Lesotho Girls    156.7208                  0.7995027
+7      Poland Girls    165.7761                  0.6035404
+8    Portugal Girls    161.2271                  0.8050183
+9       Samoa Girls    163.8160                  1.0240736
+10   Slovenia Girls    167.1976                  0.2571058
 ```
 
 
