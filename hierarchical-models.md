@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-      Country   Sex Mean.height Mean.height.standard.error
-1     Bahrain Girls    158.2908                  0.9403578
-2      Gambia Girls    161.7282                  0.9603018
-3     Grenada Girls    165.9887                  1.4713666
-4  Kazakhstan Girls    161.7446                  0.8071626
-5       Kenya Girls    159.4338                  0.6680202
-6     Lesotho Girls    156.7208                  0.7995027
-7      Poland Girls    165.7761                  0.6035404
-8    Portugal Girls    161.2271                  0.8050183
-9       Samoa Girls    163.8160                  1.0240736
-10   Slovenia Girls    167.1976                  0.2571058
+                 Country   Sex Mean.height Mean.height.standard.error
+1                Belarus Girls    166.9286                  1.1256560
+2     Dominican Republic Girls    161.2094                  0.8238181
+3                 France Girls    164.4886                  0.7704597
+4       French Polynesia Girls    166.5187                  1.0898402
+5                  Malta Girls    162.9505                  3.7687254
+6            Netherlands Girls    170.3612                  1.0355356
+7                  Niger Girls    159.8149                  0.9080398
+8  Saint Kitts and Nevis Girls    162.7824                  1.3227775
+9              Swaziland Girls    158.9214                  0.8919865
+10               Ukraine Girls    166.6227                  0.9415089
 ```
 
 
