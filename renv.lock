@@ -291,7 +291,7 @@
     },
     "boot": {
       "Package": "boot",
-      "Version": "1.3-28",
+      "Version": "1.3-30",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -299,7 +299,7 @@
         "graphics",
         "stats"
       ],
-      "Hash": "0baa960e3b49c6176a4f42addcbacc59"
+      "Hash": "96abeed416a286d4a0f52e550b612343"
     },
     "brio": {
       "Package": "brio",
@@ -548,14 +548,14 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.15.2",
+      "Version": "1.15.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "536dfe4ac4093b5d115caed7a1a7223b"
+      "Hash": "8ee9ac56ef633d0c7cab8b2ca87d683e"
     },
     "dbplyr": {
       "Package": "dbplyr",
@@ -1187,7 +1187,7 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-35.1",
+      "Version": "1.1-35.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1209,7 +1209,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "07fb0c5b727b15b0ce40feb641498e4e"
+      "Hash": "c255dd80a1771f41321db15041feed11"
     },
     "lmerTest": {
       "Package": "lmerTest",
@@ -1899,7 +1899,7 @@
     },
     "survival": {
       "Package": "survival",
-      "Version": "3.5-7",
+      "Version": "3.5-8",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1911,7 +1911,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "b8e943d262c3da0b0febd3e04517c197"
+      "Hash": "184d7799bca4ba8c3be72ea396f4b9a3"
     },
     "sys": {
       "Package": "sys",
