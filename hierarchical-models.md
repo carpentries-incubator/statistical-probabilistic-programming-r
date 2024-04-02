@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-                 Country   Sex Mean.height Mean.height.standard.error
-1                Belarus Girls    166.9286                  1.1256560
-2     Dominican Republic Girls    161.2094                  0.8238181
-3                 France Girls    164.4886                  0.7704597
-4       French Polynesia Girls    166.5187                  1.0898402
-5                  Malta Girls    162.9505                  3.7687254
-6            Netherlands Girls    170.3612                  1.0355356
-7                  Niger Girls    159.8149                  0.9080398
-8  Saint Kitts and Nevis Girls    162.7824                  1.3227775
-9              Swaziland Girls    158.9214                  0.8919865
-10               Ukraine Girls    166.6227                  0.9415089
+              Country   Sex Mean.height Mean.height.standard.error
+1  Dominican Republic Girls    161.2094                  0.8238181
+2    French Polynesia Girls    166.5187                  1.0898402
+3              Gambia Girls    161.7282                  0.9603018
+4               Ghana Girls    158.8551                  0.8002225
+5              Guinea Girls    158.7522                  0.6984315
+6             Iceland Girls    168.9135                  1.5763878
+7             Ireland Girls    164.4969                  0.9486346
+8         Saint Lucia Girls    165.5245                  1.4449263
+9        South Africa Girls    158.5787                  0.5028328
+10           Tanzania Girls    156.8863                  0.7124997
 ```
 
 
