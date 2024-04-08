@@ -59,7 +59,6 @@ contact: 'velait@utu.fi'
 
 # Order of episodes in your lesson
 episodes:
-- setup.Rmd
 - bayesian-statistics.Rmd
 - stan.Rmd
 - mcmc.Rmd

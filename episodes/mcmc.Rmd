@@ -1,6 +1,6 @@
 ---
 title: 'MCMC'
-teaching: 10
+teaching: 60
 exercises: 2
 ---
 
@@ -255,18 +255,17 @@ Try different proposal distributions variances in the MCMC example above by chan
 
 ## Assessing convergence
 
-Although converge of the MCMC is guaranteed in theory, in practice, this is not always the case. Monitoring convergence is crucial whenever MCMC is utilized, to ensure that the recovered results are reliable. 
+Although convergence of MCMC is theoretically guaranteed, in practice, this is not always the case. Monitoring convergence is crucial whenever MCMC is utilized to ensure the reliability of recovered results.
 
-Depending on the used model, initial values, amount of data, among other things can cause convergence issues. Above, we mentioned two common complications and here we will list a few more, along with actions that can alleviate the issues.
+Depending on the model used, initial values, amount of data, among other factors, can cause convergence issues. Earlier, we mentioned two common complications, and here we will list a few more, along with actions that can alleviate the issues.
 
+1. Slow convergence can occur when initial values of the chain are far from most of the target mass, resulting in early iterations biasing the approximation. Another cause for slow convergence is that the proposals are not far enough from the current value, and the sampler moves too slowly.
 
-1. Slow convergence. Initial values of the chain are far from most of the target mass, and early iteration bias the approximation. Another cause for slow convergence is that the proposals are not distinct enough from the current value, and the sampler moves too slowly.
-
-2. Incomplete exploration of the target distribution. This means that the sampler doesn't spend enough time at all significant posterior areas. 
+2. Incomplete exploration: This means that the sampler doesn't spend enough time in all significant posterior areas.
 
 3. A large proportion of the proposals is rejected. When the proposal distribution generates proposals too far from the current value, the proposals are rejected and the sampler stands still for many iterations. This leads to inefficiency. 
 
-4. Samples are autocorrelated, meaning that consecutive samples are close to each other. Ideally, we'd like to generate independent samples from the target. High sample autocorrelation can be caused by several factors, including the ones mentioned in the previous points.  
+4. Sample autocorrelation: Consecutive samples are close to each other. Ideally, we'd like to generate independent samples from the target. High sample autocorrelation can be caused by several factors, including the ones mentioned in the previous points
 
 
 
@@ -274,16 +273,16 @@ These issues can be remedied with:
 
 1. Running multiple long chains with distinct or random initial values. 
 
-2. Discarding an early proportion of the chain as warmup (burn-in).
+2. Discarding the early proportion of the chain as warm-up.
 
-3. Setting a good proposal distribution. This is easy said, but in practice not trivial at all. 
+3. Setting an appropriate proposal distribution. This is easier said than done and not trivial in practice.
 
 
 
 
 It also important to somehow be able to monitor whether or not the sampler has converged. This can be done with statistics, such as *effective sample size* and $\hat{R}$. Effective sample size estimates how many independent samples have been generated. Ideally, this number should be close to the total number of iterations the sampler has been ran. $\hat{R}$ on the other hand measures chain mixing, that is, how well the chains agree with each other. It is computed by comparing the variance within each chain to the total variance of all samples. Usually, values of $\hat{R} > 1.1$ are considered as signaling convergence issues. 
 
-Besides statistics, visually evaluation of the sample can be useful. *Trace plots* refer to graphs where the marginal posterior samples are plotted against sample number. Trace plots can be used to investigate convergence and mixing properties, and can reveal, for example, multimodality. 
+Besides statistics, visually evaluation the samples can be useful. *Trace plots* refer to graphs where the marginal posterior samples are plotted against sample index. Trace plots can be used to investigate convergence and mixing properties, and can reveal, for example, multimodality. 
 
 In Stan, many of the above-mentioned points have been automatized. By default, Stan runs 4 chains with 2000 iterations each, and discards the initial 50% as warm-up. Moreover, it computes $\hat{R}$, effective sample size, and other statistics and throws warnings in case or issues.
 
@@ -347,6 +346,8 @@ print(p_joint_2)
 ```
 
 Let's see what the trace plots look like. 
+
+*Trace plot conclusions: ----> *
 
 ```{r}
 # Trace plots

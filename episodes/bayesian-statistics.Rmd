@@ -1,6 +1,6 @@
 ---
 title: 'Short introduction to Bayesian statistics'
-teaching: 10
+teaching: 60
 exercises: 2
 ---
 
