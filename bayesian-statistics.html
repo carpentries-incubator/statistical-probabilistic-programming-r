@@ -86,11 +86,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 8%" class="percentage">
-    8%
+<aside class="col-md-12 lesson-progress"><div style="width: 0%" class="percentage">
+    0%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 8%" aria-valuenow="8" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 0%" aria-valuenow="0" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -144,22 +144,13 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
-<div class="accordion accordion-flush" id="accordionFlush2">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading2">
-        <a href="setup.html">1. Setup</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
 <div class="accordion accordion-flush" id="accordionFlushcurrent">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-headingcurrent">
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        2. Short introduction to Bayesian statistics
+        1. Short introduction to Bayesian statistics
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -177,10 +168,19 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="stan.html">2. Stan</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="stan.html">3. Stan</a>
+        <a href="mcmc.html">3. MCMC</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -189,7 +189,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="mcmc.html">4. MCMC</a>
+        <a href="hierarchical-models.html">4. Hierarchical Models</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -198,7 +198,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="hierarchical-models.html">5. Hierarchical Models</a>
+        <a href="model-critisism.html">5. Model checking</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -207,7 +207,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="model-critisism.html">6. Model checking</a>
+        <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -216,7 +216,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="gaussian-processes.html">7. Gaussian processes</a>
+        <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -225,16 +225,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="other-topics.html">8. Other topics</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="exercises.html">9. Exercises</a>
+        <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -282,14 +273,14 @@
         <!-- START: inst/pkgdown/templates/content-instructor.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="setup.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="index.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="stan.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="setup.html" rel="prev">
+        <a class="chapter-link" href="index.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Setup
+          Home
         </a>
         <a class="chapter-link float-end" href="stan.html" rel="next">
           Next: Stan... 
@@ -298,7 +289,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Short introduction to Bayesian statistics</h1>
-        <p>Last updated on 2024-04-02 |
+        <p>Last updated on 2024-04-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -842,14 +833,14 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="setup.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="index.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="stan.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="setup.html" rel="prev">
+        <a class="chapter-link" href="index.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Setup
+          Home
         </a>
         <a class="chapter-link float-end" href="stan.html" rel="next">
           Next: Stan... 
@@ -897,9 +888,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/bayesian-statistics.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/bayesian-statistics.html",
-  "dateCreated": "2024-03-08",
-  "dateModified": "2024-04-02",
-  "datePublished": "2024-04-02"
+  "dateCreated": "2024-04-08",
+  "dateModified": "2024-04-08",
+  "datePublished": "2024-04-08"
 }
 
   </script><script>

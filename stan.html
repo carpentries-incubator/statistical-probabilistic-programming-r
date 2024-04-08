@@ -86,11 +86,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 15%" class="percentage">
-    15%
+<aside class="col-md-12 lesson-progress"><div style="width: 21%" class="percentage">
+    21%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 15%" aria-valuenow="15" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 21%" aria-valuenow="21" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -147,16 +147,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="setup.html">1. Setup</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush3">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading3">
-        <a href="bayesian-statistics.html">2. Short introduction to Bayesian statistics</a>
+        <a href="bayesian-statistics.html">1. Short introduction to Bayesian statistics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -168,7 +159,7 @@
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        3. Stan
+        2. Stan
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -187,10 +178,19 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="mcmc.html">3. MCMC</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="mcmc.html">4. MCMC</a>
+        <a href="hierarchical-models.html">4. Hierarchical Models</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -199,7 +199,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="hierarchical-models.html">5. Hierarchical Models</a>
+        <a href="model-critisism.html">5. Model checking</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -208,7 +208,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="model-critisism.html">6. Model checking</a>
+        <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -217,7 +217,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="gaussian-processes.html">7. Gaussian processes</a>
+        <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -226,16 +226,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="other-topics.html">8. Other topics</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="exercises.html">9. Exercises</a>
+        <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -299,7 +290,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Stan</h1>
-        <p>Last updated on 2024-04-02 |
+        <p>Last updated on 2024-04-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -435,8 +426,8 @@ data needs to be defined as a list.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 5e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -454,8 +445,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 1:                0.003 seconds (Sampling)
-Chain 1:                0.007 seconds (Total)
+Chain 1:                0.004 seconds (Sampling)
+Chain 1:                0.008 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -478,15 +469,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.006 seconds (Warm-up)
-Chain 2:                0.006 seconds (Sampling)
-Chain 2:                0.012 seconds (Total)
+Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 2:                0.004 seconds (Sampling)
+Chain 2:                0.008 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 2e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 3: Gradient evaluation took 1e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -503,15 +494,15 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.006 seconds (Warm-up)
-Chain 3:                0.006 seconds (Sampling)
-Chain 3:                0.012 seconds (Total)
+Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 3:                0.003 seconds (Sampling)
+Chain 3:                0.007 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 2e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 4: Gradient evaluation took 1e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -528,9 +519,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.006 seconds (Warm-up)
-Chain 4:                0.006 seconds (Sampling)
-Chain 4:                0.012 seconds (Total)
+Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 4:                0.004 seconds (Sampling)
+Chain 4:                0.008 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>With the default settings, Stan executes 4 MCMC chains, each with
@@ -555,10 +546,10 @@ facilitating a quick review of the results.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.27  1680    1
-lp__  -22.84    0.01 0.70 -24.75 -23.03 -22.56 -22.38 -22.33  2305    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.19   0.26  1432    1
+lp__  -22.83    0.02 0.70 -24.80 -23.01 -22.56 -22.38 -22.33  1712    1
 
-Samples were drawn using NUTS(diag_e) at Tue Apr  2 00:31:41 2024.
+Samples were drawn using NUTS(diag_e) at Mon Apr  8 11:04:10 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -595,7 +586,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -636,7 +627,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>If the data block is modified so that it declares the hyperparameters
 as data (e.g. <code>real&lt;lower=0&gt; alpha;</code>), it enables
@@ -764,8 +755,8 @@ unvectorized format to facilitate easier debugging.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 5e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -807,9 +798,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 2:                0.006 seconds (Sampling)
-Chain 2:                0.013 seconds (Total)
+Chain 2:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 2:                0.007 seconds (Sampling)
+Chain 2:                0.015 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -833,8 +824,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 3:                0.006 seconds (Sampling)
-Chain 3:                0.014 seconds (Total)
+Chain 3:                0.007 seconds (Sampling)
+Chain 3:                0.015 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -933,7 +924,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Show me the solution</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -981,7 +972,7 @@ slope <span class="math inline">\(\beta\)</span> and noise term <span class="mat
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1108,9 +1099,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html",
-  "dateCreated": "2024-03-08",
-  "dateModified": "2024-04-02",
-  "datePublished": "2024-04-02"
+  "dateCreated": "2024-04-08",
+  "dateModified": "2024-04-08",
+  "datePublished": "2024-04-08"
 }
 
   </script><script>

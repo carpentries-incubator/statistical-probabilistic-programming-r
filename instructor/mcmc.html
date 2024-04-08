@@ -86,11 +86,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 23%" class="percentage">
-    23%
+<aside class="col-md-12 lesson-progress"><div style="width: 42%" class="percentage">
+    42%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 23%" aria-valuenow="23" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 42%" aria-valuenow="42" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -147,7 +147,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="setup.html">1. Setup</a>
+        <a href="bayesian-statistics.html">1. Short introduction to Bayesian statistics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -156,16 +156,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="bayesian-statistics.html">2. Short introduction to Bayesian statistics</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush4">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading4">
-        <a href="stan.html">3. Stan</a>
+        <a href="stan.html">2. Stan</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -177,7 +168,7 @@
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        4. MCMC
+        3. MCMC
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -194,10 +185,19 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="hierarchical-models.html">4. Hierarchical Models</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="hierarchical-models.html">5. Hierarchical Models</a>
+        <a href="model-critisism.html">5. Model checking</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -206,7 +206,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="model-critisism.html">6. Model checking</a>
+        <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -215,7 +215,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="gaussian-processes.html">7. Gaussian processes</a>
+        <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -224,16 +224,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="other-topics.html">8. Other topics</a>
-    </div><!--/div.accordion-header-->
-        
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush10">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading10">
-        <a href="exercises.html">9. Exercises</a>
+        <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -297,13 +288,13 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>MCMC</h1>
-        <p>Last updated on 2024-04-02 |
+        <p>Last updated on 2024-04-08 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
         
         
-        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
+        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
         
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
@@ -583,35 +574,35 @@ inference and convergence? Why?</p>
 </div>
 </section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
 </h2>
-<hr class="half-width"><p>Although converge of the MCMC is guaranteed in theory, in practice,
-this is not always the case. Monitoring convergence is crucial whenever
-MCMC is utilized, to ensure that the recovered results are reliable.</p>
-<p>Depending on the used model, initial values, amount of data, among
-other things can cause convergence issues. Above, we mentioned two
-common complications and here we will list a few more, along with
+<hr class="half-width"><p>Although convergence of MCMC is theoretically guaranteed, in
+practice, this is not always the case. Monitoring convergence is crucial
+whenever MCMC is utilized to ensure the reliability of recovered
+results.</p>
+<p>Depending on the model used, initial values, amount of data, among
+other factors, can cause convergence issues. Earlier, we mentioned two
+common complications, and here we will list a few more, along with
 actions that can alleviate the issues.</p>
-<ol style="list-style-type: decimal"><li><p>Slow convergence. Initial values of the chain are far from most
-of the target mass, and early iteration bias the approximation. Another
-cause for slow convergence is that the proposals are not distinct enough
-from the current value, and the sampler moves too slowly.</p></li>
-<li><p>Incomplete exploration of the target distribution. This means
-that the sampler doesn’t spend enough time at all significant posterior
-areas.</p></li>
+<ol style="list-style-type: decimal"><li><p>Slow convergence can occur when initial values of the chain are
+far from most of the target mass, resulting in early iterations biasing
+the approximation. Another cause for slow convergence is that the
+proposals are not far enough from the current value, and the sampler
+moves too slowly.</p></li>
+<li><p>Incomplete exploration: This means that the sampler doesn’t spend
+enough time in all significant posterior areas.</p></li>
 <li><p>A large proportion of the proposals is rejected. When the
 proposal distribution generates proposals too far from the current
 value, the proposals are rejected and the sampler stands still for many
 iterations. This leads to inefficiency.</p></li>
-<li><p>Samples are autocorrelated, meaning that consecutive samples are
-close to each other. Ideally, we’d like to generate independent samples
-from the target. High sample autocorrelation can be caused by several
-factors, including the ones mentioned in the previous points.</p></li>
+<li><p>Sample autocorrelation: Consecutive samples are close to each
+other. Ideally, we’d like to generate independent samples from the
+target. High sample autocorrelation can be caused by several factors,
+including the ones mentioned in the previous points</p></li>
 </ol><p>These issues can be remedied with:</p>
 <ol style="list-style-type: decimal"><li><p>Running multiple long chains with distinct or random initial
 values.</p></li>
-<li><p>Discarding an early proportion of the chain as warmup
-(burn-in).</p></li>
-<li><p>Setting a good proposal distribution. This is easy said, but in
-practice not trivial at all.</p></li>
+<li><p>Discarding the early proportion of the chain as warm-up.</p></li>
+<li><p>Setting an appropriate proposal distribution. This is easier said
+than done and not trivial in practice.</p></li>
 </ol><p>It also important to somehow be able to monitor whether or not the
 sampler has converged. This can be done with statistics, such as
 <em>effective sample size</em> and <span class="math inline">\(\hat{R}\)</span>. Effective sample size estimates
@@ -622,9 +613,9 @@ measures chain mixing, that is, how well the chains agree with each
 other. It is computed by comparing the variance within each chain to the
 total variance of all samples. Usually, values of <span class="math inline">\(\hat{R} &gt; 1.1\)</span> are considered as
 signaling convergence issues.</p>
-<p>Besides statistics, visually evaluation of the sample can be useful.
+<p>Besides statistics, visually evaluation the samples can be useful.
 <em>Trace plots</em> refer to graphs where the marginal posterior
-samples are plotted against sample number. Trace plots can be used to
+samples are plotted against sample index. Trace plots can be used to
 investigate convergence and mixing properties, and can reveal, for
 example, multimodality.</p>
 <p>In Stan, many of the above-mentioned points have been automatized. By
@@ -692,6 +683,7 @@ posterior distribution:</p>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_joint_2</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s see what the trace plots look like.</p>
+<p><em>Trace plot conclusions: —-&gt; </em></p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -819,9 +811,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
-  "dateCreated": "2024-03-08",
-  "dateModified": "2024-04-02",
-  "datePublished": "2024-04-02"
+  "dateCreated": "2024-04-08",
+  "dateModified": "2024-04-08",
+  "datePublished": "2024-04-08"
 }
 
   </script><script>
