@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-              Country   Sex Mean.height Mean.height.standard.error
-1  Dominican Republic Girls    161.2094                  0.8238181
-2    French Polynesia Girls    166.5187                  1.0898402
-3              Gambia Girls    161.7282                  0.9603018
-4               Ghana Girls    158.8551                  0.8002225
-5              Guinea Girls    158.7522                  0.6984315
-6             Iceland Girls    168.9135                  1.5763878
-7             Ireland Girls    164.4969                  0.9486346
-8         Saint Lucia Girls    165.5245                  1.4449263
-9        South Africa Girls    158.5787                  0.5028328
-10           Tanzania Girls    156.8863                  0.7124997
+          Country   Sex Mean.height Mean.height.standard.error
+1         Austria Girls    166.9267                  0.8705255
+2           Congo Girls    158.7799                  0.8692321
+3   Cote d'Ivoire Girls    158.6524                  0.9254438
+4          Cyprus Girls    160.5529                  1.3654321
+5         Germany Girls    166.1773                  0.8149046
+6      Madagascar Girls    153.0638                  0.9674112
+7        Mongolia Girls    159.8935                  0.6694592
+8           Nepal Girls    152.3890                  0.5676983
+9         Senegal Girls    163.9241                  0.9005197
+10 United Kingdom Girls    163.9391                  0.2547015
 ```
 
 
