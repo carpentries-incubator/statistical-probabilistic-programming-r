@@ -115,17 +115,17 @@ height_women10
 ```
 
 ```{.output}
-          Country   Sex Mean.height Mean.height.standard.error
-1         Austria Girls    166.9267                  0.8705255
-2           Congo Girls    158.7799                  0.8692321
-3   Cote d'Ivoire Girls    158.6524                  0.9254438
-4          Cyprus Girls    160.5529                  1.3654321
-5         Germany Girls    166.1773                  0.8149046
-6      Madagascar Girls    153.0638                  0.9674112
-7        Mongolia Girls    159.8935                  0.6694592
-8           Nepal Girls    152.3890                  0.5676983
-9         Senegal Girls    163.9241                  0.9005197
-10 United Kingdom Girls    163.9391                  0.2547015
+            Country   Sex Mean.height Mean.height.standard.error
+1             Congo Girls    158.7799                  0.8692321
+2              Iran Girls    161.1837                  0.4042259
+3         Lithuania Girls    167.6299                  1.3223906
+4  Macedonia (TFYR) Girls    160.8843                  1.3151969
+5           Morocco Girls    161.1809                  0.8572136
+6             Niger Girls    159.8149                  0.9080398
+7              Oman Girls    158.4350                  0.8546351
+8              Peru Girls    154.3872                  0.3650977
+9            Taiwan Girls    160.6953                  0.7307839
+10      Timor-Leste Girls    152.7123                  0.7629082
 ```
 
 
