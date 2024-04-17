@@ -8,78 +8,68 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- What are Bayesian hierarchical models?
-- What are they good for?
+- How does Bayesian modeling accommodate group structure?
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how to construct  hierarchical models and fit them with Stan
+- Learn to construct and fit hierarchical models.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-Bayesian hierarchical models are a class of models suited for scenarios where the study population consists of separate but related groups. For instance, analyzing student performance in different schools, income levels within various regions, or animal behavior within distinct populations are scenarios where such models might be appropriate.
-This structure can be incorporated into a model by including group-wise parameters, each with a prior that, in turn, contains unknown parameters that also receive a prior. In other words, the prior parameters, hyperparameters, are given a prior, a hyperprior, and the hyperparameters are learned in the fitting process. The hyperparameters and hyperpriors can be thought to exist on another level of hierarchy, hence the name.
-As an example, consider the beta-binomial model presented in Episode 2. It was used to estimate the prevalence of left-handedness based on a sample of 50 students. If we had additional information, such as study majors, we could include this information in the model, like so:
+**Hierarchical** (or multi-level) models are a class of models well-suited for situations where the study population comprises distinct but interconnected groups. For example, analyzing student performance across different schools, income disparities among various regions, or studying animal behavior within different populations are scenarios where such models can offer valuable insights.
+
+Incorporating group-wise parameters allows us to model each group separately, and a model becomes hierarchical when we treat the parameters of the prior distribution as unknown. These parameters, known as hyperparameters, are assigned their own prior distribution, referred to as a hyperprior, and are learned during the model fitting process. Conceptually, these hyperparameters and hyperpriors operate at a higher level of hierarchy, hence the name.
+
+For instance, let's consider the beta-binomial model discussed in Episode 1. It was employed to estimate the prevalence of left-handedness based on a sample of 50 students. If we were to include additional information, such as students' majors, we could extend the model as follows:
+
 $$X_g \sim \text{Bin}(N_g, \theta_g) \\
 \theta_g \sim \text{Beta}(\alpha, \beta) \\
 \alpha, \beta \sim \Gamma(2, 0.1).$$
 
 
-Here, the subscript $g$ indexes the study major groups. The group-specific prevalences for left-handedness $\theta_g$ are given a beta prior with hyperparameters $\alpha, \beta$ that are random variables. The final line denotes the hyperprior $\Gamma(2, 0.1)$ that controls the prior beliefs about the hyperparameters.
+Here, the subscript $g$ indexes the groups based on majors. The group-specific prevalences for left-handedness $ \theta_g $ are assigned a beta prior with hyperparameters $ \alpha $ and $ \beta $ treated as random variables. The final line indicates the hyperprior $ \Gamma(2, 0.1) $ governing the prior beliefs about the hyperparameters.
 
-In this hierarchical beta-binomial model, students are modeled as identical within the groups but no longer on the population level. On the other hand, there is an assumed similarity between the groups since they share a common prior. It is said that the groups are partially pooled, as they are not equal but not entirely independent either.
+In this hierarchical beta-binomial model, students are considered exchangeable within their majors but no longer across the entire population. However, an underlying assumption of similarity exists between the groups since they share a common prior. This is often referred to as partial pooling, where groups are not entirely independent but are not treated as equal either.
 
-One key advantage of Bayesian hierarchical models is their ability to borrow strength across groups. By pooling information from multiple groups, these models can provide more stable estimates, especially when only limited data is available.
-
-
-Another difference from non-hierarchical models is that the prior, or the **population distribution** of the parameters, is learned in the process. The population distribution can provide insights into parameter variation in a larger context, for groups where we have no data. For instance, if we had gathered data on the handedness of students majoring in natural sciences, the population distribution could offer insights into students in humanities and social sciences as well.
-
-In the following example, we'll conduct a hierarchical analysis of human heights in different countries.
+One of the key advantages of Bayesian hierarchical models is their capacity to leverage information across groups. By pooling information from various groups, these models can yield more robust estimates, particularly when data availability is limited.
 
 
+Another distinction from non-hierarchical models is that the prior, or the **population distribution**, of the parameters is learned in the process. This population distribution can offer insights into parameter variability on a broader scale, even for groups where data is scarce or completely missing. For instance, if we had data on the handedness of students majoring in natural sciences, the population distribution could provide insights into students in humanities and social sciences as well.
 
+In the following example, we will perform a hierarchical analysis of human heights across different countries.
 
 
 ## Example: human height 
 
-Let's analyze human adult height in different countries. We'll use the normal model with unknown mean $\mu$ and standard deviation $\sigma$ as the generative model, and give these parameters the hierarchical treatment. 
+Let's examine the heights of adults in various countries. In [1], averages and standard errors of adult heights in centimeters across different countries and age groups were provided. We'll utilize this dataset to generate a sample of hypothetical individual heights and then assess our ability to accurately reproduce these measured height statistics.
 
-We'll analyze simulated data based on actual measurements in different countries. The simulations are based on data in: Height: Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories: a pooled analysis of 2181 population-based studies with 65 million participants. Lancet 2020, 396:1511-1524
+This approach is commonly employed in model testing: we generate simulated data with known parameters and subsequently compare the inferred results to these known parameters. In our case, the true parameters are derived from real-world data.
 
-First, let's read the data and check its structure. 
+We'll employ a normal model with unknown mean $\mu$ and standard deviation $\sigma$ as our generative model, and treat these parameters hierarchically.
+
+First, let's load the data and examine its structure.
+
 
 
 ```r
 height <- read.csv("data/height_data.csv")
-
-head(height)
+str(height)
 ```
 
 ```{.output}
-      Country  Sex Year Age.group Mean.height
-1 Afghanistan Boys 1985         5    103.3152
-2 Afghanistan Boys 1985         6    109.2357
-3 Afghanistan Boys 1985         7    114.7595
-4 Afghanistan Boys 1985         8    120.0023
-5 Afghanistan Boys 1985         9    125.0773
-6 Afghanistan Boys 1985        10    130.0964
-  Mean.height.lower.95..uncertainty.interval
-1                                   92.91241
-2                                   99.91444
-3                                  106.31005
-4                                  112.20252
-5                                  117.88036
-6                                  123.38137
-  Mean.height.upper.95..uncertainty.interval Mean.height.standard.error
-1                                   113.7128                   5.295555
-2                                   118.2826                   4.718901
-3                                   123.0034                   4.270250
-4                                   127.5500                   3.924385
-5                                   132.1538                   3.662401
-6                                   136.7418                   3.465345
+'data.frame':	210000 obs. of  8 variables:
+ $ Country                                   : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
+ $ Sex                                       : chr  "Boys" "Boys" "Boys" "Boys" ...
+ $ Year                                      : int  1985 1985 1985 1985 1985 1985 1985 1985 1985 1985 ...
+ $ Age.group                                 : int  5 6 7 8 9 10 11 12 13 14 ...
+ $ Mean.height                               : num  103 109 115 120 125 ...
+ $ Mean.height.lower.95..uncertainty.interval: num  92.9 99.9 106.3 112.2 117.9 ...
+ $ Mean.height.upper.95..uncertainty.interval: num  114 118 123 128 132 ...
+ $ Mean.height.standard.error                : num  5.3 4.72 4.27 3.92 3.66 ...
 ```
 
 Let's subset this data to simplify the analysis and focus on the height of adult women measured in 2019.
@@ -88,14 +78,11 @@ Let's subset this data to simplify the analysis and focus on the height of adult
 ```r
 height_women <- height %>% 
   filter(
-    # 2019 measurements
-    Year == 2019,        
-    # use only a single age group
     Age.group == 19, 
-    # Consider girls only
-    Sex == "Girls"
+    Sex == "Girls",
+    Year == 2019
     ) %>% 
-  # Select variables of interest.
+  # Select variables of interest
   select(Country, Sex, Mean.height, Mean.height.standard.error)
 ```
 
@@ -115,55 +102,62 @@ height_women10
 ```
 
 ```{.output}
-            Country   Sex Mean.height Mean.height.standard.error
-1             Congo Girls    158.7799                  0.8692321
-2              Iran Girls    161.1837                  0.4042259
-3         Lithuania Girls    167.6299                  1.3223906
-4  Macedonia (TFYR) Girls    160.8843                  1.3151969
-5           Morocco Girls    161.1809                  0.8572136
-6             Niger Girls    159.8149                  0.9080398
-7              Oman Girls    158.4350                  0.8546351
-8              Peru Girls    154.3872                  0.3650977
-9            Taiwan Girls    160.6953                  0.7307839
-10      Timor-Leste Girls    152.7123                  0.7629082
+                Country   Sex Mean.height Mean.height.standard.error
+1             Argentina Girls    161.2204                  0.6207879
+2               Comoros Girls    156.5389                  0.9313273
+3               Jamaica Girls    164.3193                  0.9400244
+4                Latvia Girls    168.8066                  1.4775853
+5           New Zealand Girls    164.6600                  0.4656146
+6                Poland Girls    165.7761                  0.6035404
+7  Syrian Arab Republic Girls    159.3795                  4.4451877
+8                  Togo Girls    159.1294                  0.8030327
+9               Vanuatu Girls    160.4836                  1.3777255
+10               Zambia Girls    157.3152                  0.6805332
 ```
+
 
 
 ### Simulate data
 
-Now, we can treat the values in the table above as ground truth and simulate some data based on them. Let's generate $N=25$ samples for each country from the normal model with $\mu = \text{Mean.height}$ and $\sigma = \text{Mean.height.standard.error}$.
+Now, we can treat the values in the table above as ground truth and simulate some data based on them. Let's generate $N=15$ samples for each country from the normal model with $\mu = \text{Mean.height}$ and $\sigma = \text{Mean.height.standard.error}$.
+
 
 
 ```r
 # Sample size per group 
-N <- 25
+N <- 15
 
-# For each country, generate some random girl's heights
-height_sim <- lapply(1:nrow(height_women10), function(i) {
+# For each country, generate heights
+height_sim <- lapply(1:N_countries, function(i) {
   
   my_df <- height_women10[i, ]
   
   data.frame(Country = my_df$Country, 
-             # Random normal values based on measured mu and sd
-             Height = rnorm(N, my_df$Mean.height, my_df$Mean.height.standard.error))
+             # Random values from normal
+             Height = rnorm(N,
+                            mean = my_df$Mean.height,
+                            sd = my_df$Mean.height.standard.error))
 
 }) %>% 
   do.call(rbind, .)
-
-
-# Plot
-height_sim %>% 
-  ggplot() +
-  geom_point(aes(x = Country, y = Height)) + 
-  coord_flip() + 
-  labs(title = "Simulated data")
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
+Let's plot the data 
+
+```r
+# Plot
+height_sim %>% 
+    ggplot() +
+    geom_point(aes(x = Height, y = Country)) + 
+    labs(title = "Simulated data")
+```
+
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ### Modeling
 
-Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be written as follows. We'll use $g$ to index the country, and $i$ for individuals.
+Let's build a normal model that uses partial pooling for the country means and standard deviations. The model can be stated as follows:
 
 \begin{align}
 X_{gi} &\sim \text{N}(\mu_g, \sigma_g) \\
@@ -171,11 +165,14 @@ X_{gi} &\sim \text{N}(\mu_g, \sigma_g) \\
 \sigma_g &\sim \Gamma(\alpha_\sigma, \beta_\sigma) \\
 \mu_\mu &\sim \text{N}(0, 100)\\
 \sigma_\mu &\sim \Gamma(2, 0.1) \\
-\alpha_\sigma, \beta_\sigma  &\sim \Gamma(2, 0.01)
+\alpha_\sigma, \beta_\sigma  &\sim \Gamma(2, 0.01).
 \end{align}
 
+Above, $X_{gi}$ denotes the height for individual $i$ in country $g$. The country specific parameters $\mu_g$ and $\sigma_g$ are given normal and gamma priors, respectively, with unknown hyperparameters that, in turn, are given hyperpriors on the last two lines. 
 
-Here is the Stan program for the hierarchical normal model. The data points are input as a concatenated vector `X` as this would allow using data with uneven sample sizes. The country-specific start and end indices are computed in the transformed data block. The parameters block contains the declarations of vectors for the means and standard deviations, along with the hyperparameters. The hyperparameter subscripts denote the parameter they are assigned to so, for instance, $\sigma_{\mu}$ is the standard deviation of the mean parameter $\mu$. The generated quantities block generates samples from the population distributions of $\mu$ and $\sigma$ and a posterior predictive distribution. 
+Below is the Stan program for this model. The data points are input as a concatenated vector `X`. The country-specific start and end indices are computed in the transformed data block. This approach accommodates uneven sample sizes between groups, although in our data these are equal. 
+
+The parameters block contains the declarations of mean and standard deviation vectors, along with the hyperparameters. The hyperparameter subscripts denote the parameter they are assigned to so, for instance, $\sigma_{\mu}$ is the standard deviation of the mean parameter $\mu$. The generated quantities block generates samples from the population distributions of $\mu$ and $\sigma$ and a posterior predictive distribution $\tilde{X}$.
 
 
 
@@ -252,7 +249,7 @@ generated quantities {
 ```
 
 
-Now we can call Stan and fit the model. Hierarchical models can often encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
+Now we can call Stan and fit the model. Hierarchical models can encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
 
 
 ```r
@@ -261,15 +258,15 @@ stan_data <- list(G = length(unique(height_sim$Country)),
                   X = height_sim$Height)
 
 normal_hier_fit <- rstan::sampling(normal_hier_model,
-                              stan_data, 
-                              iter = 10000,
-                              chains = 2,
-                                    # Use to get rid of divergent transitions:
-                                    control = list(adapt_delta = 0.99), 
-                              cores = 2,
-                            # Track progress every 5000 iterations
-                            refresh = 5000
-                            )
+                                   stan_data, 
+                                   iter = 10000,
+                                   chains = 2,
+                                   # Use to avoid divergent transitions:
+                                   control = list(adapt_delta = 0.99), 
+                                   cores = 2,
+                                   # Track progress every 5000 iterations
+                                   refresh = 5000
+                                   )
 ```
 
 
@@ -306,8 +303,8 @@ par_summary <- rstan::summary(normal_hier_fit, c("mu", "sigma"))$summary %>%
 # Plot
 
   ggplot() + 
-  geom_point(data = par_summary, aes(x = country, y = mean),
-             color = posterior_color) +
+  # geom_point(data = par_summary, aes(x = country, y = mean),
+  #            color = posterior_color) +
   geom_errorbar(data = par_summary, aes(x = country, ymin = X2.5., ymax = X97.5.),
                 color = posterior_color) + 
   geom_point(data = height_women10 %>% 
@@ -316,13 +313,15 @@ par_summary <- rstan::summary(normal_hier_fit, c("mu", "sigma"))$summary %>%
                       value = "value",
                       -c(Country, Sex)), 
              aes(x = Country, y = value)) + 
+  geom_errorbar(data = unpooled_summaries, aes(x = country, ymin = X2.5., ymax = X97.5.),
+                color = "brown") +
   facet_wrap(~ par, scales = "free", ncol = 1) +
-  coord_flip() +
-  labs(title = "Blue = posterior; black = true value")
+  coord_flip() 
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
+Above, the black points represent the true values, and the intervals are the 95% CIs for a hierarchical and non-hierarchical models, respectively. 
 
 
 :::::::::::::::::::::::::::::: challenge
@@ -350,7 +349,7 @@ population_samples_l <- rstan::extract(normal_hier_fit,
 
 ggplot() +
   geom_histogram(data = population_samples_l, 
-                 aes(x = value),
+                 aes(x = value, y = after_stat(density)),
                  fill = posterior_color,
                  bins = 100) + 
   geom_vline(data = height_women %>% 
@@ -363,7 +362,7 @@ ggplot() +
   facet_wrap(~hyperpar, scales = "free")
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 ## Population distributions 
 
@@ -382,7 +381,7 @@ population_l <- rstan::extract(normal_hier_fit, c("mu_tilda", "sigma_tilda")) %>
  
 ggplot() + 
   geom_histogram(data = population_l,
-                 aes(x = value, y = ..density..),
+                 aes(x = value, y = after_stat(density)),
                  bins = 100, fill = posterior_color) +
     geom_histogram(data = height_women %>%
                      rename_with(~ c('mu', 'sigma'), 3:4) %>%
@@ -394,16 +393,8 @@ ggplot() +
   labs(title = "Blue = posterior; black = sample")
 ```
 
-```{.warning}
-Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-ℹ Please use `after_stat(density)` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-generated.
-```
-
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
-
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+We can see that the population distribution is able to capture the measured average heights and standard deviations relatively well. Remember that these estimates are based on a limited sample: 10 out of 200 countries with 15 individuals in each group. 
 
 ## Posterior predictive distribution
 
@@ -411,9 +402,6 @@ Finally, let's plot the posterior predictive distribution. Let's overlay it with
 
 
 ```r
-# Sample size per group 
-N <- 25
-
 # For each country, generate some random girl's heights
 Height_all <- lapply(1:nrow(height_women), function(i) {
   
@@ -451,7 +439,7 @@ ggplot() +
                  bins = 100)
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="fig/hierarchical-models-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -474,3 +462,12 @@ We analyzed women's heights in a few countries and modeled them hierarchically. 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Reading
+
+- Bayesian Data Analysis (3rd ed.): Ch. 5
+- Statistical Rethinking (2nd ed.): Ch. 13
+- Bayes Rules!: Ch. 15-19
+
+
+## References
+
+[1] Height: Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories: a pooled analysis of 2181 population-based studies with 65 million participants. Lancet 2020, 396:1511-1524
