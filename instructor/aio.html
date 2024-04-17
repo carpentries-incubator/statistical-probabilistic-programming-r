@@ -336,7 +336,7 @@
         
 <section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
@@ -427,7 +427,7 @@ about the matter.</p>
   <h3 class="accordion-header" id="headingInstructor1">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div>Instructor Note</h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
@@ -633,7 +633,7 @@ example.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -808,7 +808,7 @@ the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</spa
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>No. Why?</p>
 </div>
@@ -908,7 +908,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
@@ -1070,8 +1070,8 @@ Chain 1:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 2: Gradient evaluation took 2e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -1089,14 +1089,14 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
 Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.004 seconds (Sampling)
+Chain 2:                0.008 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 5e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 3: Gradient evaluation took 1e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -1114,8 +1114,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 3:                0.004 seconds (Sampling)
-Chain 3:                0.008 seconds (Total)
+Chain 3:                0.003 seconds (Sampling)
+Chain 3:                0.007 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -1139,8 +1139,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 4:                0.004 seconds (Sampling)
-Chain 4:                0.008 seconds (Total)
+Chain 4:                0.003 seconds (Sampling)
+Chain 4:                0.007 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>With the default settings, Stan executes 4 MCMC chains, each with
@@ -1165,10 +1165,10 @@ facilitating a quick review of the results.</p>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1390    1
-lp__  -22.86    0.02 0.76 -25.04 -23.04 -22.56 -22.37 -22.33  1429    1
+theta   0.15    0.00 0.05   0.07   0.12   0.15   0.18   0.25  1583    1
+lp__  -22.83    0.02 0.71 -24.81 -23.00 -22.56 -22.38 -22.33  1887    1
 
-Samples were drawn using NUTS(diag_e) at Tue Apr 16 00:32:02 2024.
+Samples were drawn using NUTS(diag_e) at Wed Apr 17 11:58:45 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1379,8 +1379,8 @@ unvectorized format to facilitate easier debugging.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 4e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 1: Gradient evaluation took 5e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -1397,9 +1397,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.006 seconds (Warm-up)
+Chain 1:  Elapsed Time: 0.007 seconds (Warm-up)
 Chain 1:                0.006 seconds (Sampling)
-Chain 1:                0.012 seconds (Total)
+Chain 1:                0.013 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -1422,9 +1422,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.007 seconds (Warm-up)
 Chain 2:                0.007 seconds (Sampling)
-Chain 2:                0.015 seconds (Total)
+Chain 2:                0.014 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1454,8 +1454,8 @@ Chain 3:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 1e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
+Chain 4: Gradient evaluation took 2e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -1473,8 +1473,8 @@ Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
 Chain 4:  Elapsed Time: 0.007 seconds (Warm-up)
-Chain 4:                0.007 seconds (Sampling)
-Chain 4:                0.014 seconds (Total)
+Chain 4:                0.006 seconds (Sampling)
+Chain 4:                0.013 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>Next, we’ll extract posterior samples and generate a plot for the
@@ -1676,7 +1676,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">MCMC</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
@@ -2160,7 +2160,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical Models</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -2175,8 +2175,7 @@ any links that you are not going to use.
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>What are Bayesian hierarchical models?</li>
-<li>What are they good for?</li>
+<li>How does Bayesian modeling accommodate group structure?</li>
 </ul>
 </div>
 </div>
@@ -2186,104 +2185,95 @@ any links that you are not going to use.
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Learn how to construct hierarchical models and fit them with
-Stan</li>
+<li>Learn to construct and fit hierarchical models.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>Bayesian hierarchical models are a class of models suited for
-scenarios where the study population consists of separate but related
-groups. For instance, analyzing student performance in different
-schools, income levels within various regions, or animal behavior within
-distinct populations are scenarios where such models might be
-appropriate. This structure can be incorporated into a model by
-including group-wise parameters, each with a prior that, in turn,
-contains unknown parameters that also receive a prior. In other words,
-the prior parameters, hyperparameters, are given a prior, a hyperprior,
-and the hyperparameters are learned in the fitting process. The
-hyperparameters and hyperpriors can be thought to exist on another level
-of hierarchy, hence the name. As an example, consider the beta-binomial
-model presented in Episode 2. It was used to estimate the prevalence of
-left-handedness based on a sample of 50 students. If we had additional
-information, such as study majors, we could include this information in
-the model, like so: <span class="math display">\[X_g \sim
-\text{Bin}(N_g, \theta_g) \\
+<p><strong>Hierarchical</strong> (or multi-level) models are a class of
+models well-suited for situations where the study population comprises
+distinct but interconnected groups. For example, analyzing student
+performance across different schools, income disparities among various
+regions, or studying animal behavior within different populations are
+scenarios where such models can offer valuable insights.</p>
+<p>Incorporating group-wise parameters allows us to model each group
+separately, and a model becomes hierarchical when we treat the
+parameters of the prior distribution as unknown. These parameters, known
+as hyperparameters, are assigned their own prior distribution, referred
+to as a hyperprior, and are learned during the model fitting process.
+Conceptually, these hyperparameters and hyperpriors operate at a higher
+level of hierarchy, hence the name.</p>
+<p>For instance, let’s consider the beta-binomial model discussed in
+Episode 1. It was employed to estimate the prevalence of left-handedness
+based on a sample of 50 students. If we were to include additional
+information, such as students’ majors, we could extend the model as
+follows:</p>
+<p><span class="math display">\[X_g \sim \text{Bin}(N_g, \theta_g) \\
 \theta_g \sim \text{Beta}(\alpha, \beta) \\
 \alpha, \beta \sim \Gamma(2, 0.1).\]</span></p>
 <p>Here, the subscript <span class="math inline">\(g\)</span> indexes
-the study major groups. The group-specific prevalences for
-left-handedness <span class="math inline">\(\theta_g\)</span> are given
-a beta prior with hyperparameters <span class="math inline">\(\alpha,
-\beta\)</span> that are random variables. The final line denotes the
-hyperprior <span class="math inline">\(\Gamma(2, 0.1)\)</span> that
-controls the prior beliefs about the hyperparameters.</p>
-<p>In this hierarchical beta-binomial model, students are modeled as
-identical within the groups but no longer on the population level. On
-the other hand, there is an assumed similarity between the groups since
-they share a common prior. It is said that the groups are partially
-pooled, as they are not equal but not entirely independent either.</p>
-<p>One key advantage of Bayesian hierarchical models is their ability to
-borrow strength across groups. By pooling information from multiple
-groups, these models can provide more stable estimates, especially when
-only limited data is available.</p>
-<p>Another difference from non-hierarchical models is that the prior, or
-the <strong>population distribution</strong> of the parameters, is
-learned in the process. The population distribution can provide insights
-into parameter variation in a larger context, for groups where we have
-no data. For instance, if we had gathered data on the handedness of
-students majoring in natural sciences, the population distribution could
-offer insights into students in humanities and social sciences as
-well.</p>
-<p>In the following example, we’ll conduct a hierarchical analysis of
-human heights in different countries.</p>
+the groups based on majors. The group-specific prevalences for
+left-handedness $ _g $ are assigned a beta prior with hyperparameters $
+$ and $ $ treated as random variables. The final line indicates the
+hyperprior $ (2, 0.1) $ governing the prior beliefs about the
+hyperparameters.</p>
+<p>In this hierarchical beta-binomial model, students are considered
+exchangeable within their majors but no longer across the entire
+population. However, an underlying assumption of similarity exists
+between the groups since they share a common prior. This is often
+referred to as partial pooling, where groups are not entirely
+independent but are not treated as equal either.</p>
+<p>One of the key advantages of Bayesian hierarchical models is their
+capacity to leverage information across groups. By pooling information
+from various groups, these models can yield more robust estimates,
+particularly when data availability is limited.</p>
+<p>Another distinction from non-hierarchical models is that the prior,
+or the <strong>population distribution</strong>, of the parameters is
+learned in the process. This population distribution can offer insights
+into parameter variability on a broader scale, even for groups where
+data is scarce or completely missing. For instance, if we had data on
+the handedness of students majoring in natural sciences, the population
+distribution could provide insights into students in humanities and
+social sciences as well.</p>
+<p>In the following example, we will perform a hierarchical analysis of
+human heights across different countries.</p>
 <section id="example-human-height"><h2 class="section-heading">Example: human height<a class="anchor" aria-label="anchor" href="#example-human-height"></a>
 </h2>
 <hr class="half-width">
-<p>Let’s analyze human adult height in different countries. We’ll use
-the normal model with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> as the generative model, and give
-these parameters the hierarchical treatment.</p>
-<p>We’ll analyze simulated data based on actual measurements in
-different countries. The simulations are based on data in: Height:
-Height and body-mass index trajectories of school-aged children and
-adolescents from 1985 to 2019 in 200 countries and territories: a pooled
-analysis of 2181 population-based studies with 65 million participants.
-Lancet 2020, 396:1511-1524</p>
-<p>First, let’s read the data and check its structure.</p>
+<p>Let’s examine the heights of adults in various countries. In [1],
+averages and standard errors of adult heights in centimeters across
+different countries and age groups were provided. We’ll utilize this
+dataset to generate a sample of hypothetical individual heights and then
+assess our ability to accurately reproduce these measured height
+statistics.</p>
+<p>This approach is commonly employed in model testing: we generate
+simulated data with known parameters and subsequently compare the
+inferred results to these known parameters. In our case, the true
+parameters are derived from real-world data.</p>
+<p>We’ll employ a normal model with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> as our generative model, and treat
+these parameters hierarchically.</p>
+<p>First, let’s load the data and examine its structure.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">height</span> <span class="op">&lt;-</span> <span class="fu">read.csv</span><span class="op">(</span><span class="st">"data/height_data.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">head</span><span class="op">(</span><span class="va">height</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">str</span><span class="op">(</span><span class="va">height</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>      Country  Sex Year Age.group Mean.height
-1 Afghanistan Boys 1985         5    103.3152
-2 Afghanistan Boys 1985         6    109.2357
-3 Afghanistan Boys 1985         7    114.7595
-4 Afghanistan Boys 1985         8    120.0023
-5 Afghanistan Boys 1985         9    125.0773
-6 Afghanistan Boys 1985        10    130.0964
-  Mean.height.lower.95..uncertainty.interval
-1                                   92.91241
-2                                   99.91444
-3                                  106.31005
-4                                  112.20252
-5                                  117.88036
-6                                  123.38137
-  Mean.height.upper.95..uncertainty.interval Mean.height.standard.error
-1                                   113.7128                   5.295555
-2                                   118.2826                   4.718901
-3                                   123.0034                   4.270250
-4                                   127.5500                   3.924385
-5                                   132.1538                   3.662401
-6                                   136.7418                   3.465345</code></pre>
+<pre class="output" tabindex="0"><code>'data.frame':	210000 obs. of  8 variables:
+ $ Country                                   : chr  "Afghanistan" "Afghanistan" "Afghanistan" "Afghanistan" ...
+ $ Sex                                       : chr  "Boys" "Boys" "Boys" "Boys" ...
+ $ Year                                      : int  1985 1985 1985 1985 1985 1985 1985 1985 1985 1985 ...
+ $ Age.group                                 : int  5 6 7 8 9 10 11 12 13 14 ...
+ $ Mean.height                               : num  103 109 115 120 125 ...
+ $ Mean.height.lower.95..uncertainty.interval: num  92.9 99.9 106.3 112.2 117.9 ...
+ $ Mean.height.upper.95..uncertainty.interval: num  114 118 123 128 132 ...
+ $ Mean.height.standard.error                : num  5.3 4.72 4.27 3.92 3.66 ...</code></pre>
 </div>
 <p>Let’s subset this data to simplify the analysis and focus on the
 height of adult women measured in 2019.</p>
@@ -2293,14 +2283,11 @@ height of adult women measured in 2019.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">height_women</span> <span class="op">&lt;-</span> <span class="va">height</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">filter</span><span class="op">(</span></span>
-<span>    <span class="co"># 2019 measurements</span></span>
-<span>    <span class="va">Year</span> <span class="op">==</span> <span class="fl">2019</span>,        </span>
-<span>    <span class="co"># use only a single age group</span></span>
 <span>    <span class="va">Age.group</span> <span class="op">==</span> <span class="fl">19</span>, </span>
-<span>    <span class="co"># Consider girls only</span></span>
-<span>    <span class="va">Sex</span> <span class="op">==</span> <span class="st">"Girls"</span></span>
+<span>    <span class="va">Sex</span> <span class="op">==</span> <span class="st">"Girls"</span>,</span>
+<span>    <span class="va">Year</span> <span class="op">==</span> <span class="fl">2019</span></span>
 <span>    <span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="co"># Select variables of interest.</span></span>
+<span>  <span class="co"># Select variables of interest</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">Country</span>, <span class="va">Sex</span>, <span class="va">Mean.height</span>, <span class="va">Mean.height.standard.error</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Let’s select 10 countries randomly</p>
@@ -2321,23 +2308,23 @@ height of adult women measured in 2019.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>            Country   Sex Mean.height Mean.height.standard.error
-1             Congo Girls    158.7799                  0.8692321
-2              Iran Girls    161.1837                  0.4042259
-3         Lithuania Girls    167.6299                  1.3223906
-4  Macedonia (TFYR) Girls    160.8843                  1.3151969
-5           Morocco Girls    161.1809                  0.8572136
-6             Niger Girls    159.8149                  0.9080398
-7              Oman Girls    158.4350                  0.8546351
-8              Peru Girls    154.3872                  0.3650977
-9            Taiwan Girls    160.6953                  0.7307839
-10      Timor-Leste Girls    152.7123                  0.7629082</code></pre>
+<pre class="output" tabindex="0"><code>                Country   Sex Mean.height Mean.height.standard.error
+1             Argentina Girls    161.2204                  0.6207879
+2               Comoros Girls    156.5389                  0.9313273
+3               Jamaica Girls    164.3193                  0.9400244
+4                Latvia Girls    168.8066                  1.4775853
+5           New Zealand Girls    164.6600                  0.4656146
+6                Poland Girls    165.7761                  0.6035404
+7  Syrian Arab Republic Girls    159.3795                  4.4451877
+8                  Togo Girls    159.1294                  0.8030327
+9               Vanuatu Girls    160.4836                  1.3777255
+10               Zambia Girls    157.3152                  0.6805332</code></pre>
 </div>
 <div class="section level3">
 <h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a>
 </h3>
 <p>Now, we can treat the values in the table above as ground truth and
-simulate some data based on them. Let’s generate <span class="math inline">\(N=25\)</span> samples for each country from the
+simulate some data based on them. Let’s generate <span class="math inline">\(N=15\)</span> samples for each country from the
 normal model with <span class="math inline">\(\mu =
 \text{Mean.height}\)</span> and <span class="math inline">\(\sigma =
 \text{Mean.height.standard.error}\)</span>.</p>
@@ -2346,134 +2333,142 @@ normal model with <span class="math inline">\(\mu =
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Sample size per group </span></span>
-<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
 <span></span>
-<span><span class="co"># For each country, generate some random girl's heights</span></span>
-<span><span class="va">height_sim</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">height_women10</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co"># For each country, generate heights</span></span>
+<span><span class="va">height_sim</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">N_countries</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="va">height_women10</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
 <span>  </span>
 <span>  <span class="fu">data.frame</span><span class="op">(</span>Country <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Country</span>, </span>
-<span>             <span class="co"># Random normal values based on measured mu and sd</span></span>
-<span>             Height <span class="op">=</span> <span class="fu">rnorm</span><span class="op">(</span><span class="va">N</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">Mean.height</span>, <span class="va">my_df</span><span class="op">$</span><span class="va">Mean.height.standard.error</span><span class="op">)</span><span class="op">)</span></span>
+<span>             <span class="co"># Random values from normal</span></span>
+<span>             Height <span class="op">=</span> <span class="fu">rnorm</span><span class="op">(</span><span class="va">N</span>,</span>
+<span>                            mean <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Mean.height</span>,</span>
+<span>                            sd <span class="op">=</span> <span class="va">my_df</span><span class="op">$</span><span class="va">Mean.height.standard.error</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Plot</span></span>
-<span><span class="va">height_sim</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Country</span>, y <span class="op">=</span> <span class="va">Height</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulated data"</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
+<p>Let’s plot the data</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot</span></span>
+<span><span class="va">height_sim</span> <span class="op">%&gt;%</span> </span>
+<span>    <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Height</span>, y <span class="op">=</span> <span class="va">Country</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulated data"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 <div class="section level3">
 <h3 id="modeling">Modeling<a class="anchor" aria-label="anchor" href="#modeling"></a>
 </h3>
 <p>Let’s build a normal model that uses partial pooling for the country
-means and standard deviations. The model can be written as follows.
-We’ll use <span class="math inline">\(g\)</span> to index the country,
-and <span class="math inline">\(i\)</span> for individuals.</p>
+means and standard deviations. The model can be stated as follows:</p>
 <p><span class="math display">\[\begin{align}
 X_{gi} &amp;\sim \text{N}(\mu_g, \sigma_g) \\
 \mu_g &amp;\sim \text{N}(\mu_\mu, \sigma_\mu) \\
 \sigma_g &amp;\sim \Gamma(\alpha_\sigma, \beta_\sigma) \\
 \mu_\mu &amp;\sim \text{N}(0, 100)\\
 \sigma_\mu &amp;\sim \Gamma(2, 0.1) \\
-\alpha_\sigma, \beta_\sigma  &amp;\sim \Gamma(2, 0.01)
+\alpha_\sigma, \beta_\sigma  &amp;\sim \Gamma(2, 0.01).
 \end{align}\]</span></p>
-<p>Here is the Stan program for the hierarchical normal model. The data
-points are input as a concatenated vector <code>X</code> as this would
-allow using data with uneven sample sizes. The country-specific start
-and end indices are computed in the transformed data block. The
-parameters block contains the declarations of vectors for the means and
-standard deviations, along with the hyperparameters. The hyperparameter
+<p>Above, <span class="math inline">\(X_{gi}\)</span> denotes the height
+for individual <span class="math inline">\(i\)</span> in country <span class="math inline">\(g\)</span>. The country specific parameters <span class="math inline">\(\mu_g\)</span> and <span class="math inline">\(\sigma_g\)</span> are given normal and gamma
+priors, respectively, with unknown hyperparameters that, in turn, are
+given hyperpriors on the last two lines.</p>
+<p>Below is the Stan program for this model. The data points are input
+as a concatenated vector <code>X</code>. The country-specific start and
+end indices are computed in the transformed data block. This approach
+accommodates uneven sample sizes between groups, although in our data
+these are equal.</p>
+<p>The parameters block contains the declarations of mean and standard
+deviation vectors, along with the hyperparameters. The hyperparameter
 subscripts denote the parameter they are assigned to so, for instance,
 <span class="math inline">\(\sigma_{\mu}\)</span> is the standard
 deviation of the mean parameter <span class="math inline">\(\mu\)</span>. The generated quantities block
 generates samples from the population distributions of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> and a posterior predictive
-distribution.</p>
-<div class="codewrapper sourceCode" id="cb7">
+distribution <span class="math inline">\(\tilde{X}\)</span>.</p>
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; G; <span class="co">// number of groups</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N[G]; <span class="co">// sample size within each group</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="dt">vector</span>[sum(N)] X; <span class="co">// concatenated observations</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>}</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="co">// get first and last index for each group in X</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="dt">int</span> start_i[G];</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="dt">int</span> end_i[G];</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  </span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>    </span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>    <span class="cf">if</span>(g == <span class="dv">1</span>) {</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>      start_i[<span class="dv">1</span>] = <span class="dv">1</span>;</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>      start_i[g] = start_i[g<span class="dv">-1</span>] + N[g<span class="dv">-1</span>];</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>    }</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>    </span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>    end_i[g] = start_i[g] + N[g]-<span class="dv">1</span>;</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  }</span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>}</span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  </span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>  <span class="co">// parameters</span></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>  <span class="dt">vector</span>[G] mu;</span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[G] sigma;</span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>  </span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>  <span class="co">// hyperparameters</span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>  <span class="dt">real</span> mu_mu;</span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_mu;</span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha_sigma;</span>
-<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; beta_sigma;</span>
-<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a>}</span>
-<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a>  </span>
-<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a>  <span class="co">// Likelihood for each group</span></span>
-<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
-<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a>    X[start_i[i]:end_i[i]] ~ normal(mu[i], sigma[i]);</span>
-<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a>  }</span>
-<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>  </span>
-<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>  <span class="co">// Priors</span></span>
-<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>  mu ~ normal(mu_mu, sigma_mu);</span>
-<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>  sigma ~ gamma(alpha_sigma, beta_sigma);</span>
-<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>  </span>
-<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a>  <span class="co">// Hyperpriors</span></span>
-<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a>  mu_mu ~ normal(<span class="dv">0</span>, <span class="dv">100</span>);</span>
-<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a>  sigma_mu ~ inv_gamma(<span class="dv">2</span>, <span class="fl">0.1</span>);</span>
-<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a>  alpha_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
-<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a>  beta_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
-<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a>}</span>
-<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a></span>
-<span id="cb7-55"><a href="#cb7-55" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb7-56"><a href="#cb7-56" tabindex="-1"></a>  </span>
-<span id="cb7-57"><a href="#cb7-57" tabindex="-1"></a>  <span class="dt">real</span> mu_tilda;</span>
-<span id="cb7-58"><a href="#cb7-58" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_tilda;</span>
-<span id="cb7-59"><a href="#cb7-59" tabindex="-1"></a>  <span class="dt">real</span> X_tilda; </span>
-<span id="cb7-60"><a href="#cb7-60" tabindex="-1"></a>  </span>
-<span id="cb7-61"><a href="#cb7-61" tabindex="-1"></a>  <span class="co">// Population distributions</span></span>
-<span id="cb7-62"><a href="#cb7-62" tabindex="-1"></a>  mu_tilda = normal_rng(mu_mu, sigma_mu);</span>
-<span id="cb7-63"><a href="#cb7-63" tabindex="-1"></a>  sigma_tilda = gamma_rng(alpha_sigma, beta_sigma);</span>
-<span id="cb7-64"><a href="#cb7-64" tabindex="-1"></a>  </span>
-<span id="cb7-65"><a href="#cb7-65" tabindex="-1"></a>  <span class="co">// Posterior predictive distribution</span></span>
-<span id="cb7-66"><a href="#cb7-66" tabindex="-1"></a>  X_tilda = normal_rng(mu_tilda, sigma_tilda);</span>
-<span id="cb7-67"><a href="#cb7-67" tabindex="-1"></a>  </span>
-<span id="cb7-68"><a href="#cb7-68" tabindex="-1"></a>} </span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; G; <span class="co">// number of groups</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N[G]; <span class="co">// sample size within each group</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="dt">vector</span>[sum(N)] X; <span class="co">// concatenated observations</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>}</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="co">// get first and last index for each group in X</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="dt">int</span> start_i[G];</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="dt">int</span> end_i[G];</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="cf">for</span>(g <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>    </span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>    <span class="cf">if</span>(g == <span class="dv">1</span>) {</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>      start_i[<span class="dv">1</span>] = <span class="dv">1</span>;</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>      start_i[g] = start_i[g<span class="dv">-1</span>] + N[g<span class="dv">-1</span>];</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>    }</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    </span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    end_i[g] = start_i[g] + N[g]-<span class="dv">1</span>;</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  }</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>}</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>  </span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>  <span class="co">// parameters</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>  <span class="dt">vector</span>[G] mu;</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[G] sigma;</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>  </span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>  <span class="co">// hyperparameters</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>  <span class="dt">real</span> mu_mu;</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_mu;</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha_sigma;</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; beta_sigma;</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>}</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>  </span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>  <span class="co">// Likelihood for each group</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:G) {</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>    X[start_i[i]:end_i[i]] ~ normal(mu[i], sigma[i]);</span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>  }</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a>  </span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>  mu ~ normal(mu_mu, sigma_mu);</span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>  sigma ~ gamma(alpha_sigma, beta_sigma);</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>  </span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>  <span class="co">// Hyperpriors</span></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>  mu_mu ~ normal(<span class="dv">0</span>, <span class="dv">100</span>);</span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>  sigma_mu ~ inv_gamma(<span class="dv">2</span>, <span class="fl">0.1</span>);</span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>  alpha_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>  beta_sigma ~ gamma(<span class="dv">2</span>, <span class="fl">0.01</span>);</span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a>}</span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>  </span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a>  <span class="dt">real</span> mu_tilda;</span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_tilda;</span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a>  <span class="dt">real</span> X_tilda; </span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>  </span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a>  <span class="co">// Population distributions</span></span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a>  mu_tilda = normal_rng(mu_mu, sigma_mu);</span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a>  sigma_tilda = gamma_rng(alpha_sigma, beta_sigma);</span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a>  </span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a>  <span class="co">// Posterior predictive distribution</span></span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a>  X_tilda = normal_rng(mu_tilda, sigma_tilda);</span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a>  </span>
+<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a>} </span></code></pre>
 </div>
-<p>Now we can call Stan and fit the model. Hierarchical models can often
+<p>Now we can call Stan and fit the model. Hierarchical models can
 encounter convergence issues and for this reason, we’ll use 10000
 iterations and set <code>adapt_delta = 0.99</code>. Moreover, we’ll
 speed up the inference by running 2 chains in parallel by setting
 <code>cores = 2</code>.</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2482,15 +2477,15 @@ speed up the inference by running 2 chains in parallel by setting
 <span>                  X <span class="op">=</span> <span class="va">height_sim</span><span class="op">$</span><span class="va">Height</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">normal_hier_fit</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">normal_hier_model</span>,</span>
-<span>                              <span class="va">stan_data</span>, </span>
-<span>                              iter <span class="op">=</span> <span class="fl">10000</span>,</span>
-<span>                              chains <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                                    <span class="co"># Use to get rid of divergent transitions:</span></span>
-<span>                                    control <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span>, </span>
-<span>                              cores <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                            <span class="co"># Track progress every 5000 iterations</span></span>
-<span>                            refresh <span class="op">=</span> <span class="fl">5000</span></span>
-<span>                            <span class="op">)</span></span></code></pre>
+<span>                                   <span class="va">stan_data</span>, </span>
+<span>                                   iter <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>                                   chains <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                                   <span class="co"># Use to avoid divergent transitions:</span></span>
+<span>                                   control <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>adapt_delta <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span>, </span>
+<span>                                   cores <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                                   <span class="co"># Track progress every 5000 iterations</span></span>
+<span>                                   refresh <span class="op">=</span> <span class="fl">5000</span></span>
+<span>                                   <span class="op">)</span></span></code></pre>
 </div>
 <!-- Non-pooled analysis -->
 <!-- Fit -->
@@ -2503,7 +2498,7 @@ speed up the inference by running 2 chains in parallel by setting
 </h3>
 <p>Let’s first compare the marginal posteriors for the country-specific
 estimates:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2514,15 +2509,15 @@ estimates:</p>
 <span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\]"</span>, <span class="st">""</span>, <span class="va">country</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="va">Countries</span><span class="op">[</span><span class="fu">as.integer</span><span class="op">(</span><span class="va">country</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">par_summary</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">country</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>,</span>
-<span>             color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># geom_point(data = par_summary, aes(x = country, y = mean),</span></span>
+<span>  <span class="co">#            color = posterior_color) +</span></span>
 <span>  <span class="fu">geom_errorbar</span><span class="op">(</span>data <span class="op">=</span> <span class="va">par_summary</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">country</span>, ymin <span class="op">=</span> <span class="va">X2.5.</span>, ymax <span class="op">=</span> <span class="va">X97.5.</span><span class="op">)</span>,</span>
 <span>                color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">height_women10</span> <span class="op">%&gt;%</span> </span>
@@ -2531,11 +2526,15 @@ estimates:</p>
 <span>                      value <span class="op">=</span> <span class="st">"value"</span>,</span>
 <span>                      <span class="op">-</span><span class="fu">c</span><span class="op">(</span><span class="va">Country</span>, <span class="va">Sex</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Country</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_errorbar</span><span class="op">(</span>data <span class="op">=</span> <span class="va">unpooled_summaries</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">country</span>, ymin <span class="op">=</span> <span class="va">X2.5.</span>, ymax <span class="op">=</span> <span class="va">X97.5.</span><span class="op">)</span>,</span>
+<span>                color <span class="op">=</span> <span class="st">"brown"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Blue = posterior; black = true value"</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> </span></code></pre>
 </div>
-<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="discussion1" class="callout discussion">
+<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Above, the black points represent the true values, and the intervals
+are the 95% CIs for a hierarchical and non-hierarchical models,
+respectively.</p>
+<div id="discussion1" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
@@ -2557,7 +2556,7 @@ example.</p>
 the hyperparameters. The sample-based values are included in the plots
 of <span class="math inline">\(\mu_\mu\)</span> and <span class="math inline">\(\sigma_\mu\)</span> (why not for the other two
 hyperparameters?).</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2573,7 +2572,7 @@ hyperparameters?).</p>
 <span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">population_samples_l</span>, </span>
-<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span><span class="op">)</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                 fill <span class="op">=</span> <span class="va">posterior_color</span>,</span>
 <span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_vline</span><span class="op">(</span>data <span class="op">=</span> <span class="va">height_women</span> <span class="op">%&gt;%</span> </span>
@@ -2585,12 +2584,12 @@ hyperparameters?).</p>
 <span>             <span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">hyperpar</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="population-distributions"><h2 class="section-heading">Population distributions<a class="anchor" aria-label="anchor" href="#population-distributions"></a>
+<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="population-distributions"><h2 class="section-heading">Population distributions<a class="anchor" aria-label="anchor" href="#population-distributions"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s then plot the population distributions and compare to the
 sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline">\(\sigma\)</span>’s</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2605,7 +2604,7 @@ sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline
 <span> </span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">population_l</span>,</span>
-<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span>,</span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                 bins <span class="op">=</span> <span class="fl">100</span>, fill <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">height_women</span> <span class="op">%&gt;%</span></span>
 <span>                     <span class="fu">rename_with</span><span class="op">(</span><span class="op">~</span> <span class="fu">c</span><span class="op">(</span><span class="st">'mu'</span>, <span class="st">'sigma'</span><span class="op">)</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -2616,16 +2615,12 @@ sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">par</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Blue = posterior; black = sample"</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="warning" tabindex="0"><code>Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-ℹ Please use `after_stat(density)` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-generated.</code></pre>
-</div>
-<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-predictive-distribution"><h2 class="section-heading">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
+<p><img src="../fig/hierarchical-models-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" class="figure">
+We can see that the population distribution is able to capture the
+measured average heights and standard deviations relatively well.
+Remember that these estimates are based on a limited sample: 10 out of
+200 countries with 15 individuals in each group.</p>
+</section><section id="posterior-predictive-distribution"><h2 class="section-heading">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>Finally, let’s plot the posterior predictive distribution. Let’s
@@ -2634,10 +2629,7 @@ overlay it with the simulated data based on all countries.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Sample size per group </span></span>
-<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
-<span></span>
-<span><span class="co"># For each country, generate some random girl's heights</span></span>
+<code class="sourceCode R"><span><span class="co"># For each country, generate some random girl's heights</span></span>
 <span><span class="va">Height_all</span> <span class="op">&lt;-</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">height_women</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">my_df</span> <span class="op">&lt;-</span> <span class="va">height_women</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">%&gt;%</span> </span>
@@ -2672,7 +2664,7 @@ overlay it with the simulated data based on all countries.</p>
 <span>                 alpha <span class="op">=</span> <span class="fl">0.75</span>, </span>
 <span>                 bins <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="extensions"><h2 class="section-heading">Extensions<a class="anchor" aria-label="anchor" href="#extensions"></a>
+<figure><img src="../fig/hierarchical-models-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="extensions"><h2 class="section-heading">Extensions<a class="anchor" aria-label="anchor" href="#extensions"></a>
 </h2>
 <hr class="half-width">
 <p>We analyzed women’s heights in a few countries and modeled them
@@ -2701,12 +2693,24 @@ model parameters in the whole population.</li>
 </section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
+<ul>
+<li>Bayesian Data Analysis (3rd ed.): Ch. 5</li>
+<li>Statistical Rethinking (2nd ed.): Ch. 13</li>
+<li>Bayes Rules!: Ch. 15-19</li>
+</ul></section><section id="references"><h2 class="section-heading">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<hr class="half-width">
+<p>[1] Height: Height and body-mass index trajectories of school-aged
+children and adolescents from 1985 to 2019 in 200 countries and
+territories: a pooled analysis of 2181 population-based studies with 65
+million participants. Lancet 2020, 396:1511-1524</p>
 <!-- 
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
- --></section></section><section id="aio-model-critisism"><p>Content from <a href="model-critisism.html">Model checking</a></p>
+ -->
+</section></section><section id="aio-model-critisism"><p>Content from <a href="model-critisism.html">Model checking</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-critisism.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3298,7 +3302,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  --></section></section><section id="aio-gaussian-processes"><p>Content from <a href="gaussian-processes.html">Gaussian processes</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/gaussian-processes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 61 minutes</p>
@@ -3497,7 +3501,7 @@ build.</p>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: There were 270 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre class="warning" tabindex="0"><code>Warning: There were 277 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="codewrapper">
@@ -3508,7 +3512,7 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 1.83, indicating chains have not mixed.
+<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 2.08, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat</code></pre>
 </div>
@@ -3580,7 +3584,7 @@ look like at the extremes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Uncertainty grows at locations away from the data points and starts
 to resemble the prior. Posterior far from the data would be centered
@@ -3744,7 +3748,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Other topics</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/other-topics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -3794,7 +3798,7 @@ any links that you are not going to use.
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>… and a solution here</p>
 </div>
@@ -3829,7 +3833,7 @@ any links that you are not going to use.
 </div>
 </div></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2024-04-16 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -4382,9 +4386,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
-  "dateCreated": "2024-04-08",
-  "dateModified": "2024-04-16",
-  "datePublished": "2024-04-16"
+  "dateCreated": "2024-04-17",
+  "dateModified": "2024-04-17",
+  "datePublished": "2024-04-17"
 }
 
   </script><script>
