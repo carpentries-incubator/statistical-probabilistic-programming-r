@@ -102,17 +102,17 @@ height_women10
 ```
 
 ```{.output}
-                Country   Sex Mean.height Mean.height.standard.error
-1             Argentina Girls    161.2204                  0.6207879
-2               Comoros Girls    156.5389                  0.9313273
-3               Jamaica Girls    164.3193                  0.9400244
-4                Latvia Girls    168.8066                  1.4775853
-5           New Zealand Girls    164.6600                  0.4656146
-6                Poland Girls    165.7761                  0.6035404
-7  Syrian Arab Republic Girls    159.3795                  4.4451877
-8                  Togo Girls    159.1294                  0.8030327
-9               Vanuatu Girls    160.4836                  1.3777255
-10               Zambia Girls    157.3152                  0.6805332
+              Country   Sex Mean.height Mean.height.standard.error
+1       Guinea Bissau Girls    158.7194                  1.1152409
+2            Honduras Girls    155.1831                  0.8690683
+3           Indonesia Girls    154.3552                  0.5208758
+4          Kyrgyzstan Girls    160.2019                  0.8355103
+5          Mozambique Girls    155.4210                  0.7713099
+6         Netherlands Girls    170.3612                  1.0355356
+7              Panama Girls    158.1865                  0.9293961
+8  Russian Federation Girls    164.5174                  0.7749542
+9              Serbia Girls    168.2851                  0.7831222
+10           Viet Nam Girls    158.4257                  0.5720185
 ```
 
 
