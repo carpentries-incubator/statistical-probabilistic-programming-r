@@ -102,17 +102,17 @@ height_women10
 ```
 
 ```{.output}
-              Country   Sex Mean.height Mean.height.standard.error
-1       Guinea Bissau Girls    158.7194                  1.1152409
-2            Honduras Girls    155.1831                  0.8690683
-3           Indonesia Girls    154.3552                  0.5208758
-4          Kyrgyzstan Girls    160.2019                  0.8355103
-5          Mozambique Girls    155.4210                  0.7713099
-6         Netherlands Girls    170.3612                  1.0355356
-7              Panama Girls    158.1865                  0.9293961
-8  Russian Federation Girls    164.5174                  0.7749542
-9              Serbia Girls    168.2851                  0.7831222
-10           Viet Nam Girls    158.4257                  0.5720185
+                Country   Sex Mean.height Mean.height.standard.error
+1            Azerbaijan Girls    161.3749                  0.8882764
+2              Cameroon Girls    160.4112                  0.6146315
+3                  Chad Girls    162.1242                  0.8894219
+4               Comoros Girls    156.5389                  0.9313273
+5                  Cuba Girls    160.1349                  0.9253287
+6              Thailand Girls    159.4177                  0.6445190
+7               Tunisia Girls    161.6855                  0.9464602
+8  United Arab Emirates Girls    160.5303                  0.8292111
+9        United Kingdom Girls    163.9391                  0.2547015
+10                Yemen Girls    154.7561                  0.8311695
 ```
 
 
@@ -267,6 +267,15 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
                                    # Track progress every 5000 iterations
                                    refresh = 5000
                                    )
+```
+
+```{.warning}
+Warning: There were 3096 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
+```
+
+```{.warning}
+Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 

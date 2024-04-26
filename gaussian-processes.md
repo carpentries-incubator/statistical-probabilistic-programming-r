@@ -155,7 +155,7 @@ gp_samples <- rstan::sampling(gp_model,
 ```
 
 ```{.warning}
-Warning: There were 322 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+Warning: There were 420 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
