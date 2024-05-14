@@ -102,17 +102,17 @@ height_women10
 ```
 
 ```{.output}
-                  Country   Sex Mean.height Mean.height.standard.error
-1     Antigua and Barbuda Girls    165.7237                  3.1920002
-2  Bosnia and Herzegovina Girls    167.4704                  1.2545376
-3                   China Girls    163.4641                  0.4105100
-4                 Comoros Girls    156.5389                  0.9313273
-5                 Finland Girls    166.4751                  0.6462776
-6                 Iceland Girls    168.9135                  1.5763878
-7                   Italy Girls    161.8102                  0.6558741
-8             New Zealand Girls    164.6600                  0.4656146
-9                    Oman Girls    158.4350                  0.8546351
-10                 Tuvalu Girls    163.5701                  1.0383303
+                Country   Sex Mean.height Mean.height.standard.error
+1               Austria Girls    166.9267                  0.8705255
+2     Brunei Darussalam Girls    154.8975                  0.7604821
+3          Cook Islands Girls    167.3086                  1.0003661
+4               Eritrea Girls    157.5803                  1.0916761
+5                Gambia Girls    161.7282                  0.9603018
+6                Israel Girls    162.2225                  0.7928922
+7                  Niue Girls    167.0323                  1.3099410
+8               Senegal Girls    163.9241                  0.9005197
+9  United Arab Emirates Girls    160.5303                  0.8292111
+10       United Kingdom Girls    163.9391                  0.2547015
 ```
 
 
@@ -267,6 +267,15 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
                                    # Track progress every 5000 iterations
                                    refresh = 5000
                                    )
+```
+
+```{.warning}
+Warning: There were 79 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
+```
+
+```{.warning}
+Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 
