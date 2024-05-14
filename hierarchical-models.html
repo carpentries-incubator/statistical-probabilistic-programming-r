@@ -298,7 +298,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Hierarchical Models</h1>
-        <p>Last updated on 2024-05-07 |
+        <p>Last updated on 2024-05-14 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -446,17 +446,17 @@ height of adult women measured in 2019.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                  Country   Sex Mean.height Mean.height.standard.error
-1     Antigua and Barbuda Girls    165.7237                  3.1920002
-2  Bosnia and Herzegovina Girls    167.4704                  1.2545376
-3                   China Girls    163.4641                  0.4105100
-4                 Comoros Girls    156.5389                  0.9313273
-5                 Finland Girls    166.4751                  0.6462776
-6                 Iceland Girls    168.9135                  1.5763878
-7                   Italy Girls    161.8102                  0.6558741
-8             New Zealand Girls    164.6600                  0.4656146
-9                    Oman Girls    158.4350                  0.8546351
-10                 Tuvalu Girls    163.5701                  1.0383303</code></pre>
+<pre class="output" tabindex="0"><code>                Country   Sex Mean.height Mean.height.standard.error
+1               Austria Girls    166.9267                  0.8705255
+2     Brunei Darussalam Girls    154.8975                  0.7604821
+3          Cook Islands Girls    167.3086                  1.0003661
+4               Eritrea Girls    157.5803                  1.0916761
+5                Gambia Girls    161.7282                  0.9603018
+6                Israel Girls    162.2225                  0.7928922
+7                  Niue Girls    167.0323                  1.3099410
+8               Senegal Girls    163.9241                  0.9005197
+9  United Arab Emirates Girls    160.5303                  0.8292111
+10       United Kingdom Girls    163.9391                  0.2547015</code></pre>
 </div>
 <div class="section level3">
 <h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a></h3>
@@ -622,6 +622,17 @@ speed up the inference by running 2 chains in parallel by setting
 <span>                                   refresh <span class="op">=</span> <span class="fl">5000</span></span>
 <span>                                   <span class="op">)</span></span></code></pre>
 </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: There were 79 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+</div>
 <!-- Non-pooled analysis -->
 <!-- Fit -->
 </div>
@@ -631,7 +642,7 @@ speed up the inference by running 2 chains in parallel by setting
 <h3 id="country-specific-estimates">Country-specific estimates<a class="anchor" aria-label="anchor" href="#country-specific-estimates"></a></h3>
 <p>Let’s first compare the marginal posteriors for the country-specific
 estimates:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -642,7 +653,7 @@ estimates:</p>
 <span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="fu">gsub</span><span class="op">(</span><span class="st">"\\]"</span>, <span class="st">""</span>, <span class="va">country</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>country <span class="op">=</span> <span class="va">Countries</span><span class="op">[</span><span class="fu">as.integer</span><span class="op">(</span><span class="va">country</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -688,7 +699,7 @@ example.</p>
 the hyperparameters. The sample-based values are included in the plots
 of <span class="math inline">\(\mu_\mu\)</span> and <span class="math inline">\(\sigma_\mu\)</span> (why not for the other two
 hyperparameters?).</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -720,7 +731,7 @@ hyperparameters?).</p>
 </h2>
 <hr class="half-width"><p>Let’s then plot the population distributions and compare to the
 sample <span class="math inline">\(\mu\)</span>’s and <span class="math inline">\(\sigma\)</span>’s</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -755,7 +766,7 @@ Remember that these estimates are based on a limited sample: 10 out of
 </h2>
 <hr class="half-width"><p>Finally, let’s plot the posterior predictive distribution. Let’s
 overlay it with the simulated data based on all countries.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -773,7 +784,7 @@ overlay it with the simulated data based on all countries.</p>
 <span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">do.call</span><span class="op">(</span><span class="va">rbind</span>, <span class="va">.</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -890,8 +901,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/hierarchical-models.html",
   "dateCreated": "2024-04-26",
-  "dateModified": "2024-05-07",
-  "datePublished": "2024-05-07"
+  "dateModified": "2024-05-14",
+  "datePublished": "2024-05-14"
 }
 
   </script><script>
