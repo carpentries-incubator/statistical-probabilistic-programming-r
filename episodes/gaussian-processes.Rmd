@@ -6,11 +6,10 @@ exercises: 1
 
 
 ```{r, include=FALSE}
-library(magrittr)
+library(rstan)
 library(tidyverse)
 library(grafify)
 library(cowplot)
-library(mvtnorm)
 theme_set(theme_bw(15))
 
 
@@ -365,12 +364,12 @@ Consider, for example, predicting predicting the presence of some insect species
 
 ```{r, include = FALSE}
 
-N <- 40
+N <- 50
 alpha <- -5
 beta <- 1.5
 x <- runif(N, 0, 25) %>% round(2)
 
-theta <- 0.75*exp(-0.05*(x- 15)^2)
+theta <- 0.75*exp(-0.06*(x- 15)^2)
 
 y <- rbinom(N, 1, theta)
 
@@ -383,8 +382,8 @@ The following simulated data contains observations from 40 locations including p
 
 ```{r}
 df <- data.frame(
-  x = c(6.04, 5.09, 16.23, 1.22, 10.49, 7.64, 0.86, 23.74, 7.85, 9.32, 17.13, 1.52, 3.02, 0.7, 17.77, 0.95, 5.3, 22.48, 14.24, 10.78, 18.65, 10.43, 19.38, 18.55, 9.85, 19.21, 4.29, 20.75, 16.92, 14.3, 19.59, 21.46, 11.19, 18.35, 24.37, 3.96, 0.21, 0.32, 7.27, 20.77), 
-  y = c(0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+  x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51), 
+  y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0)
 )
 
 p <- df %>%
@@ -414,13 +413,13 @@ data {
   int<lower=0, upper=1> y[N_data];
   real x_data[N_data];
 
-  // GP hyperparameters
-  real<lower=0> alpha;
-  real<lower=0> lambda;
-
   // Prediction points
   int<lower=1> N_pred;
   real x_pred[N_pred];
+  
+  // GP hyperparameters
+  real<lower=0> alpha;
+  real<lower=0> lambda;
 }
 transformed data {
   int<lower=1> N = N_data + N_pred;
@@ -441,6 +440,7 @@ transformed data {
   }
 
   L = cholesky_decompose(K);
+
 }
 parameters {
   real a;
@@ -451,6 +451,7 @@ transformed parameters {
   vector[N] f = L*eta;
 }
 model {
+
   // Likelihood
   y ~ bernoulli_logit(a + f[1:N_data]);
   // Priors
@@ -488,7 +489,7 @@ theta_summary <- rstan::summary(logistic_gp_fit, "theta")$summary %>%
 ```
 
 
-Then we'll look at the posterior of $\theta$, the probability of presence of the species and overlay it with the data. The posterior looks reasonable in the sense that the posterior of $\theta$ is higher in the temperature range where presence was observed. However, the posterior values seem too high at lower temperature values and, moreover, start veering up. Why might this be?
+Then we'll look at the posterior of $\theta$, the probability of presence of the species and overlay it with the data. The posterior looks reasonable in the sense that the posterior of $\theta$ is higher in the temperature range where presence was observed. However, the posterior values seem too high across the temperature range and, moreover, start veering up at the ends. Why might this be?
 
 ```{r}
 p_theta <- 
@@ -505,15 +506,11 @@ p_theta
 ```
 
 ::::::::::::::::::::::::::::::::::: challenge
-Modify the Stan program for the logistic GP regression so that the posterior behavior is more reasonable in the prediction range. 
-
-:::::::: hint
-What is the GP prior mean and what kind of $\theta$ values does it imply?
-:::::::::::::
+Think of ways to modify the Stan program for the logistic GP regression so that the posterior behavior is more reasonable in the prediction range. 
 
 ::::::::::::::::: solution
 
-Let's modify the program by setting the GP mean to a low value. 
+Let's modify the program by setting the GP mean to a negative value and treating the length scale as a parameter. 
 
 ```{stan output.var="logistic_gp_model2"}
 data {
@@ -522,23 +519,28 @@ data {
   int<lower=0, upper=1> y[N_data];
   real x_data[N_data];
 
-  // GP hyperparameters
-  real<lower=0> alpha;
-  real<lower=0> lambda;
-
   // Prediction points
   int<lower=1> N_pred;
   real x_pred[N_pred];
+
+  real<lower=0> alpha;
 }
 transformed data {
   int<lower=1> N = N_data + N_pred;
-
   real x[N];
-  matrix[N, N] K;
-  matrix[N, N] L;
-
   x[1:N_data] = x_data;
   x[(N_data+1):N] = x_pred;
+}
+parameters {
+  real a;
+  vector[N] eta;
+  real<lower=0> lambda;
+}
+transformed parameters {
+
+  matrix[N, N] K;
+  matrix[N, N] L;
+  vector[N] f;
 
   // Covariance function
   K = gp_exp_quad_cov(x, alpha, lambda);
@@ -549,13 +551,7 @@ transformed data {
   }
 
   L = cholesky_decompose(K);
-}
-parameters {
-  real a;
-  vector[N] eta;
-}
-transformed parameters {
-  vector[N] f = rep_vector(-2, N) + L*eta;
+  f = rep_vector(-3, N) + L*eta;
 }
 model {
   // Likelihood
@@ -563,6 +559,7 @@ model {
   // Priors
   a ~ normal(0, 10);
   eta ~ normal(0, 1);
+  lambda ~ gamma(2, 1);
 }
 generated quantities{
   vector[N] theta = 1 / (1 + exp(-(alpha + f)));
@@ -578,10 +575,9 @@ logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,
                                         y = df$y, 
                                         x_data = df$x, 
                                         alpha = 1, 
-                                        lambda = 3, 
                                         N_pred = N_pred, 
                                         x_pred = x_pred), 
-                                   refresh = 0)
+                                   chains = 1)
 
 theta_summary2 <- rstan::summary(logistic_gp_fit2, "theta")$summary %>%
   data.frame() %>%
