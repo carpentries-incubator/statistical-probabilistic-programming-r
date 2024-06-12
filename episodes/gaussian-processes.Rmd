@@ -355,247 +355,247 @@ mean(posterior_at_0 > 0)
 
 
 
-## Logistic Gaussian process regression
+<!-- ## Logistic Gaussian process regression -->
 
-Gaussian processes can also be used as priors in models where the relationship between the explanatory and response variables is more complex. 
+<!-- Gaussian processes can also be used as priors in models where the relationship between the explanatory and response variables is more complex.  -->
 
-Consider, for example, predicting predicting the presence of some insect species in different regions based on average annual temperature. Now the response variable $y$ is binary with $y=0$ and $y=1$ corresponding to absence and presence, respectfully.
-
-
-```{r, include = FALSE}
-
-N <- 50
-alpha <- -5
-beta <- 1.5
-x <- runif(N, 0, 25) %>% round(2)
-
-theta <- 0.75*exp(-0.06*(x- 15)^2)
-
-y <- rbinom(N, 1, theta)
-
-df <- data.frame(x, y)
-
-```
+<!-- Consider, for example, predicting predicting the presence of some insect species in different regions based on average annual temperature. Now the response variable $y$ is binary with $y=0$ and $y=1$ corresponding to absence and presence, respectfully. -->
 
 
-The following simulated data contains observations from 40 locations including presence/absence observations for a species and yearly average temperature. Plotting the data suggests there is an optimal range where the species can exists.
+<!-- ```{r, include = FALSE} -->
 
-```{r}
-df <- data.frame(
-  x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51), 
-  y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0)
-)
+<!-- N <- 50 -->
+<!-- alpha <- -5 -->
+<!-- beta <- 1.5 -->
+<!-- x <- runif(N, 0, 25) %>% round(2) -->
 
-p <- df %>%
-  ggplot() +
-  geom_point(aes(x, y))
+<!-- theta <- 0.75*exp(-0.06*(x- 15)^2) -->
 
-print(p)
+<!-- y <- rbinom(N, 1, theta) -->
 
+<!-- df <- data.frame(x, y) -->
 
-```
+<!-- ``` -->
 
 
-One way of modeling presence/absence data is with logistic regression:
+<!-- The following simulated data contains observations from 40 locations including presence/absence observations for a species and yearly average temperature. Plotting the data suggests there is an optimal range where the species can exists. -->
 
-$$ y \sim \text{Bernoulli}(\theta) \\ 
-\theta = \frac{1}{1 + e^{-(\alpha + \beta x)}},$$ where $\alpha, \beta$ are real numbers and $\theta$ is the probability of $y = 1$.
+<!-- ```{r} -->
+<!-- df <- data.frame( -->
+<!--   x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51),  -->
+<!--   y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0) -->
+<!-- ) -->
 
-However, in this standard form, the relationship between temperature and presence is monotonous: assuming $\beta > 0$, higher temperatures imply higher probability of presence. This is in disagreement with the data and, of course, with reality. For this reason, we will modify the model so that the term $\beta x$ is replaced with a non-parametric function $f(x)$. We'll give $f$ a GP prior and use a normal prior $N(0, 10)$ for the baseline parameter $\alpha$. 
+<!-- p <- df %>% -->
+<!--   ggplot() + -->
+<!--   geom_point(aes(x, y)) -->
 
-In the model block, we utilize the built-in Stan function `bernoulli_logit` to write the likelihood statement. In the generated quantities block, we'll generate $\theta$, the probability of presence as a function of temperature. 
-
-
-```{stan output.var="logistic_gp_model"}
-data {
-  // Data
-  int<lower=1> N_data;
-  int<lower=0, upper=1> y[N_data];
-  real x_data[N_data];
-
-  // Prediction points
-  int<lower=1> N_pred;
-  real x_pred[N_pred];
-  
-  // GP hyperparameters
-  real<lower=0> alpha;
-  real<lower=0> lambda;
-}
-transformed data {
-  int<lower=1> N = N_data + N_pred;
-
-  real x[N];
-  matrix[N, N] K;
-  matrix[N, N] L;
-
-  x[1:N_data] = x_data;
-  x[(N_data+1):N] = x_pred;
-
-  // Covariance function
-  K = gp_exp_quad_cov(x, alpha, lambda);
-
-  // Add nugget on diagonal for numerical stability
-  for (n in 1:N) {
-    K[n, n] = K[n, n] + 1e-6;
-  }
-
-  L = cholesky_decompose(K);
-
-}
-parameters {
-  real a;
-  vector[N] eta;
-}
-transformed parameters {
-  // mu = (0, 0, ..., 0)
-  vector[N] f = L*eta;
-}
-model {
-
-  // Likelihood
-  y ~ bernoulli_logit(a + f[1:N_data]);
-  // Priors
-  a ~ normal(0, 10);
-  eta ~ normal(0, 1);
-}
-generated quantities{
-  vector[N] theta = 1 / (1 + exp(-(alpha + f)));
-}
-
-```
+<!-- print(p) -->
 
 
-Let's fit the model and extract posterior summary of $\theta$.  
-
-```{r}
-
-x_pred <- seq(min(df$x), max(df$x), length.out = 100)
-N_pred <- length(x_pred)
-
-logistic_gp_fit <- rstan::sampling(logistic_gp_model, 
-                                   list(N_data = nrow(df), 
-                                        y = df$y, 
-                                        x_data = df$x, 
-                                        alpha = 1, 
-                                        lambda = 3, 
-                                        N_pred = N_pred, 
-                                        x_pred = x_pred), 
-                                   refresh = 0)
-
-theta_summary <- rstan::summary(logistic_gp_fit, "theta")$summary %>%
-  data.frame() %>%
-  select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>%
-  mutate(x = c(df$x, x_pred))
-```
+<!-- ``` -->
 
 
-Then we'll look at the posterior of $\theta$, the probability of presence of the species and overlay it with the data. The posterior looks reasonable in the sense that the posterior of $\theta$ is higher in the temperature range where presence was observed. However, the posterior values seem too high across the temperature range and, moreover, start veering up at the ends. Why might this be?
+<!-- One way of modeling presence/absence data is with logistic regression: -->
 
-```{r}
-p_theta <- 
-  ggplot() + 
-  geom_ribbon(data = theta_summary, 
-              aes(x = x, ymin = lower_2.5, ymax = upper_97.5), 
-              fill = posterior_color, alpha = 0.5) + 
-  geom_line(data = theta_summary, 
-            aes(x = x, y = mean), color = posterior_color) + 
-  geom_point(data = df, 
-             aes(x = x, y = y))
+<!-- $$ y \sim \text{Bernoulli}(\theta) \\  -->
+<!-- \theta = \frac{1}{1 + e^{-(\alpha + \beta x)}},$$ where $\alpha, \beta$ are real numbers and $\theta$ is the probability of $y = 1$. -->
 
-p_theta
-```
+<!-- However, in this standard form, the relationship between temperature and presence is monotonous: assuming $\beta > 0$, higher temperatures imply higher probability of presence. This is in disagreement with the data and, of course, with reality. For this reason, we will modify the model so that the term $\beta x$ is replaced with a non-parametric function $f(x)$. We'll give $f$ a GP prior and use a normal prior $N(0, 10)$ for the baseline parameter $\alpha$.  -->
 
-::::::::::::::::::::::::::::::::::: challenge
-Think of ways to modify the Stan program for the logistic GP regression so that the posterior behavior is more reasonable in the prediction range. 
+<!-- In the model block, we utilize the built-in Stan function `bernoulli_logit` to write the likelihood statement. In the generated quantities block, we'll generate $\theta$, the probability of presence as a function of temperature.  -->
 
-::::::::::::::::: solution
 
-Let's modify the program by setting the GP mean to a negative value and treating the length scale as a parameter. 
+<!-- ```{stan output.var="logistic_gp_model"} -->
+<!-- data { -->
+<!--   // Data -->
+<!--   int<lower=1> N_data; -->
+<!--   int<lower=0, upper=1> y[N_data]; -->
+<!--   real x_data[N_data]; -->
 
-```{stan output.var="logistic_gp_model2"}
-data {
-  // Data
-  int<lower=1> N_data;
-  int<lower=0, upper=1> y[N_data];
-  real x_data[N_data];
+<!--   // Prediction points -->
+<!--   int<lower=1> N_pred; -->
+<!--   real x_pred[N_pred]; -->
 
-  // Prediction points
-  int<lower=1> N_pred;
-  real x_pred[N_pred];
+<!--   // GP hyperparameters -->
+<!--   real<lower=0> alpha; -->
+<!--   real<lower=0> lambda; -->
+<!-- } -->
+<!-- transformed data { -->
+<!--   int<lower=1> N = N_data + N_pred; -->
 
-  real<lower=0> alpha;
-}
-transformed data {
-  int<lower=1> N = N_data + N_pred;
-  real x[N];
-  x[1:N_data] = x_data;
-  x[(N_data+1):N] = x_pred;
-}
-parameters {
-  real a;
-  vector[N] eta;
-  real<lower=0> lambda;
-}
-transformed parameters {
+<!--   real x[N]; -->
+<!--   matrix[N, N] K; -->
+<!--   matrix[N, N] L; -->
 
-  matrix[N, N] K;
-  matrix[N, N] L;
-  vector[N] f;
+<!--   x[1:N_data] = x_data; -->
+<!--   x[(N_data+1):N] = x_pred; -->
 
-  // Covariance function
-  K = gp_exp_quad_cov(x, alpha, lambda);
+<!--   // Covariance function -->
+<!--   K = gp_exp_quad_cov(x, alpha, lambda); -->
 
-  // Add nugget on diagonal for numerical stability
-  for (n in 1:N) {
-    K[n, n] = K[n, n] + 1e-6;
-  }
+<!--   // Add nugget on diagonal for numerical stability -->
+<!--   for (n in 1:N) { -->
+<!--     K[n, n] = K[n, n] + 1e-6; -->
+<!--   } -->
 
-  L = cholesky_decompose(K);
-  f = rep_vector(-3, N) + L*eta;
-}
-model {
-  // Likelihood
-  y ~ bernoulli_logit(a + f[1:N_data]);
-  // Priors
-  a ~ normal(0, 10);
-  eta ~ normal(0, 1);
-  lambda ~ gamma(2, 1);
-}
-generated quantities{
-  vector[N] theta = 1 / (1 + exp(-(alpha + f)));
-}
+<!--   L = cholesky_decompose(K); -->
 
-```
+<!-- } -->
+<!-- parameters { -->
+<!--   real a; -->
+<!--   vector[N] eta; -->
+<!-- } -->
+<!-- transformed parameters { -->
+<!--   // mu = (0, 0, ..., 0) -->
+<!--   vector[N] f = L*eta; -->
+<!-- } -->
+<!-- model { -->
 
-Refit the model and check posterior
+<!--   // Likelihood -->
+<!--   y ~ bernoulli_logit(a + f[1:N_data]); -->
+<!--   // Priors -->
+<!--   a ~ normal(0, 10); -->
+<!--   eta ~ normal(0, 1); -->
+<!-- } -->
+<!-- generated quantities{ -->
+<!--   vector[N] theta = 1 / (1 + exp(-(alpha + f))); -->
+<!-- } -->
 
-```{r}
-logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2, 
-                                   list(N_data = nrow(df), 
-                                        y = df$y, 
-                                        x_data = df$x, 
-                                        alpha = 1, 
-                                        N_pred = N_pred, 
-                                        x_pred = x_pred), 
-                                   chains = 1)
+<!-- ``` -->
 
-theta_summary2 <- rstan::summary(logistic_gp_fit2, "theta")$summary %>%
-  data.frame() %>%
-  select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>%
-  mutate(x = c(df$x, x_pred))
 
-p_theta2 <- 
-  ggplot() + 
-  geom_ribbon(data = theta_summary2, 
-              aes(x = x, ymin = lower_2.5, ymax = upper_97.5), 
-              fill = posterior_color, alpha = 0.5) + 
-  geom_line(data = theta_summary2, 
-            aes(x = x, y = mean), color = posterior_color) + 
-  geom_point(data = df, 
-             aes(x = x, y = y))
+<!-- Let's fit the model and extract posterior summary of $\theta$.   -->
 
-p_theta2
-```
+<!-- ```{r} -->
+
+<!-- x_pred <- seq(min(df$x), max(df$x), length.out = 100) -->
+<!-- N_pred <- length(x_pred) -->
+
+<!-- logistic_gp_fit <- rstan::sampling(logistic_gp_model,  -->
+<!--                                    list(N_data = nrow(df),  -->
+<!--                                         y = df$y,  -->
+<!--                                         x_data = df$x,  -->
+<!--                                         alpha = 1,  -->
+<!--                                         lambda = 3,  -->
+<!--                                         N_pred = N_pred,  -->
+<!--                                         x_pred = x_pred),  -->
+<!--                                    refresh = 0) -->
+
+<!-- theta_summary <- rstan::summary(logistic_gp_fit, "theta")$summary %>% -->
+<!--   data.frame() %>% -->
+<!--   select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>% -->
+<!--   mutate(x = c(df$x, x_pred)) -->
+<!-- ``` -->
+
+
+<!-- Then we'll look at the posterior of $\theta$, the probability of presence of the species and overlay it with the data. The posterior looks reasonable in the sense that the posterior of $\theta$ is higher in the temperature range where presence was observed. However, the posterior values seem too high across the temperature range and, moreover, start veering up at the ends. Why might this be? -->
+
+<!-- ```{r} -->
+<!-- p_theta <-  -->
+<!--   ggplot() +  -->
+<!--   geom_ribbon(data = theta_summary,  -->
+<!--               aes(x = x, ymin = lower_2.5, ymax = upper_97.5),  -->
+<!--               fill = posterior_color, alpha = 0.5) +  -->
+<!--   geom_line(data = theta_summary,  -->
+<!--             aes(x = x, y = mean), color = posterior_color) +  -->
+<!--   geom_point(data = df,  -->
+<!--              aes(x = x, y = y)) -->
+
+<!-- p_theta -->
+<!-- ``` -->
+
+<!-- ::::::::::::::::::::::::::::::::::: challenge -->
+<!-- Think of ways to modify the Stan program for the logistic GP regression so that the posterior behavior is more reasonable in the prediction range.  -->
+
+<!-- ::::::::::::::::: solution -->
+
+<!-- Let's modify the program by setting the GP mean to a negative value and treating the length scale as a parameter.  -->
+
+<!-- ```{stan output.var="logistic_gp_model2"} -->
+<!-- data { -->
+<!--   // Data -->
+<!--   int<lower=1> N_data; -->
+<!--   int<lower=0, upper=1> y[N_data]; -->
+<!--   real x_data[N_data]; -->
+
+<!--   // Prediction points -->
+<!--   int<lower=1> N_pred; -->
+<!--   real x_pred[N_pred]; -->
+
+<!--   real<lower=0> alpha; -->
+<!-- } -->
+<!-- transformed data { -->
+<!--   int<lower=1> N = N_data + N_pred; -->
+<!--   real x[N]; -->
+<!--   x[1:N_data] = x_data; -->
+<!--   x[(N_data+1):N] = x_pred; -->
+<!-- } -->
+<!-- parameters { -->
+<!--   real a; -->
+<!--   vector[N] eta; -->
+<!--   real<lower=0> lambda; -->
+<!-- } -->
+<!-- transformed parameters { -->
+
+<!--   matrix[N, N] K; -->
+<!--   matrix[N, N] L; -->
+<!--   vector[N] f; -->
+
+<!--   // Covariance function -->
+<!--   K = gp_exp_quad_cov(x, alpha, lambda); -->
+
+<!--   // Add nugget on diagonal for numerical stability -->
+<!--   for (n in 1:N) { -->
+<!--     K[n, n] = K[n, n] + 1e-6; -->
+<!--   } -->
+
+<!--   L = cholesky_decompose(K); -->
+<!--   f = rep_vector(-3, N) + L*eta; -->
+<!-- } -->
+<!-- model { -->
+<!--   // Likelihood -->
+<!--   y ~ bernoulli_logit(a + f[1:N_data]); -->
+<!--   // Priors -->
+<!--   a ~ normal(0, 10); -->
+<!--   eta ~ normal(0, 1); -->
+<!--   lambda ~ gamma(2, 1); -->
+<!-- } -->
+<!-- generated quantities{ -->
+<!--   vector[N] theta = 1 / (1 + exp(-(alpha + f))); -->
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- Refit the model and check posterior -->
+
+<!-- ```{r} -->
+<!-- logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,  -->
+<!--                                    list(N_data = nrow(df),  -->
+<!--                                         y = df$y,  -->
+<!--                                         x_data = df$x,  -->
+<!--                                         alpha = 1,  -->
+<!--                                         N_pred = N_pred,  -->
+<!--                                         x_pred = x_pred),  -->
+<!--                                    chains = 1) -->
+
+<!-- theta_summary2 <- rstan::summary(logistic_gp_fit2, "theta")$summary %>% -->
+<!--   data.frame() %>% -->
+<!--   select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>% -->
+<!--   mutate(x = c(df$x, x_pred)) -->
+
+<!-- p_theta2 <-  -->
+<!--   ggplot() +  -->
+<!--   geom_ribbon(data = theta_summary2,  -->
+<!--               aes(x = x, ymin = lower_2.5, ymax = upper_97.5),  -->
+<!--               fill = posterior_color, alpha = 0.5) +  -->
+<!--   geom_line(data = theta_summary2,  -->
+<!--             aes(x = x, y = mean), color = posterior_color) +  -->
+<!--   geom_point(data = df,  -->
+<!--              aes(x = x, y = y)) -->
+
+<!-- p_theta2 -->
+<!-- ``` -->
 
 
 ::::::::::::::::::::::::::
