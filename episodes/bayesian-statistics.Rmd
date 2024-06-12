@@ -1,7 +1,7 @@
 ---
 title: 'Short introduction to Bayesian statistics'
-teaching: 60
-exercises: 2
+teaching: 90
+exercises: 0
 ---
 
 ```{r, include=FALSE}
@@ -27,12 +27,12 @@ posterior_color <- "#56B4E9"
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-Learn to: 
+Learn to 
 
-- Formulate prior, likelihood, posterior distributions
-- Fit a Bayesian model with the grid approximation
-- Communicate posterior information
-- Work with with posterior samples 
+- formulate prior, likelihood, posterior distributions.
+- fit a Bayesian model with the grid approximation.
+- communicate posterior information.
+- work with with posterior samples.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
