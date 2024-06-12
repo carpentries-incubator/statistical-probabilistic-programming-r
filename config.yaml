@@ -64,7 +64,7 @@ episodes:
 - mcmc.Rmd
 - hierarchical-models.Rmd
 - model-critisism.Rmd
-- gaussian-processes.Rmd
+# - gaussian-processes.Rmd
 - other-topics.Rmd
 - exercises.Rmd
 
