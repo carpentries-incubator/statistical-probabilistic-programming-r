@@ -5,6 +5,12 @@ exercises: 2
 ---
 
 
+``` warning
+Warning in check_dep_version(): ABI version mismatch: 
+lme4 was built with Matrix ABI version 1
+Current Matrix ABI version is 2
+Please re-install lme4 from source or restore original 'Matrix' package
+```
 
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -41,7 +47,7 @@ Looking at a histogram, it's evident that the data is approximately symmetricall
 
 
 
-```{.output}
+``` output
  [1]  -2.270   1.941   0.502  -0.378  -0.226  -0.786  -0.209  -0.637   0.814
 [10]   0.566  -1.901  -2.047  -0.689  -3.509   0.133  -4.353   1.067   0.722
 [19]   0.861   0.523   0.681   2.982   0.429  -0.539  -0.512  -1.090  -8.044
@@ -84,7 +90,7 @@ We'll use a basic Stan program for the normal model and produce the replicate da
 
 
 
-```stan
+``` stan
 data {
   int<lower=0> N;
   vector[N] X;
@@ -114,7 +120,7 @@ generated quantities {
 Let's fit model and extract the replicates. 
 
 
-```r
+``` r
 # Fit
 normal_fit <- sampling(normal_model,
                        list(N = N, X = df$X), 
@@ -155,7 +161,7 @@ Let's do an identical analysis using the Cauchy model.
 The results are generated with code that is essentially copy-pasted from above, with a minor distinction in the Stan program.
 
 
-```stan
+``` stan
 data {
   int<lower=0> N;
   vector[N] X;
@@ -211,7 +217,7 @@ The log pointwise predictive density is computed as $\sum_{i=1}^N \log(\frac{1}{
 Let's use the WAIC to compare the normal and Cauchy models. First we'll need to fit both models on the data using the Stan programs presented above. 
 
 
-```r
+``` r
 stan_data <- list(N = N, X = df$X)
 
 # Fit
@@ -230,7 +236,7 @@ cauchy_samples <- rstan::extract(cauchy_fit, c("mu", "sigma")) %>% data.frame
 Then we can write a function to compute lppd and the penalization, and combine these into WAIC 
 
 
-```r
+``` r
 WAIC <- function(samples, data, model){
   
   # Loop over data points
@@ -287,19 +293,19 @@ WAIC <- function(samples, data, model){
 Applying this function to the posterior samples, we'll obtain a lower value for the Cauchy model, implying a better fit to the data. This is in line with the posterior predictive check performed above. 
 
 
-```r
+``` r
 WAIC(normal_samples, df$X, model = "normal")
 ```
 
-```{.output}
+``` output
 [1] 582.6821
 ```
 
-```r
+``` r
 WAIC(cauchy_samples, df$X, model = "cauchy")
 ```
 
-```{.output}
+``` output
 [1] 413.7336
 ```
 
@@ -322,7 +328,7 @@ where $\text{lppd}_\text{loo-cv}$  is the sum of the log predictive densities of
 Let's first write a helper function that computes the log predictive density for a point, given posterior samples and the model. 
 
 
-```r
+``` r
 # Get log predictive density for a point x,
 # given data X and posterior samples
 # See BDA3 p.175
@@ -356,7 +362,7 @@ get_lpd <- function(x, samples, model) {
 Now we can perform cross-validation for the normal and Cauchy models: 
 
 
-```r
+``` r
 # Loop over data partitions
 normal_loo_lpds <- lapply(1:N, function(i) {
   
@@ -469,7 +475,7 @@ cauchy_full_lpd <- lapply(1, function(dummy) {
 Let's combine the computed log densities, and compute model-wise sums
 
 
-```r
+``` r
 # Combine
 lpds <- rbind(normal_loo_lpds, 
               normal_full_lpd, 
@@ -485,7 +491,7 @@ lpd_summary <- lpds %>%
 Finally, we can compute the estimated of the effective number of parameters. As with WAIC, smaller values imply better suitability. In line with the posterior predictive check and WAIC, we see that, again, the Cauchy distribution gives a better description of the data that the normal model. 
 
 
-```r
+``` r
 # Effective number of parameters
 p_loo_cv_normal <- lpd_summary[lpd_summary$model == "normal", "lppd"] - lpd_summary[lpd_summary$model == "normal_loo", "lppd"]
 p_loo_cv_cauchy <- lpd_summary[lpd_summary$model == "cauchy", "lppd"] - lpd_summary[lpd_summary$model == "cauchy_loo", "lppd"]
@@ -494,15 +500,15 @@ p_loo_cv_cauchy <- lpd_summary[lpd_summary$model == "cauchy", "lppd"] - lpd_summ
 paste0("Effective number of parameters, normal = ", p_loo_cv_normal)
 ```
 
-```{.output}
+``` output
 [1] "Effective number of parameters, normal = 33.7059542565819"
 ```
 
-```r
+``` r
 paste0("Effective number of parameters, cauchy = ", p_loo_cv_cauchy)
 ```
 
-```{.output}
+``` output
 [1] "Effective number of parameters, cauchy = 1.903135942788"
 ```
 
