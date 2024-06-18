@@ -92,11 +92,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 42%" class="percentage">
-    42%
+<aside class="col-md-12 lesson-progress"><div style="width: 47%" class="percentage">
+    47%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 42%" aria-valuenow="42" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 47%" aria-valuenow="47" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -294,7 +294,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>MCMC</h1>
-        <p>Last updated on 2024-05-14 |
+        <p>Last updated on 2024-06-18 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -313,7 +313,7 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How can the posterior distribution be sampled?</li>
+<ul><li>How does Stan generate the posterior samples?</li>
 </ul></div>
 </div>
 </div>
@@ -321,24 +321,21 @@
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Learn the basic idea of the Metropolis-Hasting algorithm</li>
-<li>Know how to assess MCMC convergence</li>
-<li>Be able to implement a random walk Metropolis-Hasting algorithm</li>
+<p>Learn</p>
+<ul><li>the basic idea of the Metropolis-Hasting algorithm.</li>
+<li>how to assess Markov chain Monte Carlo convergence.</li>
+<li>how to implement a random walk Metropolis-Hasting algorithm.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<p>In the general case, computing the posterior distribution
-analytically for a probabilistic model poses an insurmountable
-challenge. Moreover, even if the analytical form were available,
-marginalizing it could still be difficult. For these reasons,
-approximation methods need to be relied upon. In Episode 2, we saw that
-drawing conclusions about the inference could be achieved effortlessly
-by working with samples drawn from the posterior distribution. The topic
-of this episode, Markov chain Monte Carlo (MCMC) methods, is a means for
-generating such samples and the most extensively employed solution for
-fitting probabilistic models.</p>
+<p>The standard solution to fitting probabilistic models is to generate
+random samples from the posterior distribution. In the previous episode,
+we learned how to generate posterior samples using Stan without knowing
+how the samples are generated. In this episode, we’ll study Markov chain
+Monte Carlo (MCMC) methods, which are the class of algorithms Stan uses
+under the hood.</p>
 <section id="metropolis-hastings-algorithm"><h2 class="section-heading">Metropolis-Hastings algorithm<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
 </h2>
 <hr class="half-width"><p>MCMC methods draw samples from the posterior distribution by
@@ -347,67 +344,69 @@ ultimately converge to the posterior. While there are other variants of
 MCMC, on this course we will mainly focus on the Metropolis-Hasting (MH)
 algorithm outlined below. As this algorithm is ran long enough,
 convergence to posterior (or to other specified target density) is
-guaranteed and eventually the samples will start approximating the
-posterior distribution.</p>
-<p>A chain starts at some initial value <span class="math inline">\(\theta^{0}\)</span>, which can be random or based
-on some more informed criterion. The only precondition is that <span class="math inline">\(p(\theta^{0} | X) &gt; 0\)</span>. A transition
-distribution <span class="math inline">\(T_i\)</span> is used to
-generate a proposal for the subsequent value. An often-used solution is
-the normal distribution centered at the current value, <span class="math inline">\(\theta^* \sim N(\theta^{i}, \sigma^2)\)</span>.
-This is where the term “Markov chain” comes from, each element is
-generated based on only the previous one.</p>
-<p>Next, the generated proposal <span class="math inline">\(\theta^*\)</span> is either accepted or rejected.
-If each proposal was accepted, the sequence would simply be a random
-walk in the parameter space and would not approximate the posterior to
-any degree. The rule that determines the acceptance should reflect this;
-proposals towards higher posterior densities should be favored over
-proposals toward low density areas. The solution is to compute the
-ratio</p>
+guaranteed. This means that that if the chain is run long enough, the
+samples will eventually start approximating the posterior
+distribution.</p>
+<p>A chain starts is initialized at value <span class="math inline">\(\theta^{0}\)</span>, which can be manually set or
+random. The only precondition is that the target distribution has
+positive mass at the location, <span class="math inline">\(p(\theta^{0}
+| X) &gt; 0\)</span>. Then, a proposal <span class="math inline">\(\theta^*\)</span> for the next value is generated
+from a transition distribution <span class="math inline">\(T_i\)</span>.
+An often-used solution is the normal distribution centered at the
+current value, <span class="math inline">\(\theta^* \sim N(\theta^{i},
+\sigma^2)\)</span>. This is where the term “Markov chain” comes from,
+the value of each element depends only on the previous one.</p>
+<p>Next, the proposal <span class="math inline">\(\theta^*\)</span> is
+either accepted or rejected. If each proposal was accepted, the sequence
+would simply be a random walk in the parameter space and would not
+approximate the posterior to any degree. The rule that determines the
+acceptance should reflect this; proposals towards higher posterior
+densities should be favored over proposals toward low density areas. The
+solution is to compute the ratio</p>
 <p><span class="math display">\[r = \frac{p(\theta^* | X) / T_i(\theta^*
 | \theta^{i})}{p(\theta^i | X) / T_i(\theta^{i} | \theta^{*})},\]</span>
 and use is as the probability to move to the proposed value. In other
 words, the next element in the chain is <span class="math inline">\(\theta^{i+1} = \theta^*\)</span> with probability
-<span class="math inline">\(\max(r, 1)\)</span>, and with probability
-<span class="math inline">\(1-r\)</span>, the proposal is rejected and
-the chain stays at the current value, <span class="math inline">\(\theta^{i+1} = \theta^{i}.\)</span> This approach
+<span class="math inline">\(\min(r, 1)\)</span>. If the proposal is not
+accepted the chain stays at the current value, <span class="math inline">\(\theta^{i+1} = \theta^{i}.\)</span> This approach
 induces directional randomness in the chain; proposals towards higher
 density areas are generally accepted but transitions away from it are
-also possible.</p>
-<p>In situations where the transition density is symmetric, such as with
-the normal distribution, <span class="math inline">\(r\)</span> reduces
-simply to the ratio of the posterior values, and all proposals toward
-higher posterior density areas are accepted.</p>
+also possible. In situations where the transition density is symmetric,
+such as with the normal distribution, <span class="math inline">\(r\)</span> reduces simply to the ratio of the
+posterior values, and all proposals toward higher posterior density
+areas are accepted.</p>
 <div class="section level3">
 <h3 id="example-banana-distribution">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a></h3>
 <p>Let’s implement the MH algorithm and use it to generate posterior
-samples of the following statistical model:</p>
+samples from the following statistical model:</p>
 <p><span class="math display">\[X \sim N(\theta_1 + \theta_2^2, 1) \\
 \theta_1, \theta_2 \sim N(0, 1),\]</span></p>
 <div class="section level4">
 <h4 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a></h4>
-<p>Let’s begin by writing some helper functions that carry out the
+<p>We begin by writing some helper functions that carry out the
 incremental steps of the MH algorithm.</p>
 <p>First, we need to be able to generate the proposals. Let’s use the
-multivariate (2D) normal with diagonal covariance scaled by a scalar
+two-dimensional normal with identity covariance scaled by a scalar
 <code>jump_scale</code>.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">generate_proposal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars_now</span>, <span class="va">jump_scale</span> <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># Number of parameters</span></span>
-<span>  <span class="va">my_n</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">pars_now</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">n_pars</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">pars_now</span><span class="op">)</span></span>
+<span>  </span>
 <span>  <span class="co"># Random draw from multivariate normal</span></span>
 <span>  <span class="va">theta_star</span> <span class="op">&lt;-</span> <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">1</span>,</span>
 <span>                                 mean <span class="op">=</span> <span class="va">pars_now</span>,</span>
-<span>                                 sigma <span class="op">=</span> <span class="va">jump_scale</span><span class="op">*</span><span class="fu">diag</span><span class="op">(</span><span class="va">my_n</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                 sigma <span class="op">=</span> <span class="va">jump_scale</span><span class="op">*</span><span class="fu">diag</span><span class="op">(</span><span class="va">n_pars</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw">return</span><span class="op">(</span><span class="va">theta_star</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
 <p>Running MH also requires computing the (unnormalized) posterior
-density at the proposed parameter values. This functions returns the log
-posterior value at point <code>pars</code>. The density is computed on
-log scale to avoid issues with numerical precision.</p>
+density at the proposed parameter values. This function returns the log
+posterior value at the location <code>pars</code>. The density is
+computed on log scale to avoid issues with numerical precision.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -494,11 +493,9 @@ algorithm steps.</p>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span>  </span>
-<span>  <span class="co"># Into data frame</span></span>
 <span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">return</span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> </span>
-<span>  </span>
 <span><span class="op">}</span></span></code></pre>
 </div>
 </div>
@@ -541,21 +538,20 @@ computed with the grid approximation.</p>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_MH1</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Looking at the figure, a few observations become evident. Firstly,
-despite the chosen initial value being moderately distant from the
+despite the chosen initial value being moderately far from the
 high-density areas of the posterior, the algorithm quickly converges to
 the target region. This rapid convergence is due to the fact that
 proposals toward higher density areas are favored, in fact they are
 always accepted when using normal density proposals. However, it’s
 important to note that such swift convergence is not guaranteed in all
 scenarios. In cases with a high number of model parameters, there’s an
-increased likelihood of the sampler taking ‘wrong’ directions, a
-phenomenon known as the curse of dimensionality. The sampler, before
-convergence, may introduce bias to the posterior approximation.</p>
+increased likelihood of the sampler taking ‘wrong’ directions. The
+samples before convergence introduce bias to the posterior
+approximation.</p>
 <p>Secondly, the posterior is not fully explored; no samples are
 generated from the lower mode in the figure. This highlights a crucial
-point: even if the sampler has converged, it doesn’t necessarily imply
-that the drawn samples provide a representative picture of the
-target.</p>
+point: even if the sampler has converged, it doesn’t guarantee that the
+drawn samples provide a representative picture of the target.</p>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -600,24 +596,23 @@ iterations. This leads to inefficiency.</p></li>
 <li><p>Sample autocorrelation: Consecutive samples are close to each
 other. Ideally, we’d like to generate independent samples from the
 target. High sample autocorrelation can be caused by several factors,
-including the ones mentioned in the previous points</p></li>
+including the ones mentioned in the previous points.</p></li>
 </ol><p>These issues can be remedied with:</p>
 <ol style="list-style-type: decimal"><li><p>Running multiple long chains with distinct or random initial
 values.</p></li>
 <li><p>Discarding the early proportion of the chain as warm-up.</p></li>
-<li><p>Setting an appropriate proposal distribution. This is easier said
-than done and not trivial in practice.</p></li>
-</ol><p>It also important to somehow be able to monitor whether or not the
-sampler has converged. This can be done with statistics, such as
-<em>effective sample size</em> and <span class="math inline">\(\hat{R}\)</span>. Effective sample size estimates
-how many independent samples have been generated. Ideally, this number
-should be close to the total number of iterations the sampler has been
-ran. <span class="math inline">\(\hat{R}\)</span> on the other hand
-measures chain mixing, that is, how well the chains agree with each
-other. It is computed by comparing the variance within each chain to the
-total variance of all samples. Usually, values of <span class="math inline">\(\hat{R} &gt; 1.1\)</span> are considered as
+<li><p>Setting an appropriate proposal distribution.</p></li>
+</ol><p>It also important to be able to monitor whether the sampler has
+converged. This can be done with statistics, such as <em>effective
+sample size</em> and <span class="math inline">\(\hat{R}\)</span>.
+Effective sample size estimates how many independent samples have been
+generated. Ideally, this number should be close to the total number of
+iterations the sampler has been ran for. <span class="math inline">\(\hat{R}\)</span> on the other hand measures chain
+mixing, that is, how well the chains agree with each other. It is
+computed by comparing the variance within each chain to the total
+variance of all samples. Usually, values of <span class="math inline">\(\hat{R} &gt; 1.1\)</span> are considered as
 signaling convergence issues.</p>
-<p>Besides statistics, visually evaluation the samples can be useful.
+<p>Besides statistics, visually evaluating the samples can be useful.
 <em>Trace plots</em> refer to graphs where the marginal posterior
 samples are plotted against sample index. Trace plots can be used to
 investigate convergence and mixing properties, and can reveal, for
@@ -625,7 +620,7 @@ example, multimodality.</p>
 <p>In Stan, many of the above-mentioned points have been automatized. By
 default, Stan runs 4 chains with 2000 iterations each, and discards the
 initial 50% as warm-up. Moreover, it computes <span class="math inline">\(\hat{R}\)</span>, effective sample size, and other
-statistics and throws warnings in case or issues.</p>
+statistics and throws warnings in case of issues.</p>
 <div class="section level3">
 <h3 id="example-continued">Example continued<a class="anchor" aria-label="anchor" href="#example-continued"></a></h3>
 <p>In light of the above information, let’s re-fit the model of the
@@ -686,8 +681,11 @@ posterior distribution:</p>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_joint_2</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s see what the trace plots look like.</p>
-<p><em>Trace plot conclusions: —-&gt; </em></p>
+<figure><img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s see what the trace plots look like. Generally, we’d want to see
+the samples randomly scattered around a mean value. For <span class="math inline">\(\theta_1\)</span> this is more or less the case,
+although there some autocorrelation is apparent. With <span class="math inline">\(\theta_2\)</span> we can see that the chains have
+mixed as they explore the same parameter ranges. However, the bimodality
+of the posterior is quite apparent.</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -717,19 +715,20 @@ posterior distribution:</p>
 <figure><img src="fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </section><section id="hamiltonian-monte-carlo"><h2 class="section-heading">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
 </h2>
-<hr class="half-width"><p>Hamiltonian Monte Carlo (HMC) is a variant of the Metropolis-Hastings
-algorithm implemented in Stan. The defining feature is the elaborate
-scheme it uses to generate proposals. Briefly, the idea is to simulate
-the dynamics of a particle moving in a potential landscape defined by
-the posterior. At each iteration, the particle is given a random
-momentum vector and then its dynamics are simulated forward for some
-time. The end of the trajectory is then taken as the proposal value.</p>
+<hr class="half-width"><p>Stan uses a variant of the Metropolis-Hastings algorithm called
+Hamiltonian Monte Carlo (HMC; or actually a variant HMC). The defining
+feature is the elaborate scheme it uses to generate proposals. Briefly,
+the idea is to simulate the dynamics of a particle moving in a potential
+landscape defined by the posterior. At each iteration, the particle is
+given a random momentum vector and then its dynamics are simulated
+forward for some time. The end of the trajectory is then taken as the
+proposal value.</p>
 <p>Compared to the random walk Metropolis-Hastings we implemented in
 this episode, HMC is very efficient. The main advantages of HMC is its
 ability to explore high-dimensional spaces more effectively, making it
-especially useful in complex models with many parameters</p>
-<p>A type of convergence criterion exclusive to HMC are divergent
-transitions. In region of the parameter space where the posterior has
+especially useful in complex models with many parameters.</p>
+<p>A type of convergence criterion exclusive to HMC is the divergent
+transition. In a region of the parameter space where the posterior has
 high curvature, the simulated particle dynamics can produce spurious
 transitions which do not represent the posterior accurately. Such
 transitions are called divergent and signal that the particular area of
@@ -815,9 +814,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/mcmc.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/mcmc.html",
-  "dateCreated": "2024-04-26",
-  "dateModified": "2024-05-14",
-  "datePublished": "2024-05-14"
+  "dateCreated": "2024-06-18",
+  "dateModified": "2024-06-18",
+  "datePublished": "2024-06-18"
 }
 
   </script><script>
