@@ -1,7 +1,7 @@
 ---
 title: 'MCMC'
 teaching: 60
-exercises: 2
+exercises: 0
 ---
 
 
@@ -41,7 +41,7 @@ and use is as the probability to move to the proposed value. In other words, the
 
 
 
-### Example: Banana distribution
+## Example: Banana distribution
 
 Let's implement the MH algorithm and use it to generate posterior samples from the following statistical model: 
 

@@ -194,8 +194,8 @@ gp_samples <- rstan::sampling(gp_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8.9e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.89 seconds.
+Chain 1: Gradient evaluation took 8.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -212,14 +212,14 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 31.364 seconds (Warm-up)
-Chain 1:                35.946 seconds (Sampling)
-Chain 1:                67.31 seconds (Total)
+Chain 1:  Elapsed Time: 30.464 seconds (Warm-up)
+Chain 1:                36.087 seconds (Sampling)
+Chain 1:                66.551 seconds (Total)
 Chain 1: 
 ```
 
 ``` warning
-Warning: There were 488 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+Warning: There were 492 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
@@ -228,7 +228,7 @@ Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ``` warning
-Warning: The largest R-hat is 1.45, indicating chains have not mixed.
+Warning: The largest R-hat is 1.31, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat
 ```
@@ -403,7 +403,7 @@ mean(posterior_at_0 > 0)
 ```
 
 ``` output
-[1] 0.609
+[1] 0.6
 ```
 
 

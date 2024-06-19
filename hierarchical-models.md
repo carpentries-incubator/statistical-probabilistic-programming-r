@@ -287,9 +287,6 @@ Warning: Examine the pairs() plot to diagnose sampling problems
 
 
 
-
-## Results
-
 ### Country-specific estimates
 
 Let's first compare the marginal posteriors for the country-specific estimates from the hierarchical model (blue) and an unpooled model (brown) that treats the parameters separately. 
@@ -333,7 +330,7 @@ Experiment with the data and fit. Explore the effect of sample size, unequal sam
 ::::::::::::::::::::::::::::::::::::::::
 
 
-## Hyperparameters
+### Hyperparameters
 
 Let's then plot the population distribution's parameters, that is, the hyperparameters. The sample-based values are included in the plots of $\mu_\mu$ and $\sigma_\mu$ (why not for the other two hyperparameters?). It seems that the model has slightly underestimated the overall average and variance of the mean parameter $\mu$, which is not suprising given the low number of data points. 
 
@@ -366,7 +363,7 @@ ggplot() +
 
 <img src="fig/hierarchical-models-rendered-unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
 
-## Population distributions 
+### Population distributions 
 
 Let's then plot the population distributions and compare to the true sample means and standard errors. 
 
@@ -398,7 +395,7 @@ ggplot() +
 <img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
 We can see that the population distribution is able to capture the measured average heights and standard deviations relatively well, although the within-country variation is estimated to be too concentrated. However, remember that these estimates are based on a limited sample: 10 out of 200 countries with 10 individuals in each group. 
 
-## Posterior predictive distribution
+### Posterior predictive distribution
 
 Finally, let's plot the posterior predictive distribution and overlay it with the simulated data based on all countries.
 
@@ -450,7 +447,7 @@ ggplot() +
 
 
 
-## Extensions
+### Extensions
 
 Here, we analyzed the height for women in a randomly chosen countries using a hierarchical model. The model could be extended further, for instance, by adding hierarchy between sexes, continents, developed/developing countries etc. 
 
