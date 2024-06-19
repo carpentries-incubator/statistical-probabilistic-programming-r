@@ -261,8 +261,9 @@
         
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#gaussian-process-regression">Gaussian process regression</a></li>
+        <ul><li><a href="#example-1-gaussian-process-regression">Example 1: Gaussian process regression</a></li>
 <li><a href="#cholesky-parameterization">Cholesky parameterization</a></li>
+<li><a href="#example-2-logistic-gaussian-process-regression">Example 2: Logistic Gaussian process regression</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
         
@@ -378,24 +379,25 @@
 </div>
 </div>
 </div>
-<p>Gaussian processes (GPs) are a class of stochastic (random)
-processes. They are widely used for non-parametric regression, that is,
-when the functional form of the predictor is not predetermined but
-learned from the data. Formally, a Gaussian process <span class="math inline">\(GP(\mu, K)\)</span> is defined as a collection of
+<p>Gaussian processes (GPs) are a class of stochastic (random) processes
+that are widely used for non-parametric regression, that is, when the
+relationship between the predictors and the dependent variable has no
+parametric form. Formally, a Gaussian process <span class="math inline">\(GP(\mu, K)\)</span> is defined as a collection of
 random variables <span class="math inline">\(X\)</span> with the
 property that any finite subset <span class="math inline">\(X_I \subset
 X\)</span> follows a multivariate normal distribution with mean <span class="math inline">\(\mu\)</span> and covariance <span class="math inline">\(K\)</span>.</p>
 <p>This definition implies a distribution over functions, meaning that
-generating a sample from a GP produces a function. This in turn implies
-that GPs can be used as priors for unknown functional forms between
-variables.</p>
+generating a realization from a GP produces a function. This in turn
+implies that GPs can be used as priors for unknown functional forms
+between variables.</p>
 <p>As an example, consider modeling crop yields as a function of
 fertilizer use. Presumably, there exists a non-linear trend between
 these variables, as insufficient or excessive fertilizer use will lead
 to suboptimal yields. In the absence of a parametric model, GPs can
-function as a prior for the relationship <span class="math inline">\(f\)</span> between fertilizer and yield. In its
-simplest form, measured yields <span class="math inline">\(y\)</span>
-could be modeled as noisy observations from <span class="math inline">\(f(x)\)</span>, where <span class="math inline">\(x\)</span> is the amount of fertilizer used:</p>
+function as a prior for the relationship between fertilizer and yield,
+<span class="math inline">\(f\)</span>. In its simplest form, measured
+yields <span class="math inline">\(y\)</span> could be modeled as noisy
+observations from <span class="math inline">\(f(x)\)</span>, where <span class="math inline">\(x\)</span> is the amount of fertilizer used:</p>
 <p><span class="math display">\[\begin{align}
 y &amp;\sim N(f(x), \sigma^2) \\
 f(x) &amp;\sim GP(\mu, K).
@@ -407,8 +409,8 @@ process characteristics.</p>
 <p>Perhaps the most frequently used covariance function is the squared
 exponential kernel <span class="math inline">\(K_{SE}(x, x’) = \alpha^2
 \exp{ \frac{(x - x’)^2}{2 \lambda} }\)</span>. The parameter <span class="math inline">\(\alpha^2\)</span> sets the variance of the
-process, and <span class="math inline">\(\lambda\)</span> determines the
-scale of the correlation; a large <span class="math inline">\(\lambda\)</span> implies large correlation between
+process, while <span class="math inline">\(\lambda\)</span> determines
+the scale of the correlation; increasing <span class="math inline">\(\lambda\)</span> increases the correlation between
 <span class="math inline">\(x\)</span> and <span class="math inline">\(x’\)</span>. In the figure below, we’ve plotted
 some realizations from a GP with <span class="math inline">\(\mu = (0,
 0, \ldots, 0)\)</span> and squared exponential covariance function with
@@ -436,8 +438,8 @@ some realizations from a GP with <span class="math inline">\(\mu = (0,
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
 <span></span>
-<span><span class="co"># Multivariate normal</span></span>
-<span><span class="va">gp_samples</span> <span class="op">&lt;-</span> <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">10</span>, sigma <span class="op">=</span> <span class="fu">sq_exp_cov</span><span class="op">(</span><span class="va">x</span>, <span class="va">lambda</span>, <span class="va">alpha</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Sample from multivariate normal</span></span>
+<span><span class="va">gp_samples</span> <span class="op">&lt;-</span> <span class="fu">rmvnorm</span><span class="op">(</span><span class="fl">10</span>, sigma <span class="op">=</span> <span class="fu">sq_exp_cov</span><span class="op">(</span><span class="va">x</span>, <span class="va">lambda</span>, <span class="va">alpha</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gp_samples_l</span> <span class="op">&lt;-</span> <span class="va">gp_samples</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="va">t</span> <span class="op">%&gt;%</span> </span>
@@ -460,18 +462,18 @@ some realizations from a GP with <span class="math inline">\(\mu = (0,
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
 </h3>
 <div class="callout-content">
-<p>Generate samples from the GP above with different values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> to get intuition about the role
-of these hyperparameters.</p>
-<p>Implement the exponential covariance kernel defined as <span class="math inline">\(K_{SE}(x, x’) = \alpha^2 \exp{ \frac{|x -
+<ol style="list-style-type: decimal"><li><p>Generate samples from the GP above with different values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> to get intuition about the role
+of these hyperparameters.</p></li>
+<li><p>Implement the exponential covariance kernel defined as <span class="math inline">\(K_{exp}(x, x’) = \alpha^2 \exp{ \frac{|x -
 x’|}{\lambda} }\)</span> and generate samples using this kernel. What is
 the qualitative difference to samples generated with squared exponential
-covariance?</p>
-</div>
+covariance?</p></li>
+</ol></div>
 </div>
 </div>
 <p>Next, we’ll explore some examples that make use of Gaussian
 processes.</p>
-<section id="gaussian-process-regression"><h2 class="section-heading">Gaussian process regression<a class="anchor" aria-label="anchor" href="#gaussian-process-regression"></a>
+<section id="example-1-gaussian-process-regression"><h2 class="section-heading">Example 1: Gaussian process regression<a class="anchor" aria-label="anchor" href="#example-1-gaussian-process-regression"></a>
 </h2>
 <hr class="half-width"><p>Assume we’d like to estimate the relationship between variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> based on the following 5 data
 points.</p>
@@ -479,27 +481,24 @@ points.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="op">-</span><span class="fl">2.76</span>, <span class="fl">2.46</span>, <span class="op">-</span><span class="fl">1.52</span>, <span class="op">-</span><span class="fl">4.34</span>, <span class="fl">4.54</span>,  <span class="fl">1</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">df6</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="op">-</span><span class="fl">2.76</span>, <span class="fl">2.46</span>, <span class="op">-</span><span class="fl">1.52</span>, <span class="op">-</span><span class="fl">4.34</span>, <span class="fl">4.54</span>,  <span class="fl">1</span><span class="op">)</span>,</span>
 <span>                 y <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="op">-</span><span class="fl">0.81</span>, <span class="op">-</span><span class="fl">0.85</span>, <span class="fl">0.76</span>, <span class="op">-</span><span class="fl">0.41</span>, <span class="op">-</span><span class="fl">1.48</span>,  <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot </span></span>
-<span><span class="va">p_data</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">p_data</span> <span class="op">&lt;-</span> <span class="va">df6</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p_data</span></span></code></pre>
 </div>
-<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>As explained above, we’ll assume <span class="math inline">\(y\)</span> are noisy observations from some
-unknown function <span class="math inline">\(f(x)\)</span> for which
-we’ll give a GP prior. Because we will not recover any functional (such
-as polynomial) form for <span class="math inline">\(f\)</span>, we will
-only learn the value of <span class="math inline">\(f\)</span> at
-separate predetermined locations <span class="math inline">\(x\)</span>.
-The covariance function needs to be computed in all those points, where
-the value <span class="math inline">\(f(x)\)</span> is of interest.
-Let’s predict the <span class="math inline">\(f\)</span> on a grid of
-points spanning the interval (-5, 5), stored in vector
-<code>x_pred</code>:</p>
+<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We’ll assume <span class="math inline">\(y\)</span> are noisy
+observations from some unknown function <span class="math inline">\(f(x)\)</span> for which we’ll give a GP prior.
+Because we will not recover any functional (such as polynomial) form for
+<span class="math inline">\(f\)</span>, we will only learn the value of
+<span class="math inline">\(f\)</span> at separate predetermined
+locations <span class="math inline">\(x\)</span>. The covariance
+function needs to be computed in all those points. Let’s estimate <span class="math inline">\(f\)</span> on a grid of points spanning the
+interval (-5, 5), stored in vector <code>x_pred</code>:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -507,11 +506,11 @@ points spanning the interval (-5, 5), stored in vector
 <code class="sourceCode R"><span><span class="va">x_pred</span> <span class="op">&lt;-</span> <span class="fu">seq</span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">N_pred</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">x_pred</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Next we’ll build the Stan program. The model structure is simple; the
+<p>Next we’ll build the Stan program. The model structure is simple: the
 model block defines the likelihood as the normal distribution with mean
 <span class="math inline">\(f(x)\)</span>:
-<code>y ~ normal(f[1:N_data], sigma);</code>. Notice that this is a
-vectorized statement so the mean of each <span class="math inline">\(y_i\)</span> equals <span class="math inline">\(f(x_i)\)</span>.</p>
+<code>y ~ normal(f[1:N_data], sigma)</code>. Notice that this is a
+vectorized statement so the mean <span class="math inline">\(y_i\)</span> equals <span class="math inline">\(f(x_i)\)</span> for all <span class="math inline">\(i\)</span>.</p>
 <p>The parameter vector <code>f</code> contains the values of <span class="math inline">\(f\)</span> corresponding to the data points, in
 addition to the locations where we want interpolate. The covariance
 function is computed in the transformed data block, where first a vector
@@ -578,9 +577,9 @@ standard deviation to <span class="math inline">\(\sigma =
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit</span></span>
 <span><span class="va">gp_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">gp_model</span>,</span>
-<span>                       <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span>
-<span>                            x_data <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>                            y <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>,</span>
+<span>                       <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">df6</span><span class="op">)</span>,</span>
+<span>                            x_data <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>                            y <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>,</span>
 <span>                            lambda <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                            alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                            sigma <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -594,8 +593,8 @@ standard deviation to <span class="math inline">\(\sigma =
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8.4e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
+Chain 1: Gradient evaluation took 8.7e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.87 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -612,15 +611,15 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 30.464 seconds (Warm-up)
-Chain 1:                36.087 seconds (Sampling)
-Chain 1:                66.551 seconds (Total)
+Chain 1:  Elapsed Time: 31.323 seconds (Warm-up)
+Chain 1:                36.221 seconds (Sampling)
+Chain 1:                67.544 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: There were 492 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre class="warning" tabindex="0"><code>Warning: There were 489 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="codewrapper">
@@ -631,7 +630,7 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 1.31, indicating chains have not mixed.
+<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 1.57, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat</code></pre>
 </div>
@@ -651,15 +650,15 @@ https://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
 </div>
 <p>The inference takes some time (minutes on a standard laptop) even
 though we only use (an insufficient) single chain and 1000 iterations.
-There are also some convergence issues. Let’s ignore these at this
-point, and look at the output.</p>
+Stan also throws warnings about convergence issues. Let’s ignore these
+at this point, and look at the output.</p>
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">gp_samples</span>, <span class="st">"f"</span><span class="op">)</span><span class="op">[[</span><span class="st">"f"</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="va">t</span> <span class="op">%&gt;%</span> <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span> <span class="co"># data and prediction locations</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span> <span class="co"># data and prediction locations</span></span>
 <span></span>
 <span><span class="va">f_samples_l</span> <span class="op">&lt;-</span> <span class="va">f_samples</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"sample"</span>, value <span class="op">=</span> <span class="st">"f"</span>, <span class="op">-</span><span class="va">x</span><span class="op">)</span></span>
@@ -669,58 +668,66 @@ point, and look at the output.</p>
 <span>    data <span class="op">=</span> <span class="va">f_samples_l</span>,</span>
 <span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">f</span>, group <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df6</span>, </span>
 <span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>, color <span class="op">=</span><span class="st">"red"</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_f</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The figure contains the data points in red and samples from the
 posterior distribution of <span class="math inline">\(f\)</span> in
-black. Note that each posterior sample corresponds to a function. This
+black. Each posterior sample corresponds to a function. This
 distribution essentially captures the model’s interpretation of the
 underlying trend within the data. The estimate for the trend seems
 plausible. However, in certain regions, the posterior seems a bit
 strange. For example, the posterior between the farthest two data points
-on the right contains most of the mass above the line connecting the
-points, and hardly any below it. This is likely a symptom of the
+on the right contains most of the mass below the line connecting the
+points, and hardly above below it. This is likely a symptom of the
 convergence issues.</p>
-<div id="discussion2" class="callout discussion">
+<div id="challenge1" class="callout challenge">
 <div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
+<i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
 </h3>
 <div class="callout-content">
 <p>In the figure above, where is the posterior uncertainty the highest
 and why? What controls the uncertainty at the locations of the data? If
 we made the prediction range wider, say, from -10 to 10, what would the
-posterior look like at the extremes? ::::::::::::::::::::::: solution
-Uncertainty grows at locations away from the data points and starts to
-resemble the prior. At the data locations, the uncertainty is controlled
-by the parameter <span class="math inline">\(\sigma\)</span>. Far from
-the data, the posterior would be centered around 0 and have variance
-<span class="math inline">\(\alpha^2\)</span>.</p>
+posterior look like at the extremes?</p>
 </div>
 </div>
 </div>
-<p>::::::::::::::::::::::::::::::::::::::::</p>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>Uncertainty grows at locations away from the data points and starts
+to resemble the prior. At the data locations, the uncertainty is
+controlled by the parameter <span class="math inline">\(\sigma\)</span>.
+Far from the data, the posterior would be centered around 0 and have
+variance <span class="math inline">\(\alpha^2\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
 </section><section id="cholesky-parameterization"><h2 class="section-heading">Cholesky parameterization<a class="anchor" aria-label="anchor" href="#cholesky-parameterization"></a>
 </h2>
 <hr class="half-width"><p>Running the previous example look a few minutes even though the
 amount data and number of prediction locations was modest. Scalability
 is a weak point of Gaussian processes but luckily there is a trick that
 can be used to speed up the inference and to improve convergence.</p>
-<p>The idea is to use the Cholesky decomposition of the covariance
-function <span class="math inline">\(K = LL^T\)</span> to reparameterize
-the target function <span class="math inline">\(f\)</span> as <span class="math inline">\(f = \mu + L\eta\)</span>. Now, if the random
+<p>By using the Cholesky decomposition of the covariance function <span class="math inline">\(K = LL^T\)</span>, the target function <span class="math inline">\(f\)</span> can be reparameterized as <span class="math inline">\(f = \mu + L\eta\)</span>. Now, if the random
 variable <span class="math inline">\(\eta\)</span> is distributed as
 multivariate normal with mean 0 and identity covariance matrix, it
 implies that <span class="math inline">\(f \sim GP(\mu, K)\)</span>.</p>
 <p>The Stan program below implements this parameterization. The Cholesky
 decomposition is performed at the end of the transformed data block and
 the reparameterization in the transformed parameters block. The
-likelihood statement is unchanged but prior is now given to <span class="math inline">\(\eta\)</span>. Other parts of the program are
+likelihood statement is unchanged but prior is now given for <span class="math inline">\(\eta\)</span>. Other parts of the program are
 identical to the previous example.</p>
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -782,9 +789,9 @@ completed in a few seconds with no convergence issues:</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gp_cholesky_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">gp_cholesky_model</span>,</span>
-<span>                       <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span>
-<span>                            x_data <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>                            y <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>,</span>
+<span>                       <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">df6</span><span class="op">)</span>,</span>
+<span>                            x_data <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>                            y <span class="op">=</span> <span class="fu">as.array</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>,</span>
 <span>                            lambda <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                            alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                            sigma <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -801,7 +808,7 @@ one recovered without the Cholesky parameterization?</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f_cholesky_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">gp_cholesky_samples</span>, <span class="st">"f"</span><span class="op">)</span><span class="op">[[</span><span class="st">"f"</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="va">t</span> <span class="op">%&gt;%</span> <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df6</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">f_cholesky_samples_l</span> <span class="op">&lt;-</span> <span class="va">f_cholesky_samples</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"sample"</span>, value <span class="op">=</span> <span class="st">"f"</span>, <span class="op">-</span><span class="va">x</span><span class="op">)</span></span>
@@ -811,29 +818,29 @@ one recovered without the Cholesky parameterization?</p>
 <span>    data <span class="op">=</span> <span class="va">f_cholesky_samples_l</span>,</span>
 <span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">f</span>, group <span class="op">=</span> <span class="va">sample</span><span class="op">)</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>, </span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df6</span>, </span>
 <span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>, color <span class="op">=</span><span class="st">"red"</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_cholesky_f</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge1" class="callout challenge">
+<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
 </h3>
 <div class="callout-content">
 <p>For the previous example, compute the posterior probability for <span class="math inline">\(f(0) &gt; 0\)</span>.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
-  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -848,202 +855,312 @@ one recovered without the Cholesky parameterization?</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>[1] 0.6</code></pre>
+<pre class="output" tabindex="0"><code>[1] 0.5993333</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
-<!-- ## Logistic Gaussian process regression -->
-<!-- Gaussian processes can also be used as priors in models where the relationship between the explanatory and response variables is more complex.  -->
-<!-- Consider, for example, predicting predicting the presence of some insect species in different regions based on average annual temperature. Now the response variable $y$ is binary with $y=0$ and $y=1$ corresponding to absence and presence, respectfully. -->
-<!-- ```{r, include = FALSE} -->
-<!-- N <- 50 -->
-<!-- alpha <- -5 -->
-<!-- beta <- 1.5 -->
-<!-- x <- runif(N, 0, 25) %>% round(2) -->
-<!-- theta <- 0.75*exp(-0.06*(x- 15)^2) -->
-<!-- y <- rbinom(N, 1, theta) -->
-<!-- df <- data.frame(x, y) -->
-<!-- ``` -->
-<!-- The following simulated data contains observations from 40 locations including presence/absence observations for a species and yearly average temperature. Plotting the data suggests there is an optimal range where the species can exists. -->
-<!-- ```{r} -->
-<!-- df <- data.frame( -->
-<!--   x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51),  -->
-<!--   y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0) -->
-<!-- ) -->
-<!-- p <- df %>% -->
-<!--   ggplot() + -->
-<!--   geom_point(aes(x, y)) -->
-<!-- print(p) -->
-<!-- ``` -->
-<!-- One way of modeling presence/absence data is with logistic regression: -->
-<!-- $$ y \sim \text{Bernoulli}(\theta) \\  -->
-<!-- \theta = \frac{1}{1 + e^{-(\alpha + \beta x)}},$$ where $\alpha, \beta$ are real numbers and $\theta$ is the probability of $y = 1$. -->
-<!-- However, in this standard form, the relationship between temperature and presence is monotonous: assuming $\beta > 0$, higher temperatures imply higher probability of presence. This is in disagreement with the data and, of course, with reality. For this reason, we will modify the model so that the term $\beta x$ is replaced with a non-parametric function $f(x)$. We'll give $f$ a GP prior and use a normal prior $N(0, 10)$ for the baseline parameter $\alpha$.  -->
-<!-- In the model block, we utilize the built-in Stan function `bernoulli_logit` to write the likelihood statement. In the generated quantities block, we'll generate $\theta$, the probability of presence as a function of temperature.  -->
-<!-- ```{stan output.var="logistic_gp_model"} -->
-<!-- data { -->
-<!--   // Data -->
-<!--   int<lower=1> N_data; -->
-<!--   int<lower=0, upper=1> y[N_data]; -->
-<!--   real x_data[N_data]; -->
-<!--   // Prediction points -->
-<!--   int<lower=1> N_pred; -->
-<!--   real x_pred[N_pred]; -->
-<!--   // GP hyperparameters -->
-<!--   real<lower=0> alpha; -->
-<!--   real<lower=0> lambda; -->
-<!-- } -->
-<!-- transformed data { -->
-<!--   int<lower=1> N = N_data + N_pred; -->
-<!--   real x[N]; -->
-<!--   matrix[N, N] K; -->
-<!--   matrix[N, N] L; -->
-<!--   x[1:N_data] = x_data; -->
-<!--   x[(N_data+1):N] = x_pred; -->
-<!--   // Covariance function -->
-<!--   K = gp_exp_quad_cov(x, alpha, lambda); -->
-<!--   // Add nugget on diagonal for numerical stability -->
-<!--   for (n in 1:N) { -->
-<!--     K[n, n] = K[n, n] + 1e-6; -->
-<!--   } -->
-<!--   L = cholesky_decompose(K); -->
-<!-- } -->
-<!-- parameters { -->
-<!--   real a; -->
-<!--   vector[N] eta; -->
-<!-- } -->
-<!-- transformed parameters { -->
-<!--   // mu = (0, 0, ..., 0) -->
-<!--   vector[N] f = L*eta; -->
-<!-- } -->
-<!-- model { -->
-<!--   // Likelihood -->
-<!--   y ~ bernoulli_logit(a + f[1:N_data]); -->
-<!--   // Priors -->
-<!--   a ~ normal(0, 10); -->
-<!--   eta ~ normal(0, 1); -->
-<!-- } -->
-<!-- generated quantities{ -->
-<!--   vector[N] theta = 1 / (1 + exp(-(alpha + f))); -->
-<!-- } -->
-<!-- ``` -->
-<!-- Let's fit the model and extract posterior summary of $\theta$.   -->
-<!-- ```{r} -->
-<!-- x_pred <- seq(min(df$x), max(df$x), length.out = 100) -->
-<!-- N_pred <- length(x_pred) -->
-<!-- logistic_gp_fit <- rstan::sampling(logistic_gp_model,  -->
-<!--                                    list(N_data = nrow(df),  -->
-<!--                                         y = df$y,  -->
-<!--                                         x_data = df$x,  -->
-<!--                                         alpha = 1,  -->
-<!--                                         lambda = 3,  -->
-<!--                                         N_pred = N_pred,  -->
-<!--                                         x_pred = x_pred),  -->
-<!--                                    refresh = 0) -->
-<!-- theta_summary <- rstan::summary(logistic_gp_fit, "theta")$summary %>% -->
-<!--   data.frame() %>% -->
-<!--   select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>% -->
-<!--   mutate(x = c(df$x, x_pred)) -->
-<!-- ``` -->
-<!-- Then we'll look at the posterior of $\theta$, the probability of presence of the species and overlay it with the data. The posterior looks reasonable in the sense that the posterior of $\theta$ is higher in the temperature range where presence was observed. However, the posterior values seem too high across the temperature range and, moreover, start veering up at the ends. Why might this be? -->
-<!-- ```{r} -->
-<!-- p_theta <-  -->
-<!--   ggplot() +  -->
-<!--   geom_ribbon(data = theta_summary,  -->
-<!--               aes(x = x, ymin = lower_2.5, ymax = upper_97.5),  -->
-<!--               fill = posterior_color, alpha = 0.5) +  -->
-<!--   geom_line(data = theta_summary,  -->
-<!--             aes(x = x, y = mean), color = posterior_color) +  -->
-<!--   geom_point(data = df,  -->
-<!--              aes(x = x, y = y)) -->
-<!-- p_theta -->
-<!-- ``` -->
-<!-- ::::::::::::::::::::::::::::::::::: challenge -->
-<!-- Think of ways to modify the Stan program for the logistic GP regression so that the posterior behavior is more reasonable in the prediction range.  -->
-<!-- ::::::::::::::::: solution -->
-<!-- Let's modify the program by setting the GP mean to a negative value and treating the length scale as a parameter.  -->
-<!-- ```{stan output.var="logistic_gp_model2"} -->
-<!-- data { -->
-<!--   // Data -->
-<!--   int<lower=1> N_data; -->
-<!--   int<lower=0, upper=1> y[N_data]; -->
-<!--   real x_data[N_data]; -->
-<!--   // Prediction points -->
-<!--   int<lower=1> N_pred; -->
-<!--   real x_pred[N_pred]; -->
-<!--   real<lower=0> alpha; -->
-<!-- } -->
-<!-- transformed data { -->
-<!--   int<lower=1> N = N_data + N_pred; -->
-<!--   real x[N]; -->
-<!--   x[1:N_data] = x_data; -->
-<!--   x[(N_data+1):N] = x_pred; -->
-<!-- } -->
-<!-- parameters { -->
-<!--   real a; -->
-<!--   vector[N] eta; -->
-<!--   real<lower=0> lambda; -->
-<!-- } -->
-<!-- transformed parameters { -->
-<!--   matrix[N, N] K; -->
-<!--   matrix[N, N] L; -->
-<!--   vector[N] f; -->
-<!--   // Covariance function -->
-<!--   K = gp_exp_quad_cov(x, alpha, lambda); -->
-<!--   // Add nugget on diagonal for numerical stability -->
-<!--   for (n in 1:N) { -->
-<!--     K[n, n] = K[n, n] + 1e-6; -->
-<!--   } -->
-<!--   L = cholesky_decompose(K); -->
-<!--   f = rep_vector(-3, N) + L*eta; -->
-<!-- } -->
-<!-- model { -->
-<!--   // Likelihood -->
-<!--   y ~ bernoulli_logit(a + f[1:N_data]); -->
-<!--   // Priors -->
-<!--   a ~ normal(0, 10); -->
-<!--   eta ~ normal(0, 1); -->
-<!--   lambda ~ gamma(2, 1); -->
-<!-- } -->
-<!-- generated quantities{ -->
-<!--   vector[N] theta = 1 / (1 + exp(-(alpha + f))); -->
-<!-- } -->
-<!-- ``` -->
-<!-- Refit the model and check posterior -->
-<!-- ```{r} -->
-<!-- logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,  -->
-<!--                                    list(N_data = nrow(df),  -->
-<!--                                         y = df$y,  -->
-<!--                                         x_data = df$x,  -->
-<!--                                         alpha = 1,  -->
-<!--                                         N_pred = N_pred,  -->
-<!--                                         x_pred = x_pred),  -->
-<!--                                    chains = 1) -->
-<!-- theta_summary2 <- rstan::summary(logistic_gp_fit2, "theta")$summary %>% -->
-<!--   data.frame() %>% -->
-<!--   select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>% -->
-<!--   mutate(x = c(df$x, x_pred)) -->
-<!-- p_theta2 <-  -->
-<!--   ggplot() +  -->
-<!--   geom_ribbon(data = theta_summary2,  -->
-<!--               aes(x = x, ymin = lower_2.5, ymax = upper_97.5),  -->
-<!--               fill = posterior_color, alpha = 0.5) +  -->
-<!--   geom_line(data = theta_summary2,  -->
-<!--             aes(x = x, y = mean), color = posterior_color) +  -->
-<!--   geom_point(data = df,  -->
-<!--              aes(x = x, y = y)) -->
-<!-- p_theta2 -->
-<!-- ``` -->
-<!-- :::::::::::::::::::::::::: -->
-<!-- ::::::::::::::::::::::::::::::::::::::::::::: -->
-<div id="discussion3" class="callout discussion">
+</section><section id="example-2-logistic-gaussian-process-regression"><h2 class="section-heading">Example 2: Logistic Gaussian process regression<a class="anchor" aria-label="anchor" href="#example-2-logistic-gaussian-process-regression"></a>
+</h2>
+<hr class="half-width"><p>Gaussian processes can also be used as priors in models where the
+relationship between the explanatory and response variables is more
+complex.</p>
+<p>Consider, for example, predicting the presence of some insect species
+in different regions based on average annual temperature. Now the
+response variable <span class="math inline">\(y\)</span> is binary with
+<span class="math inline">\(y=0\)</span> and <span class="math inline">\(y=1\)</span> corresponding to absence and
+presence, respectfully.</p>
+<p>The following simulated data contains observations from 40 locations
+including presence/absence observations for an insect species and yearly
+average temperature. Plotting the data suggests there is a temperature
+range where the species can exists.</p>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">insect</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1.74</span>, <span class="fl">13.46</span>, <span class="fl">3.69</span>, <span class="fl">16.09</span>, <span class="fl">8.52</span>, <span class="fl">11.11</span>, <span class="fl">19.32</span>, <span class="fl">5.79</span>, <span class="fl">11.44</span>, <span class="fl">2.32</span>, <span class="fl">0.67</span>, <span class="fl">23.29</span>, <span class="fl">14.1</span>, <span class="fl">16.96</span>, <span class="fl">16.29</span>, <span class="fl">20.16</span>, <span class="fl">12.68</span>, <span class="fl">3.61</span>, <span class="fl">14.22</span>, <span class="fl">11.1</span>, <span class="fl">8.02</span>, <span class="fl">13.35</span>, <span class="fl">24.48</span>, <span class="fl">4.04</span>, <span class="fl">21.41</span>, <span class="fl">6.64</span>, <span class="fl">1.36</span>, <span class="fl">8.97</span>, <span class="fl">17.87</span>, <span class="fl">3.51</span>, <span class="fl">15.68</span>, <span class="fl">8.12</span>, <span class="fl">1.38</span>, <span class="fl">13.39</span>, <span class="fl">3.01</span>, <span class="fl">13.84</span>, <span class="fl">5.29</span>, <span class="fl">20.13</span>, <span class="fl">5.57</span>, <span class="fl">24.51</span>, <span class="fl">3.94</span>, <span class="fl">17.53</span>, <span class="fl">10.62</span>, <span class="fl">3.26</span>, <span class="fl">19.78</span>, <span class="fl">21.93</span>, <span class="fl">21.47</span>, <span class="fl">18.3</span>, <span class="fl">15.91</span>, <span class="fl">8.51</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">insect</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">print</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>One way of modeling presence/absence data is with logistic
+regression:</p>
+<p><span class="math display">\[ y \sim \text{Bernoulli}(\theta) \\
+\theta = \frac{1}{1 + e^{-(\alpha + \beta x)}},\]</span> where <span class="math inline">\(\alpha, \beta\)</span> are real numbers and <span class="math inline">\(\theta\)</span> is the probability of <span class="math inline">\(y = 1\)</span>.</p>
+<p>However, in this standard form, the relationship between temperature
+and presence is monotonous: assuming <span class="math inline">\(\beta
+&gt; 0\)</span>, higher temperatures imply higher probability of
+presence. This is in disagreement with the data and, of course, with
+reality. For this reason, we will modify the model so that the term
+<span class="math inline">\(\beta x\)</span> is replaced with a
+non-parametric function <span class="math inline">\(f(x)\)</span>, that
+is given a GP prior. For the baseline parameter <span class="math inline">\(\alpha\)</span>, we will use a normal prior <span class="math inline">\(N(0, 10)\)</span>.</p>
+<p>In the model block, we utilize the built-in Stan function
+<code>bernoulli_logit</code> to write the likelihood statement. The
+probability of presence as a function of temperature <span class="math inline">\(\theta\)</span> is generated in the generated
+quantities block.</p>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="co">// Data</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_data;</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; y[N_data];</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="dt">real</span> x_data[N_data];</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="co">// Prediction points</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pred;</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="dt">real</span> x_pred[N_pred];</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>  <span class="co">// GP hyperparameters</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha;</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; lambda;</span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>}</span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N = N_data + N_pred;</span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a>  <span class="dt">real</span> x[N];</span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a>  <span class="dt">matrix</span>[N, N] K;</span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a>  <span class="dt">matrix</span>[N, N] L;</span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a>  x[<span class="dv">1</span>:N_data] = x_data;</span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>  x[(N_data+<span class="dv">1</span>):N] = x_pred;</span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>  <span class="co">// Covariance function</span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a>  K = gp_exp_quad_cov(x, alpha, lambda);</span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a>  <span class="co">// Add nugget on diagonal for numerical stability</span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a>    K[n, n] = K[n, n] + <span class="fl">1e-6</span>;</span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a>  }</span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a></span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a>  L = cholesky_decompose(K);</span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a>}</span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a>  <span class="dt">real</span> a;</span>
+<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a>  <span class="dt">vector</span>[N] eta;</span>
+<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a>}</span>
+<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a>  <span class="co">// mu = (0, 0, ..., 0)</span></span>
+<span id="cb19-42"><a href="#cb19-42" tabindex="-1"></a>  <span class="dt">vector</span>[N] f = L*eta;</span>
+<span id="cb19-43"><a href="#cb19-43" tabindex="-1"></a>}</span>
+<span id="cb19-44"><a href="#cb19-44" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb19-45"><a href="#cb19-45" tabindex="-1"></a></span>
+<span id="cb19-46"><a href="#cb19-46" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb19-47"><a href="#cb19-47" tabindex="-1"></a>  y ~ bernoulli_logit(a + f[<span class="dv">1</span>:N_data]);</span>
+<span id="cb19-48"><a href="#cb19-48" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb19-49"><a href="#cb19-49" tabindex="-1"></a>  a ~ normal(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb19-50"><a href="#cb19-50" tabindex="-1"></a>  eta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb19-51"><a href="#cb19-51" tabindex="-1"></a>}</span>
+<span id="cb19-52"><a href="#cb19-52" tabindex="-1"></a><span class="kw">generated quantities</span>{</span>
+<span id="cb19-53"><a href="#cb19-53" tabindex="-1"></a>  <span class="dt">vector</span>[N] theta = <span class="dv">1</span> / (<span class="dv">1</span> + exp(-(alpha + f)));</span>
+<span id="cb19-54"><a href="#cb19-54" tabindex="-1"></a>}</span></code></pre>
+</div>
+<p>Let’s fit the model and extract the posterior summary of <span class="math inline">\(\theta\)</span>.</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x_pred</span> <span class="op">&lt;-</span> <span class="fu">seq</span><span class="op">(</span><span class="fu">min</span><span class="op">(</span><span class="va">insect</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, <span class="fu">max</span><span class="op">(</span><span class="va">insect</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">N_pred</span> <span class="op">&lt;-</span> <span class="fu">length</span><span class="op">(</span><span class="va">x_pred</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">logistic_gp_fit</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">logistic_gp_model</span>,</span>
+<span>                                   <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">insect</span><span class="op">)</span>,</span>
+<span>                                        y <span class="op">=</span> <span class="va">insect</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>                                        x_data <span class="op">=</span> <span class="va">insect</span><span class="op">$</span><span class="va">x</span>,</span>
+<span>                                        alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                        lambda <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                        N_pred <span class="op">=</span> <span class="va">N_pred</span>,</span>
+<span>                                        x_pred <span class="op">=</span> <span class="va">x_pred</span><span class="op">)</span>,</span>
+<span>                                   refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">theta_summary</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">logistic_gp_fit</span>, <span class="st">"theta"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span>lower_2.5 <span class="op">=</span> <span class="va">X2.5.</span>, <span class="va">mean</span>, upper_97.5 <span class="op">=</span> <span class="va">X97.5.</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">insect</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Then we’ll look at the posterior of <span class="math inline">\(\theta\)</span>, the probability of presence of
+the species and overlay it with the data. The posterior looks reasonable
+in the sense that the posterior of <span class="math inline">\(\theta\)</span> is higher in the temperature range
+where presence was observed. However, the posterior values seem too high
+across the temperature range and, moreover, start veering up at the
+ends. Why might this be?</p>
+<div class="codewrapper sourceCode" id="cb21">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_theta</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span>data <span class="op">=</span> <span class="va">theta_summary</span>,</span>
+<span>              <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, ymin <span class="op">=</span> <span class="va">lower_2.5</span>, ymax <span class="op">=</span> <span class="va">upper_97.5</span><span class="op">)</span>,</span>
+<span>              fill <span class="op">=</span> <span class="va">posterior_color</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">theta_summary</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>, color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">insect</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_theta</span></span></code></pre>
+</div>
+<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge3" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge3"></a>
+</h3>
+<div class="callout-content">
+<p>Think of ways to modify the Stan program for the logistic GP
+regression so that the posterior behavior is more reasonable in the
+prediction range.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
+</button>
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div class="accordion-body">
+<p>Let’s modify the program by setting the GP mean to a negative value
+and treating the length scale as a parameter.</p>
+<div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="co">// Data</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_data;</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; y[N_data];</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>  <span class="dt">real</span> x_data[N_data];</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  <span class="co">// Prediction points</span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pred;</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="dt">real</span> x_pred[N_pred];</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; alpha;</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>}</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N = N_data + N_pred;</span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>  <span class="dt">real</span> x[N];</span>
+<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>  x[<span class="dv">1</span>:N_data] = x_data;</span>
+<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a>  x[(N_data+<span class="dv">1</span>):N] = x_pred;</span>
+<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>}</span>
+<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  <span class="dt">real</span> a;</span>
+<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a>  <span class="dt">vector</span>[N] eta;</span>
+<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; lambda;</span>
+<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>}</span>
+<span id="cb22-24"><a href="#cb22-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb22-25"><a href="#cb22-25" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" tabindex="-1"></a>  <span class="dt">matrix</span>[N, N] K;</span>
+<span id="cb22-27"><a href="#cb22-27" tabindex="-1"></a>  <span class="dt">matrix</span>[N, N] L;</span>
+<span id="cb22-28"><a href="#cb22-28" tabindex="-1"></a>  <span class="dt">vector</span>[N] f;</span>
+<span id="cb22-29"><a href="#cb22-29" tabindex="-1"></a></span>
+<span id="cb22-30"><a href="#cb22-30" tabindex="-1"></a>  <span class="co">// Covariance function</span></span>
+<span id="cb22-31"><a href="#cb22-31" tabindex="-1"></a>  K = gp_exp_quad_cov(x, alpha, lambda);</span>
+<span id="cb22-32"><a href="#cb22-32" tabindex="-1"></a></span>
+<span id="cb22-33"><a href="#cb22-33" tabindex="-1"></a>  <span class="co">// Add nugget on diagonal for numerical stability</span></span>
+<span id="cb22-34"><a href="#cb22-34" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb22-35"><a href="#cb22-35" tabindex="-1"></a>    K[n, n] = K[n, n] + <span class="fl">1e-6</span>;</span>
+<span id="cb22-36"><a href="#cb22-36" tabindex="-1"></a>  }</span>
+<span id="cb22-37"><a href="#cb22-37" tabindex="-1"></a></span>
+<span id="cb22-38"><a href="#cb22-38" tabindex="-1"></a>  L = cholesky_decompose(K);</span>
+<span id="cb22-39"><a href="#cb22-39" tabindex="-1"></a>  f = rep_vector(-<span class="dv">3</span>, N) + L*eta;</span>
+<span id="cb22-40"><a href="#cb22-40" tabindex="-1"></a>}</span>
+<span id="cb22-41"><a href="#cb22-41" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb22-42"><a href="#cb22-42" tabindex="-1"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb22-43"><a href="#cb22-43" tabindex="-1"></a>  y ~ bernoulli_logit(a + f[<span class="dv">1</span>:N_data]);</span>
+<span id="cb22-44"><a href="#cb22-44" tabindex="-1"></a>  <span class="co">// Priors</span></span>
+<span id="cb22-45"><a href="#cb22-45" tabindex="-1"></a>  a ~ normal(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb22-46"><a href="#cb22-46" tabindex="-1"></a>  eta ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb22-47"><a href="#cb22-47" tabindex="-1"></a>  lambda ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb22-48"><a href="#cb22-48" tabindex="-1"></a>}</span>
+<span id="cb22-49"><a href="#cb22-49" tabindex="-1"></a><span class="kw">generated quantities</span>{</span>
+<span id="cb22-50"><a href="#cb22-50" tabindex="-1"></a>  <span class="dt">vector</span>[N] theta = <span class="dv">1</span> / (<span class="dv">1</span> + exp(-(alpha + f)));</span>
+<span id="cb22-51"><a href="#cb22-51" tabindex="-1"></a>}</span></code></pre>
+</div>
+<p>Refit the model and check posterior</p>
+<div class="codewrapper sourceCode" id="cb23">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">logistic_gp_fit2</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">logistic_gp_model2</span>,</span>
+<span>                                   <span class="fu">list</span><span class="op">(</span>N_data <span class="op">=</span> <span class="fu">nrow</span><span class="op">(</span><span class="va">insect</span><span class="op">)</span>,</span>
+<span>                                        y <span class="op">=</span> <span class="va">insect</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>                                        x_data <span class="op">=</span> <span class="va">insect</span><span class="op">$</span><span class="va">x</span>,</span>
+<span>                                        alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                        N_pred <span class="op">=</span> <span class="va">N_pred</span>,</span>
+<span>                                        x_pred <span class="op">=</span> <span class="va">x_pred</span><span class="op">)</span>,</span>
+<span>                                   chains <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 0.001441 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 14.41 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 17.613 seconds (Warm-up)
+Chain 1:                18.165 seconds (Sampling)
+Chain 1:                35.778 seconds (Total)
+Chain 1: </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">theta_summary2</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">logistic_gp_fit2</span>, <span class="st">"theta"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span>lower_2.5 <span class="op">=</span> <span class="va">X2.5.</span>, <span class="va">mean</span>, upper_97.5 <span class="op">=</span> <span class="va">X97.5.</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">insect</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_pred</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_theta2</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span>data <span class="op">=</span> <span class="va">theta_summary2</span>,</span>
+<span>              <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, ymin <span class="op">=</span> <span class="va">lower_2.5</span>, ymax <span class="op">=</span> <span class="va">upper_97.5</span><span class="op">)</span>,</span>
+<span>              fill <span class="op">=</span> <span class="va">posterior_color</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">theta_summary2</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>, color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">insect</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_theta2</span></span></code></pre>
+</div>
+<figure><img src="fig/gaussian-processes-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+</div>
+</div>
+</div>
+<div id="discussion2" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion3"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
 </h3>
 <div class="callout-content">
 <p>Generate a posterior for the optimal temperature.</p>
@@ -1058,7 +1175,9 @@ one recovered without the Cholesky parameterization?</p>
 <h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
 </h3>
 <div class="callout-content">
-<ul><li>point 1</li>
+<ul><li>GPs provide a means for non-parametric regression.</li>
+<li>A GP has two parameters: mean, and covariance.</li>
+<li>GPs can be used a part of more complex models.</li>
 </ul></div>
 </div>
 </div>

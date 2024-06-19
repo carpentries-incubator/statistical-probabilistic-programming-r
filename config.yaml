@@ -63,7 +63,7 @@ episodes:
 - stan.Rmd
 - mcmc.Rmd
 - hierarchical-models.Rmd
-- model-critisism.Rmd
+- model-comparison.Rmd
 - gaussian-processes.Rmd
 - other-topics.Rmd
 - exercises.Rmd
