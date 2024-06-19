@@ -67,7 +67,7 @@ A Stan program is organized into several blocks that collectively define the mod
 For best practices, it is recommended to specify Stan programs in separate text files with a .stan extension, which can then be called from R.
 
 
-### Example 1: Beta-binomial model
+## Example 1: Beta-binomial model
   
 The following Stan program specifies the Beta-binomial model, and consists of data, parameters, and model blocks. 
 
