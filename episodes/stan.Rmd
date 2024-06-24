@@ -13,11 +13,6 @@ library(cowplot)
 library(rstan)
 theme_set(theme_bw(15))
 
-
-okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
-prior_color <- "#009E73"
-likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
 
 ```
@@ -97,15 +92,17 @@ In the model block, the likelihood is specified with the sampling statement `x ~
   }
 ```
 
-Once the Stan program has been saved we need to compile it. In R, this is done by running the following line, where `"binomial_model.stan"` is the path of the program file. 
+When the Stan program has been saved we need to compile it. In R, this is done by running the following line, where `"binomial_model.stan"` is the path of the program file. 
 
 ```{r, eval=FALSE}
 binomial_model <- stan_model("binomial_model.stan")
 ```
 
-Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be input as a list. 
+Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be input as a list.
 
 ```{r, message=FALSE}
+set.seed(135)
+
 binom_data <- list(N = 50, x = 7)
 
 binom_samples <- sampling(object = binomial_model,
@@ -127,7 +124,7 @@ This summary can also be accessed as a matrix with `summary(binom_samples)$summa
 Often, however, it is necessary process the individual samples. These can be extracted as follows:
 
 ```{r}
-theta_samples <- extract(binom_samples, "theta")[["theta"]]
+theta_samples <- rstan::extract(binom_samples, "theta")[["theta"]]
 ```
 
 Now we can use the methods presented in the previous Episode to compute posterior summaries, credible intervals and to generate figures. 
@@ -192,7 +189,7 @@ In addition to the data, parameters, and model blocks there are additional block
 
 We will make use of these additional structures in subsequent illustrations. 
 
-## Example 2: normal model
+## Example 2: Normal model
 
 Next, let's implement the normal model in Stan. First we'll generate some data $X$ from a normal model with unknown mean and standard deviation parameters $\mu$ and $\sigma$
 
@@ -207,6 +204,8 @@ unknown_mu <- runif(1, -5, 5)
 X <- rnorm(n = N,
            mean = unknown_mu,
            sd = unknown_sigma) 
+
+normal_data <- list(N = N, X = X)
 ```
 
 
@@ -229,7 +228,7 @@ model {
   
   // Priors
   mu ~ normal(0, 1);
-  sigma ~ inv_gamma(1, 1);
+  sigma ~ gamma(2, 1);
 }
 generated quantities {
   real X_tilde;
@@ -241,14 +240,14 @@ Let's fit the model to the data
 
 ```{r, message=FALSE}
 normal_samples <- rstan::sampling(normal_model, 
-                                  list(N = N, X = X))
+                                  normal_data)
 ```
 
 
 Next, we'll extract posterior samples and generate a plot for the joint, and marginal posteriors. The true unknown parameter values are included in the plots in red. 
 ```{r}
 # Extract parameter samples
-par_samples <- extract(normal_samples, c("mu", "sigma")) %>% 
+par_samples <- rstan::extract(normal_samples, c("mu", "sigma")) %>% 
   do.call(cbind, .) %>% 
   data.frame
 
@@ -256,8 +255,8 @@ par_samples <- extract(normal_samples, c("mu", "sigma")) %>%
 # Full posterior
 p_posterior <- ggplot(data = par_samples) + 
   geom_point(aes(x = mu, y = sigma)) +
-  geom_point(aes(x = unknown_mu, y = unknown_sigma),
-             color = "red", size = 5)
+  annotate("point", x = unknown_mu, y = unknown_sigma, 
+           color = "red", size = 5)
 
 # Marginal posteriors
 p_marginals <- ggplot(data = par_samples %>% gather) + 
@@ -269,7 +268,7 @@ p_marginals <- ggplot(data = par_samples %>% gather) +
 
 
 p <- cowplot::plot_grid(p_posterior, p_marginals,
-                  ncol = 1)
+                        ncol = 1)
 
 print(p)
 ```
@@ -278,7 +277,7 @@ print(p)
 Let's also plot the posterior predictive distribution samples histogram and compare it to that of the data. 
 
 ```{r, fig.height = 4, fig.width = 5}
-PPD <- extract(normal_samples, c("X_tilde"))[[1]] %>% 
+PPD <- rstan::extract(normal_samples, c("X_tilde"))[[1]] %>% 
   data.frame(X_tilde = . )
 
 p_PPD <- ggplot() + 
@@ -299,7 +298,7 @@ print(p_PPD)
 
 Write a Stan program for linear regression with one dependent variable. 
 
-Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$ and noise term $\sigma$.
+Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$, and noise term $\sigma$.
 
 ::::::::::::::::::::: solution
 
@@ -385,7 +384,7 @@ model {
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Stan is a tool for generating posterior distribution samples. 
+- Stan is a tool for efficient posterior distribution sample generation. 
 - A Stan program is specified in a separate text file that consists of code blocks, with the data, parameters, and model blocks being the most crucial ones.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

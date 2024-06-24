@@ -13,13 +13,7 @@ library(cowplot)
 library(mvtnorm)
 theme_set(theme_bw(15))
 
-
-okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
-prior_color <- "#009E73"
-likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
-
 ```
 
 
@@ -52,6 +46,8 @@ Perhaps the most frequently used covariance function is the squared exponential 
 
 
 ```{r}
+
+set.seed(6436)
 
 sq_exp_cov <- function(x, lambda, alpha) {
   n <- length(x)
@@ -199,7 +195,7 @@ gp_samples <- rstan::sampling(gp_model,
 ```
 
 
-The inference takes some time (minutes on a standard laptop) even though we only use (an insufficient) single chain and 1000 iterations. Stan also throws warnings about convergence issues. Let's ignore these at this point, and look at the output.
+The inference takes some time (about a minute on a standard laptop) even though we only use (an insufficient) single chain and 1000 iterations. Stan also throws warnings about convergence issues. Let's ignore these at this point, and look at the output.
 
 
 ```{r}
@@ -223,7 +219,7 @@ print(p_f)
 ```
 
 
-The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Each posterior sample corresponds to a function. This distribution essentially captures the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. However, in certain regions, the posterior seems a bit strange. For example, the posterior between the farthest two data points on the right contains most of the mass below the line connecting the points, and hardly above below it. This is likely a symptom of the convergence issues. 
+The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Each posterior sample corresponds to a function. This distribution essentially captures the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. 
 
 :::::::::::::::::::::::::::::: challenge
 In the figure above, where is the posterior uncertainty the highest and why? What controls the uncertainty at the locations of the data? If we made the prediction range wider, say, from -10 to 10, what would the posterior  look like at the extremes?
@@ -376,14 +372,22 @@ theta <- 0.75*exp(-0.06*(x- 15)^2)
 
 y <- rbinom(N, 1, theta)
 
-df <- data.frame(x, y)
+insect <- data.frame(x, y)
 
+insect <- data.frame(
+  x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51),
+  y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0)
+)
+
+
+# write.csv(insect, "insect", row.names = FALSE)
 ```
 
 
 The following simulated data contains observations from 40 locations including presence/absence observations for an insect species and yearly average temperature. Plotting the data suggests there is a temperature range where the species can exists.
 
 ```{r}
+
 insect <- data.frame(
   x = c(1.74, 13.46, 3.69, 16.09, 8.52, 11.11, 19.32, 5.79, 11.44, 2.32, 0.67, 23.29, 14.1, 16.96, 16.29, 20.16, 12.68, 3.61, 14.22, 11.1, 8.02, 13.35, 24.48, 4.04, 21.41, 6.64, 1.36, 8.97, 17.87, 3.51, 15.68, 8.12, 1.38, 13.39, 3.01, 13.84, 5.29, 20.13, 5.57, 24.51, 3.94, 17.53, 10.62, 3.26, 19.78, 21.93, 21.47, 18.3, 15.91, 8.51),
   y = c(0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0)

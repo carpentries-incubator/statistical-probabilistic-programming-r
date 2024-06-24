@@ -9,11 +9,8 @@ library(magrittr)
 library(tidyverse)
 library(cowplot)
 library(grafify)
+
 theme_set(theme_bw(15))
-
-
-okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
 prior_color <- "#009E73"
 likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
@@ -62,7 +59,7 @@ The proportional Bayes' formula yields an unnormalized posterior distribution, w
 
 
 
-### Example: handedness
+## Example 1: handedness
 
 Let's illustrate the use of the Bayes' theorem with an example. 
 
@@ -86,6 +83,9 @@ Below, we'll plot these functions. Likelihood (which is not a distribution!) has
 
 ```{r, echo = FALSE, fig.height=4, out.width = '100%'}
 
+# Set seed for reproducibility
+set.seed(543)
+
 # Sample size
 N <- 50
 
@@ -106,15 +106,15 @@ posterior <- posterior/(sum(posterior)*delta)
 likelihood <- likelihood/(sum(likelihood)*delta)
 
 # Make data frame
-df_hand <- data.frame(theta = theta_grid, likelihood, prior, posterior)
+df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
 
 # wide to long format
-df_l <- df_hand %>%
+df1_l <- df1 %>%
   gather(key = "Function", value = "value", -theta)
 
 # Plot
-p1 <- ggplot(df_l, 
+p1 <- ggplot(df1_l, 
        aes(x = theta, y = value, color = Function)) + 
   # geom_point(linewidth = 2) +
   geom_line(linewidth = 1) +
@@ -158,7 +158,7 @@ upper5 <- theta_grid[which.min(cumsum(posterior)*delta < 0.95)]
 Pr_theta_outside_0.1_0.2 <- sum(posterior[theta_grid < 0.1 | theta_grid > 0.2])*delta
 
 
-my_p <- df_hand %>% 
+my_p <- df1 %>% 
   ggplot() + 
   geom_line(aes(x = theta, y = posterior),
             color = posterior_color, 
@@ -167,38 +167,37 @@ my_p <- df_hand %>%
 my_breaks <- seq(0, 1, by = 0.25)
 
 p1 <- my_p + 
-    geom_area(data = df_hand %>% 
+    geom_area(data = df1 %>% 
                   filter(theta >= lower5 & theta <= upper5) %>% 
                   mutate(area = "yes"), 
               aes(x = theta, y = posterior), 
               alpha = 0.5) +
-    geom_vline(xintercept = df_hand[which.max(df_hand$posterior), "theta"], 
+    geom_vline(xintercept = df1[which.max(df1$posterior), "theta"], 
                linetype = "dashed") +
     labs(title = paste0("90% CIs = (", lower5, ",", upper5, ")"), 
          x = expression(theta))
 
 
 p2 <- my_p + 
-    geom_area(data = df_hand %>% 
+    geom_area(data = df1 %>% 
                   filter(theta >= 0.2) %>% 
                   mutate(area = "yes"), 
               aes(x = theta, y = posterior), 
               alpha = 0.5) +
   
-  geom_area(data = df_hand %>% 
+  geom_area(data = df1 %>% 
                   filter(theta <= 0.1) %>% 
                   mutate(area = "yes"), 
               aes(x = theta, y = posterior), 
               alpha = 0.5) +
-  geom_vline(xintercept = df_hand[which.max(df_hand$posterior), "theta"], 
+  geom_vline(xintercept = df1[which.max(df1$posterior), "theta"], 
              linetype = "dashed") +
     labs(title = paste0("Pr(theta < 0.1 or theta > 0.2) = ",
                         round(Pr_theta_outside_0.1_0.2, 3)), 
          x = expression(theta))
 
 
-p_area <- plot_grid(p1, p2,
-               ncol = 1)
+p_area <- plot_grid(p1, p2, ncol = 1)
 
 p_area
 
@@ -216,9 +215,9 @@ Specifying a probabilistic model can be simple, but a common bottleneck in Bayes
 
 Now, we'll implement the grid approximation for the handedness example in R.
 
-### Example: handedness with grid approximation
+## Example 2: handedness with grid approximation
 
-First, we'll define the data variables and the grid of parameter values
+First, we'll load the required packages, define the data variables, and the grid of parameter values
 
 ```{r}
 # Sample size
@@ -256,14 +255,14 @@ Finally, we can plot these functions
 
 ```{r, fig.width=10, fig.height=5}
 # Make data frame
-df_hand <- data.frame(theta = theta_grid, likelihood, prior, posterior)
+df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
 # wide to long format
-df_hand_l <- df_hand %>%
+df1_l <- df1 %>%
   gather(key = "Function", value = "value", -theta)
 
 # Plot
-p1 <- ggplot(df_hand_l, 
+p1 <- ggplot(df1_l, 
        aes(x = theta, y = value, color = Function)) + 
   geom_point(size = 2) +
   geom_line(linewidth = 1) +
@@ -292,17 +291,17 @@ What is the relationship between the posterior, data (likelihood) and the prior?
 
 Next, we'll learn how to compute point estimates and posterior intervals based on the approximate posterior obtained with the grid approximation.
 
-Computing the posterior mean and variance is based on the definition of these statistics for continuous variables. The mean is defined as $$\int \theta \cdot p(\theta | X) d\theta$$ and can be computed using discrete integration: $$\sum_{\text{grid}} \theta \cdot p(\theta | X) \cdot \delta.$$ Similarly, variance can be computed based on the definition $$\text{var}(\theta) = \int (\theta - \text{mean}(\theta))^2p(\theta | X)d\theta$$. Posterior mode is simply the grid value where the posterior is maximized. 
+Computing the posterior mean and variance is based on the definition of these statistics for continuous variables. The mean is defined as $$\int \theta \cdot p(\theta | X) d\theta,$$ and can be computed using discrete integration: $$\sum_{\text{grid}} \theta \cdot p(\theta | X) \cdot \delta.$$ Similarly, variance can be computed based on the definition $$\text{var}(\theta) = \int (\theta - \text{mean}(\theta))^2p(\theta | X)d\theta.$$ Posterior mode is simply the grid value where the posterior is maximized. 
 
 In R, these statistics can be computed as follows: 
 
 ```{r}
 
 data.frame(Estimate = c("Mode", "Mean", "Variance"), 
-           Value = c(df_hand[which.max(df_hand$posterior), "theta"],
-                     sum(df_hand$theta*df_hand$posterior*delta), 
-                     sum(df_hand$theta^2*df_hand$posterior*delta) -
-                       sum(df_hand$theta*df_hand$posterior*delta)^2))
+           Value = c(df1[which.max(df1$posterior), "theta"],
+                     sum(df1$theta*df1$posterior*delta), 
+                     sum(df1$theta^2*df1$posterior*delta) -
+                       sum(df1$theta*df1$posterior*delta)^2))
 
 ```
 
@@ -312,7 +311,7 @@ Posterior intervals are also relatively easy to compute.
 
 Finding the quantiles used to determine CIs is based on the cumulative distribution function of the posterior $F(\theta) = \int_{\infty}^{\theta}p(y | X) dy$. The locations where the $F(\theta) = 0.05$ and $F(\theta) = 0.95$ define the 90% CIs. 
 
-Probabilities for certain parameter ranges are computed simply by integrating over the appropriate set. For instance, $Pr(\theta < 0.1) = \int_0^{0.1} p(\theta | X) d\theta$
+Probabilities for certain parameter ranges are computed simply by integrating over the appropriate set, for example, $Pr(\theta < 0.1) = \int_0^{0.1} p(\theta | X) d\theta.$
 
 :::::::::::::::::::::::::::::::: challenge
 
@@ -342,7 +341,7 @@ print(paste0("Pr(theta < 0.1) = ",
 
 
 
-### Example: Gamma model with grid approximation
+## Example 3: Gamma model with grid approximation
 
 Let's investigate another model and implement a grid approximation to fit it. 
 
@@ -360,7 +359,7 @@ alpha_grid <- seq(from = 0.01, to = 15, by = delta)
 beta_grid <- seq(from = 0.01, to = 25, by = delta)
 
 # Get pairwise combinations
-df <- expand.grid(alpha = alpha_grid, beta = beta_grid)
+df2 <- expand.grid(alpha = alpha_grid, beta = beta_grid)
 ```
 
 
@@ -368,11 +367,11 @@ Next, we'll compute the likelihood. As we assumed the data points to be independ
 
 ```{r}
 # Loop over all alpha, beta combinations
-for(i in 1:nrow(df)) {
-  df[i, "likelihood"] <- prod(
+for(i in 1:nrow(df2)) {
+  df2[i, "likelihood"] <- prod(
     dgamma(x = X,
-           shape = df[i, "alpha"],
-           rate = df[i, "beta"])
+           shape = df2[i, "alpha"],
+           rate = df2[i, "beta"])
     )
 }
 ```
@@ -383,17 +382,17 @@ Notice, that normalizing the posterior now requires integrating over both dimens
 
 ```{r, fig.height= 5, out.width = '100%'}
 # Priors: alpha, beta ~ Gamma(2, .1)
-df <- df %>% 
+df2 <- df2 %>% 
   mutate(prior = dgamma(x = alpha, 2, 0.1)*dgamma(x = beta, 2, 0.1))
 
 # Posterior
-df <- df %>% 
+df2 <- df2 %>% 
   mutate(posterior = prior*likelihood) %>% 
   mutate(posterior = posterior/(sum(posterior)*delta^2)) # normalize
 
 
 # Plot
-p_joint_posterior <- df %>% 
+p_joint_posterior <- df2 %>% 
   ggplot() + 
   geom_tile(aes(x = alpha, y = beta, fill = posterior)) + 
   scale_fill_gradientn(colours = rainbow(5)) +
@@ -406,7 +405,7 @@ p_joint_posterior
 Next, we'll compute the posterior mode, which is a point in the 2-dimensional parameter space. 
 
 ```{r}
-df[which.max(df$posterior), c("alpha", "beta")]
+df2[which.max(df2$posterior), c("alpha", "beta")]
 ```
 
 
@@ -416,7 +415,7 @@ Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta
 
 ```{r, fig.height= 4, out.width = '100%'}
 # Get marginal posterior for alpha
-alpha_posterior <- df %>% 
+alpha_posterior <- df2 %>% 
   group_by(alpha) %>% 
   summarize(posterior = sum(posterior)) %>% 
   mutate(posterior = posterior/(sum(posterior)*delta))
@@ -436,10 +435,6 @@ p_alpha_posterior
 
 Does the MAP of the joint posterior of $\theta = (\alpha, \beta)$ correspond to the MAPs of the marginal posteriors of $\alpha$ and $\beta$?
 
-::::::::::::: solution
-No. Why?
-:::::::::::::
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::: callout
@@ -451,7 +446,7 @@ The conjugate prior for the Gamma likelihood [exists](https://en.wikipedia.org/w
 
 The main limitation of the grid approximation is that it becomes impractical for models with even a moderate number of parameters. The reason is that the number of computations grows as $O \{ \Delta^p \}$ where $\Delta$ is the number of grid points per model parameter and $p$ the number of parameters. This quickly becomes prohibitive, and the grid approximation is seldom used in practice. The standard approach to fitting Bayesian models is to draw samples from the posterior with Markov chain Monte Carlo (MCMC) methods. These methods are the topic of a later episode but we'll anticipate this now by studying how posterior summaries can be computed based on samples. 
 
-### Example: handedness with samples
+## Example 4: handedness with samples
 
 Let's take the Beta-binomial model (beta prior, binomial likelihood) of the handedness analysis as our example. It is an instance of a model for which the posterior can be computed analytically. Given a prior $\text{Beta}(\alpha, \beta)$ and likelihood $\text{Bin}(x | N, \theta)$, the posterior is
 $$p(\theta | X) = \text{Beta}(\alpha + x, \beta + N - x).$$
@@ -463,16 +458,16 @@ theta_samples <- rbeta(n, 1 + 7, 10 + 50 - 7)
 ```
 
 Plotting a histogram of these samples against the grid approximation posterior displays that both are indeed approximating the same distribution
-```{r, echo = FALSE, fig.height= 4, out.width = '100%'}
+```{r, echo = TRUE, fig.height= 4, out.width = '100%'}
 ggplot() + 
   geom_histogram(data = theta_samples %>% 
   data.frame(theta = .), 
   aes(x = theta, y = after_stat(density)), bins = 50, 
   fill = posterior_color, color = "black") +
-    geom_line(data = df_hand,
+    geom_line(data = df1,
             aes(x = theta, y = posterior),
             linewidth = 1.5) +
-  geom_line(data = df_hand, 
+  geom_line(data = df1, 
             aes(x = theta, y = posterior), 
             color = posterior_color) +
   labs(x = expression(theta))

@@ -12,7 +12,23 @@ The lesson makes use of two programming languages: R and Stan. While Stan is com
 
 Instructions for installing Stan can be found [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). 
 
-For the lessons, you'll need to have several R packages installed and loaded. These include `rstan` for calling Stan, `tidyverse` and `magrittr` for data manipulations, as well as `cowplot` and `grafify` for visualization purposes. Please make sure to install and load these packages before diving into the lesson material.
+For the lessons, you'll need to have several R packages installed and loaded. Run the following code to load the libraries and to set the graphical theme. 
+
+```R
+package_list <- c("magrittr", "tidyverse", "cowplot", "grafify", "rstan", "mvtnorm")
+
+for (p in package_list){
+     if(! p %in% package_list()){
+         package_list(i, dependencies = TRUE)
+     }
+     require(i)
+}
+
+theme_set(theme_bw(15))
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+```
 
 ## Data Sets
 

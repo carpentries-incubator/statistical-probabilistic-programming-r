@@ -5,7 +5,6 @@ exercises: 2
 ---
 
 ```{r setup,  message=FALSE, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(rstan)
 library(tidyverse)
 library(magrittr)
@@ -13,13 +12,7 @@ library(grafify)
 
 theme_set(theme_bw(20))
 
-
-okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
-prior_color <- "#009E73"
-likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
-
 ```
 
 
@@ -47,16 +40,15 @@ The first one is the posterior predictive check, which involves comparing a fitt
 
 ## Data
 
-Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points.
+Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points. The data is included in the course's data folder at 
 
 Looking at the data histogram, it's evident that the data is approximately symmetrically distributed around 0. However, there is some dispersion in the data, and an extreme positive value, suggesting that the tails might be longer than those of a normal distribution. The Cauchy distribution is a potential alternative and below we will compare the suitability of these two distributions on this data. 
 
 
 ```{r, echo = FALSE}
-# Generate data
-
-# seed <- sample(1:1000, 1)
 set.seed(215)
+
+# Generate data
 N <- 88
 location <- 0
 scale <- 1
@@ -64,7 +56,12 @@ scale <- 1
 X <- rcauchy(N, location, scale) %>% round(., 3)
 df5 <- data.frame(X)
 
-# print(X)
+# write.csv(df5, "df5", col.names = FALSE, row.names = FALSE)
+```
+
+
+```{r, echo = FALSE}
+df5 <- data.frame(X = c(-2.27, 1.941, 0.502, -0.378, -0.226, -0.786, -0.209, -0.637, 0.814, 0.566, -1.901, -2.047, -0.689, -3.509, 0.133, -4.353, 1.067, 0.722, 0.861, 0.523, 0.681, 2.982, 0.429, -0.539, -0.512, -1.09, -8.044, -0.387, -0.007, -11.126, 1.036, 1.734, -0.203, 1.036, 0.582, -2.922, -0.543, -6.12, -0.649, 4.547, -0.867, 1.942, 7.148, -0.044, -0.681, -3.461, -0.142, 0.678, 0.644, -0.039, 0.354, 1.783, 0.369, 0.175, 0.98, -0.097, -4.408, 0.442, 0.158, 0.255, 0.084, 0.775, 2.786, 0.008, -0.664, 43.481, 1.943, 0.334, -0.118, 3.901, 1.736, -0.665, 2.695, 0.002, -1.904, -2.194, -4.015, 0.329, 1.14, -3.816, -14.788, 0.047, 6.205, 1.119, -0.003, 3.618, 1.666, -10.845))
 
 p_data <- df5 %>% 
   ggplot() + 
@@ -79,16 +76,16 @@ print(p_data)
 
 The idea of posterior predictive checking is to use the posterior predictive distribution to simulate a replicate data set and compare it to the observed data. The reasoning behind this approach is that if the model is a good fit, then replicate data should look similar the observed one. Qualitative discrepancies between the simulated and observed data can imply that the model does not match the properties of the data or the domain. 
 
-The comparison can be done in different ways. Visual comparison is an option but a more rigorous approach is to compute the *posterior predictive p-value* ($ppp$), which measures how well the model can reproduce the observed data. Computing the $ppp$ requires specifying a statistic whose value is compared between the posterior predictions and the observations.
+The comparison can be done in different ways. Visual comparison is an option but a more rigorous approach is to compute the *posterior predictive p-value* ($p_B$), which measures how well the model can reproduce the observed data. Computing the $p_B$ requires specifying a statistic whose value is compared between the posterior predictions and the observations.
 
 The steps of a posterior predictive check can be formulated in the following points: 
 
 1. **Generate replicate data:**
   Use the posterior predictive distribution to simulate replicate datasets $X^{rep}$ with characteristics matching the observed data. In our example, this amounts to generating data with $N=88$ for each posterior sample. 
 2. **Choose test quantity $T(X)$:**
-  Choose an aspect of the data that you wish to check. We'll use the maximum value as the test quantity and compute it for the observed data and each replicate.
-3. **Compute $ppp$:**
-  The posterior predictive p-value is defined as the probability $Pr(T(X^{rep}) \geq T(X) | X)$, that is, the probability that the predictions produce test quantity values at least as extreme as those found in the data. Using samples, it is computed as the proportion of replicate data sets with $T$ not smaller than that of $T(X)$. The smaller the $ppp$-value, the larger the evidence that the model cannot properly emulate the data.  
+  Choose an aspect of the data that you wish to check. We'll use the maximum value as the test quantity and compute it for the observed data and each replicate. It's important to note that not every imaginable data quantity will make a good $T(X)$, see chapter 6.3 in BDA3 for details. 
+3. **Compute $p_B$:**
+  The posterior predictive p-value is defined as the probability $Pr(T(X^{rep}) \geq T(X) | X)$, that is, the probability that the predictions produce test quantity values at least as extreme as those found in the data. Using samples, it is computed as the proportion of replicate data sets with $T$ not smaller than that of $T(X)$. The closer the $p_B$-value is to 1 (or 0), the larger the evidence that the model cannot properly emulate the data.  
 
 
 Next we will perform these steps for the normal and Cauchy models. 
@@ -188,9 +185,9 @@ rep_maxs <- X_rep %>%
 
 
 
-Let's quantify this discrepancy by computing the $ppp$ using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = `r max(df5$X)`. The posterior predictive $p$-value is $ppp =$ `r mean(rep_maxs$max < max(df5$X))`.
+Let's quantify this discrepancy by computing the $p_B$ using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = `r max(df5$X)`. The posterior predictive $p$-value is $p_B =$ `r mean(rep_maxs$max >= max(df5$X))`.
 
-This means that the chosen statistic $T$ is at least as large as in the data in `r 100*(1 -  mean(rep_maxs$max < max(df5$X)))`% of the replications, indicating strong evidence that the normal model is a poor choice for the data. 
+This means that the chosen statistic $T$ is at least as large as in the data in `r 100*(1 -  mean(rep_maxs$max >= max(df5$X)))`% of the replications, indicating strong evidence that the normal model is a poor choice for the data. 
 
 The following histogram displays $T(X) = \max(X)$ (vertical line) against the distribution of $T(X^{rep})$.
 
@@ -287,10 +284,10 @@ print(p_caucy_hist)
 ```
 
 
-The maximum value observed in the data is similar to those from replicate sets. Additionally, $ppp=$ `r round(mean(rep_maxs$max > max(df5$X)), 4)`, indicating no issues with the suitability of the model for the data.     distribution.
+The maximum value observed in the data is similar to those from replicate sets. Additionally, $p_B=$ `r round(mean(rep_maxs$max >= max(df5$X)), 4)`, indicating no issues with the suitability of the model for the data.     distribution.
 
 ```{r, echo = FALSE}
-## Compute ppp
+## Compute p_B
 rep_maxs <- X_rep %>%
   select(-sample) %>%
   apply(MARGIN = 1, FUN = max) %>%
@@ -559,6 +556,10 @@ paste0("Effective number of parameters, cauchy = ", p_loo_cv_cauchy)
 
 ```
 
+
+:::::::::::::::::::::::::::::::::::: callout
+There are packages that enable computing WAIC and approximate leave-one-out score automatically so, in practice, there is seldom need to implement these yourself. In episode 7 you will learn about these options tools. 
+::::::::::::::::::::::::::::::::::::::::::::
 
 
 

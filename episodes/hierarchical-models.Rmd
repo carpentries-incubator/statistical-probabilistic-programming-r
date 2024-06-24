@@ -1,21 +1,18 @@
 ---
-title: 'Hierarchical Models'
+title: 'Hierarchical models'
 teaching: 10
 exercises: 2
 ---
 
 ```{r, include=FALSE}
+library(rstan)
 library(magrittr)
 library(tidyverse)
 library(cowplot)
 library(grafify)
+
 theme_set(theme_bw(15))
 
-
-okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
-prior_color <- "#009E73"
-# likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
 ```
 
@@ -35,7 +32,7 @@ posterior_color <- "#56B4E9"
 
 *Hierarchical* (or multi-level) models are a class of models suited for situations where the study population comprises distinct but interconnected groups. For example, analyzing student performance across different schools, income disparities among various regions, or studying animal behavior within different populations are scenarios where such models would be appropriate.
 
-Incorporating group-wise parameters allows us to model each group separately, and a model becomes hierarchical when we treat the parameters of the prior distribution as unknown. These parameters, known as hyperparameters, are assigned their own prior distribution, referred to as a hyperprior, and are learned during the model fitting process. Conceptually, these hyperparameters and hyperpriors operate at a higher level of hierarchy, hence the name.
+Incorporating group-wise parameters allows us to model each group separately, and a model becomes hierarchical when we treat the parameters of the prior distribution as unknown. These parameters, known as hyperparameters, are assigned their own prior distribution, referred to as a hyperprior, and are learned during the model fitting process. Similarly as priors, the hyperpriors should be set so they reflect ranges of possible hyperparameter values.  Conceptually, these hyperparameters and hyperpriors operate at a higher level of hierarchy, hence the name.
 
 For example, let's consider the beta-binomial model discussed in Episode 1. We used it to estimate the prevalence of left-handedness based on a sample of 50 students. If we were to include additional information, such as the students' majors, we could extend the model as follows:
 
@@ -68,6 +65,8 @@ First, let's load the data and examine its structure.
 
 
 ```{r}
+set.seed(4985)
+
 height <- read.csv("data/height_data.csv")
 str(height)
 ```
@@ -149,7 +148,7 @@ X_{gi} &\sim \text{N}(\mu_g, \sigma_g) \\
 \alpha_\sigma, \beta_\sigma  &\sim \Gamma(2, 0.01).
 \end{align}
 
-Above, $X_{gi}$ denotes the height for individual $i$ in country $g$. The country specific parameters $\mu_g$ and $\sigma_g$ are given normal and gamma priors, respectively, with unknown hyperparameters that, in turn, are given hyperpriors on the last two lines. 
+Above, $X_{gi}$ denotes the height for individual $i$ in country $g$. The country specific parameters $\mu_g$ and $\sigma_g$ are given normal and gamma priors, respectively, with unknown hyperparameters that, in turn, are given hyperpriors on the last two lines. The hyperpriors are quite uninformative as they allow large hyperparameter ranges.
 
 Below is the Stan program for this model. The data points are input as a concatenated vector `X`. The country-specific start and end indices are computed in the transformed data block. This approach accommodates uneven sample sizes between groups, although in our data these are equal. 
 
@@ -206,7 +205,7 @@ model {
   
   // Hyperpriors
   mu_mu ~ normal(0, 100);
-  sigma_mu ~ inv_gamma(2, 0.1);
+  sigma_mu ~ gamma(2, 0.1);
   alpha_sigma ~ gamma(2, 0.01);
   beta_sigma ~ gamma(2, 0.01);
 }
@@ -229,7 +228,7 @@ generated quantities {
 ```
 
 
-Now we can call Stan and fit the model. Hierarchical models can encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
+Now we can call Stan and fit the model. Hierarchical models can encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. This controls the acceptance probability in Stan's adaptation period and will result in a smaller step size in the Markov chain. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
 
 ```{r}
 stan_data <- list(G = length(unique(height_sim$Country)), 
@@ -246,8 +245,7 @@ normal_hier_fit <- rstan::sampling(normal_hier_model,
 ```
 
 
-
-<!-- Non-pooled analysis -->
+For comparison, we will also run an unpooled analysis of heights, which makes use of the following Stan file: 
 
 ```{stan output.var="normal_pooled_model", echo = FALSE, eval=TRUE}
 data {
@@ -263,14 +261,14 @@ parameters {
 model {
   X ~ normal(mu, sigma);
   // Prior
-  mu ~ normal(0, 200);
-  sigma ~ inv_gamma(2, 10);
+  mu ~ normal(0, 100);
+  sigma ~ gamma(2, 0.1);
 }
 ```
 
-<!-- Fit -->
 
-```{r, echo = FALSE, eval=TRUE}
+
+```{r, echo = TRUE, eval=TRUE}
 
 unpooled_summaries <- list()
 
@@ -291,7 +289,6 @@ for(i in 1:N_countries) {
                                     # Use to get rid of divergent transitions:
                                     control = list(adapt_delta = 0.99), 
                               cores = 2,
-                            # Track progress every 5000 iterations
                             refresh = 0
                             )
   
@@ -305,11 +302,6 @@ for(i in 1:N_countries) {
 
 
 unpooled_summaries <- do.call(rbind, unpooled_summaries)
-
-
-# Add in the figure chuck below to include unpooled estimates
-# geom_errorbar(data = unpooled_summaries, aes(x = country, ymin = X2.5., ymax = X97.5.),
-#                 color = "brown") +
 
 ```
 
@@ -327,8 +319,6 @@ par_summary <- rstan::summary(normal_hier_fit, c("mu", "sigma"))$summary %>%
   mutate(country = Countries[as.integer(country)])
 
 ggplot() + 
-# geom_point(data = par_summary, aes(x = country, y = mean),
-#            color = posterior_color) +
 geom_errorbar(data = par_summary, aes(x = country, ymin = X2.5., ymax = X97.5.),
               color = posterior_color) + 
 geom_point(data = height_women10 %>% 
@@ -419,11 +409,11 @@ We can see that the population distribution is able to capture the measured aver
 
 ### Posterior predictive distribution
 
-Finally, let's plot the posterior predictive distribution and overlay it with the simulated data based on all countries.
+Finally, let's plot the posterior predictive distribution for the whole population and overlay it with the simulated data based on all countries.
 
 ```{r}
 # For each country, generate some random girl's heights
-Height_all <- lapply(1:nrow(height_women), function(i) {
+height_all <- lapply(1:nrow(height_women), function(i) {
   
   my_df <- height_women[i, ] %>% 
     rename_with(~ c('mu', 'sigma'), 3:4)
@@ -453,7 +443,7 @@ ggplot() +
                  aes(x = X_tilda, y = after_stat(density)),
                  bins = 100,
                  fill = posterior_color) +
-  geom_histogram(data = Height_all, 
+  geom_histogram(data = height_all, 
                  aes(x = Height, y = after_stat(density)), 
                  alpha = 0.75, 
                  bins = 100)
