@@ -1,7 +1,7 @@
 ---
 title: 'Stan'
 teaching: 60
-exercises: 0
+exercises: 4
 ---
 
 
@@ -28,6 +28,8 @@ Learn how to
 Stan is a probabilistic programming language that can be used to specify probabilistic models and to generate samples from posterior distributions. 
 
 The standard steps is using Stan is to first write the statistical model in a separate text file, then to call Stan from R (or other supported interface) which performs the sampling. Instead of having to write formulas the model can be written using built-in functions and sampling statements similar to written text. The sampling process is performed with a Markov Chain Monte Carlo (MCMC) algorithm, which we will study in a later episode. For now, however, our focus is on understanding how to execute it using Stan. 
+
+Several R packages have been built that simplify Stan usage. For example, brms allows specifying models via R's customary formula syntax, while bayesplot provides a library of plotting functions. In this lesson, however, we will first learn using Stan from the bottom-up, by writing Stan programs, extracting the posterior samples and generating the plots ourselves. Later, in episode 7, we'll introduce the usage of some of these additional packages. 
 
 To get started, follow the instructions provided at https://mc-stan.org/users/interfaces/ to install Stan on your local computer.
 
@@ -83,17 +85,19 @@ In the model block, the likelihood is specified with the sampling statement `x ~
   }
 ```
 
-Once the Stan program has been saved we need to compile it. In R, this is done by running the following line, where `"binomial_model.stan"` is the path of the program file. 
+When the Stan program has been saved we need to compile it. In R, this is done by running the following line, where `"binomial_model.stan"` is the path of the program file. 
 
 
 ``` r
 binomial_model <- stan_model("binomial_model.stan")
 ```
 
-Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be input as a list. 
+Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be input as a list.
 
 
 ``` r
+set.seed(135)
+
 binom_data <- list(N = 50, x = 7)
 
 binom_samples <- sampling(object = binomial_model,
@@ -104,8 +108,8 @@ binom_samples <- sampling(object = binomial_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 3e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -122,9 +126,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 1:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 1:                0.003 seconds (Sampling)
-Chain 1:                0.007 seconds (Total)
+Chain 1:                0.006 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -172,9 +176,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 3:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.007 seconds (Total)
+Chain 3:                0.006 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -219,10 +223,10 @@ Inference for Stan model: anon_model.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.19   0.26  1381    1
-lp__  -22.82    0.02 0.72 -24.76 -22.99 -22.55 -22.37 -22.33  1597    1
+theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
+lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Jun 25 00:31:37 2024.
+Samples were drawn using NUTS(diag_e) at Wed Jun 26 11:03:25 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -235,7 +239,7 @@ Often, however, it is necessary process the individual samples. These can be ext
 
 
 ``` r
-theta_samples <- extract(binom_samples, "theta")[["theta"]]
+theta_samples <- rstan::extract(binom_samples, "theta")[["theta"]]
 ```
 
 Now we can use the methods presented in the previous Episode to compute posterior summaries, credible intervals and to generate figures. 
@@ -302,7 +306,7 @@ In addition to the data, parameters, and model blocks there are additional block
 
 We will make use of these additional structures in subsequent illustrations. 
 
-## Example 2: normal model
+## Example 2: Normal model
 
 Next, let's implement the normal model in Stan. First we'll generate some data $X$ from a normal model with unknown mean and standard deviation parameters $\mu$ and $\sigma$
 
@@ -318,6 +322,8 @@ unknown_mu <- runif(1, -5, 5)
 X <- rnorm(n = N,
            mean = unknown_mu,
            sd = unknown_sigma) 
+
+normal_data <- list(N = N, X = X)
 ```
 
 
@@ -341,7 +347,7 @@ model {
   
   // Priors
   mu ~ normal(0, 1);
-  sigma ~ inv_gamma(1, 1);
+  sigma ~ gamma(2, 1);
 }
 generated quantities {
   real X_tilde;
@@ -354,7 +360,7 @@ Let's fit the model to the data
 
 ``` r
 normal_samples <- rstan::sampling(normal_model, 
-                                  list(N = N, X = X))
+                                  normal_data)
 ```
 
 ``` output
@@ -379,8 +385,8 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 1:                0.008 seconds (Sampling)
+Chain 1:  Elapsed Time: 0.009 seconds (Warm-up)
+Chain 1:                0.007 seconds (Sampling)
 Chain 1:                0.016 seconds (Total)
 Chain 1: 
 
@@ -404,9 +410,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 2:                0.007 seconds (Sampling)
-Chain 2:                0.015 seconds (Total)
+Chain 2:  Elapsed Time: 0.01 seconds (Warm-up)
+Chain 2:                0.008 seconds (Sampling)
+Chain 2:                0.018 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -429,9 +435,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 3:  Elapsed Time: 0.009 seconds (Warm-up)
 Chain 3:                0.007 seconds (Sampling)
-Chain 3:                0.015 seconds (Total)
+Chain 3:                0.016 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -454,9 +460,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.009 seconds (Warm-up)
 Chain 4:                0.008 seconds (Sampling)
-Chain 4:                0.016 seconds (Total)
+Chain 4:                0.017 seconds (Total)
 Chain 4: 
 ```
 
@@ -465,7 +471,7 @@ Next, we'll extract posterior samples and generate a plot for the joint, and mar
 
 ``` r
 # Extract parameter samples
-par_samples <- extract(normal_samples, c("mu", "sigma")) %>% 
+par_samples <- rstan::extract(normal_samples, c("mu", "sigma")) %>% 
   do.call(cbind, .) %>% 
   data.frame
 
@@ -473,8 +479,8 @@ par_samples <- extract(normal_samples, c("mu", "sigma")) %>%
 # Full posterior
 p_posterior <- ggplot(data = par_samples) + 
   geom_point(aes(x = mu, y = sigma)) +
-  geom_point(aes(x = unknown_mu, y = unknown_sigma),
-             color = "red", size = 5)
+  annotate("point", x = unknown_mu, y = unknown_sigma, 
+           color = "red", size = 5)
 
 # Marginal posteriors
 p_marginals <- ggplot(data = par_samples %>% gather) + 
@@ -486,16 +492,8 @@ p_marginals <- ggplot(data = par_samples %>% gather) +
 
 
 p <- cowplot::plot_grid(p_posterior, p_marginals,
-                  ncol = 1)
-```
+                        ncol = 1)
 
-``` warning
-Warning in geom_point(aes(x = unknown_mu, y = unknown_sigma), color = "red", : All aesthetics have length 1, but the data has 4000 rows.
-ℹ Please consider using `annotate()` or provide this layer with data containing
-  a single row.
-```
-
-``` r
 print(p)
 ```
 
@@ -506,7 +504,7 @@ Let's also plot the posterior predictive distribution samples histogram and comp
 
 
 ``` r
-PPD <- extract(normal_samples, c("X_tilde"))[[1]] %>% 
+PPD <- rstan::extract(normal_samples, c("X_tilde"))[[1]] %>% 
   data.frame(X_tilde = . )
 
 p_PPD <- ggplot() + 
@@ -529,7 +527,7 @@ print(p_PPD)
 
 Write a Stan program for linear regression with one dependent variable. 
 
-Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$ and noise term $\sigma$.
+Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$, and noise term $\sigma$.
 
 ::::::::::::::::::::: solution
 
@@ -617,7 +615,7 @@ model {
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Stan is a tool for generating posterior distribution samples. 
+- Stan is a tool for efficient posterior distribution sample generation. 
 - A Stan program is specified in a separate text file that consists of code blocks, with the data, parameters, and model blocks being the most crucial ones.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

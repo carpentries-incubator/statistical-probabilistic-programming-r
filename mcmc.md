@@ -1,7 +1,7 @@
 ---
-title: 'MCMC'
+title: 'Markov chain Monte Carlo'
 teaching: 60
-exercises: 0
+exercises: 3
 ---
 
 
@@ -32,7 +32,7 @@ The standard solution to fitting probabilistic models is to generate random samp
 
 MCMC methods draw samples from the posterior distribution by constructing sequences (chains) of values in the parameter space that ultimately converge to the posterior. While there are other variants of MCMC, on this course we will mainly focus on the Metropolis-Hasting (MH) algorithm outlined below. As this algorithm is ran long enough, convergence to posterior (or to other specified target density) is guaranteed. This means that that if the chain is run long enough, the samples will eventually start approximating the posterior distribution. 
 
-A chain starts is initialized at value $\theta^{0}$, which can be manually set or random. The only precondition is that the target distribution has positive mass at the location, $p(\theta^{0} | X) > 0$. Then, a proposal $\theta^*$ for the next value is generated from a transition distribution $T_i$. An often-used solution is the normal distribution centered at the current value, $\theta^* \sim N(\theta^{i}, \sigma^2)$. This is where the term "Markov chain" comes from, the value of each element depends only on the previous one. 
+A chain starts is initialized at value $\theta^{0}$, which can be manually set or random. The only precondition is that the target distribution has positive mass at the location, $p(\theta^{0} | X) > 0$. Then, a proposal $\theta^*$ for the next value is generated from a proposal distribution $T_i$. An often-used solution is the normal distribution centered at the current value, $\theta^* \sim N(\theta^{i}, \sigma^2)$. This is where the term "Markov chain" comes from, the value of each element depends only on the previous one. 
 
 Next, the proposal $\theta^*$ is either accepted or rejected. If each proposal was accepted, the sequence would simply be a random walk in the parameter space and would not approximate the posterior to any degree. The rule that determines the acceptance should reflect this; proposals towards higher posterior densities should be favored over proposals toward low density areas. The solution is to compute the ratio
 
@@ -48,6 +48,8 @@ Let's implement the MH algorithm and use it to generate posterior samples from t
 $$X \sim N(\theta_1 + \theta_2^2, 1) \\
 \theta_1, \theta_2 \sim N(0, 1),$$
 
+where $X$ is univariate data and $\theta_1, \theta_2$ the parameters. 
+
 #### Helper functions
 
 We begin by writing some helper functions that carry out the incremental steps of the MH algorithm. 
@@ -56,6 +58,8 @@ First, we need to be able to generate the proposals. Let's use the two-dimension
 
 
 ``` r
+set.seed(12)
+
 generate_proposal <- function(pars_now, jump_scale = 0.1) {
 
   n_pars <- length(pars_now)
@@ -172,32 +176,58 @@ We'll generate 1000 samples with initial value (0, 5) and jump scale 0.01. The t
 
 
 
-
-
 ``` r
-set.seed(12)
-
 # Draw samples
-samples <- MH_sampler(X,
+samples1 <- MH_sampler(X,
                       inits = c(0, 5),
                       n_samples = 1000, 
                       jump_scale = 0.01)
 
-colnames(samples) <- c("theta1", "theta2")
+colnames(samples1) <- c("theta1", "theta2")
 
 # Add column for sample index
-samples$sample <- 1:nrow(samples)
+samples1$sample <- 1:nrow(samples1)
+
+
+# Grid approximation
+delta <- 0.05
+df_grid <- expand.grid(seq(-4, 4, by = delta),
+                       seq(-4, 5, by = delta)) %>%
+  set_colnames(c("theta1", "theta2"))
+
+
+for(i in 1:nrow(df_grid)) {
+  df_grid[i, "likelihood"] <- prod(
+    dnorm(X,
+          df_grid[i, "theta1"] + df_grid[i, "theta2"]^2,
+          1)
+    )
+}
+
+df_grid <- df_grid %>% 
+  mutate(prior = dnorm(theta1, 0, 1)*dnorm(theta2, 0, 1)) %>%
+  mutate(posterior = prior*likelihood) %>% 
+  mutate(posterior = posterior / (sum(posterior)*delta^2))
+
+
+# Plot
+p_grid <- ggplot() +
+  geom_tile(data = df_grid, 
+             aes(x = theta1, y = theta2, fill = posterior)) +
+  scale_fill_gradientn(colours = rainbow(5))
+
+
 
 # Plot joint posterior samples
 p_MH1 <- p_grid +
-  geom_path(data = samples,
+  geom_path(data = samples1,
             aes(x = theta1, y = theta2))
   
 
 print(p_MH1)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/mcmc-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 
 Looking at the figure, a few observations become evident. Firstly, despite the chosen initial value being moderately far from the high-density areas of the posterior, the algorithm quickly converges to the target region. This rapid convergence is due to the fact that proposals toward higher density areas are favored, in fact they are always accepted when using normal density proposals. However, it's important to note that such swift convergence is not guaranteed in all scenarios. In cases with a high number of model parameters, there's an increased likelihood of the sampler taking 'wrong' directions. The samples before convergence introduce bias to the posterior approximation.
@@ -245,7 +275,7 @@ These issues can be remedied with:
 
 
 
-It also important to be able to monitor whether the sampler has converged. This can be done with statistics, such as *effective sample size* and $\hat{R}$. Effective sample size estimates how many independent samples have been generated. Ideally, this number should be close to the total number of iterations the sampler has been ran for. $\hat{R}$ on the other hand measures chain mixing, that is, how well the chains agree with each other. It is computed by comparing the variance within each chain to the total variance of all samples. Usually, values of $\hat{R} > 1.1$ are considered as signaling convergence issues. 
+It also important to be able to monitor whether the sampler has converged. This can be done with statistics, such as *effective sample size* and $\hat{R}$. Effective sample size estimates how many independent samples have been generated. Ideally, this number should be close to the total number of iterations the sampler has been ran for. $\hat{R}$ on the other hand measures chain mixing, that is, how well the chains agree with each other. It is computed by comparing the variance within each chain to the total variance of all samples. Usually, values of $\hat{R} > 1.1$ are considered as signaling convergence issues. However, the Stan development team [recommends](https://mc-stan.org/rstan/reference/Rhat.html) using 1.05 as the limit.
 
 Besides statistics, visually evaluating the samples can be useful. *Trace plots* refer to graphs where the marginal posterior samples are plotted against sample index. Trace plots can be used to investigate convergence and mixing properties, and can reveal, for example, multimodality. 
 
@@ -268,10 +298,10 @@ n_chains <- 4
 # Number of samples
 n_samples <- 10000
 
-# Consider first p% samples as warmup
+# Initial warmup proportion
 warmup <- 0.5
 
-samples <- lapply(1:n_chains, function(i) {
+samples2 <- lapply(1:n_chains, function(i) {
   
   # Use random initial values
   inits <- rnorm(2, 0, 5)
@@ -300,35 +330,38 @@ Now it's evident that the sample trajectories explore the entire posterior distr
 # Plot
 p_joint_2 <- ggplot() +
   # warmup samples
-  geom_path(data = samples %>%
+  geom_path(data = samples2 %>%
               filter(warmup == TRUE),
             aes(theta1, theta2, color = chain),
             alpha = 0.25) +
   # post-warmup samples
-  geom_path(data = samples %>%
+  geom_path(data = samples2 %>%
               filter(warmup == FALSE),
             aes(theta1, theta2, color = chain))
 
 print(p_joint_2)
 ```
 
-<img src="fig/mcmc-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/mcmc-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
-Let's see what the trace plots look like. Generally, we'd want to see the samples randomly scattered around a mean value. For $\theta_1$ this is more or less the case, although there some autocorrelation is apparent. With $\theta_2$ we can see that the chains have mixed as they explore the same parameter ranges. However, the bimodality of the posterior is quite apparent. 
 
+
+
+
+Let's see what the trace plots look like. Generally, we'd want to see the samples randomly scattered around a mean value. For $\theta_1$ this is more or less the case, although there some autocorrelation is apparent. With $\theta_2$ we can see that the chains have mixed as they explore the same parameter ranges. However, the bimodality of the posterior is quite apparent. The $\hat{R}$ statistics are 1.0082279 and 1.1065365 for $\theta_1$ and $\theta_2$, respectively.
 
 
 ``` r
 # Trace plots
 p_trace_2 <- ggplot() + 
-  geom_line(data = samples %>% 
+  geom_line(data = samples2 %>% 
               filter(warmup == TRUE) %>% 
               gather(key = "parameter",
                      value = "value",
                      -c("sample", "chain", "warmup")), 
             aes(x = sample, y = value, color = chain), 
             alpha = 0.25) + 
-  geom_line(data = samples %>% 
+  geom_line(data = samples2 %>% 
               filter(warmup == FALSE) %>% 
               gather(key = "parameter",
                      value = "value",
@@ -359,6 +392,8 @@ A type of convergence criterion exclusive to HMC is the divergent transition. In
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Markov chain Monte Carlo methods can be used to generate samples from a posterior distribution.
+- Values of the chain are generated from a proposal distribution.
+- Proposals towards higher areas of the target distribution are accepted with higher probability. 
 - MCMC convergence should always be monitored. 
 
 

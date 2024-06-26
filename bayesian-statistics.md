@@ -1,7 +1,7 @@
 ---
 title: 'Short introduction to Bayesian statistics'
-teaching: 90
-exercises: 0
+teaching: 60
+exercises: 8
 ---
 
 
@@ -49,7 +49,7 @@ The proportional Bayes' formula yields an unnormalized posterior distribution, w
 
 
 
-### Example: handedness
+## Example 1: handedness
 
 Let's illustrate the use of the Bayes' theorem with an example. 
 
@@ -112,9 +112,9 @@ Specifying a probabilistic model can be simple, but a common bottleneck in Bayes
 
 Now, we'll implement the grid approximation for the handedness example in R.
 
-### Example: handedness with grid approximation
+## Example 2: handedness with grid approximation
 
-First, we'll define the data variables and the grid of parameter values
+First, we'll load the required packages, define the data variables, and the grid of parameter values
 
 
 ``` r
@@ -156,14 +156,14 @@ Finally, we can plot these functions
 
 ``` r
 # Make data frame
-df_hand <- data.frame(theta = theta_grid, likelihood, prior, posterior)
+df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
 # wide to long format
-df_hand_l <- df_hand %>%
+df1_l <- df1 %>%
   gather(key = "Function", value = "value", -theta)
 
 # Plot
-p1 <- ggplot(df_hand_l, 
+p1 <- ggplot(df1_l, 
        aes(x = theta, y = value, color = Function)) + 
   geom_point(size = 2) +
   geom_line(linewidth = 1) +
@@ -194,17 +194,17 @@ What is the relationship between the posterior, data (likelihood) and the prior?
 
 Next, we'll learn how to compute point estimates and posterior intervals based on the approximate posterior obtained with the grid approximation.
 
-Computing the posterior mean and variance is based on the definition of these statistics for continuous variables. The mean is defined as $$\int \theta \cdot p(\theta | X) d\theta$$ and can be computed using discrete integration: $$\sum_{\text{grid}} \theta \cdot p(\theta | X) \cdot \delta.$$ Similarly, variance can be computed based on the definition $$\text{var}(\theta) = \int (\theta - \text{mean}(\theta))^2p(\theta | X)d\theta$$. Posterior mode is simply the grid value where the posterior is maximized. 
+Computing the posterior mean and variance is based on the definition of these statistics for continuous variables. The mean is defined as $$\int \theta \cdot p(\theta | X) d\theta,$$ and can be computed using discrete integration: $$\sum_{\text{grid}} \theta \cdot p(\theta | X) \cdot \delta.$$ Similarly, variance can be computed based on the definition $$\text{var}(\theta) = \int (\theta - \text{mean}(\theta))^2p(\theta | X)d\theta.$$ Posterior mode is simply the grid value where the posterior is maximized. 
 
 In R, these statistics can be computed as follows: 
 
 
 ``` r
 data.frame(Estimate = c("Mode", "Mean", "Variance"), 
-           Value = c(df_hand[which.max(df_hand$posterior), "theta"],
-                     sum(df_hand$theta*df_hand$posterior*delta), 
-                     sum(df_hand$theta^2*df_hand$posterior*delta) -
-                       sum(df_hand$theta*df_hand$posterior*delta)^2))
+           Value = c(df1[which.max(df1$posterior), "theta"],
+                     sum(df1$theta*df1$posterior*delta), 
+                     sum(df1$theta^2*df1$posterior*delta) -
+                       sum(df1$theta*df1$posterior*delta)^2))
 ```
 
 ``` output
@@ -220,7 +220,7 @@ Posterior intervals are also relatively easy to compute.
 
 Finding the quantiles used to determine CIs is based on the cumulative distribution function of the posterior $F(\theta) = \int_{\infty}^{\theta}p(y | X) dy$. The locations where the $F(\theta) = 0.05$ and $F(\theta) = 0.95$ define the 90% CIs. 
 
-Probabilities for certain parameter ranges are computed simply by integrating over the appropriate set. For instance, $Pr(\theta < 0.1) = \int_0^{0.1} p(\theta | X) d\theta$
+Probabilities for certain parameter ranges are computed simply by integrating over the appropriate set, for example, $Pr(\theta < 0.1) = \int_0^{0.1} p(\theta | X) d\theta.$
 
 :::::::::::::::::::::::::::::::: challenge
 
@@ -261,7 +261,7 @@ print(paste0("Pr(theta < 0.1) = ",
 
 
 
-### Example: Gamma model with grid approximation
+## Example 3: Gamma model with grid approximation
 
 Let's investigate another model and implement a grid approximation to fit it. 
 
@@ -281,7 +281,7 @@ alpha_grid <- seq(from = 0.01, to = 15, by = delta)
 beta_grid <- seq(from = 0.01, to = 25, by = delta)
 
 # Get pairwise combinations
-df <- expand.grid(alpha = alpha_grid, beta = beta_grid)
+df2 <- expand.grid(alpha = alpha_grid, beta = beta_grid)
 ```
 
 
@@ -290,11 +290,11 @@ Next, we'll compute the likelihood. As we assumed the data points to be independ
 
 ``` r
 # Loop over all alpha, beta combinations
-for(i in 1:nrow(df)) {
-  df[i, "likelihood"] <- prod(
+for(i in 1:nrow(df2)) {
+  df2[i, "likelihood"] <- prod(
     dgamma(x = X,
-           shape = df[i, "alpha"],
-           rate = df[i, "beta"])
+           shape = df2[i, "alpha"],
+           rate = df2[i, "beta"])
     )
 }
 ```
@@ -306,17 +306,17 @@ Notice, that normalizing the posterior now requires integrating over both dimens
 
 ``` r
 # Priors: alpha, beta ~ Gamma(2, .1)
-df <- df %>% 
+df2 <- df2 %>% 
   mutate(prior = dgamma(x = alpha, 2, 0.1)*dgamma(x = beta, 2, 0.1))
 
 # Posterior
-df <- df %>% 
+df2 <- df2 %>% 
   mutate(posterior = prior*likelihood) %>% 
   mutate(posterior = posterior/(sum(posterior)*delta^2)) # normalize
 
 
 # Plot
-p_joint_posterior <- df %>% 
+p_joint_posterior <- df2 %>% 
   ggplot() + 
   geom_tile(aes(x = alpha, y = beta, fill = posterior)) + 
   scale_fill_gradientn(colours = rainbow(5)) +
@@ -332,7 +332,7 @@ Next, we'll compute the posterior mode, which is a point in the 2-dimensional pa
 
 
 ``` r
-df[which.max(df$posterior), c("alpha", "beta")]
+df2[which.max(df2$posterior), c("alpha", "beta")]
 ```
 
 ``` output
@@ -348,7 +348,7 @@ Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta
 
 ``` r
 # Get marginal posterior for alpha
-alpha_posterior <- df %>% 
+alpha_posterior <- df2 %>% 
   group_by(alpha) %>% 
   summarize(posterior = sum(posterior)) %>% 
   mutate(posterior = posterior/(sum(posterior)*delta))
@@ -370,10 +370,6 @@ p_alpha_posterior
 
 Does the MAP of the joint posterior of $\theta = (\alpha, \beta)$ correspond to the MAPs of the marginal posteriors of $\alpha$ and $\beta$?
 
-::::::::::::: solution
-No. Why?
-:::::::::::::
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::: callout
@@ -385,9 +381,9 @@ The conjugate prior for the Gamma likelihood [exists](https://en.wikipedia.org/w
 
 The main limitation of the grid approximation is that it becomes impractical for models with even a moderate number of parameters. The reason is that the number of computations grows as $O \{ \Delta^p \}$ where $\Delta$ is the number of grid points per model parameter and $p$ the number of parameters. This quickly becomes prohibitive, and the grid approximation is seldom used in practice. The standard approach to fitting Bayesian models is to draw samples from the posterior with Markov chain Monte Carlo (MCMC) methods. These methods are the topic of a later episode but we'll anticipate this now by studying how posterior summaries can be computed based on samples. 
 
-### Example: handedness with samples
+## Example 4: handedness with samples
 
-Let's take the Beta-binomial model (beta prior, binomial likelihood) of the handedness analysis as our example. It is an instance of a model for which the posterior can be computed analytically. Given a prior $\text{Beta}(\alpha, \beta)$ and likelihood $\text{Bin}(x | N, \theta)$, the posterior is
+Let's take the beta-binomial model (beta prior, binomial likelihood) of the handedness analysis as our example. It is an instance of a model for which the posterior can be computed analytically. Given a prior $\text{Beta}(\alpha, \beta)$ and likelihood $\text{Bin}(x | N, \theta)$, the posterior is
 $$p(\theta | X) = \text{Beta}(\alpha + x, \beta + N - x).$$
 Let's generate $n = 1000$ samples from this posterior using the handedness data: 
 
@@ -398,6 +394,22 @@ theta_samples <- rbeta(n, 1 + 7, 10 + 50 - 7)
 ```
 
 Plotting a histogram of these samples against the grid approximation posterior displays that both are indeed approximating the same distribution
+
+``` r
+ggplot() + 
+  geom_histogram(data = theta_samples %>% 
+  data.frame(theta = .), 
+  aes(x = theta, y = after_stat(density)), bins = 50, 
+  fill = posterior_color, color = "black") +
+    geom_line(data = df1,
+            aes(x = theta, y = posterior),
+            linewidth = 1.5) +
+  geom_line(data = df1, 
+            aes(x = theta, y = posterior), 
+            color = posterior_color) +
+  labs(x = expression(theta))
+```
+
 <img src="fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
 
 
@@ -410,6 +422,32 @@ Computing posterior summaries from samples is easy. The posterior mean and varia
 Compute the posterior mean, variance, 90% CI and $Pr(\theta > 0.1)$ using the generated samples. 
 
 ::::::::::::::::::::::::::::::::::
+
+## Posterior predictive distribution
+
+Now we have learned how to fit a probabilistic model using the grid approximation and how to compute posterior summaries of the model parameters based on the fit or with posterior samples. A potentially interesting question that the posterior doesn't directly answer is what do possible unobserved data values $\tilde{X}$ look like, conditional on the observed values $X$. 
+
+The unknown value can be predicted using the *posterior predictive distribution*  $p(\tilde{X} | X) = \int p(\tilde{X} | \theta) p(\theta | X) d\theta$. Using samples, this distribution can be sampled from by first drawing a value $\theta^s$ from the posterior and then generating a random value from the likelihood function $p(\tilde{X} | \theta^s)$. 
+
+A posterior predictive distribution for the beta-binomial model, using the posterior samples of the previous example can be generated as
+
+
+``` r
+ppd <- rbinom(length(theta_samples), 50, prob = theta_samples)
+```
+
+In other words, this is the distribution of the number of left-handed people in a yet unseen sample of 50 people. Let's plot the histogram of these samples and compare it to the observed data (red vertical line): 
+
+
+``` r
+ggplot() + 
+  geom_histogram(data = data.frame(ppd), 
+                 aes(x = ppd, y = after_stat(density)), binwidth = 1) +
+  geom_vline(xintercept = 7, color = "red")
+```
+
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+
 
 
 

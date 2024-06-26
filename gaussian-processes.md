@@ -1,7 +1,7 @@
 ---
 title: 'Gaussian processes'
 teaching: 60
-exercises: 1
+exercises: 3
 ---
 
 
@@ -38,6 +38,8 @@ Perhaps the most frequently used covariance function is the squared exponential 
 
 
 ``` r
+set.seed(6436)
+
 sq_exp_cov <- function(x, lambda, alpha) {
   n <- length(x)
   
@@ -194,8 +196,8 @@ gp_samples <- rstan::sampling(gp_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8.5e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.85 seconds.
+Chain 1: Gradient evaluation took 8.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -212,14 +214,14 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 31.352 seconds (Warm-up)
-Chain 1:                36.7 seconds (Sampling)
-Chain 1:                68.052 seconds (Total)
+Chain 1:  Elapsed Time: 32.042 seconds (Warm-up)
+Chain 1:                36.412 seconds (Sampling)
+Chain 1:                68.454 seconds (Total)
 Chain 1: 
 ```
 
 ``` warning
-Warning: There were 496 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+Warning: There were 492 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 ```
 
@@ -228,7 +230,7 @@ Warning: Examine the pairs() plot to diagnose sampling problems
 ```
 
 ``` warning
-Warning: The largest R-hat is 2.05, indicating chains have not mixed.
+Warning: The largest R-hat is 2.11, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat
 ```
@@ -246,7 +248,7 @@ https://mc-stan.org/misc/warnings.html#tail-ess
 ```
 
 
-The inference takes some time (minutes on a standard laptop) even though we only use (an insufficient) single chain and 1000 iterations. Stan also throws warnings about convergence issues. Let's ignore these at this point, and look at the output.
+The inference takes some time (about a minute on a standard laptop) even though we only use (an insufficient) single chain and 1000 iterations. Stan also throws warnings about convergence issues. Let's ignore these at this point, and look at the output.
 
 
 
@@ -272,7 +274,7 @@ print(p_f)
 <img src="fig/gaussian-processes-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 
-The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Each posterior sample corresponds to a function. This distribution essentially captures the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. However, in certain regions, the posterior seems a bit strange. For example, the posterior between the farthest two data points on the right contains most of the mass below the line connecting the points, and hardly above below it. This is likely a symptom of the convergence issues. 
+The figure contains the data points in red and samples from the posterior distribution of $f$ in black. Each posterior sample corresponds to a function. This distribution essentially captures the model's interpretation of the underlying trend within the data. The estimate for the trend seems plausible. 
 
 :::::::::::::::::::::::::::::: challenge
 In the figure above, where is the posterior uncertainty the highest and why? What controls the uncertainty at the locations of the data? If we made the prediction range wider, say, from -10 to 10, what would the posterior  look like at the extremes?
@@ -404,7 +406,7 @@ mean(posterior_at_0 > 0)
 ```
 
 ``` output
-[1] 0.603
+[1] 0.6006667
 ```
 
 
@@ -637,8 +639,8 @@ logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.001489 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 14.89 seconds.
+Chain 1: Gradient evaluation took 0.001344 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 13.44 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -655,9 +657,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 17.073 seconds (Warm-up)
-Chain 1:                17.241 seconds (Sampling)
-Chain 1:                34.314 seconds (Total)
+Chain 1:  Elapsed Time: 17.508 seconds (Warm-up)
+Chain 1:                17.549 seconds (Sampling)
+Chain 1:                35.057 seconds (Total)
 Chain 1: 
 ```
 

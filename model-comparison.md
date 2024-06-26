@@ -1,6 +1,6 @@
 ---
 title: 'Model comparison'
-teaching: 10
+teaching: 60
 exercises: 2
 ---
 
@@ -37,28 +37,31 @@ The first one is the posterior predictive check, which involves comparing a fitt
 
 ## Data
 
-Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points.
+Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points. The data is included in the course's data folder at 
 
 Looking at the data histogram, it's evident that the data is approximately symmetrically distributed around 0. However, there is some dispersion in the data, and an extreme positive value, suggesting that the tails might be longer than those of a normal distribution. The Cauchy distribution is a potential alternative and below we will compare the suitability of these two distributions on this data. 
 
 
-<img src="fig/model-comparison-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" />
+
+
+
+<img src="fig/model-comparison-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 
 ## Posterior predictive check
 
 The idea of posterior predictive checking is to use the posterior predictive distribution to simulate a replicate data set and compare it to the observed data. The reasoning behind this approach is that if the model is a good fit, then replicate data should look similar the observed one. Qualitative discrepancies between the simulated and observed data can imply that the model does not match the properties of the data or the domain. 
 
-The comparison can be done in different ways. Visual comparison is an option but a more rigorous approach is to compute the *posterior predictive p-value* ($ppp$), which measures how well the model can reproduce the observed data. Computing the $ppp$ requires specifying a statistic whose value is compared between the posterior predictions and the observations.
+The comparison can be done in different ways. Visual comparison is an option but a more rigorous approach is to compute the *posterior predictive p-value* ($p_B$), which measures how well the model can reproduce the observed data. Computing the $p_B$ requires specifying a statistic whose value is compared between the posterior predictions and the observations.
 
 The steps of a posterior predictive check can be formulated in the following points: 
 
 1. **Generate replicate data:**
   Use the posterior predictive distribution to simulate replicate datasets $X^{rep}$ with characteristics matching the observed data. In our example, this amounts to generating data with $N=88$ for each posterior sample. 
 2. **Choose test quantity $T(X)$:**
-  Choose an aspect of the data that you wish to check. We'll use the maximum value as the test quantity and compute it for the observed data and each replicate.
-3. **Compute $ppp$:**
-  The posterior predictive p-value is defined as the probability $Pr(T(X^{rep}) \geq T(X) | X)$, that is, the probability that the predictions produce test quantity values at least as extreme as those found in the data. Using samples, it is computed as the proportion of replicate data sets with $T$ not smaller than that of $T(X)$. The smaller the $ppp$-value, the larger the evidence that the model cannot properly emulate the data.  
+  Choose an aspect of the data that you wish to check. We'll use the maximum value as the test quantity and compute it for the observed data and each replicate. It's important to note that not every imaginable data quantity will make a good $T(X)$, see chapter 6.3 in BDA3 for details. 
+3. **Compute $p_B$:**
+  The posterior predictive p-value is defined as the probability $Pr(T(X^{rep}) \geq T(X) | X)$, that is, the probability that the predictions produce test quantity values at least as extreme as those found in the data. Using samples, it is computed as the proportion of replicate data sets with $T$ not smaller than that of $T(X)$. The closer the $p_B$-value is to 1 (or 0), the larger the evidence that the model cannot properly emulate the data.  
 
 
 Next we will perform these steps for the normal and Cauchy models. 
@@ -115,21 +118,21 @@ X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>%
 
 Below is a comparison of 9 realizations of $X^{rep}$ (blue) against the data (grey; the panel titles correspond to MCMC sample numbers). It is evident that the tail properties are different between  $X^{rep}$ and $X$, and this discrepancy indicates an issue with the model choice. 
 
-<img src="fig/model-comparison-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="fig/model-comparison-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 
 
 
 
 
-Let's quantify this discrepancy by computing the $ppp$ using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 43.481. The posterior predictive $p$-value is $ppp =$ 1.
+Let's quantify this discrepancy by computing the $p_B$ using the maximum of the data as a test statistic. The maximum of the original data is max($X$) = 43.481. The posterior predictive $p$-value is $p_B =$ 0.
 
-This means that the chosen statistic $T$ is at least as large as in the data in 0% of the replications, indicating strong evidence that the normal model is a poor choice for the data. 
+This means that the chosen statistic $T$ is at least as large as in the data in 100% of the replications, indicating strong evidence that the normal model is a poor choice for the data. 
 
 The following histogram displays $T(X) = \max(X)$ (vertical line) against the distribution of $T(X^{rep})$.
 
 
-<img src="fig/model-comparison-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="fig/model-comparison-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -170,12 +173,12 @@ generated quantities {
 
 A comparison of data $X$ and $X^{rep}$ from the Cauchy model shows good agreement between the posterior predictions and the data. The distributions appear to closely match around 0, and the replicates contain some extreme values similarly to the data.
 
-<img src="fig/model-comparison-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
-
-
-The maximum value observed in the data is similar to those from replicate sets. Additionally, $ppp=$ 0, indicating no issues with the suitability of the model for the data.     distribution.
-
 <img src="fig/model-comparison-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+
+The maximum value observed in the data is similar to those from replicate sets. Additionally, $p_B=$ 0, indicating no issues with the suitability of the model for the data.     distribution.
+
+<img src="fig/model-comparison-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -456,6 +459,10 @@ paste0("Effective number of parameters, cauchy = ", p_loo_cv_cauchy)
 [1] "Effective number of parameters, cauchy = 0.79387837262459"
 ```
 
+
+:::::::::::::::::::::::::::::::::::: callout
+There are packages that enable computing WAIC and approximate leave-one-out score automatically so, in practice, there is seldom need to implement these yourself. In episode 7 you will learn about these options tools. 
+::::::::::::::::::::::::::::::::::::::::::::
 
 
 
