@@ -1,6 +1,6 @@
 ---
 title: 'Model comparison'
-teaching: 10
+teaching: 60
 exercises: 2
 ---
 

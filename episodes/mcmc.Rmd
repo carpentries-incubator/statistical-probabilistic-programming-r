@@ -1,7 +1,7 @@
 ---
 title: 'Markov chain Monte Carlo'
 teaching: 60
-exercises: 0
+exercises: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -222,7 +222,7 @@ p_grid <- ggplot() +
 
 # Plot joint posterior samples
 p_MH1 <- p_grid +
-  geom_path(data = samples,
+  geom_path(data = samples1,
             aes(x = theta1, y = theta2))
   
 
@@ -340,8 +340,52 @@ p_joint_2 <- ggplot() +
 print(p_joint_2)
 ```
 
-Let's see what the trace plots look like. Generally, we'd want to see the samples randomly scattered around a mean value. For $\theta_1$ this is more or less the case, although there some autocorrelation is apparent. With $\theta_2$ we can see that the chains have mixed as they explore the same parameter ranges. However, the bimodality of the posterior is quite apparent. 
 
+
+```{r, echo=FALSE}
+# Compute R hats for theta1 and theta2
+Rhat <- function(samples) {
+  
+  my_samples <- samples
+  
+  # Number of samples and chains
+  m <- ncol(my_samples)
+  n <- nrow(my_samples)
+  
+  
+  # Compute B ******************
+  psi. <- apply(my_samples, MARGIN = 2, FUN = function(x) mean(x))
+  psi.. <- mean(psi.)
+  
+  B <- (n/(m-1)) * sum((psi. - psi..)^2)
+  
+  # Compute W ******************
+  s_sq <- lapply(1:m, function(i) {
+    my_s_sq <- 1/(n-1) * sum((my_samples[, i] - psi.[i])^2)
+  }) %>% unlist
+  
+  W <- 1/m * sum(s_sq)
+  
+  # R hat
+  R <- sqrt( (n-1)/n + B/(n*W) )
+  
+  return(R)
+  
+}
+
+
+th1_Rhat <- samples2[, c("theta1", "chain", "sample")] %>%
+  spread(key = chain, value = theta1) %>% 
+  select(-sample) %>% 
+  Rhat()
+
+th2_Rhat <- samples2[, c("theta2", "chain", "sample")] %>%
+  spread(key = chain, value = theta2) %>% 
+  select(-sample) %>% 
+  Rhat()
+```
+
+Let's see what the trace plots look like. Generally, we'd want to see the samples randomly scattered around a mean value. For $\theta_1$ this is more or less the case, although there some autocorrelation is apparent. With $\theta_2$ we can see that the chains have mixed as they explore the same parameter ranges. However, the bimodality of the posterior is quite apparent. The $\hat{R}$ statistics are `r th1_Rhat` and `r th2_Rhat` for $\theta_1$ and $\theta_2$, respectively.
 
 ```{r}
 # Trace plots

@@ -1,7 +1,7 @@
 ---
 title: 'Stan'
 teaching: 60
-exercises: 0
+exercises: 4
 ---
 
 
@@ -38,6 +38,8 @@ Learn how to
 Stan is a probabilistic programming language that can be used to specify probabilistic models and to generate samples from posterior distributions. 
 
 The standard steps is using Stan is to first write the statistical model in a separate text file, then to call Stan from R (or other supported interface) which performs the sampling. Instead of having to write formulas the model can be written using built-in functions and sampling statements similar to written text. The sampling process is performed with a Markov Chain Monte Carlo (MCMC) algorithm, which we will study in a later episode. For now, however, our focus is on understanding how to execute it using Stan. 
+
+Several R packages have been built that simplify Stan usage. For example, brms allows specifying models via R's customary formula syntax, while bayesplot provides a library of plotting functions. In this lesson, however, we will first learn using Stan from the bottom-up, by writing Stan programs, extracting the posterior samples and generating the plots ourselves. Later, in episode 7, we'll introduce the usage of some of these additional packages. 
 
 To get started, follow the instructions provided at https://mc-stan.org/users/interfaces/ to install Stan on your local computer.
 

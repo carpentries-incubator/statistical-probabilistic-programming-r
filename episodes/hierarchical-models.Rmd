@@ -1,7 +1,7 @@
 ---
 title: 'Hierarchical models'
 teaching: 10
-exercises: 2
+exercises: 4
 ---
 
 ```{r, include=FALSE}
@@ -212,16 +212,16 @@ model {
 
 generated quantities {
   
-  real mu_tilda;
-  real<lower=0> sigma_tilda;
-  real X_tilda; 
+  real mu_tilde;
+  real<lower=0> sigma_tilde;
+  real X_tilde; 
   
   // Population distributions
-  mu_tilda = normal_rng(mu_mu, sigma_mu);
-  sigma_tilda = gamma_rng(alpha_sigma, beta_sigma);
+  mu_tilde = normal_rng(mu_mu, sigma_mu);
+  sigma_tilde = gamma_rng(alpha_sigma, beta_sigma);
   
   // Posterior predictive distribution
-  X_tilda = normal_rng(mu_tilda, sigma_tilda);
+  X_tilde = normal_rng(mu_tilde, sigma_tilde);
   
 } 
 
@@ -380,7 +380,7 @@ Let's then plot the population distributions and compare to the true sample mean
 
 ```{r, out.width = '100%'}
 
-population_l <- rstan::extract(normal_hier_fit, c("mu_tilda", "sigma_tilda")) %>% 
+population_l <- rstan::extract(normal_hier_fit, c("mu_tilde", "sigma_tilde")) %>% 
   do.call(cbind, .) %>% 
   data.frame() %>% 
   set_colnames( c("mu", "sigma")) %>% 
@@ -432,15 +432,15 @@ height_all <- lapply(1:nrow(height_women), function(i) {
 ```{r}
 
 # Extract the posterior predictive distribution
-PPD <- rstan::extract(normal_hier_fit, c("X_tilda")) %>% 
+PPD <- rstan::extract(normal_hier_fit, c("X_tilde")) %>% 
   data.frame() %>% 
-  set_colnames( c("X_tilda")) %>% 
+  set_colnames( c("X_tilde")) %>% 
   mutate(sample = 1:nrow(.))
 
 
 ggplot() + 
   geom_histogram(data = PPD, 
-                 aes(x = X_tilda, y = after_stat(density)),
+                 aes(x = X_tilde, y = after_stat(density)),
                  bins = 100,
                  fill = posterior_color) +
   geom_histogram(data = height_all, 

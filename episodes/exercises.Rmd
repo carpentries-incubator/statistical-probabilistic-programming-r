@@ -303,6 +303,12 @@ Generate the initial value randomly: $N_0 \sim \text{Uniform}(-100, 100)$ and co
 
 
 
+## 3.4. $\hat{R}$
+
+Write a function that returns the $\hat{R}$ statistic for a collection of MCMC chains. Compute $\hat{R}$ for the samples from one of the exercises 3.1-3.3, and plot the trace plots.    
+
+See p.285 in BDA3 for the definition of $\hat{R}$. 
+
 # 4. Hierarchical models
 
 ## 4.1. Model analysis 
