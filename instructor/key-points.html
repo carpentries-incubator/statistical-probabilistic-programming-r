@@ -268,7 +268,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="mcmc.html">3. MCMC</a>
+        <a href="mcmc.html">3. Markov chain Monte Carlo</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -280,7 +280,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="hierarchical-models.html">4. Hierarchical Models</a>
+        <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -414,17 +414,21 @@ samples from the posterior.</li>
 </ul></section><section id="stan"><h2 class="section-heading"><a href="stan.html">Stan</a></h2>
 <hr class="half-width">
 <ul>
-<li>Stan is a tool for generating posterior distribution samples.</li>
+<li>Stan is a tool for efficient posterior distribution sample
+generation.</li>
 <li>A Stan program is specified in a separate text file that consists of
 code blocks, with the data, parameters, and model blocks being the most
 crucial ones.</li>
-</ul></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">MCMC</a></h2>
+</ul></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">Markov chain Monte Carlo</a></h2>
 <hr class="half-width">
 <ul>
 <li>Markov chain Monte Carlo methods can be used to generate samples
 from a posterior distribution.</li>
+<li>Values of the chain are generated from a proposal distribution.</li>
+<li>Proposals towards higher areas of the target distribution are
+accepted with higher probability.</li>
 <li>MCMC convergence should always be monitored.</li>
-</ul></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical Models</a></h2>
+</ul></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical models</a></h2>
 <hr class="half-width">
 <ul>
 <li>Hierarchical models are appropriate for scenarios where the study
@@ -449,7 +453,7 @@ cross-validation.</li>
 <hr class="half-width">
 <ul>
 <li>point 1</li>
-</ul></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">Exercises1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>5. Model critisism<a class="anchor" aria-label="anchor" href="#model-critisism"></a>6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a></a></h2>
+</ul></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">Exercises1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>5. Model comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a></a></h2>
 <hr class="half-width"></section>
 </div>
     </main>
@@ -475,7 +479,7 @@ cross-validation.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.5" class="external-link">pegboard (0.7.5)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -497,9 +501,9 @@ cross-validation.</li>
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/key-points.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/key-points.html",
-  "dateCreated": "2024-06-19",
-  "dateModified": "2024-06-25",
-  "datePublished": "2024-06-25"
+  "dateCreated": "2024-06-26",
+  "dateModified": "2024-06-26",
+  "datePublished": "2024-06-26"
 }
 
   </script><script>

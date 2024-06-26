@@ -217,9 +217,14 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#bayes-formula">Bayes’ formula</a></li>
+<li><a href="#example-1-handedness">Example 1: handedness</a></li>
 <li><a href="#communicating-posterior-information">Communicating posterior information</a></li>
 <li><a href="#grid-approximation">Grid approximation</a></li>
+<li><a href="#example-2-handedness-with-grid-approximation">Example 2: handedness with grid approximation</a></li>
+<li><a href="#example-3-gamma-model-with-grid-approximation">Example 3: Gamma model with grid approximation</a></li>
 <li><a href="#working-with-samples">Working with samples</a></li>
+<li><a href="#example-4-handedness-with-samples">Example 4: handedness with samples</a></li>
+<li><a href="#posterior-predictive-distribution">Posterior predictive distribution</a></li>
 <li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -239,7 +244,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="mcmc.html">3. MCMC</a>
+        <a href="mcmc.html">3. Markov chain Monte Carlo</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -248,7 +253,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="hierarchical-models.html">4. Hierarchical Models</a>
+        <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -348,13 +353,13 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Short introduction to Bayesian statistics</h1>
-        <p>Last updated on 2024-06-25 |
+        <p>Last updated on 2024-06-26 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
         
         
-        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 90 minutes</p>
+        <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 68 minutes</p>
         
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
@@ -417,9 +422,9 @@ p(\theta | X) \propto p(\theta)  p(X | \theta).
 <p>The proportional Bayes’ formula yields an unnormalized posterior
 distribution, which can subsequently be normalized to obtain the
 posterior.</p>
-<div class="section level3">
-<h3 id="example-handedness">Example: handedness<a class="anchor" aria-label="anchor" href="#example-handedness"></a></h3>
-<p>Let’s illustrate the use of the Bayes’ theorem with an example.</p>
+</section><section id="example-1-handedness"><h2 class="section-heading">Example 1: handedness<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a>
+</h2>
+<hr class="half-width"><p>Let’s illustrate the use of the Bayes’ theorem with an example.</p>
 <p>Assume we are trying to estimate the prevalence of left-handedness in
 humans, based on a sample of <span class="math inline">\(N=50\)</span>
 students, out of which <span class="math inline">\(x=7\)</span> are
@@ -450,12 +455,11 @@ expectations about left-handedness in humans.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
 <div class="accordion-body">
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
 <p>Hardyck, C. et al. (1976), Left-handedness and cognitive deficit <a href="https://en.wikipedia.org/wiki/Handedness" class="external-link uri">https://en.wikipedia.org/wiki/Handedness</a></p>
-</div>
 </div>
 </div>
 </div>
@@ -500,10 +504,10 @@ the parameter space and can be specified as follows:</p>
 <li>Normalize.</li>
 </ol><p>Now, we’ll implement the grid approximation for the handedness
 example in R.</p>
-<div class="section level3">
-<h3 id="example-handedness-with-grid-approximation">Example: handedness with grid approximation<a class="anchor" aria-label="anchor" href="#example-handedness-with-grid-approximation"></a></h3>
-<p>First, we’ll define the data variables and the grid of parameter
-values</p>
+</section><section id="example-2-handedness-with-grid-approximation"><h2 class="section-heading">Example 2: handedness with grid approximation<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a>
+</h2>
+<hr class="half-width"><p>First, we’ll load the required packages, define the data variables,
+and the grid of parameter values</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -551,14 +555,14 @@ X)_{\text{unnormalized}} \cdot \delta,\]</span> where <span class="math inline">
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make data frame</span></span>
-<span><span class="va">df_hand</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_grid</span>, <span class="va">likelihood</span>, <span class="va">prior</span>, <span class="va">posterior</span><span class="op">)</span></span>
+<span><span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_grid</span>, <span class="va">likelihood</span>, <span class="va">prior</span>, <span class="va">posterior</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># wide to long format</span></span>
-<span><span class="va">df_hand_l</span> <span class="op">&lt;-</span> <span class="va">df_hand</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">df1_l</span> <span class="op">&lt;-</span> <span class="va">df1</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"Function"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">theta</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">df_hand_l</span>, </span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">df1_l</span>, </span>
 <span>       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">Function</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -587,7 +591,6 @@ the prior?</p>
 </div>
 </div>
 </div>
-</div>
 <div class="section level3">
 <h3 id="grid-approximation-and-posterior-summaries">Grid approximation and posterior summaries<a class="anchor" aria-label="anchor" href="#grid-approximation-and-posterior-summaries"></a></h3>
 <p>Next, we’ll learn how to compute point estimates and posterior
@@ -596,10 +599,10 @@ approximation.</p>
 <p>Computing the posterior mean and variance is based on the definition
 of these statistics for continuous variables. The mean is defined as
 <span class="math display">\[\int \theta \cdot p(\theta | X)
-d\theta\]</span> and can be computed using discrete integration: <span class="math display">\[\sum_{\text{grid}} \theta \cdot p(\theta | X)
+d\theta,\]</span> and can be computed using discrete integration: <span class="math display">\[\sum_{\text{grid}} \theta \cdot p(\theta | X)
 \cdot \delta.\]</span> Similarly, variance can be computed based on the
 definition <span class="math display">\[\text{var}(\theta) = \int
-(\theta - \text{mean}(\theta))^2p(\theta | X)d\theta\]</span>. Posterior
+(\theta - \text{mean}(\theta))^2p(\theta | X)d\theta.\]</span> Posterior
 mode is simply the grid value where the posterior is maximized.</p>
 <p>In R, these statistics can be computed as follows:</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -607,10 +610,10 @@ mode is simply the grid value where the posterior is maximized.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">data.frame</span><span class="op">(</span>Estimate <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"Mode"</span>, <span class="st">"Mean"</span>, <span class="st">"Variance"</span><span class="op">)</span>, </span>
-<span>           Value <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df_hand</span><span class="op">[</span><span class="fu">which.max</span><span class="op">(</span><span class="va">df_hand</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span>, <span class="st">"theta"</span><span class="op">]</span>,</span>
-<span>                     <span class="fu">sum</span><span class="op">(</span><span class="va">df_hand</span><span class="op">$</span><span class="va">theta</span><span class="op">*</span><span class="va">df_hand</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span>, </span>
-<span>                     <span class="fu">sum</span><span class="op">(</span><span class="va">df_hand</span><span class="op">$</span><span class="va">theta</span><span class="op">^</span><span class="fl">2</span><span class="op">*</span><span class="va">df_hand</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span> <span class="op">-</span></span>
-<span>                       <span class="fu">sum</span><span class="op">(</span><span class="va">df_hand</span><span class="op">$</span><span class="va">theta</span><span class="op">*</span><span class="va">df_hand</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span>           Value <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="va">df1</span><span class="op">[</span><span class="fu">which.max</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span>, <span class="st">"theta"</span><span class="op">]</span>,</span>
+<span>                     <span class="fu">sum</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">theta</span><span class="op">*</span><span class="va">df1</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span>, </span>
+<span>                     <span class="fu">sum</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">theta</span><span class="op">^</span><span class="fl">2</span><span class="op">*</span><span class="va">df1</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span> <span class="op">-</span></span>
+<span>                       <span class="fu">sum</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">theta</span><span class="op">*</span><span class="va">df1</span><span class="op">$</span><span class="va">posterior</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -625,8 +628,8 @@ mode is simply the grid value where the posterior is maximized.</p>
 cumulative distribution function of the posterior <span class="math inline">\(F(\theta) = \int_{\infty}^{\theta}p(y | X)
 dy\)</span>. The locations where the <span class="math inline">\(F(\theta) = 0.05\)</span> and <span class="math inline">\(F(\theta) = 0.95\)</span> define the 90% CIs.</p>
 <p>Probabilities for certain parameter ranges are computed simply by
-integrating over the appropriate set. For instance, <span class="math inline">\(Pr(\theta &lt; 0.1) = \int_0^{0.1} p(\theta | X)
-d\theta\)</span></p>
+integrating over the appropriate set, for example, <span class="math inline">\(Pr(\theta &lt; 0.1) = \int_0^{0.1} p(\theta | X)
+d\theta.\)</span></p>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -645,7 +648,7 @@ example.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -682,9 +685,9 @@ example.</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="example-gamma-model-with-grid-approximation">Example: Gamma model with grid approximation<a class="anchor" aria-label="anchor" href="#example-gamma-model-with-grid-approximation"></a></h3>
-<p>Let’s investigate another model and implement a grid approximation to
+</section><section id="example-3-gamma-model-with-grid-approximation"><h2 class="section-heading">Example 3: Gamma model with grid approximation<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a>
+</h2>
+<hr class="half-width"><p>Let’s investigate another model and implement a grid approximation to
 fit it.</p>
 <p>The gamma distribution arises, for example, in applications that
 model the waiting time between consecutive events. Let’s model the
@@ -710,7 +713,7 @@ individual grids.</p>
 <span><span class="va">beta_grid</span> <span class="op">&lt;-</span> <span class="fu">seq</span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.01</span>, to <span class="op">=</span> <span class="fl">25</span>, by <span class="op">=</span> <span class="va">delta</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get pairwise combinations</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">expand.grid</span><span class="op">(</span>alpha <span class="op">=</span> <span class="va">alpha_grid</span>, beta <span class="op">=</span> <span class="va">beta_grid</span><span class="op">)</span></span></code></pre>
+<span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu">expand.grid</span><span class="op">(</span>alpha <span class="op">=</span> <span class="va">alpha_grid</span>, beta <span class="op">=</span> <span class="va">beta_grid</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Next, we’ll compute the likelihood. As we assumed the data points to
 be independently generated from the gamma distribution, the likelihood
@@ -720,11 +723,11 @@ is the product of the likelihoods of individual observations.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Loop over all alpha, beta combinations</span></span>
-<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">df</span><span class="op">[</span><span class="va">i</span>, <span class="st">"likelihood"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">prod</span><span class="op">(</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">df2</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df2</span><span class="op">[</span><span class="va">i</span>, <span class="st">"likelihood"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">prod</span><span class="op">(</span></span>
 <span>    <span class="fu">dgamma</span><span class="op">(</span>x <span class="op">=</span> <span class="va">X</span>,</span>
-<span>           shape <span class="op">=</span> <span class="va">df</span><span class="op">[</span><span class="va">i</span>, <span class="st">"alpha"</span><span class="op">]</span>,</span>
-<span>           rate <span class="op">=</span> <span class="va">df</span><span class="op">[</span><span class="va">i</span>, <span class="st">"beta"</span><span class="op">]</span><span class="op">)</span></span>
+<span>           shape <span class="op">=</span> <span class="va">df2</span><span class="op">[</span><span class="va">i</span>, <span class="st">"alpha"</span><span class="op">]</span>,</span>
+<span>           rate <span class="op">=</span> <span class="va">df2</span><span class="op">[</span><span class="va">i</span>, <span class="st">"beta"</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
@@ -738,17 +741,17 @@ below.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Priors: alpha, beta ~ Gamma(2, .1)</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="va">df2</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>prior <span class="op">=</span> <span class="fu">dgamma</span><span class="op">(</span>x <span class="op">=</span> <span class="va">alpha</span>, <span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">*</span><span class="fu">dgamma</span><span class="op">(</span>x <span class="op">=</span> <span class="va">beta</span>, <span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Posterior</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="va">df2</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">prior</span><span class="op">*</span><span class="va">likelihood</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">posterior</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># normalize</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
-<span><span class="va">p_joint_posterior</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">p_joint_posterior</span> <span class="op">&lt;-</span> <span class="va">df2</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_tile</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">alpha</span>, y <span class="op">=</span> <span class="va">beta</span>, fill <span class="op">=</span> <span class="va">posterior</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">scale_fill_gradientn</span><span class="op">(</span>colours <span class="op">=</span> <span class="fu">rainbow</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -762,7 +765,7 @@ below.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df</span><span class="op">[</span><span class="fu">which.max</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"alpha"</span>, <span class="st">"beta"</span><span class="op">)</span><span class="op">]</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">df2</span><span class="op">[</span><span class="fu">which.max</span><span class="op">(</span><span class="va">df2</span><span class="op">$</span><span class="va">posterior</span><span class="op">)</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"alpha"</span>, <span class="st">"beta"</span><span class="op">)</span><span class="op">]</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -787,7 +790,7 @@ axis, as if drawn by a gravitational force.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get marginal posterior for alpha</span></span>
-<span><span class="va">alpha_posterior</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> </span>
+<span><span class="va">alpha_posterior</span> <span class="op">&lt;-</span> <span class="va">df2</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">summarize</span><span class="op">(</span>posterior <span class="op">=</span> <span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">posterior</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span><span class="op">)</span></span>
@@ -801,28 +804,16 @@ axis, as if drawn by a gravitational force.</p>
 <span></span>
 <span><span class="va">p_alpha_posterior</span></span></code></pre>
 </div>
-<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge2" class="callout challenge">
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="discussion2" class="callout discussion">
 <div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
+<i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
 </h3>
 <div class="callout-content">
 <p>Does the MAP of the joint posterior of <span class="math inline">\(\theta = (\alpha, \beta)\)</span> correspond to
 the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>?</p>
-</div>
-</div>
-</div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
-</button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
-<div class="accordion-body">
-<p>No. Why?</p>
-</div>
 </div>
 </div>
 </div>
@@ -840,7 +831,6 @@ shape.</p>
 </div>
 </div>
 </div>
-</div>
 </section><section id="working-with-samples"><h2 class="section-heading">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
 </h2>
 <hr class="half-width"><p>The main limitation of the grid approximation is that it becomes
@@ -853,9 +843,9 @@ models is to draw samples from the posterior with Markov chain Monte
 Carlo (MCMC) methods. These methods are the topic of a later episode but
 we’ll anticipate this now by studying how posterior summaries can be
 computed based on samples.</p>
-<div class="section level3">
-<h3 id="example-handedness-with-samples">Example: handedness with samples<a class="anchor" aria-label="anchor" href="#example-handedness-with-samples"></a></h3>
-<p>Let’s take the Beta-binomial model (beta prior, binomial likelihood)
+</section><section id="example-4-handedness-with-samples"><h2 class="section-heading">Example 4: handedness with samples<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a>
+</h2>
+<hr class="half-width"><p>Let’s take the beta-binomial model (beta prior, binomial likelihood)
 of the handedness analysis as our example. It is an instance of a model
 for which the posterior can be computed analytically. Given a prior
 <span class="math inline">\(\text{Beta}(\alpha, \beta)\)</span> and
@@ -873,20 +863,36 @@ posterior using the handedness data:</p>
 </div>
 <p>Plotting a histogram of these samples against the grid approximation
 posterior displays that both are indeed approximating the same
-distribution
-<img src="../fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" class="figure"></p>
-<p>Computing posterior summaries from samples is easy. The posterior
+distribution</p>
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="va">theta_samples</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">.</span><span class="op">)</span>, </span>
+<span>  <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">50</span>, </span>
+<span>  fill <span class="op">=</span> <span class="va">posterior_color</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df1</span>,</span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="va">posterior</span><span class="op">)</span>,</span>
+<span>            linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>data <span class="op">=</span> <span class="va">df1</span>, </span>
+<span>            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">theta</span>, y <span class="op">=</span> <span class="va">posterior</span><span class="op">)</span>, </span>
+<span>            color <span class="op">=</span> <span class="va">posterior_color</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="fu">expression</span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Computing posterior summaries from samples is easy. The posterior
 mean and variance are computed simply by taking the mean and variance of
 the samples, respectively. Posterior intervals are equally easy to
 compute: 90% CI is recovered from the appropriate quantiles and the
 probability of a certain parameter interval is the proportion of total
 samples within the interval.</p>
-<div id="discussion2" class="callout discussion">
+<div id="discussion3" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion3"></a>
 </h3>
 <div class="callout-content">
 <p>Compute the posterior mean, variance, 90% CI and <span class="math inline">\(Pr(\theta &gt; 0.1)\)</span> using the generated
@@ -894,7 +900,42 @@ samples.</p>
 </div>
 </div>
 </div>
-<div id="keypoints1" class="callout keypoints">
+</section><section id="posterior-predictive-distribution"><h2 class="section-heading">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
+</h2>
+<hr class="half-width"><p>Now we have learned how to fit a probabilistic model using the grid
+approximation and how to compute posterior summaries of the model
+parameters based on the fit or with posterior samples. A potentially
+interesting question that the posterior doesn’t directly answer is what
+do possible unobserved data values <span class="math inline">\(\tilde{X}\)</span> look like, conditional on the
+observed values <span class="math inline">\(X\)</span>.</p>
+<p>The unknown value can be predicted using the <em>posterior predictive
+distribution</em> <span class="math inline">\(p(\tilde{X} | X) = \int
+p(\tilde{X} | \theta) p(\theta | X) d\theta\)</span>. Using samples,
+this distribution can be sampled from by first drawing a value <span class="math inline">\(\theta^s\)</span> from the posterior and then
+generating a random value from the likelihood function <span class="math inline">\(p(\tilde{X} | \theta^s)\)</span>.</p>
+<p>A posterior predictive distribution for the beta-binomial model,
+using the posterior samples of the previous example can be generated
+as</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ppd</span> <span class="op">&lt;-</span> <span class="fu">rbinom</span><span class="op">(</span><span class="fu">length</span><span class="op">(</span><span class="va">theta_samples</span><span class="op">)</span>, <span class="fl">50</span>, prob <span class="op">=</span> <span class="va">theta_samples</span><span class="op">)</span></span></code></pre>
+</div>
+<p>In other words, this is the distribution of the number of left-handed
+people in a yet unseen sample of 50 people. Let’s plot the histogram of
+these samples and compare it to the observed data (red vertical
+line):</p>
+<div class="codewrapper sourceCode" id="cb21">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">data.frame</span><span class="op">(</span><span class="va">ppd</span><span class="op">)</span>, </span>
+<span>                 <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">ppd</span>, y <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, binwidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_vline</span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">7</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
@@ -919,7 +960,6 @@ parameters.</li>
 <li>Usually, Bayesian models are fitted using methods that generate
 samples from the posterior.</li>
 </ul></div>
-</div>
 </div>
 </div>
 </section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
@@ -966,7 +1006,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.5" class="external-link">pegboard (0.7.5)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -987,9 +1027,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
-  "dateCreated": "2024-06-19",
-  "dateModified": "2024-06-25",
-  "datePublished": "2024-06-25"
+  "dateCreated": "2024-06-26",
+  "dateModified": "2024-06-26",
+  "datePublished": "2024-06-26"
 }
 
   </script><script>

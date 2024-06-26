@@ -118,11 +118,11 @@
   Introduction to Probabilistic Programming in R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 70%" class="percentage">
-    70%
+<aside class="col-md-12 lesson-progress"><div style="width: 58%" class="percentage">
+    58%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 70%" aria-valuenow="70" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 58%" aria-valuenow="58" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -224,7 +224,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="mcmc.html">3. MCMC</a>
+        <a href="mcmc.html">3. Markov chain Monte Carlo</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -233,7 +233,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="hierarchical-models.html">4. Hierarchical Models</a>
+        <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -339,7 +339,7 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="hierarchical-models.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Hierarchical Models
+          Previous: Hierarchical models
         </a>
         <a class="chapter-link float-end" href="gaussian-processes.html" rel="next">
           Next: Gaussian processes... 
@@ -348,7 +348,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Model comparison</h1>
-        <p>Last updated on 2024-06-25 |
+        <p>Last updated on 2024-06-26 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -405,14 +405,15 @@ concludes with Bayesian cross-validation.</p>
 </h2>
 <hr class="half-width"><p>Throughout the chapter, we will use the same simulated data set in
 the examples, a set of <span class="math inline">\(N=88\)</span>
-univariate numerical data points.</p>
+univariate numerical data points. The data is included in the course’s
+data folder at</p>
 <p>Looking at the data histogram, it’s evident that the data is
 approximately symmetrically distributed around 0. However, there is some
 dispersion in the data, and an extreme positive value, suggesting that
 the tails might be longer than those of a normal distribution. The
 Cauchy distribution is a potential alternative and below we will compare
 the suitability of these two distributions on this data.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-predictive-check"><h2 class="section-heading">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-predictive-check"><h2 class="section-heading">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
 </h2>
 <hr class="half-width"><p>The idea of posterior predictive checking is to use the posterior
 predictive distribution to simulate a replicate data set and compare it
@@ -423,9 +424,9 @@ observed data can imply that the model does not match the properties of
 the data or the domain.</p>
 <p>The comparison can be done in different ways. Visual comparison is an
 option but a more rigorous approach is to compute the <em>posterior
-predictive p-value</em> (<span class="math inline">\(ppp\)</span>),
+predictive p-value</em> (<span class="math inline">\(p_B\)</span>),
 which measures how well the model can reproduce the observed data.
-Computing the <span class="math inline">\(ppp\)</span> requires
+Computing the <span class="math inline">\(p_B\)</span> requires
 specifying a statistic whose value is compared between the posterior
 predictions and the observations.</p>
 <p>The steps of a posterior predictive check can be formulated in the
@@ -439,14 +440,17 @@ sample.</li>
 <li>
 <strong>Choose test quantity <span class="math inline">\(T(X)\)</span>:</strong> Choose an aspect of the
 data that you wish to check. We’ll use the maximum value as the test
-quantity and compute it for the observed data and each replicate.</li>
+quantity and compute it for the observed data and each replicate. It’s
+important to note that not every imaginable data quantity will make a
+good <span class="math inline">\(T(X)\)</span>, see chapter 6.3 in BDA3
+for details.</li>
 <li>
-<strong>Compute <span class="math inline">\(ppp\)</span>:</strong>
+<strong>Compute <span class="math inline">\(p_B\)</span>:</strong>
 The posterior predictive p-value is defined as the probability <span class="math inline">\(Pr(T(X^{rep}) \geq T(X) | X)\)</span>, that is,
 the probability that the predictions produce test quantity values at
 least as extreme as those found in the data. Using samples, it is
-computed as the proportion of replicate data sets with <span class="math inline">\(T\)</span> not smaller than that of <span class="math inline">\(T(X)\)</span>. The smaller the <span class="math inline">\(ppp\)</span>-value, the larger the evidence that
-the model cannot properly emulate the data.</li>
+computed as the proportion of replicate data sets with <span class="math inline">\(T\)</span> not smaller than that of <span class="math inline">\(T(X)\)</span>. The closer the <span class="math inline">\(p_B\)</span>-value is to 1 (or 0), the larger the
+evidence that the model cannot properly emulate the data.</li>
 </ol><p>Next we will perform these steps for the normal and Cauchy
 models.</p>
 <div class="section level3">
@@ -503,15 +507,15 @@ distribution of <span class="math inline">\(X^{rep}\)</span></p>
 the panel titles correspond to MCMC sample numbers). It is evident that
 the tail properties are different between <span class="math inline">\(X^{rep}\)</span> and <span class="math inline">\(X\)</span>, and this discrepancy indicates an
 issue with the model choice.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s quantify this discrepancy by computing the <span class="math inline">\(ppp\)</span> using the maximum of the data as a
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s quantify this discrepancy by computing the <span class="math inline">\(p_B\)</span> using the maximum of the data as a
 test statistic. The maximum of the original data is max(<span class="math inline">\(X\)</span>) = 43.481. The posterior predictive
-<span class="math inline">\(p\)</span>-value is <span class="math inline">\(ppp =\)</span> 1.</p>
+<span class="math inline">\(p\)</span>-value is <span class="math inline">\(p_B =\)</span> 0.</p>
 <p>This means that the chosen statistic <span class="math inline">\(T\)</span> is at least as large as in the data in
-0% of the replications, indicating strong evidence that the normal model
-is a poor choice for the data.</p>
+100% of the replications, indicating strong evidence that the normal
+model is a poor choice for the data.</p>
 <p>The following histogram displays <span class="math inline">\(T(X) =
 \max(X)\)</span> (vertical line) against the distribution of <span class="math inline">\(T(X^{rep})\)</span>.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 <div class="section level3">
 <h3 id="cauchy-model">Cauchy model<a class="anchor" aria-label="anchor" href="#cauchy-model"></a></h3>
 <p>Let’s do an identical analysis using the Cauchy model.</p>
@@ -548,11 +552,11 @@ above, with a minor distinction in the Stan program.</p>
 agreement between the posterior predictions and the data. The
 distributions appear to closely match around 0, and the replicates
 contain some extreme values similarly to the data.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The maximum value observed in the data is similar to those from
-replicate sets. Additionally, <span class="math inline">\(ppp=\)</span>
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The maximum value observed in the data is similar to those from
+replicate sets. Additionally, <span class="math inline">\(p_B=\)</span>
 0, indicating no issues with the suitability of the model for the data.
 distribution.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </section><section id="information-criteria"><h2 class="section-heading">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
 </h2>
 <hr class="half-width"><p>Information criteria are statistics used for model comparison within
@@ -863,6 +867,21 @@ normal model.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] "Effective number of parameters, cauchy = 0.79387837262459"</code></pre>
 </div>
+<div id="callout1" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
+</h3>
+<div class="callout-content">
+<p>There are packages that enable computing WAIC and approximate
+leave-one-out score automatically so, in practice, there is seldom need
+to implement these yourself. In episode 7 you will learn about these
+options tools.</p>
+</div>
+</div>
+</div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -895,7 +914,7 @@ any links that you are not going to use.
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="hierarchical-models.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Hierarchical Models
+          Previous: Hierarchical models
         </a>
         <a class="chapter-link float-end" href="gaussian-processes.html" rel="next">
           Next: Gaussian processes... 
@@ -922,7 +941,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.5" class="external-link">pegboard (0.7.5)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -943,9 +962,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-comparison.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-comparison.html",
-  "dateCreated": "2024-06-19",
-  "dateModified": "2024-06-25",
-  "datePublished": "2024-06-25"
+  "dateCreated": "2024-06-26",
+  "dateModified": "2024-06-26",
+  "datePublished": "2024-06-26"
 }
 
   </script><script>
