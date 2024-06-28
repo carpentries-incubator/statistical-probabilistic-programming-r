@@ -246,7 +246,7 @@ Plot the posterior distribution and color the points according to the condition 
 
 The AR(1) process is defined by the recursion: 
 $$x_i \sim N(\phi \cdot x_{i-1}, \sigma^2),$$
-where $i$ is a time index. In other words, given some initial value $x_1$, the next value $x_2$ is generated from a normal distribution with mean $\phi\cdot x_1$ and variance $sigma^2$. This pattern continues for the successive values.
+where $i$ is a time index. In other words, given some initial value $x_1$, the next value $x_2$ is generated from a normal distribution with mean $\phi\cdot x_1$ and variance $\sigma^2$. This pattern continues for the successive values.
  
 Write a Stan program that estimates the parameters $\phi$ and $\sigma$ of the AR(1) process. 
 
@@ -371,13 +371,7 @@ $$
 Use data 
 
 ``` r
-y <-  c(2,7,4,3,5,2,7,5,5,5).
-```
-
-``` error
-Error: <text>:1:29: unexpected symbol
-1: y <-  c(2,7,4,3,5,2,7,5,5,5).
-                                ^
+y <-  c(2,7,4,3,5,2,7,5,5,5)
 ```
 
 Implement the model in Stan. 

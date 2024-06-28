@@ -10,19 +10,19 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What next?
+- Motivating questions
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
 
-- Learn more
+- Learn to use Stan with additional R packages
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Add text
+Add text here
 
 
 ::::::::::::::::::::::::::::::::::::::::: challenge
@@ -41,12 +41,6 @@ You can define a challenge here
 More text
 
 
-
-::::::::::::::::::::::::::::::::::::: discussion
-
-Discussion poitns
-
-:::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
