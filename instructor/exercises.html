@@ -337,7 +337,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Exercises</h1>
-        <p>Last updated on 2024-06-26 |
+        <p>Last updated on 2024-06-28 |
         
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -604,7 +604,7 @@ condition <span class="math inline">\(CV &lt; 1\)</span>.</p>
 \sigma^2),\]</span> where <span class="math inline">\(i\)</span> is a
 time index. In other words, given some initial value <span class="math inline">\(x_1\)</span>, the next value <span class="math inline">\(x_2\)</span> is generated from a normal
 distribution with mean <span class="math inline">\(\phi\cdot
-x_1\)</span> and variance <span class="math inline">\(sigma^2\)</span>.
+x_1\)</span> and variance <span class="math inline">\(\sigma^2\)</span>.
 This pattern continues for the successive values.</p>
 <p>Write a Stan program that estimates the parameters <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\sigma\)</span> of the AR(1) process.</p>
 <p>Using the data in <code>data/time_series.txt</code>, do the
@@ -730,14 +730,8 @@ y_i \sim \text{Pois}(\lambda) \\
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>y <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>).</span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error: &lt;text&gt;:1:29: unexpected symbol
-1: y &lt;-  c(2,7,4,3,5,2,7,5,5,5).
-                                ^</code></pre>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span>  <span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">7</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">7</span>,<span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Implement the model in Stan.</p>
 <p>Identify the data subgroups. Visualize the posterior distribution of
@@ -819,7 +813,7 @@ as the test statistic. Compute the posterior predictive p-value.</p>
 <h2 id="gp-prediction">6.1. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction"></a></h2>
 <p>Consider the following data <span class="math inline">\((x,
 y)\)</span>:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -948,9 +942,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/exercises.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/exercises.html",
-  "dateCreated": "2024-06-26",
-  "dateModified": "2024-06-26",
-  "datePublished": "2024-06-26"
+  "dateCreated": "2024-06-28",
+  "dateModified": "2024-06-28",
+  "datePublished": "2024-06-28"
 }
 
   </script><script>
