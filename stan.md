@@ -133,8 +133,8 @@ Chain 1:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 2e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 2: Gradient evaluation took 1e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -151,9 +151,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.006 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -176,9 +176,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 3:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.007 seconds (Total)
+Chain 3:                0.006 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -201,9 +201,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 4:                0.003 seconds (Sampling)
-Chain 4:                0.007 seconds (Total)
+Chain 4:                0.006 seconds (Total)
 Chain 4: 
 ```
 
@@ -226,7 +226,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Fri Jun 28 17:38:14 2024.
+Samples were drawn using NUTS(diag_e) at Tue Jul  2 00:30:48 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -386,8 +386,8 @@ Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0.009 seconds (Warm-up)
-Chain 1:                0.008 seconds (Sampling)
-Chain 1:                0.017 seconds (Total)
+Chain 1:                0.007 seconds (Sampling)
+Chain 1:                0.016 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
@@ -410,15 +410,15 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.011 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.01 seconds (Warm-up)
 Chain 2:                0.008 seconds (Sampling)
-Chain 2:                0.019 seconds (Total)
+Chain 2:                0.018 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 2e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 3: Gradient evaluation took 3e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -436,8 +436,8 @@ Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
 Chain 3:  Elapsed Time: 0.009 seconds (Warm-up)
-Chain 3:                0.008 seconds (Sampling)
-Chain 3:                0.017 seconds (Total)
+Chain 3:                0.007 seconds (Sampling)
+Chain 3:                0.016 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
