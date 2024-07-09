@@ -226,7 +226,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Jul  2 00:30:48 2024.
+Samples were drawn using NUTS(diag_e) at Tue Jul  9 00:33:55 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -417,8 +417,8 @@ Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 3e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 3: Gradient evaluation took 2e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
