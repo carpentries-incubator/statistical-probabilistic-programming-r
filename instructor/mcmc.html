@@ -27,7 +27,7 @@
             <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
           </abbr>
         </span>
-        
+
       </div>
     </div>
     <div class="selector-container">
@@ -56,7 +56,7 @@
             </li>
           </ul></li>
       </div>
-      
+
       <div class="dropdown" id="instructor-dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           <i aria-hidden="true" class="icon" data-feather="eye"></i> Instructor View <i data-feather="chevron-down"></i>
@@ -180,7 +180,7 @@
                 </div><!--/div.accordion-flush-->
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
-      
+
             <hr></div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordionFlush11">
@@ -199,7 +199,7 @@
     <div class="accordion-header" id="flush-heading1">
         <a href="index.html">Summary and Schedule</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -208,7 +208,7 @@
     <div class="accordion-header" id="flush-heading2">
         <a href="bayesian-statistics.html">1. Short introduction to Bayesian statistics</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -217,7 +217,7 @@
     <div class="accordion-header" id="flush-heading3">
         <a href="stan.html">2. Stan</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -231,7 +231,7 @@
         </span>
       </button>
     </div><!--/div.accordion-header-->
-        
+
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#metropolis-hastings-algorithm">Metropolis-Hastings algorithm</a></li>
@@ -241,7 +241,7 @@
 <li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -250,7 +250,7 @@
     <div class="accordion-header" id="flush-heading5">
         <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -259,7 +259,7 @@
     <div class="accordion-header" id="flush-heading6">
         <a href="model-comparison.html">5. Model comparison</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -268,7 +268,7 @@
     <div class="accordion-header" id="flush-heading7">
         <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -277,7 +277,7 @@
     <div class="accordion-header" id="flush-heading8">
         <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -286,7 +286,7 @@
     <div class="accordion-header" id="flush-heading9">
         <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -318,10 +318,10 @@
               </div>
             </div>
             <hr class="half-width resources"><a href="../instructor/aio.html">See all in one page</a>
-            
+
 
             <hr class="d-none d-sm-block d-md-none"><div class="d-grid gap-1">
-            
+
             </div>
           </div><!-- /div.accordion -->
         </div><!-- /div.sidebar-inner -->
@@ -342,20 +342,20 @@
           Previous: Stan
         </a>
         <a class="chapter-link float-end" href="../instructor/hierarchical-models.html" rel="next">
-          Next: Hierarchical models... 
+          Next: Hierarchical models...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Markov chain Monte Carlo</h1>
-        <p>Last updated on 2024-07-02 |
-        
+        <p>Last updated on 2024-07-09 |
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
-        
-        
-        
+
+
+
         <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 63 minutes</p>
-        
+
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -392,8 +392,8 @@ we learned how to generate posterior samples using Stan without knowing
 how the samples are generated. In this episode, we’ll study Markov chain
 Monte Carlo (MCMC) methods, which are the class of algorithms Stan uses
 under the hood.</p>
-<section id="metropolis-hastings-algorithm"><h2 class="section-heading">Metropolis-Hastings algorithm<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
-</h2>
+<section><h2 class="section-heading" id="metropolis-hastings-algorithm">Metropolis-Hastings algorithm<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
+<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a></h2>
 <hr class="half-width"><p>MCMC methods draw samples from the posterior distribution by
 constructing sequences (chains) of values in the parameter space that
 ultimately converge to the posterior. While there are other variants of
@@ -431,8 +431,8 @@ also possible. In situations where the transition density is symmetric,
 such as with the normal distribution, <span class="math inline">\(r\)</span> reduces simply to the ratio of the
 posterior values, and all proposals toward higher posterior density
 areas are accepted.</p>
-</section><section id="example-banana-distribution"><h2 class="section-heading">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
-</h2>
+</section><section><h2 class="section-heading" id="example-banana-distribution">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
+<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a></h2>
 <hr class="half-width"><p>Let’s implement the MH algorithm and use it to generate posterior
 samples from the following statistical model:</p>
 <p><span class="math display">\[X \sim N(\theta_1 + \theta_2^2, 1) \\
@@ -660,8 +660,8 @@ inference and convergence? Why?</p>
 </div>
 </div>
 </div>
-</section><section id="assessing-convergence"><h2 class="section-heading">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
-</h2>
+</section><section><h2 class="section-heading" id="assessing-convergence">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
+<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a></h2>
 <hr class="half-width"><p>Although convergence of MCMC is theoretically guaranteed, in
 practice, this is not always the case. Monitoring convergence is crucial
 whenever MCMC is utilized to ensure the reliability of recovered
@@ -803,8 +803,8 @@ of the posterior is quite apparent. The <span class="math inline">\(\hat{R}\)</s
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_trace_2</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-</section><section id="hamiltonian-monte-carlo"><h2 class="section-heading">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
-</h2>
+</section><section><h2 class="section-heading" id="hamiltonian-monte-carlo">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
+<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a></h2>
 <hr class="half-width"><p>Stan uses a variant of the Metropolis-Hastings algorithm called
 Hamiltonian Monte Carlo (HMC; or actually a variant HMC). The defining
 feature is the elaborate scheme it uses to generate proposals. Briefly,
@@ -841,15 +841,15 @@ accepted with higher probability.</li>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
+</section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
 <hr class="half-width"><ul><li><p>See interactive visualization of different MCMC algorithms: <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a></p></li>
 <li><p>Bayesian Data Analysis (3rd ed.): Ch. 11-12</p></li>
 <li><p>Statistical Rethinking (2nd ed.): Ch. 9</p></li>
 <li><p>Bayes Rules!: Ch. 6-7</p></li>
-</ul><!-- 
+</ul><!--
 Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use. 
+any links that you are not going to use.
  --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/stan.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
@@ -862,7 +862,7 @@ any links that you are not going to use.
           Previous: Stan
         </a>
         <a class="chapter-link float-end" href="../instructor/hierarchical-models.html" rel="next">
-          Next: Hierarchical models... 
+          Next: Hierarchical models...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -873,18 +873,18 @@ any links that you are not going to use.
       		<footer class="row footer mx-md-3"><hr><div class="col-md-6">
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
-        
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit on GitHub</a>
-        
+
 	
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:velait@utu.fi">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
 			<div class="col-md-6">
-        
+
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
-        
+
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
         <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
@@ -908,8 +908,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/mcmc.html",
   "dateCreated": "2024-06-28",
-  "dateModified": "2024-07-02",
-  "datePublished": "2024-07-02"
+  "dateModified": "2024-07-09",
+  "datePublished": "2024-07-09"
 }
 
   </script><script>

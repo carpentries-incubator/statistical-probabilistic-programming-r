@@ -27,7 +27,7 @@
             <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
           </abbr>
         </span>
-        
+
       </div>
     </div>
     <div class="selector-container">
@@ -56,7 +56,7 @@
             </li>
           </ul></li>
       </div>
-      
+
       <div class="dropdown" id="instructor-dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           <i aria-hidden="true" class="icon" data-feather="eye"></i> Instructor View <i data-feather="chevron-down"></i>
@@ -180,7 +180,7 @@
                 </div><!--/div.accordion-flush-->
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
-      
+
             <hr></div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordionFlush11">
@@ -199,7 +199,7 @@
     <div class="accordion-header" id="flush-heading1">
         <a href="index.html">Summary and Schedule</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -213,7 +213,7 @@
         </span>
       </button>
     </div><!--/div.accordion-header-->
-        
+
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#bayes-formula">Bayes’ formula</a></li>
@@ -228,7 +228,7 @@
 <li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -237,7 +237,7 @@
     <div class="accordion-header" id="flush-heading3">
         <a href="stan.html">2. Stan</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -246,7 +246,7 @@
     <div class="accordion-header" id="flush-heading4">
         <a href="mcmc.html">3. Markov chain Monte Carlo</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -255,7 +255,7 @@
     <div class="accordion-header" id="flush-heading5">
         <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -264,7 +264,7 @@
     <div class="accordion-header" id="flush-heading6">
         <a href="model-comparison.html">5. Model comparison</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -273,7 +273,7 @@
     <div class="accordion-header" id="flush-heading7">
         <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -282,7 +282,7 @@
     <div class="accordion-header" id="flush-heading8">
         <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -291,7 +291,7 @@
     <div class="accordion-header" id="flush-heading9">
         <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -323,10 +323,10 @@
               </div>
             </div>
             <hr class="half-width resources"><a href="../instructor/aio.html">See all in one page</a>
-            
+
 
             <hr class="d-none d-sm-block d-md-none"><div class="d-grid gap-1">
-            
+
             </div>
           </div><!-- /div.accordion -->
         </div><!-- /div.sidebar-inner -->
@@ -347,20 +347,20 @@
           Home
         </a>
         <a class="chapter-link float-end" href="../instructor/stan.html" rel="next">
-          Next: Stan... 
+          Next: Stan...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Short introduction to Bayesian statistics</h1>
-        <p>Last updated on 2024-07-02 |
-        
+        <p>Last updated on 2024-07-09 |
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
-        
-        
-        
+
+
+
         <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 68 minutes</p>
-        
+
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -393,8 +393,8 @@ framework?</li>
 </div>
 </div>
 </div>
-<section id="bayes-formula"><h2 class="section-heading">Bayes’ formula<a class="anchor" aria-label="anchor" href="#bayes-formula"></a>
-</h2>
+<section><h2 class="section-heading" id="bayes-formula">Bayes’ formula<a class="anchor" aria-label="anchor" href="#bayes-formula"></a>
+<a class="anchor" aria-label="anchor" href="#bayes-formula"></a></h2>
 <hr class="half-width"><p>The starting point of Bayesian statistics is Bayes’ theorem,
 expressed as:</p>
 <p><span class="math display">\[
@@ -422,8 +422,8 @@ p(\theta | X) \propto p(\theta)  p(X | \theta).
 <p>The proportional Bayes’ formula yields an unnormalized posterior
 distribution, which can subsequently be normalized to obtain the
 posterior.</p>
-</section><section id="example-1-handedness"><h2 class="section-heading">Example 1: handedness<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a>
-</h2>
+</section><section><h2 class="section-heading" id="example-1-handedness">Example 1: handedness<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a>
+<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a></h2>
 <hr class="half-width"><p>Let’s illustrate the use of the Bayes’ theorem with an example.</p>
 <p>Assume we are trying to estimate the prevalence of left-handedness in
 humans, based on a sample of <span class="math inline">\(N=50\)</span>
@@ -464,8 +464,8 @@ expectations about left-handedness in humans.</p>
 </div>
 </div>
 </div>
-</section><section id="communicating-posterior-information"><h2 class="section-heading">Communicating posterior information<a class="anchor" aria-label="anchor" href="#communicating-posterior-information"></a>
-</h2>
+</section><section><h2 class="section-heading" id="communicating-posterior-information">Communicating posterior information<a class="anchor" aria-label="anchor" href="#communicating-posterior-information"></a>
+<a class="anchor" aria-label="anchor" href="#communicating-posterior-information"></a></h2>
 <hr class="half-width"><p>The posterior distribution <span class="math inline">\(p(\theta |
 X)\)</span> contains all the information about <span class="math inline">\(\theta\)</span> given the data, chosen model, and
 the prior distribution. However, understanding a distribution in itself
@@ -489,8 +489,8 @@ sets.</p></li>
 </ol><p>The following figures illustrate selected posterior intervals for the
 previous example along with the posterior mode, or <em>maximum a
 posteriori</em> (MAP) estimate.</p>
-<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="grid-approximation"><h2 class="section-heading">Grid approximation<a class="anchor" aria-label="anchor" href="#grid-approximation"></a>
-</h2>
+<figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="grid-approximation">Grid approximation<a class="anchor" aria-label="anchor" href="#grid-approximation"></a>
+<a class="anchor" aria-label="anchor" href="#grid-approximation"></a></h2>
 <hr class="half-width"><p>Specifying a probabilistic model can be simple, but a common
 bottleneck in Bayesian data analysis is model fitting. Later in the
 course, we will begin using Stan, a state-of-the-art method for
@@ -504,8 +504,8 @@ the parameter space and can be specified as follows:</p>
 <li>Normalize.</li>
 </ol><p>Now, we’ll implement the grid approximation for the handedness
 example in R.</p>
-</section><section id="example-2-handedness-with-grid-approximation"><h2 class="section-heading">Example 2: handedness with grid approximation<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a>
-</h2>
+</section><section><h2 class="section-heading" id="example-2-handedness-with-grid-approximation">Example 2: handedness with grid approximation<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a>
+<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a></h2>
 <hr class="half-width"><p>First, we’ll load the required packages, define the data variables,
 and the grid of parameter values</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -685,8 +685,8 @@ example.</p>
 </div>
 </div>
 </div>
-</section><section id="example-3-gamma-model-with-grid-approximation"><h2 class="section-heading">Example 3: Gamma model with grid approximation<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a>
-</h2>
+</section><section><h2 class="section-heading" id="example-3-gamma-model-with-grid-approximation">Example 3: Gamma model with grid approximation<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a>
+<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a></h2>
 <hr class="half-width"><p>Let’s investigate another model and implement a grid approximation to
 fit it.</p>
 <p>The gamma distribution arises, for example, in applications that
@@ -831,8 +831,8 @@ shape.</p>
 </div>
 </div>
 </div>
-</section><section id="working-with-samples"><h2 class="section-heading">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
-</h2>
+</section><section><h2 class="section-heading" id="working-with-samples">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
+<a class="anchor" aria-label="anchor" href="#working-with-samples"></a></h2>
 <hr class="half-width"><p>The main limitation of the grid approximation is that it becomes
 impractical for models with even a moderate number of parameters. The
 reason is that the number of computations grows as <span class="math inline">\(O \{ \Delta^p \}\)</span> where <span class="math inline">\(\Delta\)</span> is the number of grid points per
@@ -843,8 +843,8 @@ models is to draw samples from the posterior with Markov chain Monte
 Carlo (MCMC) methods. These methods are the topic of a later episode but
 we’ll anticipate this now by studying how posterior summaries can be
 computed based on samples.</p>
-</section><section id="example-4-handedness-with-samples"><h2 class="section-heading">Example 4: handedness with samples<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a>
-</h2>
+</section><section><h2 class="section-heading" id="example-4-handedness-with-samples">Example 4: handedness with samples<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a>
+<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a></h2>
 <hr class="half-width"><p>Let’s take the beta-binomial model (beta prior, binomial likelihood)
 of the handedness analysis as our example. It is an instance of a model
 for which the posterior can be computed analytically. Given a prior
@@ -900,8 +900,8 @@ samples.</p>
 </div>
 </div>
 </div>
-</section><section id="posterior-predictive-distribution"><h2 class="section-heading">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
-</h2>
+</section><section><h2 class="section-heading" id="posterior-predictive-distribution">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
+<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a></h2>
 <hr class="half-width"><p>Now we have learned how to fit a probabilistic model using the grid
 approximation and how to compute posterior summaries of the model
 parameters based on the fit or with posterior samples. A potentially
@@ -962,14 +962,14 @@ samples from the posterior.</li>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
+</section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
 <hr class="half-width"><ul><li>Bayesian Data Analysis (3rd ed.): Ch. 1-3</li>
 <li>Statistical Rethinking (2nd ed.): Ch. 1-3</li>
 <li>Bayes Rules!: Ch. 1-6</li>
-</ul><!-- 
+</ul><!--
 Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use. 
+any links that you are not going to use.
  --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/index.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
@@ -982,7 +982,7 @@ any links that you are not going to use.
           Home
         </a>
         <a class="chapter-link float-end" href="../instructor/stan.html" rel="next">
-          Next: Stan... 
+          Next: Stan...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -993,18 +993,18 @@ any links that you are not going to use.
       		<footer class="row footer mx-md-3"><hr><div class="col-md-6">
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
-        
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit on GitHub</a>
-        
+
 	
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:velait@utu.fi">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
 			<div class="col-md-6">
-        
+
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
-        
+
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
         <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
@@ -1028,8 +1028,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
   "dateCreated": "2024-06-28",
-  "dateModified": "2024-07-02",
-  "datePublished": "2024-07-02"
+  "dateModified": "2024-07-09",
+  "datePublished": "2024-07-09"
 }
 
   </script><script>

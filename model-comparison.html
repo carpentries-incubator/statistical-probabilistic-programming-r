@@ -27,7 +27,7 @@
             <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
           </abbr>
         </span>
-        
+
       </div>
     </div>
     <div class="selector-container">
@@ -56,7 +56,7 @@
             </li>
           </ul></li>
       </div>
-      
+
       <div class="dropdown" id="instructor-dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           <i aria-hidden="true" class="icon" data-feather="eye"></i> Learner View <i data-feather="chevron-down"></i>
@@ -180,7 +180,7 @@
                 </div><!--/div.accordion-flush-->
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
-      
+
             <hr></div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordionFlush11">
@@ -199,7 +199,7 @@
     <div class="accordion-header" id="flush-heading1">
         <a href="index.html">Summary and Setup</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -208,7 +208,7 @@
     <div class="accordion-header" id="flush-heading2">
         <a href="bayesian-statistics.html">1. Short introduction to Bayesian statistics</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -217,7 +217,7 @@
     <div class="accordion-header" id="flush-heading3">
         <a href="stan.html">2. Stan</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -226,7 +226,7 @@
     <div class="accordion-header" id="flush-heading4">
         <a href="mcmc.html">3. Markov chain Monte Carlo</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -235,7 +235,7 @@
     <div class="accordion-header" id="flush-heading5">
         <a href="hierarchical-models.html">4. Hierarchical models</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -249,7 +249,7 @@
         </span>
       </button>
     </div><!--/div.accordion-header-->
-        
+
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#data">Data</a></li>
@@ -259,7 +259,7 @@
 <li><a href="#reading">Reading</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -268,7 +268,7 @@
     <div class="accordion-header" id="flush-heading7">
         <a href="gaussian-processes.html">6. Gaussian processes</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -277,7 +277,7 @@
     <div class="accordion-header" id="flush-heading8">
         <a href="other-topics.html">7. Other topics</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -286,7 +286,7 @@
     <div class="accordion-header" id="flush-heading9">
         <a href="exercises.html">8. Exercises</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -318,10 +318,10 @@
               </div>
             </div>
             <hr class="half-width resources"><a href="aio.html">See all in one page</a>
-            
+
 
             <hr class="d-none d-sm-block d-md-none"><div class="d-grid gap-1">
-            
+
             </div>
           </div><!-- /div.accordion -->
         </div><!-- /div.sidebar-inner -->
@@ -342,18 +342,18 @@
           Previous: Hierarchical models
         </a>
         <a class="chapter-link float-end" href="gaussian-processes.html" rel="next">
-          Next: Gaussian processes... 
+          Next: Gaussian processes...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Model comparison</h1>
-        <p>Last updated on 2024-07-02 |
-        
+        <p>Last updated on 2024-07-09 |
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
-        
-        
-        
+
+
+
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -363,7 +363,7 @@
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning in check_dep_version(): ABI version mismatch: 
+<pre class="warning" tabindex="0"><code>Warning in check_dep_version(): ABI version mismatch:
 lme4 was built with Matrix ABI version 1
 Current Matrix ABI version is 2
 Please re-install lme4 from source or restore original 'Matrix' package</code></pre>
@@ -401,8 +401,8 @@ comparing a fitted model’s predictions with the observed data. The
 second approach is to use information criteria, which measure the
 balance between model complexity and goodness-of-fit. The episode
 concludes with Bayesian cross-validation.</p>
-<section id="data"><h2 class="section-heading">Data<a class="anchor" aria-label="anchor" href="#data"></a>
-</h2>
+<section><h2 class="section-heading" id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+<a class="anchor" aria-label="anchor" href="#data"></a></h2>
 <hr class="half-width"><p>Throughout the chapter, we will use the same simulated data set in
 the examples, a set of <span class="math inline">\(N=88\)</span>
 univariate numerical data points. The data is included in the course’s
@@ -413,8 +413,8 @@ dispersion in the data, and an extreme positive value, suggesting that
 the tails might be longer than those of a normal distribution. The
 Cauchy distribution is a potential alternative and below we will compare
 the suitability of these two distributions on this data.</p>
-<figure><img src="fig/model-comparison-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section id="posterior-predictive-check"><h2 class="section-heading">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
-</h2>
+<figure><img src="fig/model-comparison-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="posterior-predictive-check">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
+<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a></h2>
 <hr class="half-width"><p>The idea of posterior predictive checking is to use the posterior
 predictive distribution to simulate a replicate data set and compare it
 to the observed data. The reasoning behind this approach is that if the
@@ -557,8 +557,8 @@ replicate sets. Additionally, <span class="math inline">\(p_B=\)</span>
 0, indicating no issues with the suitability of the model for the data.
 distribution.</p>
 <figure><img src="fig/model-comparison-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-</section><section id="information-criteria"><h2 class="section-heading">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
-</h2>
+</section><section><h2 class="section-heading" id="information-criteria">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
+<a class="anchor" aria-label="anchor" href="#information-criteria"></a></h2>
 <hr class="half-width"><p>Information criteria are statistics used for model comparison within
 both Bayesian and classical frequentist frameworks. These criteria
 provide a means to compare the relative suitability of a model to data
@@ -682,8 +682,8 @@ in line with the posterior predictive check performed above.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 412.4815</code></pre>
 </div>
-</section><section id="bayesian-cross-validation"><h2 class="section-heading">Bayesian cross-validation<a class="anchor" aria-label="anchor" href="#bayesian-cross-validation"></a>
-</h2>
+</section><section><h2 class="section-heading" id="bayesian-cross-validation">Bayesian cross-validation<a class="anchor" aria-label="anchor" href="#bayesian-cross-validation"></a>
+<a class="anchor" aria-label="anchor" href="#bayesian-cross-validation"></a></h2>
 <hr class="half-width"><p>The final approach we take to model comparison in
 cross-validation.</p>
 <p>Cross-validation is a technique that estimates how well a model
@@ -896,15 +896,15 @@ cross-validation.</li>
 </ul></div>
 </div>
 </div>
-</section><section id="reading"><h2 class="section-heading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-</h2>
+</section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
+<a class="anchor" aria-label="anchor" href="#reading"></a></h2>
 <hr class="half-width"><ul><li><p>Statistical Rethinking: Ch. 7</p></li>
 <li><p>BDA3: p.143: 6.3 Posterior predictive checking</p></li>
 <li><p>PSIS-loo</p></li>
 <li><p><a href="https://mc-stan.org/loo/articles/online-only/faq.html" class="external-link uri">https://mc-stan.org/loo/articles/online-only/faq.html</a></p></li>
-</ul><!-- 
+</ul><!--
 Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use. 
+any links that you are not going to use.
  --></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="hierarchical-models.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
@@ -917,7 +917,7 @@ any links that you are not going to use.
           Previous: Hierarchical models
         </a>
         <a class="chapter-link float-end" href="gaussian-processes.html" rel="next">
-          Next: Gaussian processes... 
+          Next: Gaussian processes...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -928,18 +928,18 @@ any links that you are not going to use.
       		<footer class="row footer mx-md-3"><hr><div class="col-md-6">
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
-        
+
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit on GitHub</a>
-        
+
 	
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:velait@utu.fi">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
 			<div class="col-md-6">
-        
+
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
-        
+
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
         <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
 			</div>
@@ -963,8 +963,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-comparison.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/model-comparison.html",
   "dateCreated": "2024-06-28",
-  "dateModified": "2024-07-02",
-  "datePublished": "2024-07-02"
+  "dateModified": "2024-07-09",
+  "datePublished": "2024-07-09"
 }
 
   </script><script>
