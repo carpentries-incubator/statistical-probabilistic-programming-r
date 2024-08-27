@@ -342,10 +342,10 @@
             </div>
 
             <hr class="half-width">
-<div class="accordion accordion-flush resources" id="accordionFlush12">
+<div class="accordion accordion-flush lesson-resources" id="accordionFlush12">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingTwelve">
-                  <button class="accordion-button collapsed" id="resources" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwelve" aria-expanded="false" aria-controls="flush-collapseTwelve">
+                  <button class="accordion-button collapsed" id="lesson-resources" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwelve" aria-expanded="false" aria-controls="flush-collapseTwelve">
                     RESOURCES
                   </button>
                 </h2>
@@ -368,7 +368,7 @@
                 </div>
               </div>
             </div>
-            <hr class="half-width resources">
+            <hr class="half-width lesson-resources">
 <a href="../instructor/aio.html">See all in one page</a>
 
 
@@ -394,7 +394,7 @@
         
 <section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 68 minutes</p>
@@ -432,7 +432,6 @@ framework?</li>
 </div>
 </div>
 <section><h2 class="section-heading" id="bayes-formula">Bayes’ formula<a class="anchor" aria-label="anchor" href="#bayes-formula"></a>
-<a class="anchor" aria-label="anchor" href="#bayes-formula"></a>
 </h2>
 <hr class="half-width">
 <p>The starting point of Bayesian statistics is Bayes’ theorem,
@@ -463,7 +462,6 @@ p(\theta | X) \propto p(\theta)  p(X | \theta).
 distribution, which can subsequently be normalized to obtain the
 posterior.</p>
 </section><section><h2 class="section-heading" id="example-1-handedness">Example 1: handedness<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a>
-<a class="anchor" aria-label="anchor" href="#example-1-handedness"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s illustrate the use of the Bayes’ theorem with an example.</p>
@@ -497,7 +495,7 @@ expectations about left-handedness in humans.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
@@ -507,7 +505,6 @@ expectations about left-handedness in humans.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="communicating-posterior-information">Communicating posterior information<a class="anchor" aria-label="anchor" href="#communicating-posterior-information"></a>
-<a class="anchor" aria-label="anchor" href="#communicating-posterior-information"></a>
 </h2>
 <hr class="half-width">
 <p>The posterior distribution <span class="math inline">\(p(\theta |
@@ -536,7 +533,6 @@ sets.</p></li>
 previous example along with the posterior mode, or <em>maximum a
 posteriori</em> (MAP) estimate.</p>
 <figure><img src="../fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="grid-approximation">Grid approximation<a class="anchor" aria-label="anchor" href="#grid-approximation"></a>
-<a class="anchor" aria-label="anchor" href="#grid-approximation"></a>
 </h2>
 <hr class="half-width">
 <p>Specifying a probabilistic model can be simple, but a common
@@ -555,7 +551,6 @@ the parameter space and can be specified as follows:</p>
 <p>Now, we’ll implement the grid approximation for the handedness
 example in R.</p>
 </section><section><h2 class="section-heading" id="example-2-handedness-with-grid-approximation">Example 2: handedness with grid approximation<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a>
-<a class="anchor" aria-label="anchor" href="#example-2-handedness-with-grid-approximation"></a>
 </h2>
 <hr class="half-width">
 <p>First, we’ll load the required packages, define the data variables,
@@ -631,8 +626,7 @@ between these points.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Experiment with different priors and examine their effects on the
 posterior. You could try, for example, different Beta distributions, the
@@ -688,8 +682,7 @@ d\theta.\)</span></p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Compute the 90% CIs and the probability <span class="math inline">\(Pr(\theta &lt; 0.1)\)</span> for the handedness
 example.</p>
@@ -701,7 +694,7 @@ example.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -739,7 +732,6 @@ example.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="example-3-gamma-model-with-grid-approximation">Example 3: Gamma model with grid approximation<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a>
-<a class="anchor" aria-label="anchor" href="#example-3-gamma-model-with-grid-approximation"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s investigate another model and implement a grid approximation to
@@ -864,8 +856,7 @@ axis, as if drawn by a gravitational force.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Does the MAP of the joint posterior of <span class="math inline">\(\theta = (\alpha, \beta)\)</span> correspond to
 the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>?</p>
@@ -877,8 +868,7 @@ the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</spa
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>The conjugate prior for the Gamma likelihood <a href="https://en.wikipedia.org/wiki/Gamma_distribution#Bayesian_inference" class="external-link">exists</a>,
 which means there is a prior that causes the posterior to be of the same
@@ -887,7 +877,6 @@ shape.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="working-with-samples">Working with samples<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
-<a class="anchor" aria-label="anchor" href="#working-with-samples"></a>
 </h2>
 <hr class="half-width">
 <p>The main limitation of the grid approximation is that it becomes
@@ -901,7 +890,6 @@ Carlo (MCMC) methods. These methods are the topic of a later episode but
 we’ll anticipate this now by studying how posterior summaries can be
 computed based on samples.</p>
 </section><section><h2 class="section-heading" id="example-4-handedness-with-samples">Example 4: handedness with samples<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a>
-<a class="anchor" aria-label="anchor" href="#example-4-handedness-with-samples"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s take the beta-binomial model (beta prior, binomial likelihood)
@@ -951,8 +939,7 @@ samples within the interval.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion3"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Compute the posterior mean, variance, 90% CI and <span class="math inline">\(Pr(\theta &gt; 0.1)\)</span> using the generated
 samples.</p>
@@ -960,7 +947,6 @@ samples.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="posterior-predictive-distribution">Posterior predictive distribution<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#posterior-predictive-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>Now we have learned how to fit a probabilistic model using the grid
@@ -1001,8 +987,7 @@ line):</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Likelihood determines the probability of data conditional on the
@@ -1026,7 +1011,6 @@ samples from the posterior.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -1039,7 +1023,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 64 minutes</p>
@@ -1099,8 +1083,7 @@ your local computer.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>With Stan, you can fit model that have continuous parameters. Models
 with discrete parameters such as most classification models are
@@ -1110,7 +1093,6 @@ implemented.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="basic-program-structure">Basic program structure<a class="anchor" aria-label="anchor" href="#basic-program-structure"></a>
-<a class="anchor" aria-label="anchor" href="#basic-program-structure"></a>
 </h2>
 <hr class="half-width">
 <p>A Stan program is organized into several blocks that collectively
@@ -1129,7 +1111,6 @@ through sampling statements.</p></li>
 separate text files with a .stan extension, which can then be called
 from R.</p>
 </section><section><h2 class="section-heading" id="example-1-beta-binomial-model">Example 1: Beta-binomial model<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
-<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
 </h2>
 <hr class="half-width">
 <p>The following Stan program specifies the Beta-binomial model, and
@@ -1196,8 +1177,8 @@ data needs to be input as a list.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 3e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -1239,9 +1220,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2:
-Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.006 seconds (Total)
 Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1319,7 +1300,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Aug 20 00:33:11 2024.
+Samples were drawn using NUTS(diag_e) at Tue Aug 27 00:34:14 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at
 convergence, Rhat=1).</code></pre>
@@ -1342,8 +1323,7 @@ figures.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Compute the 95% credible intervals for the samples drawn with Stan.
 What is the probability that <span class="math inline">\(\theta \in
@@ -1356,7 +1336,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1383,8 +1363,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Try modifying the Stan program so that you add a <span class="math inline">\(Beta(\alpha, \beta)\)</span> prior for <span class="math inline">\(\theta\)</span>.</p>
 <p>Can you modify the Stan program further so that you can set the
@@ -1398,7 +1377,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Modifying the data block so that it declares the hyperparameters as
 data (e.g. <code>real&lt;lower=0&gt; alpha;</code>) enables setting the
@@ -1409,7 +1388,6 @@ the hyperparameters without modifying the Stan file.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="additional-stan-blocks">Additional Stan blocks<a class="anchor" aria-label="anchor" href="#additional-stan-blocks"></a>
-<a class="anchor" aria-label="anchor" href="#additional-stan-blocks"></a>
 </h2>
 <hr class="half-width">
 <p>In addition to the data, parameters, and model blocks there are
@@ -1434,7 +1412,6 @@ of the model but are useful for post-processing.</p></li>
 <p>We will make use of these additional structures in subsequent
 illustrations.</p>
 </section><section><h2 class="section-heading" id="example-2-normal-model">Example 2: Normal model<a class="anchor" aria-label="anchor" href="#example-2-normal-model"></a>
-<a class="anchor" aria-label="anchor" href="#example-2-normal-model"></a>
 </h2>
 <hr class="half-width">
 <p>Next, let’s implement the normal model in Stan. First we’ll generate
@@ -1503,8 +1480,8 @@ from the normal distribution for each posterior sample <span class="math inline"
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 5e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 1: Gradient evaluation took 6e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -1553,8 +1530,8 @@ Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3:
-Chain 3: Gradient evaluation took 2e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 3: Gradient evaluation took 2.3e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3:
 Chain 3:
@@ -1653,7 +1630,6 @@ histogram and compare it to that of the data.</p>
 <span><span class="fu">print</span><span class="op">(</span><span class="va">p_PPD</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/stan-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="example-3-linear-regression">Example 3: Linear regression<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
-<a class="anchor" aria-label="anchor" href="#example-3-linear-regression"></a>
 </h2>
 <hr class="half-width">
 <div id="challenge3" class="callout challenge">
@@ -1661,8 +1637,7 @@ histogram and compare it to that of the data.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge3"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Write a Stan program for linear regression with one dependent
 variable.</p>
@@ -1677,7 +1652,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1713,8 +1688,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge4"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Modify the program for linear regression so it facilitates <span class="math inline">\(M\)</span> dependent variables.</p>
 </div>
@@ -1725,7 +1699,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1763,8 +1737,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Stan is a tool for efficient posterior distribution sample
@@ -1777,7 +1750,6 @@ crucial ones.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
-<a class="anchor" aria-label="anchor" href="#resources"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -1794,7 +1766,6 @@ crucial ones.</li>
 <li>Case studies <a href="https://mc-stan.org/users/documentation/case-studies" class="external-link uri">https://mc-stan.org/users/documentation/case-studies</a>
 </li>
 </ul></section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -1806,7 +1777,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">Markov chain Monte Carlo</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 63 minutes</p>
@@ -1848,7 +1819,6 @@ how the samples are generated. In this episode, we’ll study Markov chain
 Monte Carlo (MCMC) methods, which are the class of algorithms Stan uses
 under the hood.</p>
 <section><h2 class="section-heading" id="metropolis-hastings-algorithm">Metropolis-Hastings algorithm<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
-<a class="anchor" aria-label="anchor" href="#metropolis-hastings-algorithm"></a>
 </h2>
 <hr class="half-width">
 <p>MCMC methods draw samples from the posterior distribution by
@@ -1889,7 +1859,6 @@ such as with the normal distribution, <span class="math inline">\(r\)</span> red
 posterior values, and all proposals toward higher posterior density
 areas are accepted.</p>
 </section><section><h2 class="section-heading" id="example-banana-distribution">Example: Banana distribution<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#example-banana-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s implement the MH algorithm and use it to generate posterior
@@ -2107,8 +2076,7 @@ drawn samples provide a representative picture of the target.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Consider how you could address the two issues raised above:</p>
 <ol style="list-style-type: decimal">
@@ -2124,7 +2092,6 @@ inference and convergence? Why?</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="assessing-convergence">Assessing convergence<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
-<a class="anchor" aria-label="anchor" href="#assessing-convergence"></a>
 </h2>
 <hr class="half-width">
 <p>Although convergence of MCMC is theoretically guaranteed, in
@@ -2275,7 +2242,6 @@ of the posterior is quite apparent. The <span class="math inline">\(\hat{R}\)</s
 <figure><img src="../fig/mcmc-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 </section><section><h2 class="section-heading" id="hamiltonian-monte-carlo">Hamiltonian Monte Carlo<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
-<a class="anchor" aria-label="anchor" href="#hamiltonian-monte-carlo"></a>
 </h2>
 <hr class="half-width">
 <p>Stan uses a variant of the Metropolis-Hastings algorithm called
@@ -2302,8 +2268,7 @@ about divergent transitions automatically.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Markov chain Monte Carlo methods can be used to generate samples
@@ -2317,7 +2282,6 @@ accepted with higher probability.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -2331,7 +2295,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical models</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 14 minutes</p>
@@ -2413,7 +2377,6 @@ sciences as well.</p>
 <p>In the following example, we will perform a hierarchical analysis of
 human heights across different countries.</p>
 <section><h2 class="section-heading" id="example-human-height">Example: human height<a class="anchor" aria-label="anchor" href="#example-human-height"></a>
-<a class="anchor" aria-label="anchor" href="#example-human-height"></a>
 </h2>
 <hr class="half-width">
 <p>Let’s examine the heights of adults in various countries. In [1],
@@ -2744,8 +2707,7 @@ concentrated and better capture the true values.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Experiment with the data and fit. Explore the effect of sample size,
 unequal sample sizes between countries, and the amount of countries, for
@@ -2891,8 +2853,7 @@ developed/developing countries etc.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Hierarchical models are appropriate for scenarios where the study
@@ -2907,7 +2868,6 @@ model parameters over the whole population.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -2915,7 +2875,6 @@ model parameters over the whole population.</li>
 <li>Statistical Rethinking (2nd ed.): Ch. 13</li>
 <li>Bayes Rules!: Ch. 15-19</li>
 </ul></section><section><h2 class="section-heading" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <hr class="half-width">
 <p>[1] Height: Height and body-mass index trajectories of school-aged
@@ -2928,7 +2887,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-model-comparison"><p>Content from <a href="model-comparison.html">Model comparison</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
@@ -2981,7 +2940,6 @@ second approach is to use information criteria, which measure the
 balance between model complexity and goodness-of-fit. The episode
 concludes with Bayesian cross-validation.</p>
 <section><h2 class="section-heading" id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
-<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
 <hr class="half-width">
 <p>Throughout the chapter, we will use the same simulated data set in
@@ -2995,7 +2953,6 @@ the tails might be longer than those of a normal distribution. The
 Cauchy distribution is a potential alternative and below we will compare
 the suitability of these two distributions on this data.</p>
 <figure><img src="../fig/model-comparison-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="posterior-predictive-check">Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
-<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
 </h2>
 <hr class="half-width">
 <p>The idea of posterior predictive checking is to use the posterior
@@ -3147,7 +3104,6 @@ distribution.</p>
 <figure><img src="../fig/model-comparison-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 </section><section><h2 class="section-heading" id="information-criteria">Information criteria<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
-<a class="anchor" aria-label="anchor" href="#information-criteria"></a>
 </h2>
 <hr class="half-width">
 <p>Information criteria are statistics used for model comparison within
@@ -3274,7 +3230,6 @@ in line with the posterior predictive check performed above.</p>
 <pre class="output" tabindex="0"><code>[1] 412.4815</code></pre>
 </div>
 </section><section><h2 class="section-heading" id="bayesian-cross-validation">Bayesian cross-validation<a class="anchor" aria-label="anchor" href="#bayesian-cross-validation"></a>
-<a class="anchor" aria-label="anchor" href="#bayesian-cross-validation"></a>
 </h2>
 <hr class="half-width">
 <p>The final approach we take to model comparison in
@@ -3465,8 +3420,7 @@ normal model.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout1"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>There are packages that enable computing WAIC and approximate
 leave-one-out score automatically so, in practice, there is seldom need
@@ -3480,8 +3434,7 @@ options tools.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Bayesian model comparison can be performed (for example) with
@@ -3492,7 +3445,6 @@ cross-validation.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
-<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h2>
 <hr class="half-width">
 <ul>
@@ -3506,7 +3458,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-gaussian-processes"><p>Content from <a href="gaussian-processes.html">Gaussian processes</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/gaussian-processes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 63 minutes</p>
@@ -3620,8 +3572,7 @@ some realizations from a GP with <span class="math inline">\(\mu = (0,
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <ol style="list-style-type: decimal">
 <li><p>Generate samples from the GP above with different values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> to get intuition about the role
@@ -3637,7 +3588,6 @@ covariance?</p></li>
 <p>Next, we’ll explore some examples that make use of Gaussian
 processes.</p>
 <section><h2 class="section-heading" id="example-1-gaussian-process-regression">Example 1: Gaussian process regression<a class="anchor" aria-label="anchor" href="#example-1-gaussian-process-regression"></a>
-<a class="anchor" aria-label="anchor" href="#example-1-gaussian-process-regression"></a>
 </h2>
 <hr class="half-width">
 <p>Assume we’d like to estimate the relationship between variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> based on the following 5 data
@@ -3758,8 +3708,8 @@ standard deviation to <span class="math inline">\(\sigma =
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 8.3e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.83 seconds.
+Chain 1: Gradient evaluation took 8.2e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.82 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -3776,9 +3726,9 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 31.925 seconds (Warm-up)
-Chain 1:                36.215 seconds (Sampling)
-Chain 1:                68.14 seconds (Total)
+Chain 1:  Elapsed Time: 31.847 seconds (Warm-up)
+Chain 1:                36.166 seconds (Sampling)
+Chain 1:                68.013 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper">
@@ -3849,8 +3799,7 @@ plausible.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>In the figure above, where is the posterior uncertainty the highest
 and why? What controls the uncertainty at the locations of the data? If
@@ -3864,7 +3813,7 @@ posterior look like at the extremes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Uncertainty grows at locations away from the data points and starts
 to resemble the prior. At the data locations, the uncertainty is
@@ -3876,7 +3825,6 @@ variance <span class="math inline">\(\alpha^2\)</span>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="cholesky-parameterization">Cholesky parameterization<a class="anchor" aria-label="anchor" href="#cholesky-parameterization"></a>
-<a class="anchor" aria-label="anchor" href="#cholesky-parameterization"></a>
 </h2>
 <hr class="half-width">
 <p>Running the previous example look a few minutes even though the
@@ -3991,8 +3939,7 @@ one recovered without the Cholesky parameterization?</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>For the previous example, compute the posterior probability for <span class="math inline">\(f(0) &gt; 0\)</span>.</p>
 </div>
@@ -4003,7 +3950,7 @@ one recovered without the Cholesky parameterization?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4025,7 +3972,6 @@ one recovered without the Cholesky parameterization?</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="example-2-logistic-gaussian-process-regression">Example 2: Logistic Gaussian process regression<a class="anchor" aria-label="anchor" href="#example-2-logistic-gaussian-process-regression"></a>
-<a class="anchor" aria-label="anchor" href="#example-2-logistic-gaussian-process-regression"></a>
 </h2>
 <hr class="half-width">
 <p>Gaussian processes can also be used as priors in models where the
@@ -4179,8 +4125,7 @@ ends. Why might this be?</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge3"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Think of ways to modify the Stan program for the logistic GP
 regression so that the posterior behavior is more reasonable in the
@@ -4193,7 +4138,7 @@ prediction range.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Let’s modify the program by setting the GP mean to a negative value
 and treating the length scale as a parameter.</p>
@@ -4272,8 +4217,8 @@ and treating the length scale as a parameter.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 0.001288 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.88 seconds.
+Chain 1: Gradient evaluation took 0.001281 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.81 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -4290,9 +4235,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 17.286 seconds (Warm-up)
-Chain 1:                17.192 seconds (Sampling)
-Chain 1:                34.478 seconds (Total)
+Chain 1:  Elapsed Time: 17.109 seconds (Warm-up)
+Chain 1:                17.037 seconds (Sampling)
+Chain 1:                34.146 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb25">
@@ -4326,8 +4271,7 @@ Chain 1: </code></pre>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#discussion2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Generate a posterior for the optimal temperature.</p>
 </div>
@@ -4338,8 +4282,7 @@ Chain 1: </code></pre>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>GPs provide a means for non-parametric regression.</li>
@@ -4355,7 +4298,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Other topics</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/other-topics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -4393,8 +4336,7 @@ any links that you are not going to use.
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>You can define a challenge here</p>
 </div>
@@ -4405,7 +4347,7 @@ any links that you are not going to use.
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>… and a solution here</p>
 </div>
@@ -4418,8 +4360,7 @@ any links that you are not going to use.
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>point 1</li>
@@ -4428,7 +4369,7 @@ any links that you are not going to use.
 </div>
 </div></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-27 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -5048,7 +4989,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.5" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.3" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.6" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.6" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.4" class="external-link">varnish (1.0.4)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -5071,8 +5012,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "dateCreated": "2024-06-28",
-  "dateModified": "2024-08-20",
-  "datePublished": "2024-08-20"
+  "dateModified": "2024-08-27",
+  "datePublished": "2024-08-27"
 }
 
   </script><script>
