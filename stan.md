@@ -108,8 +108,8 @@ binom_samples <- sampling(object = binomial_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 3e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -151,9 +151,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.003 seconds (Warm-up)
 Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
+Chain 2:                0.006 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -226,7 +226,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Aug 20 00:33:11 2024.
+Samples were drawn using NUTS(diag_e) at Tue Aug 27 00:34:14 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -367,8 +367,8 @@ normal_samples <- rstan::sampling(normal_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 5e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 1: Gradient evaluation took 6e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -417,8 +417,8 @@ Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 2e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
+Chain 3: Gradient evaluation took 2.3e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
