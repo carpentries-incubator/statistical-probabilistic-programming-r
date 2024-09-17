@@ -80,7 +80,7 @@ Instructions:
 The following data is a collection of daily milk yield (in liters) for dairy cows.
 
 ```{r}
-X <- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93).
+X <- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93)
 ```
 
 
@@ -102,7 +102,7 @@ Let's model the following observations X with the exponential likelihood, $\text
 X <-  c(0.166, 1.08, 1.875, 0.413, 1.369, 0.463, 0.735, 
        0.24, 0.774, 1.09, 0.463, 0.916, 0.225,
         0.889, 0.051, 0.688, 0.119, 0.078, 1.624, 0.553, 0.523, 
-       0.644, 0.284, 1.744, 1.468).
+       0.644, 0.284, 1.744, 1.468)
 ```
 
 
@@ -500,4 +500,51 @@ Is such a model appropriate for predicting stock prices into the future?
 Hint: Running the Stan program can take quite a long time, so do the initial testing using only 1 chain and, for example, 500 iterations. 
 
 
+
+
+
+
+
+
+
+
+
+# 7. Other topics
+
+## 7.1 Hierarchical models using `brms`
+
+a) 
+
+Use `brms` to fit the hierarchical Gamma-Poisson model fitted in exercise 4.2. After fitting the model plot the histogram of lambda and compare that the results are similar to the model fit in 4.2.
+
+(Hint: You can check [this](https://discourse.mc-stan.org/t/how-to-set-prior-for-hyper-parameter/15306/5) forum post for how to implement prior for hyper-parameter when using `brm`. You can also get a warning when fitting the model, which you can ignore.)
+
+b)
+
+Fit the hierarchical Poisson regression model fitted in exercise 4.3 using `brms`. After fitting the models plot the city specific estimates for alpha and beta.
+
+## 7.2 Zero-inflated poisson model 
+
+Sometimes count data has more zeros than is expected when using, for example, Poisson or negative binomial model. This type of data can be called zero-inflated. An example of this type of data is `DoctorVisits` dataset from `AER` R package. The data describes the amount of doctor visits based on Australian Health Survey in 1977—1987.
+
+```{r}
+# Install the package to get the data
+install.packages(AER)
+# Get data
+data("DoctorVisits", package = "AER")
+```
+
+a)
+
+Use `brms` to fit an zero-inflated poisson model to the data while using gender, age, health and income as explanatory variables. Use weakly informative prior for the population-level coefficients. Comment the fit summary. Also plot the conditional effects.
+
+b) 
+
+Part of zero-inflated models is the zero-inflated probability. This probability can also be predicted when fitting the model. Fit the same model, but this time also predict zero-inflated probability using age and health. Again comment the fit summary and especially how age and health affect probability of zero visits. Compare the results to the first model.
+
+c) 
+
+To end fit a zero-inflated negative binomial model with the same explanatory variables as in the second model. Compare results to the two previous models. Use loo and comment which model is the best. Running the model can take a while. 
+
+(Hint: Use `adapt_delta = 0.95`. Also if your computer has 4 or more cores you can use `cores = 4` to speed up the fit.)
 
