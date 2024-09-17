@@ -429,14 +429,8 @@ for dairy cows.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">30.25</span>, <span class="fl">34.98</span>, <span class="fl">29.66</span>, <span class="fl">20.14</span>, <span class="fl">23.92</span>, <span class="fl">38.61</span>, <span class="fl">36.89</span>, <span class="fl">34.68</span>, <span class="fl">25.83</span>, <span class="fl">29.93</span>).</span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error: &lt;text&gt;:1:77: unexpected symbol
-1: X &lt;- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93).
-                                                                                ^</code></pre>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">30.25</span>, <span class="fl">34.98</span>, <span class="fl">29.66</span>, <span class="fl">20.14</span>, <span class="fl">23.92</span>, <span class="fl">38.61</span>, <span class="fl">36.89</span>, <span class="fl">34.68</span>, <span class="fl">25.83</span>, <span class="fl">29.93</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Using the grid approximation for the normal model, estimate the
 average daily yield <span class="math inline">\(\mu\)</span>.</p>
@@ -450,21 +444,14 @@ than 30 liters?</p>
 <h2 id="sampling-the-gamma">1.5 Sampling the Gamma<a class="anchor" aria-label="anchor" href="#sampling-the-gamma"></a></h2>
 <p>Let’s model the following observations X with the exponential
 likelihood, <span class="math inline">\(\text{Exp}(\lambda)\)</span>:</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>X <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fl">0.166</span>, <span class="fl">1.08</span>, <span class="fl">1.875</span>, <span class="fl">0.413</span>, <span class="fl">1.369</span>, <span class="fl">0.463</span>, <span class="fl">0.735</span>, </span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>       <span class="fl">0.24</span>, <span class="fl">0.774</span>, <span class="fl">1.09</span>, <span class="fl">0.463</span>, <span class="fl">0.916</span>, <span class="fl">0.225</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>        <span class="fl">0.889</span>, <span class="fl">0.051</span>, <span class="fl">0.688</span>, <span class="fl">0.119</span>, <span class="fl">0.078</span>, <span class="fl">1.624</span>, <span class="fl">0.553</span>, <span class="fl">0.523</span>, </span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>       <span class="fl">0.644</span>, <span class="fl">0.284</span>, <span class="fl">1.744</span>, <span class="fl">1.468</span>).</span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error: &lt;text&gt;:4:35: unexpected symbol
-3:         0.889, 0.051, 0.688, 0.119, 0.078, 1.624, 0.553, 0.523,
-4:        0.644, 0.284, 1.744, 1.468).
-                                     ^</code></pre>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span>  <span class="fu">c</span><span class="op">(</span><span class="fl">0.166</span>, <span class="fl">1.08</span>, <span class="fl">1.875</span>, <span class="fl">0.413</span>, <span class="fl">1.369</span>, <span class="fl">0.463</span>, <span class="fl">0.735</span>, </span>
+<span>       <span class="fl">0.24</span>, <span class="fl">0.774</span>, <span class="fl">1.09</span>, <span class="fl">0.463</span>, <span class="fl">0.916</span>, <span class="fl">0.225</span>,</span>
+<span>        <span class="fl">0.889</span>, <span class="fl">0.051</span>, <span class="fl">0.688</span>, <span class="fl">0.119</span>, <span class="fl">0.078</span>, <span class="fl">1.624</span>, <span class="fl">0.553</span>, <span class="fl">0.523</span>, </span>
+<span>       <span class="fl">0.644</span>, <span class="fl">0.284</span>, <span class="fl">1.744</span>, <span class="fl">1.468</span><span class="op">)</span></span></code></pre>
 </div>
 <p>If we use a <span class="math inline">\(\Gamma(2, 1)\)</span> prior,
 the posterior distribution can be shown to be</p>
@@ -509,7 +496,7 @@ N(\bar{X}, \frac{\sigma^2}{n})\)</span>
 data points <span class="math inline">\(X = \{X_1, X_2, ...,
 X_n\}\)</span>.</p>
 <ol style="list-style-type: lower-alpha"><li>Generate 5000 samples from the posterior using the data</li>
-</ol><div class="codewrapper sourceCode" id="cb6">
+</ol><div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -549,7 +536,7 @@ points, and Pois is the Poisson distribution with rate parameter <span class="ma
 input as part of data. Heuristically, what effect does altering beta
 have on the prior shape?</p>
 <p>Fit the model using the data</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -569,7 +556,7 @@ probability vector and Dir is the Dirichlet distribution.</p>
 <p>Use the program to assess the fairness of a 6 sided dice. In other
 words, estimate the probabilities of each side on a roll using the
 following data.</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -587,7 +574,7 @@ of the dice faces.</p>
 distribution - Generate posterior for <span class="math inline">\(CV =
 \frac{\mu}{\sigma}.\)</span></p>
 <p>Fit the model using the data</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -656,7 +643,7 @@ distribution.</p>
 <div class="section level2">
 <h2 id="gamma-with-discrete-rate">3.3. Gamma with discrete rate<a class="anchor" aria-label="anchor" href="#gamma-with-discrete-rate"></a></h2>
 <p>The data</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -725,7 +712,7 @@ y_i \sim \text{Pois}(\lambda) \\
 \beta \sim \Gamma(2, 1) \\
 \]</span></p>
 <p>Use data</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -811,7 +798,7 @@ as the test statistic. Compute the posterior predictive p-value.</p>
 <h2 id="gp-prediction">6.1. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction"></a></h2>
 <p>Consider the following data <span class="math inline">\((x,
 y)\)</span>:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -874,6 +861,80 @@ targets shorter-term variations around the trend.</p>
 future?</p>
 <p>Hint: Running the Stan program can take quite a long time, so do the
 initial testing using only 1 chain and, for example, 500 iterations.</p>
+</div>
+</div>
+<div class="section level1">
+<h1 id="other-topics">7. Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a></h1>
+<div class="section level2">
+<h2 id="hierarchical-models-using-brms">7.1 Hierarchical models using <code>brms</code>
+<a class="anchor" aria-label="anchor" href="#hierarchical-models-using-brms"></a></h2>
+<ol style="list-style-type: lower-alpha"><li>
+</li></ol><p>Use <code>brms</code> to fit the hierarchical Gamma-Poisson model
+fitted in exercise 4.2. After fitting the model plot the histogram of
+lambda and compare that the results are similar to the model fit in
+4.2.</p>
+<p>(Hint: You can check <a href="https://discourse.mc-stan.org/t/how-to-set-prior-for-hyper-parameter/15306/5" class="external-link">this</a>
+forum post for how to implement prior for hyper-parameter when using
+<code>brm</code>. You can also get a warning when fitting the model,
+which you can ignore.)</p>
+<ol start="2" style="list-style-type: lower-alpha"><li>
+</li></ol><p>Fit the hierarchical Poisson regression model fitted in exercise 4.3
+using <code>brms</code>. After fitting the models plot the city specific
+estimates for alpha and beta.</p>
+</div>
+<div class="section level2">
+<h2 id="zero-inflated-poisson-model">7.2 Zero-inflated poisson model<a class="anchor" aria-label="anchor" href="#zero-inflated-poisson-model"></a></h2>
+<p>Sometimes count data has more zeros than is expected when using, for
+example, Poisson or negative binomial model. This type of data can be
+called zero-inflated. An example of this type of data is
+<code>DoctorVisits</code> dataset from <code>AER</code> R package. The
+data describes the amount of doctor visits based on Australian Health
+Survey in 1977—1987.</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install the package to get the data</span></span>
+<span><span class="fu">install.packages</span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(call, envir = parent.frame()): object 'AER' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get data</span></span>
+<span><span class="fu">data</span><span class="op">(</span><span class="st">"DoctorVisits"</span>, package <span class="op">=</span> <span class="st">"AER"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in find.package(package, lib.loc, verbose = verbose): there is no package called 'AER'</code></pre>
+</div>
+<ol style="list-style-type: lower-alpha"><li>
+</li></ol><p>Use <code>brms</code> to fit an zero-inflated poisson model to the
+data while using gender, age, health and income as explanatory
+variables. Use weakly informative prior for the population-level
+coefficients. Comment the fit summary. Also plot the conditional
+effects.</p>
+<ol start="2" style="list-style-type: lower-alpha"><li>
+</li></ol><p>Part of zero-inflated models is the zero-inflated probability. This
+probability can also be predicted when fitting the model. Fit the same
+model, but this time also predict zero-inflated probability using age
+and health. Again comment the fit summary and especially how age and
+health affect probability of zero visits. Compare the results to the
+first model.</p>
+<ol start="3" style="list-style-type: lower-alpha"><li>
+</li></ol><p>To end fit a zero-inflated negative binomial model with the same
+explanatory variables as in the second model. Compare results to the two
+previous models. Use loo and comment which model is the best. Running
+the model can take a while.</p>
+<p>(Hint: Use <code>adapt_delta = 0.95</code>. Also if your computer has
+4 or more cores you can use <code>cores = 4</code> to speed up the
+fit.)</p>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
@@ -940,7 +1001,7 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/exercises.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/exercises.html",
-  "dateCreated": "2024-06-28",
+  "dateCreated": "2024-09-17",
   "dateModified": "2024-09-17",
   "datePublished": "2024-09-17"
 }
