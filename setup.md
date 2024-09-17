@@ -15,13 +15,14 @@ Instructions for installing Stan can be found [here](https://github.com/stan-dev
 For the lessons, you'll need to have some R packages installed and loaded. Run the following code to load the libraries and to set the graphical theme. 
 
 ```R
-package_list <- c("magrittr", "tidyverse", "cowplot", "grafify", "rstan", "mvtnorm")
+package_list <- c("magrittr", "tidyverse", "cowplot", "grafify", "rstan",
+                  "mvtnorm", "loo", "bayesplot", "brms")
 
 for (p in package_list){
-     if(! p %in% package_list()){
-         package_list(i, dependencies = TRUE)
+     if(!p %in% installed.packages()){
+         install.packages(p)
      }
-     require(i)
+     require(p, character.only = TRUE)
 }
 
 theme_set(theme_bw(15))

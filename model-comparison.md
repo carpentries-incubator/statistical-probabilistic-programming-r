@@ -5,12 +5,6 @@ exercises: 2
 ---
 
 
-``` warning
-Warning in check_dep_version(): ABI version mismatch: 
-lme4 was built with Matrix ABI version 1
-Current Matrix ABI version is 2
-Please re-install lme4 from source or restore original 'Matrix' package
-```
 
 
 :::::::::::::::::::::::::::::::::::::: questions 

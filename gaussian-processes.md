@@ -196,8 +196,8 @@ gp_samples <- rstan::sampling(gp_model,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 8.2e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.82 seconds.
+Chain 1: Gradient evaluation took 8.8e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.88 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -214,9 +214,9 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 31.619 seconds (Warm-up)
-Chain 1:                35.987 seconds (Sampling)
-Chain 1:                67.606 seconds (Total)
+Chain 1:  Elapsed Time: 31.974 seconds (Warm-up)
+Chain 1:                36.288 seconds (Sampling)
+Chain 1:                68.262 seconds (Total)
 Chain 1: 
 ```
 
@@ -639,8 +639,8 @@ logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.001286 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.86 seconds.
+Chain 1: Gradient evaluation took 0.001278 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.78 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -657,9 +657,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 17.265 seconds (Warm-up)
-Chain 1:                17.203 seconds (Sampling)
-Chain 1:                34.468 seconds (Total)
+Chain 1:  Elapsed Time: 17.324 seconds (Warm-up)
+Chain 1:                17.227 seconds (Sampling)
+Chain 1:                34.551 seconds (Total)
 Chain 1: 
 ```
 
