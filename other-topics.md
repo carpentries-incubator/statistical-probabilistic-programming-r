@@ -1,5 +1,5 @@
 ---
-title: 'Other topics'
+title: 'Stan extensions'
 teaching: 10
 exercises: 2
 ---
@@ -16,25 +16,23 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-
 - Learn to use Stan with additional R packages
-
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-In this chapter we will introduce packages that take advantage of Stan and `rstan`. The packages covered are `loo`, `bayesplot` and `brms`. From these `loo` enables easy cross-validation of Bayesian models and `bayesplot` provides tools for plotting the models. `brms` allows user fit Bayesian models using Stan without having to write the Stan code.
+In this chapter, we will introduce packages that take advantage of Stan. The covered packages are  `loo`, which enables approximate Bayesian cross-validation,  `bayesplot`, which contains plotting tools, and `brms`, which allows calling Stan using common R syntax, without having to write the Stan code.
 
 
-## `loo` R package
+## `loo` 
 
-The first package that we will introduce is the `loo` R package. It allows user to compute efficient approximate leave-one-out cross-validation for fitted Bayesian models. It can also compute model weights that can be used to average predictive distributions. `loo` uses Pareto smoothed importance sampling (PSIS) to compute LOO-CV. It can also return approximate standard errors for estimated predictive errors. The package can also be used for calculating WAIC.
+The `loo` package allows computing approximate leave-one-out cross-validation (loo-cv) for models fitted with Stan. The approximation is based on something called Pareto smoothed importance sampling (PSIS) [1]. The package can also be used for computing WAIC and model weights for average predictive distributions.
 
 ### Example 1
 
-We will demonstrate the use of the `loo` package on the two models introduced in chapter 5. We will evaluate the fit of the models and compare them with the tools provided by `loo`.
+We will demonstrate `loo` package usage on the model comparison example studied in Episode 5. We will fit the normal and Cauchy models on the same synthetic data, then use the tools provided in `loo` to compute and compare the approximate loo-cv scores for these two models. 
 
-To begging we need to add log-likelihood calculation to the Stan code. This is done by adding `log_lik` to the generated quantities block of the code. Below we demonstrate how this is done with the two models we will be comparing.
+To be able to utilize the package functions, we need to add a log-likelihood computation in the Stan code, in the generated quantities block. The object containing the log-likelihood needs to be named `log_lik` so the 'loo' functions can find it. Below, we demonstrate this with the two models we are comparing.
 
 
 ``` stan
@@ -107,23 +105,23 @@ generated quantities {
 
 ```
 
-After adding the log-likelihood calculation into the code the model can be fit in the usual way.
+Now we can fit the models in the usual way.
 
 
 
 
 ``` r
-# Fitting normal model
+# Fit normal model
 normal_fit <- rstan::sampling(normal_model_loo,
                        list(N = N, X = df5$X), 
                        refresh = 0, seed = 2024)
-# Fitting cauchy model
+# Fit cauchy model
 cauchy_fit <- rstan::sampling(cauchy_model_loo,
                        list(N = N, X = df5$X), 
                        refresh = 0, seed = 2024)
 ```
 
-We can now compute PSIS-LOO for both of the models with `loo::loo` function. After the computations we can get more information about the fit by printing the `loo` objects.
+We can now compute PSIS-LOO for both of the models with `loo::loo` function. After the calling the function, information about the fit can be viewed by printing the `loo` objects.
 
 
 ``` r
@@ -181,9 +179,9 @@ All Pareto k estimates are good (k < 0.7).
 See help('pareto-k-diagnostic') for details.
 ```
 
-Using print returns $\widehat{\text{elpd}}_{\text{loo}}$ (expected log pointwise predictive density), $\hat{p}_{loo}$ (estimated number of parameters) and $\text{looic}$ (LOO information criterion) values and their standard errors. It also return a table with the Pareto $k$ diagnostic values. These values are used to asses the reliability of the estimates. Values over 1 means that the PSIS estimate and the corresponding Monte Carlo standard error are not well defined.
+Running `print` returns $\widehat{\text{elpd}}_{\text{loo}}$ (expected log pointwise predictive density), $\hat{p}_{loo}$ (estimated number of parameters) and $\text{looic}$ (LOO information criterion) values and their standard errors. It also returns a table with the Pareto $k$ diagnostic values, which are used to asses the reliability of the estimates. Values below 1 are required for reliable PSIS estimates.
 
-If we want to compare the models, this can be done by using `loo::loo_compare` function on the `loo` objects. It will compare the models based on their elpd values. 
+Model comparison can be done by using the `loo::loo_compare` function on the `loo` objects. The comparison is based on the models' elpd values. 
 
 
 ``` r
@@ -197,7 +195,7 @@ model2   0.0       0.0
 model1 -81.9      36.2  
 ```
 
-From the comparison we see that the elpd difference is larger than the standard error which indicates that the cauchy model is expected to have better predictive performance than the normal model. This is in line with what we saw in chapter 5.
+The comparison shows that the elpd difference is larger than the standard error, indicating that the cauchy model is expected to have better predictive performance than the normal model. This is in line with what we saw in chapter 5: the Cauchy distribution is a superior model for the data. 
 
 
 ::::::::::::::::::::::::::::::::::::::::: challenge
@@ -254,7 +252,7 @@ p_waic         2.0  0.0
 waic         413.8 29.3
 ```
 
-Computing WAIC for the model return values for $\widehat{\text{eldp}}_{\text{WAIC}}$, $\hat{p}_{\text{WAIC}}$ and $\widehat{\text{WAIC}}$. Models can be compared based on WAIC with the same function as with PSIS-LOO.
+Computing WAIC for the model return values for $\widehat{\text{eldp}}_{\text{WAIC}}$, $\hat{p}_{\text{WAIC}}$ and $\widehat{\text{WAIC}}$. Models can be compared based on WAIC using the same function as with PSIS-LOO.
 
 
 ``` r
@@ -273,13 +271,13 @@ model1 -83.1      37.4
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-## `bayesplot` R package
+## `bayesplot`
 
-The next package we will cover is the `bayesplot` R package. The package provides a large library of different kinds of plotting functions to use after fitting a Bayesian model. The plots created by the package are `ggplot` objects, which means that the plots can be customized with the functions from `ggplot2` package. The package provides functions for plotting posterior draws, visual MCMC diagnostics and graphical posterior or prior predictive checking. The functions in the package also works with models fit by other packages like `brms` and `rstanarm`.
+Next, we will look at the the `bayesplot` R package. The package provides a library of plotting functions for fitted Stan models. The created plots are `ggplot` objects, meaning that the plots can be customized with the functions from `ggplot2` package. The package enables plotting posterior draws, visual MCMC diagnostics and graphical posterior and prior predictive checking. The functions of the package also work with model fit with the popular packages `brms` and `rstanarm`.
 
-### Continuing with example 1
+### Example 1 continued
 
-We will demonstrate using `bayesplot` with the Cauchy model used in the first exercise. Before we can start using the plotting functions we must first extract the draws. After this we will plot uncertainty intervals for mu and sigma.
+We will demonstrate using `bayesplot` with the Cauchy model used in the first example. First, we need to extract the posterior draws. Then, we will plot uncertainty intervals for $\mu$ and $\sigma$.
 
 
 ``` r
@@ -292,7 +290,7 @@ bayesplot::mcmc_intervals(cauchy_draws, pars = c("mu", "sigma"))
 
 <img src="fig/other-topics-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
-If we instead wanted to plot estimated posterior density curves with uncertainty intervals as shaded areas or histograms of marginal posterior distributions, we can use the following functions:
+Alternatively, we can plot the (marginal) posterior sample histograms or densities with credible intervals as shaded areas as follows:
 
 
 ``` r
@@ -311,7 +309,7 @@ bayesplot::mcmc_hist(cauchy_draws, pars = c("mu", "sigma"))
 
 <img src="fig/other-topics-rendered-unnamed-chunk-11-2.png" style="display: block; margin: auto;" />
 
-`bayesplot` also provides a lot of functions meant for assessing the convergence of the MCMC chains and visualizing other fit diagnostics. For example we can easily plot the trace plots for the chains.
+`bayesplot` also provides functions for assessing MCMC convergence and visualizing fit diagnostics. For example, we can generate trace plots for the chains:
 
 
 ``` r
@@ -322,12 +320,11 @@ bayesplot::mcmc_trace(cauchy_draws, pars = c("mu", "sigma"),
 
 <img src="fig/other-topics-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
-In addition to the demonstrated functions, `bayesplot` has many more plotting functions. 
 
 
 ::::::::::::::::::::::::::::::::::::::::: challenge
 
-`bayesplot` provides tools for doing graphical posterior predictive checks. Plot density estimates of $X_{rep}$ overlaid with density of $X$ for the Cauchy model using `bayesplot`. You can also plot the histograms for $X$ and $X_{rep}$.
+Perform a graphical posterior predictive checks with `bayesplot`. Using the Cauchy model fit generated above, plot the density of $X_{rep}$ samples overlaid with the density of $X$. Alternatively, you can plot the corresponding histograms.
 
 ::::::::::::::::::::::::::::::: solution
 
@@ -352,7 +349,8 @@ X_rep_sub <- X_rep_sub[, -89] %>%
 
 
 ``` r
-# Plotting density
+# Plot density
+# Limit x range for better illustration
 bayesplot::ppc_dens_overlay(y = df5$X, yrep = X_rep_sub) + xlim(-25, 50)
 ```
 
@@ -360,13 +358,12 @@ bayesplot::ppc_dens_overlay(y = df5$X, yrep = X_rep_sub) + xlim(-25, 50)
 
 
 ``` r
-# Plotting histograms
+# Plot histograms
 bayesplot::ppc_hist(y = df5$X, yrep = X_rep_sub) + xlim(-25,50)
 ```
 
 <img src="fig/other-topics-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
-In both cases it is recommended to use `xlim` to make the results more clear.
 
 ::::::::::::::::::::::::::::::::::::::::
 
@@ -375,30 +372,40 @@ In both cases it is recommended to use `xlim` to make the results more clear.
 
 ## `brms` R package
 
-We will now introduce the `brms` R package. The purpose of the package is fitting Bayesian generalized (non-)linear multivariate multilevel models using Stan. It allows user to use familiar syntax from other linear fit functions, while writing and compiling the Stan model on the backend. `brms` supports large range of distributions and link functions. User can also easily specify a lot of different kinds of priors for the models.
+We will now introduce the `brms` R package. The package allows fitting probabilistic generalized (non-)linear models with Stan. A large range of distributions and link functions are supported, in addition to multilevel structure. Moreover, several built-in functions are available for priors. 
 
-The package also provides a lot of tools for evaluating the fit and convergence of the MCMC chains. It does this by using `loo` and `bayesplot` packages, so it uses a lot of the same tools we have already covered in this chapter. You can for example easily plot the trace plots and conditional effects. You can also use different functions that take advantage of PSIS-LOO to assess the fit or compare different models. User can also easily compute posterior draws of the posterior predictive distribution.
+Models are specified using familiar R formula syntax, input into an R function which compiles and calls the Stan model in the backend.
 
-We will next demonstrate the use of the package with two different examples.
+The package also provides tools for evaluating the fit and MCMC convergence. These tools, in turn, use functions from the `loo` and `bayesplot` packages, that is, many of the same tools we covered earlier in this Episode. 
 
-### Example 2: Cox proportional hazard model
+Next, we will demonstrate usage of the package with two different examples.
 
-As mentioned `brms` can be used to fit large array of different models. We will now fit a Cox proportional hazard model on the `lung` dataset from the `survival` R package. Before getting into fitting the model we will shortly introduce survival modeling and the Cox model.
 
-In survival modeling the outcome of interest is time to event, meaning the time it takes to move from one state to another. This can be the time it takes to move from alive to dead or from sick to healthy. The risk of transitioning to a state at time $t$, for example the risk of dying at time $t$, is described by hazard function $\lambda(t)=\text{lim}_{h \to 0+} \frac{1}{h}P(t \le T<t+h|T\ge t)$. Hazard function basically describes the possibility of the event happening in the time interval $h$ conditioned on it not having happened by time $t$.
 
-In the Cox model we will be fitting, the hazard function is of form $\lambda(t_i,Z_i,\theta)=\lambda_0(t_i)\text{exp}(\beta^\prime Z_i)$. Now there is a baseline hazard $\lambda_0(t_i)$ that is same for every subject $i$. The hazard function also has subject specific covariate part $\text{exp}(\beta^\prime Z_i)$. The covariates $Z_i$ can be things like age of the patient or an indicator for if the subject is getting a placebo or a drug. It is good to note that $\beta$ is log hazard ratio. Hazard ratio measures the hazard in one group against hazard in a another group.
+### Example 2: Survival modeling
 
-When fitting Cox proportional hazard model, `brms` will use M-splines for the baseline hazard. Splines are functions defined piecewise by polynomials. This means that the the baseline hazard is a combination of several different polynomial functions. M-splines are non-negative spline functions.
+In this example, we will demonstrate fitting a Cox proportional hazard model with `brms`. However, first, we will briefly describe and model and idea in survival modeling. 
 
-Before actually fitting the model, let's take a look at the lung dataset we will be using. The dataset consists of survival times of patients with advanced lung cancer. 
+The Cox model is a standard approach used in survival modeling, in which the outcome of interest is the time to some event. A common application is medical studies where patients are followed in time until an event (e.g. death) or until censoring. A subject is censored if the event doesn't occur during the follow-up. 
+
+An important ingredient in survival modeling is the hazard function, representing the instantaneous risk for an event at time $t$, defined as  $\lambda(t)=\text{lim}_{h \to 0+} \frac{1}{h}P(t \le T<t+h|T\ge t)$. In the Cox model, the hazard function is of the form $\lambda(t_i,Z_i,\theta)=\lambda_0(t_i)\text{exp}(\beta^\prime Z_i)$.
+
+The baseline hazard function $\lambda_0(t_i)$ represents the hazard when the covariates are set to their baselines, and is the same for each subject $i$. Commonly, the functional form the baseline hazard is not specified. The second part of the hazard function contains subject-specific covariates, $\text{exp}(\beta^\prime Z_i)$. 
+
+The exponentials of the effects $\beta$ are called hazard ratios, which measure the hazard in one group against the hazard in another group.
+
+When fitting the Cox model, `brms` uses M-splines for the baseline hazard. Splines are functions built from piecewise-defined polynomials. In other words, the baseline hazard is a combination of several different polynomial functions. M-splines are non-negative spline functions, which is important for reasons we omit. However, hopefully, the reader can appreciate the simplicity of the upcoming `brms` function call.
+
+
+
+Before fitting the model, we will take a look at the `lung` dataset from the `survival` R package, which we will be analyzing below. The dataset consists of survival times of patients with advanced lung cancer including some clinical covariates. 
 
 
 ``` r
-# Getting the dataset
+# Get data
 lung <- survival::lung
 
-# First few rows of data
+# Take a peek
 head(lung)
 ```
 
@@ -412,9 +419,10 @@ head(lung)
 6   12 1022      1  74   1       1       50        80      513       0
 ```
 
-Status variable describes if the event of interest (death) was observed or if the observation was censored. Censoring is common in time-to-event datasets as it is often infeasible to follow all the subjects until the event of interest. Censoring means that the event time is larger than the observed time. Censoring must be taken into account during modelling or it will bias the results.
 
-We will fit a Cox proportional hazard model with three covariates: age, sex and ph.karno. Variable ph.karno describes how well patient can perform daily activities rated by a physician. We will split the variable into two categories high and mid. Cox model can be fit with `brms::brm()` function by specifying `family = brmsfamily("cox")`. We also need to specify when observations are censored, which is done with `cens(1 - status)` argument. We will use $\text{Normal}(0, 10)$ as prior for the population-level effects. By default `brms` will use an improper flat prior over the reals for population-level effects. Prior is defined with the `prior(normal(0,10), class = b)` argument, where `class = b` means that the prior is set for all population-level effects.
+The variable `status` denotes if an event (death) was observed or if the subject was censored. We will use three covariates: `age`, `sex` and `ph.karno`. The variable `ph.karno` describes how well a patient can perform daily activities rated by a physician. We will split the variable into two categories "high" and "low." 
+
+Cox model can be fit with `brms::brm()` function by specifying `family = brmsfamily("cox")`. Censored data points are indicated with the `cens(1 - status)` argument. We will use a standard $\text{Normal}(0, 10)$ prior for the population-level effects, with the argument `prior(normal(0,10), class = b)`. The option `class = b` sets the prior for all population-level effects.
  
 
 ``` r
@@ -427,99 +435,219 @@ lung <- lung[!is.na(lung$ph.karno),]
 # Creating new variable for ph.karno status
 lung$ph.karno_status <- cut(lung$ph.karno,
                             breaks = c(0, 70, 100),
-                            labels = c("mid", "high"))
+                            labels = c("low", "high"))
 
 # Fitting the model
 fit_cox <- brms::brm(time | cens(1 - status) ~ sex + age + ph.karno_status,
              data = lung, family = brmsfamily("cox"), seed = 2024,
              silent = 2, refresh = 0, cores = 4,
              prior = prior(normal(0,10), class = b))
-```
-
-``` error
-Error: Please install the 'splines2' package.
-```
-
-``` r
 # Summary of the fit
 summary(fit_cox)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'fit_cox' not found
+``` output
+ Family: cox 
+  Links: mu = log 
+Formula: time | cens(1 - status) ~ sex + age + ph.karno_status 
+   Data: lung (Number of observations: 227) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept               1.27      0.69    -0.15     2.58 1.00     5012     2490
+sex                    -0.51      0.17    -0.83    -0.19 1.00     4789     2922
+age                     0.01      0.01    -0.01     0.03 1.00     5207     2779
+ph.karno_statushigh    -0.36      0.18    -0.72    -0.01 1.00     4534     2669
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-The summary output of the `brms` fit returns estimates for coefficients and their credible intervals. It also returns Rhat, Bulk_ESS and Tail_ESS values, which can be used to assess the convergence of the model. 
+The summary output of the `brms` fit prints coefficient estimates, and also returns Rhat, Bulk_ESS and Tail_ESS values, which can be used to assess the convergence of the model. 
 
-It is important to notice that the coefficients are the log hazard ratios, which means that we still need to take an exponential of the values. We will also plot the credible intervals. The `bayesplot::mcmc_intervals()` function allows transforming the parameters before plotting with `transform = "exp"` argument.
+It is important to notice that the coefficients are the log hazard ratios, which means we still need to exponentiate them. The `bayesplot::mcmc_intervals()` function allows transforming the parameters before plotting with `transform = "exp"` argument.
 
 
 ``` r
-# Getting hazard values to normal scale
+# Get hazard values
 sum_cox <- summary(fit_cox)
-```
-
-``` error
-Error in eval(expr, envir, enclos): object 'fit_cox' not found
-```
-
-``` r
 exp(sum_cox$fixed[,1:4])
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'sum_cox' not found
+``` output
+                     Estimate Est.Error  l-95% CI   u-95% CI
+Intercept           3.5486294  1.985898 0.8641319 13.1790893
+sex                 0.6031900  1.179877 0.4380762  0.8288425
+age                 1.0131344  1.009490 0.9948428  1.0323407
+ph.karno_statushigh 0.6964744  1.194624 0.4884050  0.9913700
 ```
 
 ``` r
 # Credible intervals
-bayesplot::mcmc_intervals(fit_cox, pars = c("b_sex", "b_age", "b_ph.karno_statushigh"),
+bayesplot::mcmc_intervals(fit_cox,
+                          pars = c("b_sex", "b_age", "b_ph.karno_statushigh"),
                           transform = "exp")
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'fit_cox' not found
-```
+<img src="fig/other-topics-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
-Based on the estimate and credible interval it seems that age has a very little effect on the hazard. Females and patients with high ph.karno value have smaller hazard, meaning that the risk of death is smaller.
+Based on the estimates, it seems that age has only a minor effect on the hazard. Female sex and being "high" in `ph.karno` imply smaller hazards, meaning that these factors are protective. 
 
-After fitting the model you can print info on the priors used with the function `brms::get_prior`.
+After fitting the model, we can print information about the priors used with the function `brms::get_prior`.
 
 
 ``` r
-# Getting priors for the cox model
+# Get priors for the cox model
 brms::get_prior(fit_cox)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'fit_cox' not found
+``` output
+                  prior     class                coef group resp dpar nlpar lb
+          normal(0, 10)         b                                             
+          normal(0, 10)         b                 age                         
+          normal(0, 10)         b ph.karno_statushigh                         
+          normal(0, 10)         b                 sex                         
+ student_t(3, 5.6, 2.5) Intercept                                             
+           dirichlet(1)     sbhaz                                             
+ ub       source
+            user
+    (vectorized)
+    (vectorized)
+    (vectorized)
+         default
+         default
 ```
 
-As we can see the population-level effects has the normal prior we specified. Intercept has the default prior used by `brms` for intercept, which is Student's t-distribution with three degrees of freedom. If we want to print the whole Stan code used in fitting the model, we can do this with the `brms::stancode` function.
+The population-level effects have the normal prior we specified. In `brms`, the default prior for the intercept is Student's t-distribution with three degrees of freedom. The Stan program `brms` ran under the hood can be printed with the `brms::stancode` function.
 
 
 ``` r
-# Printing the Stan code
+# Print the Stan code
 brms::stancode(fit_cox)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'fit_cox' not found
+``` output
+// generated with brms 2.21.0
+functions {
+  /* distribution functions of the Cox proportional hazards model
+   * parameterize hazard(t) = baseline(t) * mu
+   * so that higher values of 'mu' imply lower survival times
+   * Args:
+   *   y: the response value; currently ignored as the relevant
+   *     information is passed via 'bhaz' and 'cbhaz'
+   *   mu: positive location parameter
+   *   bhaz: baseline hazard
+   *   cbhaz: cumulative baseline hazard
+   */
+  real cox_lhaz(real y, real mu, real bhaz, real cbhaz) {
+    return log(bhaz) + log(mu);
+  }
+  real cox_lccdf(real y, real mu, real bhaz, real cbhaz) {
+    // equivalent to the log survival function
+    return - cbhaz * mu;
+  }
+  real cox_lcdf(real y, real mu, real bhaz, real cbhaz) {
+    return log1m_exp(cox_lccdf(y | mu, bhaz, cbhaz));
+  }
+  real cox_lpdf(real y, real mu, real bhaz, real cbhaz) {
+    return cox_lhaz(y, mu, bhaz, cbhaz) + cox_lccdf(y | mu, bhaz, cbhaz);
+  }
+  // Distribution functions of the Cox model in log parameterization
+  real cox_log_lhaz(real y, real log_mu, real bhaz, real cbhaz) {
+    return log(bhaz) + log_mu;
+  }
+  real cox_log_lccdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return - cbhaz * exp(log_mu);
+  }
+  real cox_log_lcdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return log1m_exp(cox_log_lccdf(y | log_mu, bhaz, cbhaz));
+  }
+  real cox_log_lpdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return cox_log_lhaz(y, log_mu, bhaz, cbhaz) +
+           cox_log_lccdf(y | log_mu, bhaz, cbhaz);
+  }
+}
+data {
+  int<lower=1> N;  // total number of observations
+  vector[N] Y;  // response variable
+  array[N] int<lower=-1,upper=2> cens;  // indicates censoring
+  int<lower=1> K;  // number of population-level effects
+  matrix[N, K] X;  // population-level design matrix
+  int<lower=1> Kc;  // number of population-level effects after centering
+  // data for flexible baseline functions
+  int Kbhaz;  // number of basis functions
+  // design matrix of the baseline function
+  matrix[N, Kbhaz] Zbhaz;
+  // design matrix of the cumulative baseline function
+  matrix[N, Kbhaz] Zcbhaz;
+  // a-priori concentration vector of baseline coefficients
+  vector<lower=0>[Kbhaz] con_sbhaz;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+  matrix[N, Kc] Xc;  // centered version of X without an intercept
+  vector[Kc] means_X;  // column means of X before centering
+  for (i in 2:K) {
+    means_X[i - 1] = mean(X[, i]);
+    Xc[, i - 1] = X[, i] - means_X[i - 1];
+  }
+}
+parameters {
+  vector[Kc] b;  // regression coefficients
+  real Intercept;  // temporary intercept for centered predictors
+  simplex[Kbhaz] sbhaz;  // baseline coefficients
+}
+transformed parameters {
+  real lprior = 0;  // prior contributions to the log posterior
+  lprior += normal_lpdf(b | 0, 10);
+  lprior += student_t_lpdf(Intercept | 3, 5.6, 2.5);
+  lprior += dirichlet_lpdf(sbhaz | con_sbhaz);
+}
+model {
+  // likelihood including constants
+  if (!prior_only) {
+    // compute values of baseline function
+    vector[N] bhaz = Zbhaz * sbhaz;
+    // compute values of cumulative baseline function
+    vector[N] cbhaz = Zcbhaz * sbhaz;
+    // initialize linear predictor term
+    vector[N] mu = rep_vector(0.0, N);
+    mu += Intercept + Xc * b;
+    for (n in 1:N) {
+    // special treatment of censored data
+      if (cens[n] == 0) {
+        target += cox_log_lpdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      } else if (cens[n] == 1) {
+        target += cox_log_lccdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      } else if (cens[n] == -1) {
+        target += cox_log_lcdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      }
+    }
+  }
+  // priors including constants
+  target += lprior;
+}
+generated quantities {
+  // actual population-level intercept
+  real b_Intercept = Intercept - dot_product(means_X, b);
+}
 ```
 
 
 ### Example 3: Hierarchical binomial model
 
-We will next show how to fit hierarchical models using `brms`. Fitting hierarchical models can be considered one of the main focuses of the `brms` package. If you have ever used the `lme4` package, you are already quite familiar with the syntax used in `brm()` to fit hierarchical models, as both packages use similar formula syntax. 
+We will now demonstrate one of the key focuses of `brms`, fitting hierarchical models. The syntax for specifying hierarchical models is similar as in the `lme4` package, which is used to fit frequentist multilevel models in R. 
 
-The data we will be using is the `VerbAgg` dataset from `lme4` package. The dataset consist of item responses to a questionnaire on verbal aggression. 
+For this example, we will be using is the `VerbAgg` data from `lme4` package. The data consist of item responses to a questionnaire on verbal aggression. 
 
 
 ``` r
-# Getting the data
+# Get data
 VerbAgg <- lme4::VerbAgg
 
-# First few rows of the data
 head(VerbAgg)
 ```
 
@@ -533,19 +661,21 @@ head(VerbAgg)
 6    21      F S1WantCurse     yes  6 curse other want  Y
 ```
 
-We will use Anger, Gender, btype and situ as population-level effects for the model. The model will also have group-level intercept for id. The variable of interest is the binary r2, which describes response to questionnaire question. For priors we will use $\text{Normal}(0, 10)$ as prior for all the population-level effects. The group-level effect's standard deviation parameter will have $\text{Cauchy}(0, 5)$ prior (this is Half-Cauchy prior as the values are restricted to be positive). By default `brms` uses Half-Student's t-distribution with three degrees of freedom for standard deviation parameters. The group-level intercept for variable id is specified with the argument `(1|id)`. Let's now fit the model.
+We will estimate population-level effects for Anger, Gender, btype and situ, and includea group-level intercept for id. The variable of interest is the binary r2, which contains the response to an question in the questionnaire. We will use $\text{Normal}(0, 10)$ as the prior for all the population-level effects. For the standard deviation of group-level effect we will set a (half-)$\text{Cauchy}(0, 5)$ prior. By default, `brms` uses half-Student's t-distribution with three degrees of freedom for standard deviation parameters. The group-level intercept for variable id is specified with the argument `(1|id)`. Let's now fit the model.
 
 
 ``` r
-# Changing coding for r2
+# Change coding for r2
 VerbAgg <- VerbAgg %>%
   mutate(r2 = ifelse(r2 == "N", 0, 1))
-# Fitting the model
-fit_hier <- brms::brm(r2 ~ Anger + Gender + btype + situ + (1|id), family = bernoulli, 
-                data = VerbAgg, seed = 2024, cores = 4, silent = 2, refresh = 0,
-                prior = prior(normal(0, 10), class = b) + 
-                  prior(cauchy(0,5), class = sd))
-# Summary of the fit
+# Fit model
+fit_hier <- brms::brm(r2 ~ Anger + Gender + btype + situ + (1|id),
+                      family = bernoulli, 
+                      data = VerbAgg,
+                      seed = 2024, cores = 4, silent = 2, refresh = 0,
+                      prior = prior(normal(0, 10), class = b) + 
+                        prior(cauchy(0,5), class = sd))
+# Summary
 summary(fit_hier)
 ```
 
@@ -576,7 +706,7 @@ and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-With `brms` we can easily plot conditional effects of predictors by using the function `brms::conditional_effects`.
+The conditional effects of the predictors can easily be plotted with the function `brms::conditional_effects`.
 
 
 ``` r
@@ -587,24 +717,26 @@ cowplot::plot_grid(plots[[1]], plots[[2]], plots[[3]], plots[[4]])
 
 <img src="fig/other-topics-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
-We can also plot interactions using the function. Let's plot the conditional effect for interaction of Anger and btype.
+The function can also plot variable interactions. Let's plot the conditional effect for interaction between Anger and btype.
 
 
 ``` r
-# Plotting conditional effect for interaction of Anger and btype
+# Plot conditional effect for interaction of Anger and btype
 plot(conditional_effects(fit_hier, effects = "Anger:btype"))
 ```
 
 <img src="fig/other-topics-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
 
-Let's fit another model with the same population-level effects, but we will add another group-level intercept for the item variable. The priors are same as for the first model. We don't have to rewrite the whole formula when updating the model. We can use the `update` function for updating the formula.
+
+
+Let us now do a slight alteration in model and add another group-level intercept for the item variable. The priors are same as in the first model. The `update` function can be used to modify the formula without writing it anew in its entirety.
 
 
 ``` r
-# Updating the model
+# Update model
 fit_hier2 <- update(fit_hier, formula. = ~ . + (1|item), newdata = VerbAgg, seed = 2024,
                     cores = 4, silent = 2, refresh = 0)
-# Summary of the updated fit
+# Summary
 summary(fit_hier2)
 ```
 
@@ -639,13 +771,13 @@ and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).
 ```
 
-Another useful thing about `update` is that it allows for resampling from the model with, for example, different number of iterations without having to recompile the model. If you update the formula or priors, the model has to be recompiled.
+Another useful aspect of `update` is that it allows resampling from the model without having to recompile the model, for example, using different number of iterations. However, changes to the model itself require recompilation.
 
-To end let's compare the two models by using `brms::loo()`. This works in the same way as the `loo::loo_compare`.
+To end this section, let's compare the two models by using `brms::loo()`. This works in the same way as the `loo::loo_compare`.
 
 
 ``` r
-# Comparing the models
+# Compare models
 brms::loo(fit_hier, fit_hier2)
 ```
 
@@ -686,30 +818,28 @@ fit_hier2    0.0       0.0
 fit_hier  -138.0      16.2 
 ```
 
-Based on the output the second model is clearly better fit when compared to the first model.
+Based on the output, the second model provides a superior fit compared to the first model.
 
 
 ::::::::::::::::::::::::::: challenge
 
-Experiment with different priors for the model. How much does the choice of prior effect the results? Is there a big difference between a flat and the used weakly informative prior?
+Experiment with different priors for the model. How much does the chosen prior affect the results? Is there a big difference between a flat and the weakly informative prior used above?
 
 :::::::::::::::::::::::::::::::::::::
 
 
 ## Other packages built on Stan
 
-In addition to the packages covered here, there are several other packages that take advantage of Stan. Here we will shortly introduce some of them.  [CmdStanR](https://mc-stan.org/cmdstanr/index.html) is a lightweight interface for Stan and provides and alternative for rstan interface. [rstanarm](https://mc-stan.org/rstanarm/) emulates R model-fitting functions using Stan. The package can do lot of the same things as `brms`, but they do have differences, for example `rstanarm` models come pre-compiled while `brms` compiles the models when fitted. 
+In addition to the ones covered here, there are several other packages that take advantage of Stan. Here we will briefly introduce some of them.  [CmdStanR](https://mc-stan.org/cmdstanr/index.html) is a lightweight command-line-based interface for Stan and provides and alternative for rstan. [rstanarm](https://mc-stan.org/rstanarm/) emulates the model fitting R functions using Stan. The package can do lot of the same things as `brms`, but they do have differences, for example `rstanarm` models come pre-compiled while `brms` compiles the models when called. 
 
-[shinystan](https://mc-stan.org/shinystan/) uses Shiny and provides user with informative, customizable visual and numerical summaries of model parameters and convergence diagnostics. [projpred](https://mc-stan.org/projpred/) performs projection predictive variable selection for various models. The package works with models from `brms` and `rstanarm`. [posterior](https://mc-stan.org/posterior/) provides tools for converting between different formats of draws, consistent methods for operations commonly performed on draws (like subsetting and binding), summaries of draws and posterior diagnostics. 
-
-You can learn a lot more about the packages above and the packages covered in this chapter by visiting the associated websites and reading the provided examples, vignettes and articles.
+[shinystan](https://mc-stan.org/shinystan/) uses Shiny and provides user with interactive, customizable visual and numerical summaries of model parameters and convergence diagnostics. [projpred](https://mc-stan.org/projpred/) performs projection predictive variable selection for various models. The package works with models from `brms` and `rstanarm`. [posterior](https://mc-stan.org/posterior/) provides tools for manipulating posterior draws, and contains methods for common operations, such as,  subsetting and binding, and producing posterior summaries, and diagnostics. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- There are several R packages that make use Stan enabling more user-friendly ways of fitting Bayesian models and allowing for more advanced inference.
-- `brms` package can be used to fit a fast array of different Bayesian models.
-- Extensive set of different plots for Bayesian models can be plotted with `bayesplot` package.
-- Leave-one-out cross-validation can be performed with `loo` package. 
+- There are several R packages that provide more user-friendly ways of using Stan.
+- `brms` package can be used to fit a vast array of different Bayesian models.
+- `bayesplot` package is a library for various plotting tools. 
+- Approximate leave-one-out cross-validation can be performed with the `loo` package. 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -723,3 +853,6 @@ You can learn a lot more about the packages above and the packages covered in th
 
 - [loo website](https://mc-stan.org/loo/)
 
+## References
+
+- [1] A. Vehtari *et al.*, Pareto Smoothed Importance Sampling, *Journal of Machine Learning Research* 25 (2024) 1-58.
