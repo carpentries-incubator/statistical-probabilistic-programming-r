@@ -315,7 +315,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="other-topics.html">7. Other topics</a>
+        <a href="other-topics.html">7. Stan extensions</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -1160,8 +1160,8 @@ data needs to be input as a list.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 3e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.03 seconds.
+Chain 1: Gradient evaluation took 4e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -1253,9 +1253,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4:
-Chain 4:  Elapsed Time: 0.003 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
 Chain 4:                0.003 seconds (Sampling)
-Chain 4:                0.006 seconds (Total)
+Chain 4:                0.007 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>With the default settings, Stan executes 4 MCMC chains, each with
@@ -1283,7 +1283,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Sep 24 00:36:38 2024.
+Samples were drawn using NUTS(diag_e) at Tue Sep 24 11:44:53 2024.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at
 convergence, Rhat=1).</code></pre>
@@ -1463,8 +1463,8 @@ from the normal distribution for each posterior sample <span class="math inline"
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 7e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+Chain 1: Gradient evaluation took 6e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -1507,8 +1507,8 @@ Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2:
 Chain 2:  Elapsed Time: 0.009 seconds (Warm-up)
-Chain 2:                0.015 seconds (Sampling)
-Chain 2:                0.024 seconds (Total)
+Chain 2:                0.008 seconds (Sampling)
+Chain 2:                0.017 seconds (Total)
 Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1531,9 +1531,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3:
-Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 3:  Elapsed Time: 0.009 seconds (Warm-up)
 Chain 3:                0.007 seconds (Sampling)
-Chain 3:                0.015 seconds (Total)
+Chain 3:                0.016 seconds (Total)
 Chain 3:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -1556,9 +1556,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4:
-Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.01 seconds (Warm-up)
 Chain 4:                0.008 seconds (Sampling)
-Chain 4:                0.016 seconds (Total)
+Chain 4:                0.018 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>Next, we’ll extract posterior samples and generate a plot for the
@@ -3679,8 +3679,8 @@ standard deviation to <span class="math inline">\(\sigma =
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 8.6e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.86 seconds.
+Chain 1: Gradient evaluation took 8.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -3697,9 +3697,9 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 32.131 seconds (Warm-up)
-Chain 1:                36.407 seconds (Sampling)
-Chain 1:                68.538 seconds (Total)
+Chain 1:  Elapsed Time: 32.324 seconds (Warm-up)
+Chain 1:                36.752 seconds (Sampling)
+Chain 1:                69.076 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper">
@@ -4188,8 +4188,8 @@ and treating the length scale as a parameter.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 0.001246 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.46 seconds.
+Chain 1: Gradient evaluation took 0.001319 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 13.19 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -4206,9 +4206,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 17.35 seconds (Warm-up)
-Chain 1:                17.271 seconds (Sampling)
-Chain 1:                34.621 seconds (Total)
+Chain 1:  Elapsed Time: 17.728 seconds (Warm-up)
+Chain 1:                17.74 seconds (Sampling)
+Chain 1:                35.468 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb25">
@@ -4267,7 +4267,7 @@ Chain 1: </code></pre>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Other topics</a></p>
+</section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Stan extensions</a></p>
 <hr>
 <p>Last updated on 2024-09-24 |
 
@@ -4300,35 +4300,33 @@ any links that you are not going to use.
 </div>
 </div>
 </div>
-<p>In this chapter we will introduce packages that take advantage of
-Stan and <code>rstan</code>. The packages covered are <code>loo</code>,
-<code>bayesplot</code> and <code>brms</code>. From these
-<code>loo</code> enables easy cross-validation of Bayesian models and
-<code>bayesplot</code> provides tools for plotting the models.
-<code>brms</code> allows user fit Bayesian models using Stan without
-having to write the Stan code.</p>
-<section><h2 class="section-heading" id="loo-r-package">
-<code>loo</code> R package<a class="anchor" aria-label="anchor" href="#loo-r-package"></a>
+<p>In this chapter, we will introduce packages that take advantage of
+Stan. The covered packages are <code>loo</code>, which enables
+approximate Bayesian cross-validation, <code>bayesplot</code>, which
+contains plotting tools, and <code>brms</code>, which allows calling
+Stan using common R syntax, without having to write the Stan code.</p>
+<section><h2 class="section-heading" id="loo">
+<code>loo</code><a class="anchor" aria-label="anchor" href="#loo"></a>
 </h2>
 <hr class="half-width">
-<p>The first package that we will introduce is the <code>loo</code> R
-package. It allows user to compute efficient approximate leave-one-out
-cross-validation for fitted Bayesian models. It can also compute model
-weights that can be used to average predictive distributions.
-<code>loo</code> uses Pareto smoothed importance sampling (PSIS) to
-compute LOO-CV. It can also return approximate standard errors for
-estimated predictive errors. The package can also be used for
-calculating WAIC.</p>
+<p>The <code>loo</code> package allows computing approximate
+leave-one-out cross-validation (loo-cv) for models fitted with Stan. The
+approximation is based on something called Pareto smoothed importance
+sampling (PSIS) [1]. The package can also be used for computing WAIC and
+model weights for average predictive distributions.</p>
 <div class="section level3">
 <h3 id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
 </h3>
-<p>We will demonstrate the use of the <code>loo</code> package on the
-two models introduced in chapter 5. We will evaluate the fit of the
-models and compare them with the tools provided by <code>loo</code>.</p>
-<p>To begging we need to add log-likelihood calculation to the Stan
-code. This is done by adding <code>log_lik</code> to the generated
-quantities block of the code. Below we demonstrate how this is done with
-the two models we will be comparing.</p>
+<p>We will demonstrate <code>loo</code> package usage on the model
+comparison example studied in Episode 5. We will fit the normal and
+Cauchy models on the same synthetic data, then use the tools provided in
+<code>loo</code> to compute and compare the approximate loo-cv scores
+for these two models.</p>
+<p>To be able to utilize the package functions, we need to add a
+log-likelihood computation in the Stan code, in the generated quantities
+block. The object containing the log-likelihood needs to be named
+<code>log_lik</code> so the ‘loo’ functions can find it. Below, we
+demonstrate this with the two models we are comparing.</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4398,24 +4396,24 @@ the two models we will be comparing.</p>
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>  }</span>
 <span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>}</span></code></pre>
 </div>
-<p>After adding the log-likelihood calculation into the code the model
-can be fit in the usual way.</p>
+<p>Now we can fit the models in the usual way.</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fitting normal model</span></span>
+<code class="sourceCode R"><span><span class="co"># Fit normal model</span></span>
 <span><span class="va">normal_fit</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">normal_model_loo</span>,</span>
 <span>                       <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, X <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span><span class="op">)</span>, </span>
 <span>                       refresh <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">2024</span><span class="op">)</span></span>
-<span><span class="co"># Fitting cauchy model</span></span>
+<span><span class="co"># Fit cauchy model</span></span>
 <span><span class="va">cauchy_fit</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">sampling</span><span class="op">(</span><span class="va">cauchy_model_loo</span>,</span>
 <span>                       <span class="fu">list</span><span class="op">(</span>N <span class="op">=</span> <span class="va">N</span>, X <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span><span class="op">)</span>, </span>
 <span>                       refresh <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">2024</span><span class="op">)</span></span></code></pre>
 </div>
 <p>We can now compute PSIS-LOO for both of the models with
-<code>loo::loo</code> function. After the computations we can get more
-information about the fit by printing the <code>loo</code> objects.</p>
+<code>loo::loo</code> function. After the calling the function,
+information about the fit can be viewed by printing the <code>loo</code>
+objects.</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4480,17 +4478,16 @@ MCSE and ESS estimates assume MCMC draws (r_eff in [0.7, 0.8]).
 All Pareto k estimates are good (k &lt; 0.7).
 See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
-<p>Using print returns <span class="math inline">\(\widehat{\text{elpd}}_{\text{loo}}\)</span>
+<p>Running <code>print</code> returns <span class="math inline">\(\widehat{\text{elpd}}_{\text{loo}}\)</span>
 (expected log pointwise predictive density), <span class="math inline">\(\hat{p}_{loo}\)</span> (estimated number of
 parameters) and <span class="math inline">\(\text{looic}\)</span> (LOO
-information criterion) values and their standard errors. It also return
+information criterion) values and their standard errors. It also returns
 a table with the Pareto <span class="math inline">\(k\)</span>
-diagnostic values. These values are used to asses the reliability of the
-estimates. Values over 1 means that the PSIS estimate and the
-corresponding Monte Carlo standard error are not well defined.</p>
-<p>If we want to compare the models, this can be done by using
+diagnostic values, which are used to asses the reliability of the
+estimates. Values below 1 are required for reliable PSIS estimates.</p>
+<p>Model comparison can be done by using the
 <code>loo::loo_compare</code> function on the <code>loo</code> objects.
-It will compare the models based on their elpd values.</p>
+The comparison is based on the models’ elpd values.</p>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4505,10 +4502,11 @@ It will compare the models based on their elpd values.</p>
 model2   0.0       0.0
 model1 -81.9      36.2  </code></pre>
 </div>
-<p>From the comparison we see that the elpd difference is larger than
-the standard error which indicates that the cauchy model is expected to
-have better predictive performance than the normal model. This is in
-line with what we saw in chapter 5.</p>
+<p>The comparison shows that the elpd difference is larger than the
+standard error, indicating that the cauchy model is expected to have
+better predictive performance than the normal model. This is in line
+with what we saw in chapter 5: the Cauchy distribution is a superior
+model for the data.</p>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -4586,7 +4584,7 @@ waic         413.8 29.3</code></pre>
 </div>
 <p>Computing WAIC for the model return values for <span class="math inline">\(\widehat{\text{eldp}}_{\text{WAIC}}\)</span>,
 <span class="math inline">\(\hat{p}_{\text{WAIC}}\)</span> and <span class="math inline">\(\widehat{\text{WAIC}}\)</span>. Models can be
-compared based on WAIC with the same function as with PSIS-LOO.</p>
+compared based on WAIC using the same function as with PSIS-LOO.</p>
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4606,26 +4604,24 @@ model1 -83.1      37.4  </code></pre>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="bayesplot-r-package">
-<code>bayesplot</code> R package<a class="anchor" aria-label="anchor" href="#bayesplot-r-package"></a>
+</section><section><h2 class="section-heading" id="bayesplot">
+<code>bayesplot</code><a class="anchor" aria-label="anchor" href="#bayesplot"></a>
 </h2>
 <hr class="half-width">
-<p>The next package we will cover is the <code>bayesplot</code> R
-package. The package provides a large library of different kinds of
-plotting functions to use after fitting a Bayesian model. The plots
-created by the package are <code>ggplot</code> objects, which means that
-the plots can be customized with the functions from <code>ggplot2</code>
-package. The package provides functions for plotting posterior draws,
-visual MCMC diagnostics and graphical posterior or prior predictive
-checking. The functions in the package also works with models fit by
-other packages like <code>brms</code> and <code>rstanarm</code>.</p>
+<p>Next, we will look at the the <code>bayesplot</code> R package. The
+package provides a library of plotting functions for fitted Stan models.
+The created plots are <code>ggplot</code> objects, meaning that the
+plots can be customized with the functions from <code>ggplot2</code>
+package. The package enables plotting posterior draws, visual MCMC
+diagnostics and graphical posterior and prior predictive checking. The
+functions of the package also work with model fit with the popular
+packages <code>brms</code> and <code>rstanarm</code>.</p>
 <div class="section level3">
-<h3 id="continuing-with-example-1">Continuing with example 1<a class="anchor" aria-label="anchor" href="#continuing-with-example-1"></a>
+<h3 id="example-1-continued">Example 1 continued<a class="anchor" aria-label="anchor" href="#example-1-continued"></a>
 </h3>
 <p>We will demonstrate using <code>bayesplot</code> with the Cauchy
-model used in the first exercise. Before we can start using the plotting
-functions we must first extract the draws. After this we will plot
-uncertainty intervals for mu and sigma.</p>
+model used in the first example. First, we need to extract the posterior
+draws. Then, we will plot uncertainty intervals for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
 <div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4636,9 +4632,8 @@ uncertainty intervals for mu and sigma.</p>
 <span><span class="co"># Plotting uncertainty intervals</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_intervals</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>If we instead wanted to plot estimated posterior density curves with
-uncertainty intervals as shaded areas or histograms of marginal
-posterior distributions, we can use the following functions:</p>
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Alternatively, we can plot the (marginal) posterior sample histograms
+or densities with credible intervals as shaded areas as follows:</p>
 <div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4655,10 +4650,9 @@ posterior distributions, we can use the following functions:</p>
 <code class="sourceCode R"><span><span class="co"># Plotting histogram</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_hist</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-11-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><code>bayesplot</code> also provides a lot of functions meant for
-assessing the convergence of the MCMC chains and visualizing other fit
-diagnostics. For example we can easily plot the trace plots for the
-chains.</p>
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-11-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><code>bayesplot</code> also provides functions for assessing MCMC
+convergence and visualizing fit diagnostics. For example, we can
+generate trace plots for the chains:</p>
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4667,18 +4661,18 @@ chains.</p>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_trace</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span>,</span>
 <span>                      facet_args <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>In addition to the demonstrated functions, <code>bayesplot</code> has
-many more plotting functions.</p>
-<div id="challenge2" class="callout challenge">
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
-<p><code>bayesplot</code> provides tools for doing graphical posterior
-predictive checks. Plot density estimates of <span class="math inline">\(X_{rep}\)</span> overlaid with density of <span class="math inline">\(X\)</span> for the Cauchy model using
-<code>bayesplot</code>. You can also plot the histograms for <span class="math inline">\(X\)</span> and <span class="math inline">\(X_{rep}\)</span>.</p>
+<p>Perform a graphical posterior predictive checks with
+<code>bayesplot</code>. Using the Cauchy model fit generated above, plot
+the density of <span class="math inline">\(X_{rep}\)</span> samples
+overlaid with the density of <span class="math inline">\(X\)</span>.
+Alternatively, you can plot the corresponding histograms.</p>
 </div>
 </div>
 </div>
@@ -4712,18 +4706,18 @@ predictive checks. Plot density estimates of <span class="math inline">\(X_{rep}
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Plotting density</span></span>
+<code class="sourceCode R"><span><span class="co"># Plot density</span></span>
+<span><span class="co"># Limit x range for better illustration</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">ppc_dens_overlay</span><span class="op">(</span>y <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span>, yrep <span class="op">=</span> <span class="va">X_rep_sub</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/other-topics-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Plotting histograms</span></span>
+<code class="sourceCode R"><span><span class="co"># Plot histograms</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">ppc_hist</span><span class="op">(</span>y <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span>, yrep <span class="op">=</span> <span class="va">X_rep_sub</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>,<span class="fl">50</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>In both cases it is recommended to use <code>xlim</code> to make the
-results more clear.</p>
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 </div>
 </div>
@@ -4733,66 +4727,62 @@ results more clear.</p>
 <code>brms</code> R package<a class="anchor" aria-label="anchor" href="#brms-r-package"></a>
 </h2>
 <hr class="half-width">
-<p>We will now introduce the <code>brms</code> R package. The purpose of
-the package is fitting Bayesian generalized (non-)linear multivariate
-multilevel models using Stan. It allows user to use familiar syntax from
-other linear fit functions, while writing and compiling the Stan model
-on the backend. <code>brms</code> supports large range of distributions
-and link functions. User can also easily specify a lot of different
-kinds of priors for the models.</p>
-<p>The package also provides a lot of tools for evaluating the fit and
-convergence of the MCMC chains. It does this by using <code>loo</code>
-and <code>bayesplot</code> packages, so it uses a lot of the same tools
-we have already covered in this chapter. You can for example easily plot
-the trace plots and conditional effects. You can also use different
-functions that take advantage of PSIS-LOO to assess the fit or compare
-different models. User can also easily compute posterior draws of the
-posterior predictive distribution.</p>
-<p>We will next demonstrate the use of the package with two different
+<p>We will now introduce the <code>brms</code> R package. The package
+allows fitting probabilistic generalized (non-)linear models with Stan.
+A large range of distributions and link functions are supported, in
+addition to multilevel structure. Moreover, several built-in functions
+are available for priors.</p>
+<p>Models are specified using familiar R formula syntax, input into an R
+function which compiles and calls the Stan model in the backend.</p>
+<p>The package also provides tools for evaluating the fit and MCMC
+convergence. These tools, in turn, use functions from the
+<code>loo</code> and <code>bayesplot</code> packages, that is, many of
+the same tools we covered earlier in this Episode.</p>
+<p>Next, we will demonstrate usage of the package with two different
 examples.</p>
 <div class="section level3">
-<h3 id="example-2-cox-proportional-hazard-model">Example 2: Cox proportional hazard model<a class="anchor" aria-label="anchor" href="#example-2-cox-proportional-hazard-model"></a>
+<h3 id="example-2-survival-modeling">Example 2: Survival modeling<a class="anchor" aria-label="anchor" href="#example-2-survival-modeling"></a>
 </h3>
-<p>As mentioned <code>brms</code> can be used to fit large array of
-different models. We will now fit a Cox proportional hazard model on the
-<code>lung</code> dataset from the <code>survival</code> R package.
-Before getting into fitting the model we will shortly introduce survival
-modeling and the Cox model.</p>
-<p>In survival modeling the outcome of interest is time to event,
-meaning the time it takes to move from one state to another. This can be
-the time it takes to move from alive to dead or from sick to healthy.
-The risk of transitioning to a state at time <span class="math inline">\(t\)</span>, for example the risk of dying at time
-<span class="math inline">\(t\)</span>, is described by hazard function
-<span class="math inline">\(\lambda(t)=\text{lim}_{h \to 0+}
-\frac{1}{h}P(t \le T&lt;t+h|T\ge t)\)</span>. Hazard function basically
-describes the possibility of the event happening in the time interval
-<span class="math inline">\(h\)</span> conditioned on it not having
-happened by time <span class="math inline">\(t\)</span>.</p>
-<p>In the Cox model we will be fitting, the hazard function is of form
-<span class="math inline">\(\lambda(t_i,Z_i,\theta)=\lambda_0(t_i)\text{exp}(\beta^\prime
-Z_i)\)</span>. Now there is a baseline hazard <span class="math inline">\(\lambda_0(t_i)\)</span> that is same for every
-subject <span class="math inline">\(i\)</span>. The hazard function also
-has subject specific covariate part <span class="math inline">\(\text{exp}(\beta^\prime Z_i)\)</span>. The
-covariates <span class="math inline">\(Z_i\)</span> can be things like
-age of the patient or an indicator for if the subject is getting a
-placebo or a drug. It is good to note that <span class="math inline">\(\beta\)</span> is log hazard ratio. Hazard ratio
-measures the hazard in one group against hazard in a another group.</p>
-<p>When fitting Cox proportional hazard model, <code>brms</code> will
-use M-splines for the baseline hazard. Splines are functions defined
-piecewise by polynomials. This means that the the baseline hazard is a
-combination of several different polynomial functions. M-splines are
-non-negative spline functions.</p>
-<p>Before actually fitting the model, let’s take a look at the lung
-dataset we will be using. The dataset consists of survival times of
-patients with advanced lung cancer.</p>
+<p>In this example, we will demonstrate fitting a Cox proportional
+hazard model with <code>brms</code>. However, first, we will briefly
+describe and model and idea in survival modeling.</p>
+<p>The Cox model is a standard approach used in survival modeling, in
+which the outcome of interest is the time to some event. A common
+application is medical studies where patients are followed in time until
+an event (e.g. death) or until censoring. A subject is censored if the
+event doesn’t occur during the follow-up.</p>
+<p>An important ingredient in survival modeling is the hazard function,
+representing the instantaneous risk for an event at time <span class="math inline">\(t\)</span>, defined as <span class="math inline">\(\lambda(t)=\text{lim}_{h \to 0+} \frac{1}{h}P(t
+\le T&lt;t+h|T\ge t)\)</span>. In the Cox model, the hazard function is
+of the form <span class="math inline">\(\lambda(t_i,Z_i,\theta)=\lambda_0(t_i)\text{exp}(\beta^\prime
+Z_i)\)</span>.</p>
+<p>The baseline hazard function <span class="math inline">\(\lambda_0(t_i)\)</span> represents the hazard when
+the covariates are set to their baselines, and is the same for each
+subject <span class="math inline">\(i\)</span>. Commonly, the functional
+form the baseline hazard is not specified. The second part of the hazard
+function contains subject-specific covariates, <span class="math inline">\(\text{exp}(\beta^\prime Z_i)\)</span>.</p>
+<p>The exponentials of the effects <span class="math inline">\(\beta\)</span> are called hazard ratios, which
+measure the hazard in one group against the hazard in another group.</p>
+<p>When fitting the Cox model, <code>brms</code> uses M-splines for the
+baseline hazard. Splines are functions built from piecewise-defined
+polynomials. In other words, the baseline hazard is a combination of
+several different polynomial functions. M-splines are non-negative
+spline functions, which is important for reasons we omit. However,
+hopefully, the reader can appreciate the simplicity of the upcoming
+<code>brms</code> function call.</p>
+<p>Before fitting the model, we will take a look at the
+<code>lung</code> dataset from the <code>survival</code> R package,
+which we will be analyzing below. The dataset consists of survival times
+of patients with advanced lung cancer including some clinical
+covariates.</p>
 <div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Getting the dataset</span></span>
+<code class="sourceCode R"><span><span class="co"># Get data</span></span>
 <span><span class="va">lung</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="va">lung</span></span>
 <span></span>
-<span><span class="co"># First few rows of data</span></span>
+<span><span class="co"># Take a peek</span></span>
 <span><span class="fu">head</span><span class="op">(</span><span class="va">lung</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -4806,25 +4796,20 @@ patients with advanced lung cancer.</p>
 5    1  883      2  60   1       0      100        90       NA       0
 6   12 1022      1  74   1       1       50        80      513       0</code></pre>
 </div>
-<p>Status variable describes if the event of interest (death) was
-observed or if the observation was censored. Censoring is common in
-time-to-event datasets as it is often infeasible to follow all the
-subjects until the event of interest. Censoring means that the event
-time is larger than the observed time. Censoring must be taken into
-account during modelling or it will bias the results.</p>
-<p>We will fit a Cox proportional hazard model with three covariates:
-age, sex and ph.karno. Variable ph.karno describes how well patient can
-perform daily activities rated by a physician. We will split the
-variable into two categories high and mid. Cox model can be fit with
-<code>brms::brm()</code> function by specifying
-<code>family = brmsfamily("cox")</code>. We also need to specify when
-observations are censored, which is done with
-<code>cens(1 - status)</code> argument. We will use <span class="math inline">\(\text{Normal}(0, 10)\)</span> as prior for the
-population-level effects. By default <code>brms</code> will use an
-improper flat prior over the reals for population-level effects. Prior
-is defined with the <code>prior(normal(0,10), class = b)</code>
-argument, where <code>class = b</code> means that the prior is set for
-all population-level effects.</p>
+<p>The variable <code>status</code> denotes if an event (death) was
+observed or if the subject was censored. We will use three covariates:
+<code>age</code>, <code>sex</code> and <code>ph.karno</code>. The
+variable <code>ph.karno</code> describes how well a patient can perform
+daily activities rated by a physician. We will split the variable into
+two categories “high” and “low.”</p>
+<p>Cox model can be fit with <code>brms::brm()</code> function by
+specifying <code>family = brmsfamily("cox")</code>. Censored data points
+are indicated with the <code>cens(1 - status)</code> argument. We will
+use a standard <span class="math inline">\(\text{Normal}(0, 10)\)</span>
+prior for the population-level effects, with the argument
+<code>prior(normal(0,10), class = b)</code>. The option
+<code>class = b</code> sets the prior for all population-level
+effects.</p>
 <div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -4838,133 +4823,239 @@ all population-level effects.</p>
 <span><span class="co"># Creating new variable for ph.karno status</span></span>
 <span><span class="va">lung</span><span class="op">$</span><span class="va">ph.karno_status</span> <span class="op">&lt;-</span> <span class="fu">cut</span><span class="op">(</span><span class="va">lung</span><span class="op">$</span><span class="va">ph.karno</span>,</span>
 <span>                            breaks <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, <span class="fl">100</span><span class="op">)</span>,</span>
-<span>                            labels <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mid"</span>, <span class="st">"high"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                            labels <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"high"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Fitting the model</span></span>
 <span><span class="va">fit_cox</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu">brm</span><span class="op">(</span><span class="va">time</span> <span class="op">|</span> <span class="fu">cens</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">ph.karno_status</span>,</span>
 <span>             data <span class="op">=</span> <span class="va">lung</span>, family <span class="op">=</span> <span class="fu">brmsfamily</span><span class="op">(</span><span class="st">"cox"</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">2024</span>,</span>
 <span>             silent <span class="op">=</span> <span class="fl">2</span>, refresh <span class="op">=</span> <span class="fl">0</span>, cores <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>             prior <span class="op">=</span> <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span>             prior <span class="op">=</span> <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Summary of the fit</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error: Please install the 'splines2' package.</code></pre>
+<pre class="output" tabindex="0"><code> Family: cox
+  Links: mu = log
+Formula: time | cens(1 - status) ~ sex + age + ph.karno_status
+   Data: lung (Number of observations: 227)
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept               1.27      0.69    -0.15     2.58 1.00     5012     2490
+sex                    -0.51      0.17    -0.83    -0.19 1.00     4789     2922
+age                     0.01      0.01    -0.01     0.03 1.00     5207     2779
+ph.karno_statushigh    -0.36      0.18    -0.72    -0.01 1.00     4534     2669
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
+<p>The summary output of the <code>brms</code> fit prints coefficient
+estimates, and also returns Rhat, Bulk_ESS and Tail_ESS values, which
+can be used to assess the convergence of the model.</p>
+<p>It is important to notice that the coefficients are the log hazard
+ratios, which means we still need to exponentiate them. The
+<code>bayesplot::mcmc_intervals()</code> function allows transforming
+the parameters before plotting with <code>transform = "exp"</code>
+argument.</p>
 <div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summary of the fit</span></span>
-<span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Get hazard values</span></span>
+<span><span class="va">sum_cox</span> <span class="op">&lt;-</span> <span class="fu">summary</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span>
+<span><span class="fu">exp</span><span class="op">(</span><span class="va">sum_cox</span><span class="op">$</span><span class="va">fixed</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'fit_cox' not found</code></pre>
+<pre class="output" tabindex="0"><code>                     Estimate Est.Error  l-95% CI   u-95% CI
+Intercept           3.5486294  1.985898 0.8641319 13.1790893
+sex                 0.6031900  1.179877 0.4380762  0.8288425
+age                 1.0131344  1.009490 0.9948428  1.0323407
+ph.karno_statushigh 0.6964744  1.194624 0.4884050  0.9913700</code></pre>
 </div>
-<p>The summary output of the <code>brms</code> fit returns estimates for
-coefficients and their credible intervals. It also returns Rhat,
-Bulk_ESS and Tail_ESS values, which can be used to assess the
-convergence of the model.</p>
-<p>It is important to notice that the coefficients are the log hazard
-ratios, which means that we still need to take an exponential of the
-values. We will also plot the credible intervals. The
-<code>bayesplot::mcmc_intervals()</code> function allows transforming
-the parameters before plotting with <code>transform = "exp"</code>
-argument.</p>
 <div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Getting hazard values to normal scale</span></span>
-<span><span class="va">sum_cox</span> <span class="op">&lt;-</span> <span class="fu">summary</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'fit_cox' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb35">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">exp</span><span class="op">(</span><span class="va">sum_cox</span><span class="op">$</span><span class="va">fixed</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'sum_cox' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb37">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Credible intervals</span></span>
-<span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_intervals</span><span class="op">(</span><span class="va">fit_cox</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"b_sex"</span>, <span class="st">"b_age"</span>, <span class="st">"b_ph.karno_statushigh"</span><span class="op">)</span>,</span>
+<span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_intervals</span><span class="op">(</span><span class="va">fit_cox</span>,</span>
+<span>                          pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"b_sex"</span>, <span class="st">"b_age"</span>, <span class="st">"b_ph.karno_statushigh"</span><span class="op">)</span>,</span>
 <span>                          transform <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'fit_cox' not found</code></pre>
-</div>
-<p>Based on the estimate and credible interval it seems that age has a
-very little effect on the hazard. Females and patients with high
-ph.karno value have smaller hazard, meaning that the risk of death is
-smaller.</p>
-<p>After fitting the model you can print info on the priors used with
-the function <code>brms::get_prior</code>.</p>
-<div class="codewrapper sourceCode" id="cb39">
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Based on the estimates, it seems that age has only a minor effect on
+the hazard. Female sex and being “high” in <code>ph.karno</code> imply
+smaller hazards, meaning that these factors are protective.</p>
+<p>After fitting the model, we can print information about the priors
+used with the function <code>brms::get_prior</code>.</p>
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Getting priors for the cox model</span></span>
+<code class="sourceCode R"><span><span class="co"># Get priors for the cox model</span></span>
 <span><span class="fu">brms</span><span class="fu">::</span><span class="fu">get_prior</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'fit_cox' not found</code></pre>
+<pre class="output" tabindex="0"><code>                  prior     class                coef group resp dpar nlpar lb
+          normal(0, 10)         b
+          normal(0, 10)         b                 age
+          normal(0, 10)         b ph.karno_statushigh
+          normal(0, 10)         b                 sex
+ student_t(3, 5.6, 2.5) Intercept
+           dirichlet(1)     sbhaz
+ ub       source
+            user
+    (vectorized)
+    (vectorized)
+    (vectorized)
+         default
+         default</code></pre>
 </div>
-<p>As we can see the population-level effects has the normal prior we
-specified. Intercept has the default prior used by <code>brms</code> for
-intercept, which is Student’s t-distribution with three degrees of
-freedom. If we want to print the whole Stan code used in fitting the
-model, we can do this with the <code>brms::stancode</code> function.</p>
-<div class="codewrapper sourceCode" id="cb41">
+<p>The population-level effects have the normal prior we specified. In
+<code>brms</code>, the default prior for the intercept is Student’s
+t-distribution with three degrees of freedom. The Stan program
+<code>brms</code> ran under the hood can be printed with the
+<code>brms::stancode</code> function.</p>
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Printing the Stan code</span></span>
+<code class="sourceCode R"><span><span class="co"># Print the Stan code</span></span>
 <span><span class="fu">brms</span><span class="fu">::</span><span class="fu">stancode</span><span class="op">(</span><span class="va">fit_cox</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'fit_cox' not found</code></pre>
+<pre class="output" tabindex="0"><code>// generated with brms 2.21.0
+functions {
+  /* distribution functions of the Cox proportional hazards model
+   * parameterize hazard(t) = baseline(t) * mu
+   * so that higher values of 'mu' imply lower survival times
+   * Args:
+   *   y: the response value; currently ignored as the relevant
+   *     information is passed via 'bhaz' and 'cbhaz'
+   *   mu: positive location parameter
+   *   bhaz: baseline hazard
+   *   cbhaz: cumulative baseline hazard
+   */
+  real cox_lhaz(real y, real mu, real bhaz, real cbhaz) {
+    return log(bhaz) + log(mu);
+  }
+  real cox_lccdf(real y, real mu, real bhaz, real cbhaz) {
+    // equivalent to the log survival function
+    return - cbhaz * mu;
+  }
+  real cox_lcdf(real y, real mu, real bhaz, real cbhaz) {
+    return log1m_exp(cox_lccdf(y | mu, bhaz, cbhaz));
+  }
+  real cox_lpdf(real y, real mu, real bhaz, real cbhaz) {
+    return cox_lhaz(y, mu, bhaz, cbhaz) + cox_lccdf(y | mu, bhaz, cbhaz);
+  }
+  // Distribution functions of the Cox model in log parameterization
+  real cox_log_lhaz(real y, real log_mu, real bhaz, real cbhaz) {
+    return log(bhaz) + log_mu;
+  }
+  real cox_log_lccdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return - cbhaz * exp(log_mu);
+  }
+  real cox_log_lcdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return log1m_exp(cox_log_lccdf(y | log_mu, bhaz, cbhaz));
+  }
+  real cox_log_lpdf(real y, real log_mu, real bhaz, real cbhaz) {
+    return cox_log_lhaz(y, log_mu, bhaz, cbhaz) +
+           cox_log_lccdf(y | log_mu, bhaz, cbhaz);
+  }
+}
+data {
+  int&lt;lower=1&gt; N;  // total number of observations
+  vector[N] Y;  // response variable
+  array[N] int&lt;lower=-1,upper=2&gt; cens;  // indicates censoring
+  int&lt;lower=1&gt; K;  // number of population-level effects
+  matrix[N, K] X;  // population-level design matrix
+  int&lt;lower=1&gt; Kc;  // number of population-level effects after centering
+  // data for flexible baseline functions
+  int Kbhaz;  // number of basis functions
+  // design matrix of the baseline function
+  matrix[N, Kbhaz] Zbhaz;
+  // design matrix of the cumulative baseline function
+  matrix[N, Kbhaz] Zcbhaz;
+  // a-priori concentration vector of baseline coefficients
+  vector&lt;lower=0&gt;[Kbhaz] con_sbhaz;
+  int prior_only;  // should the likelihood be ignored?
+}
+transformed data {
+  matrix[N, Kc] Xc;  // centered version of X without an intercept
+  vector[Kc] means_X;  // column means of X before centering
+  for (i in 2:K) {
+    means_X[i - 1] = mean(X[, i]);
+    Xc[, i - 1] = X[, i] - means_X[i - 1];
+  }
+}
+parameters {
+  vector[Kc] b;  // regression coefficients
+  real Intercept;  // temporary intercept for centered predictors
+  simplex[Kbhaz] sbhaz;  // baseline coefficients
+}
+transformed parameters {
+  real lprior = 0;  // prior contributions to the log posterior
+  lprior += normal_lpdf(b | 0, 10);
+  lprior += student_t_lpdf(Intercept | 3, 5.6, 2.5);
+  lprior += dirichlet_lpdf(sbhaz | con_sbhaz);
+}
+model {
+  // likelihood including constants
+  if (!prior_only) {
+    // compute values of baseline function
+    vector[N] bhaz = Zbhaz * sbhaz;
+    // compute values of cumulative baseline function
+    vector[N] cbhaz = Zcbhaz * sbhaz;
+    // initialize linear predictor term
+    vector[N] mu = rep_vector(0.0, N);
+    mu += Intercept + Xc * b;
+    for (n in 1:N) {
+    // special treatment of censored data
+      if (cens[n] == 0) {
+        target += cox_log_lpdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      } else if (cens[n] == 1) {
+        target += cox_log_lccdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      } else if (cens[n] == -1) {
+        target += cox_log_lcdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
+      }
+    }
+  }
+  // priors including constants
+  target += lprior;
+}
+generated quantities {
+  // actual population-level intercept
+  real b_Intercept = Intercept - dot_product(means_X, b);
+}</code></pre>
 </div>
 </div>
 <div class="section level3">
 <h3 id="example-3-hierarchical-binomial-model">Example 3: Hierarchical binomial model<a class="anchor" aria-label="anchor" href="#example-3-hierarchical-binomial-model"></a>
 </h3>
-<p>We will next show how to fit hierarchical models using
-<code>brms</code>. Fitting hierarchical models can be considered one of
-the main focuses of the <code>brms</code> package. If you have ever used
-the <code>lme4</code> package, you are already quite familiar with the
-syntax used in <code>brm()</code> to fit hierarchical models, as both
-packages use similar formula syntax.</p>
-<p>The data we will be using is the <code>VerbAgg</code> dataset from
-<code>lme4</code> package. The dataset consist of item responses to a
+<p>We will now demonstrate one of the key focuses of <code>brms</code>,
+fitting hierarchical models. The syntax for specifying hierarchical
+models is similar as in the <code>lme4</code> package, which is used to
+fit frequentist multilevel models in R.</p>
+<p>For this example, we will be using is the <code>VerbAgg</code> data
+from <code>lme4</code> package. The data consist of item responses to a
 questionnaire on verbal aggression.</p>
-<div class="codewrapper sourceCode" id="cb43">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Getting the data</span></span>
+<code class="sourceCode R"><span><span class="co"># Get data</span></span>
 <span><span class="va">VerbAgg</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="va">VerbAgg</span></span>
 <span></span>
-<span><span class="co"># First few rows of the data</span></span>
 <span><span class="fu">head</span><span class="op">(</span><span class="va">VerbAgg</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -4978,31 +5069,31 @@ questionnaire on verbal aggression.</p>
 5    17      F S1WantCurse perhaps  5 curse other want  Y
 6    21      F S1WantCurse     yes  6 curse other want  Y</code></pre>
 </div>
-<p>We will use Anger, Gender, btype and situ as population-level effects
-for the model. The model will also have group-level intercept for id.
-The variable of interest is the binary r2, which describes response to
-questionnaire question. For priors we will use <span class="math inline">\(\text{Normal}(0, 10)\)</span> as prior for all the
-population-level effects. The group-level effect’s standard deviation
-parameter will have <span class="math inline">\(\text{Cauchy}(0,
-5)\)</span> prior (this is Half-Cauchy prior as the values are
-restricted to be positive). By default <code>brms</code> uses
-Half-Student’s t-distribution with three degrees of freedom for standard
-deviation parameters. The group-level intercept for variable id is
-specified with the argument <code>(1|id)</code>. Let’s now fit the
-model.</p>
-<div class="codewrapper sourceCode" id="cb45">
+<p>We will estimate population-level effects for Anger, Gender, btype
+and situ, and includea group-level intercept for id. The variable of
+interest is the binary r2, which contains the response to an question in
+the questionnaire. We will use <span class="math inline">\(\text{Normal}(0, 10)\)</span> as the prior for all
+the population-level effects. For the standard deviation of group-level
+effect we will set a (half-)<span class="math inline">\(\text{Cauchy}(0,
+5)\)</span> prior. By default, <code>brms</code> uses half-Student’s
+t-distribution with three degrees of freedom for standard deviation
+parameters. The group-level intercept for variable id is specified with
+the argument <code>(1|id)</code>. Let’s now fit the model.</p>
+<div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Changing coding for r2</span></span>
+<code class="sourceCode R"><span><span class="co"># Change coding for r2</span></span>
 <span><span class="va">VerbAgg</span> <span class="op">&lt;-</span> <span class="va">VerbAgg</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>r2 <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">r2</span> <span class="op">==</span> <span class="st">"N"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># Fitting the model</span></span>
-<span><span class="va">fit_hier</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu">brm</span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">btype</span> <span class="op">+</span> <span class="va">situ</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span>, family <span class="op">=</span> <span class="va">bernoulli</span>, </span>
-<span>                data <span class="op">=</span> <span class="va">VerbAgg</span>, seed <span class="op">=</span> <span class="fl">2024</span>, cores <span class="op">=</span> <span class="fl">4</span>, silent <span class="op">=</span> <span class="fl">2</span>, refresh <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>                prior <span class="op">=</span> <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>                  <span class="fu">prior</span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># Summary of the fit</span></span>
+<span><span class="co"># Fit model</span></span>
+<span><span class="va">fit_hier</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu">brm</span><span class="op">(</span><span class="va">r2</span> <span class="op">~</span> <span class="va">Anger</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">btype</span> <span class="op">+</span> <span class="va">situ</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span>,</span>
+<span>                      family <span class="op">=</span> <span class="va">bernoulli</span>, </span>
+<span>                      data <span class="op">=</span> <span class="va">VerbAgg</span>,</span>
+<span>                      seed <span class="op">=</span> <span class="fl">2024</span>, cores <span class="op">=</span> <span class="fl">4</span>, silent <span class="op">=</span> <span class="fl">2</span>, refresh <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                      prior <span class="op">=</span> <span class="fu">prior</span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                        <span class="fu">prior</span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Summary</span></span>
 <span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_hier</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -5033,10 +5124,9 @@ Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
-<p>With <code>brms</code> we can easily plot conditional effects of
-predictors by using the function
-<code>brms::conditional_effects</code>.</p>
-<div class="codewrapper sourceCode" id="cb47">
+<p>The conditional effects of the predictors can easily be plotted with
+the function <code>brms::conditional_effects</code>.</p>
+<div class="codewrapper sourceCode" id="cb42">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5044,28 +5134,27 @@ predictors by using the function
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">plot</span><span class="op">(</span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">fit_hier</span><span class="op">)</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can also plot interactions using the function. Let’s plot the
-conditional effect for interaction of Anger and btype.</p>
-<div class="codewrapper sourceCode" id="cb48">
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The function can also plot variable interactions. Let’s plot the
+conditional effect for interaction between Anger and btype.</p>
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Plotting conditional effect for interaction of Anger and btype</span></span>
+<code class="sourceCode R"><span><span class="co"># Plot conditional effect for interaction of Anger and btype</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">fit_hier</span>, effects <span class="op">=</span> <span class="st">"Anger:btype"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/other-topics-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s fit another model with the same population-level effects, but
-we will add another group-level intercept for the item variable. The
-priors are same as for the first model. We don’t have to rewrite the
-whole formula when updating the model. We can use the
-<code>update</code> function for updating the formula.</p>
-<div class="codewrapper sourceCode" id="cb49">
+<figure><img src="fig/other-topics-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let us now do a slight alteration in model and add another
+group-level intercept for the item variable. The priors are same as in
+the first model. The <code>update</code> function can be used to modify
+the formula without writing it anew in its entirety.</p>
+<div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Updating the model</span></span>
+<code class="sourceCode R"><span><span class="co"># Update model</span></span>
 <span><span class="va">fit_hier2</span> <span class="op">&lt;-</span> <span class="fu">update</span><span class="op">(</span><span class="va">fit_hier</span>, formula. <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">item</span><span class="op">)</span>, newdata <span class="op">=</span> <span class="va">VerbAgg</span>, seed <span class="op">=</span> <span class="fl">2024</span>,</span>
 <span>                    cores <span class="op">=</span> <span class="fl">4</span>, silent <span class="op">=</span> <span class="fl">2</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span><span class="co"># Summary of the updated fit</span></span>
+<span><span class="co"># Summary</span></span>
 <span><span class="fu">summary</span><span class="op">(</span><span class="va">fit_hier2</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -5100,18 +5189,18 @@ Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
 scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
-<p>Another useful thing about <code>update</code> is that it allows for
-resampling from the model with, for example, different number of
-iterations without having to recompile the model. If you update the
-formula or priors, the model has to be recompiled.</p>
-<p>To end let’s compare the two models by using
+<p>Another useful aspect of <code>update</code> is that it allows
+resampling from the model without having to recompile the model, for
+example, using different number of iterations. However, changes to the
+model itself require recompilation.</p>
+<p>To end this section, let’s compare the two models by using
 <code>brms::loo()</code>. This works in the same way as the
 <code>loo::loo_compare</code>.</p>
-<div class="codewrapper sourceCode" id="cb51">
+<div class="codewrapper sourceCode" id="cb46">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Comparing the models</span></span>
+<code class="sourceCode R"><span><span class="co"># Compare models</span></span>
 <span><span class="fu">brms</span><span class="fu">::</span><span class="fu">loo</span><span class="op">(</span><span class="va">fit_hier</span>, <span class="va">fit_hier2</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -5152,7 +5241,7 @@ Model comparisons:
 fit_hier2    0.0       0.0
 fit_hier  -138.0      16.2 </code></pre>
 </div>
-<p>Based on the output the second model is clearly better fit when
+<p>Based on the output, the second model provides a superior fit
 compared to the first model.</p>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
@@ -5162,8 +5251,8 @@ compared to the first model.</p>
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Experiment with different priors for the model. How much does the
-choice of prior effect the results? Is there a big difference between a
-flat and the used weakly informative prior?</p>
+chosen prior affect the results? Is there a big difference between a
+flat and the weakly informative prior used above?</p>
 </div>
 </div>
 </div>
@@ -5171,26 +5260,23 @@ flat and the used weakly informative prior?</p>
 </section><section><h2 class="section-heading" id="other-packages-built-on-stan">Other packages built on Stan<a class="anchor" aria-label="anchor" href="#other-packages-built-on-stan"></a>
 </h2>
 <hr class="half-width">
-<p>In addition to the packages covered here, there are several other
-packages that take advantage of Stan. Here we will shortly introduce
+<p>In addition to the ones covered here, there are several other
+packages that take advantage of Stan. Here we will briefly introduce
 some of them. <a href="https://mc-stan.org/cmdstanr/index.html" class="external-link">CmdStanR</a> is a
-lightweight interface for Stan and provides and alternative for rstan
-interface. <a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a> emulates
-R model-fitting functions using Stan. The package can do lot of the same
+lightweight command-line-based interface for Stan and provides and
+alternative for rstan. <a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a> emulates the model
+fitting R functions using Stan. The package can do lot of the same
 things as <code>brms</code>, but they do have differences, for example
 <code>rstanarm</code> models come pre-compiled while <code>brms</code>
-compiles the models when fitted.</p>
+compiles the models when called.</p>
 <p><a href="https://mc-stan.org/shinystan/" class="external-link">shinystan</a> uses Shiny and
-provides user with informative, customizable visual and numerical
+provides user with interactive, customizable visual and numerical
 summaries of model parameters and convergence diagnostics. <a href="https://mc-stan.org/projpred/" class="external-link">projpred</a> performs projection
 predictive variable selection for various models. The package works with
 models from <code>brms</code> and <code>rstanarm</code>. <a href="https://mc-stan.org/posterior/" class="external-link">posterior</a> provides tools for
-converting between different formats of draws, consistent methods for
-operations commonly performed on draws (like subsetting and binding),
-summaries of draws and posterior diagnostics.</p>
-<p>You can learn a lot more about the packages above and the packages
-covered in this chapter by visiting the associated websites and reading
-the provided examples, vignettes and articles.</p>
+manipulating posterior draws, and contains methods for common
+operations, such as, subsetting and binding, and producing posterior
+summaries, and diagnostics.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -5199,15 +5285,15 @@ the provided examples, vignettes and articles.</p>
 <h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
-<li>There are several R packages that make use Stan enabling more
-user-friendly ways of fitting Bayesian models and allowing for more
-advanced inference.</li>
+<li>There are several R packages that provide more user-friendly ways of
+using Stan.</li>
 <li>
-<code>brms</code> package can be used to fit a fast array of
+<code>brms</code> package can be used to fit a vast array of
 different Bayesian models.</li>
-<li>Extensive set of different plots for Bayesian models can be plotted
-with <code>bayesplot</code> package.</li>
-<li>Leave-one-out cross-validation can be performed with
+<li>
+<code>bayesplot</code> package is a library for various plotting
+tools.</li>
+<li>Approximate leave-one-out cross-validation can be performed with the
 <code>loo</code> package.</li>
 </ul>
 </div>
@@ -5222,6 +5308,12 @@ website</a></p></li>
 <li><p><a href="http://mc-stan.org/bayesplot/" class="external-link">bayesplot
 website</a></p></li>
 <li><p><a href="https://mc-stan.org/loo/" class="external-link">loo website</a></p></li>
+</ul></section><section><h2 class="section-heading" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<hr class="half-width">
+<ul>
+<li>[1] A. Vehtari <em>et al.</em>, Pareto Smoothed Importance Sampling,
+<em>Journal of Machine Learning Research</em> 25 (2024) 1-58.</li>
 </ul>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
@@ -5938,7 +6030,7 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/aio.html",
-  "dateCreated": "2024-09-17",
+  "dateCreated": "2024-09-24",
   "dateModified": "2024-09-24",
   "datePublished": "2024-09-24"
 }
