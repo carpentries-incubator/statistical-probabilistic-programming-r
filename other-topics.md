@@ -456,10 +456,10 @@ Formula: time | cens(1 - status) ~ sex + age + ph.karno_status
 
 Regression Coefficients:
                     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept               1.27      0.69    -0.15     2.58 1.00     5012     2490
-sex                    -0.51      0.17    -0.83    -0.19 1.00     4789     2922
-age                     0.01      0.01    -0.01     0.03 1.00     5207     2779
-ph.karno_statushigh    -0.36      0.18    -0.72    -0.01 1.00     4534     2669
+Intercept               1.27      0.68    -0.11     2.57 1.00     4304     2666
+sex                    -0.50      0.16    -0.83    -0.19 1.00     4768     2842
+age                     0.01      0.01    -0.01     0.03 1.00     4607     2784
+ph.karno_statushigh    -0.36      0.18    -0.70    -0.02 1.00     4471     2616
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -479,10 +479,10 @@ exp(sum_cox$fixed[,1:4])
 
 ``` output
                      Estimate Est.Error  l-95% CI   u-95% CI
-Intercept           3.5486294  1.985898 0.8641319 13.1790893
-sex                 0.6031900  1.179877 0.4380762  0.8288425
-age                 1.0131344  1.009490 0.9948428  1.0323407
-ph.karno_statushigh 0.6964744  1.194624 0.4884050  0.9913700
+Intercept           3.5576154  1.970680 0.8962140 13.1193479
+sex                 0.6044998  1.179035 0.4369700  0.8279120
+age                 1.0130229  1.009435 0.9945742  1.0318059
+ph.karno_statushigh 0.6956990  1.193047 0.4959062  0.9847118
 ```
 
 ``` r
@@ -530,7 +530,7 @@ brms::stancode(fit_cox)
 ```
 
 ``` output
-// generated with brms 2.21.0
+// generated with brms 2.22.0
 functions {
   /* distribution functions of the Cox proportional hazards model
    * parameterize hazard(t) = baseline(t) * mu
@@ -545,35 +545,68 @@ functions {
   real cox_lhaz(real y, real mu, real bhaz, real cbhaz) {
     return log(bhaz) + log(mu);
   }
+  vector cox_lhaz(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return log(bhaz) + log(mu);
+  }
+
+  // equivalent to the log survival function
   real cox_lccdf(real y, real mu, real bhaz, real cbhaz) {
-    // equivalent to the log survival function
     return - cbhaz * mu;
   }
+  real cox_lccdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return - dot_product(cbhaz, mu);
+  }
+
   real cox_lcdf(real y, real mu, real bhaz, real cbhaz) {
     return log1m_exp(cox_lccdf(y | mu, bhaz, cbhaz));
   }
+  real cox_lcdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return sum(log1m_exp(- cbhaz .* mu));
+  }
+
   real cox_lpdf(real y, real mu, real bhaz, real cbhaz) {
     return cox_lhaz(y, mu, bhaz, cbhaz) + cox_lccdf(y | mu, bhaz, cbhaz);
   }
+  real cox_lpdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return sum(cox_lhaz(y, mu, bhaz, cbhaz)) + cox_lccdf(y | mu, bhaz, cbhaz);
+  }
+
   // Distribution functions of the Cox model in log parameterization
   real cox_log_lhaz(real y, real log_mu, real bhaz, real cbhaz) {
     return log(bhaz) + log_mu;
   }
+  vector cox_log_lhaz(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return log(bhaz) + log_mu;
+  }
+
   real cox_log_lccdf(real y, real log_mu, real bhaz, real cbhaz) {
     return - cbhaz * exp(log_mu);
   }
+  real cox_log_lccdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return - dot_product(cbhaz, exp(log_mu));
+  }
+
   real cox_log_lcdf(real y, real log_mu, real bhaz, real cbhaz) {
     return log1m_exp(cox_log_lccdf(y | log_mu, bhaz, cbhaz));
   }
+  real cox_log_lcdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return sum(log1m_exp(- cbhaz .* exp(log_mu)));
+  }
+
   real cox_log_lpdf(real y, real log_mu, real bhaz, real cbhaz) {
     return cox_log_lhaz(y, log_mu, bhaz, cbhaz) +
+           cox_log_lccdf(y | log_mu, bhaz, cbhaz);
+  }
+  real cox_log_lpdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return sum(cox_log_lhaz(y, log_mu, bhaz, cbhaz)) +
            cox_log_lccdf(y | log_mu, bhaz, cbhaz);
   }
 }
 data {
   int<lower=1> N;  // total number of observations
   vector[N] Y;  // response variable
-  array[N] int<lower=-1,upper=2> cens;  // indicates censoring
+  // censoring indicator: 0 = event, 1 = right, -1 = left, 2 = interval censored
+  array[N] int<lower=-1,upper=2> cens;
   int<lower=1> K;  // number of population-level effects
   matrix[N, K] X;  // population-level design matrix
   int<lower=1> Kc;  // number of population-level effects after centering
@@ -588,8 +621,28 @@ data {
   int prior_only;  // should the likelihood be ignored?
 }
 transformed data {
+  // indices of censored data
+  int Nevent = 0;
+  int Nrcens = 0;
+  int Nlcens = 0;
+  array[N] int Jevent;
+  array[N] int Jrcens;
+  array[N] int Jlcens;
   matrix[N, Kc] Xc;  // centered version of X without an intercept
   vector[Kc] means_X;  // column means of X before centering
+  // collect indices of censored data
+  for (n in 1:N) {
+    if (cens[n] == 0) {
+      Nevent += 1;
+      Jevent[Nevent] = n;
+    } else if (cens[n] == 1) {
+      Nrcens += 1;
+      Jrcens[Nrcens] = n;
+    } else if (cens[n] == -1) {
+      Nlcens += 1;
+      Jlcens[Nlcens] = n;
+    }
+  }
   for (i in 2:K) {
     means_X[i - 1] = mean(X[, i]);
     Xc[, i - 1] = X[, i] - means_X[i - 1];
@@ -598,7 +651,8 @@ transformed data {
 parameters {
   vector[Kc] b;  // regression coefficients
   real Intercept;  // temporary intercept for centered predictors
-  simplex[Kbhaz] sbhaz;  // baseline coefficients
+  // baseline hazard coefficients
+  simplex[Kbhaz] sbhaz;
 }
 transformed parameters {
   real lprior = 0;  // prior contributions to the log posterior
@@ -616,16 +670,10 @@ model {
     // initialize linear predictor term
     vector[N] mu = rep_vector(0.0, N);
     mu += Intercept + Xc * b;
-    for (n in 1:N) {
-    // special treatment of censored data
-      if (cens[n] == 0) {
-        target += cox_log_lpdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      } else if (cens[n] == 1) {
-        target += cox_log_lccdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      } else if (cens[n] == -1) {
-        target += cox_log_lcdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      }
-    }
+    // vectorized log-likelihood contributions of censored data
+    target += cox_log_lpdf(Y[Jevent[1:Nevent]] | mu[Jevent[1:Nevent]], bhaz[Jevent[1:Nevent]], cbhaz[Jevent[1:Nevent]]);
+    target += cox_log_lccdf(Y[Jrcens[1:Nrcens]] | mu[Jrcens[1:Nrcens]], bhaz[Jrcens[1:Nrcens]], cbhaz[Jrcens[1:Nrcens]]);
+    target += cox_log_lcdf(Y[Jlcens[1:Nlcens]] | mu[Jlcens[1:Nlcens]], bhaz[Jlcens[1:Nlcens]], cbhaz[Jlcens[1:Nlcens]]);
   }
   // priors including constants
   target += lprior;
