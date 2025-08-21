@@ -1,0 +1,87 @@
+---
+title: 'Stan extensions'
+teaching: 10
+exercises: 2
+---
+
+
+```{r, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(grafify)
+library(cowplot)
+library(brms)
+library(bayesplot)
+library(splines2)
+theme_set(theme_bw(15))
+
+
+okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
+bayesplot::color_scheme_set("brightblue")
+```
+
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- What else can I learn?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- How can I do this in Stan?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+Intro text
+
+
+## Section
+
+
+
+### Example 
+
+
+::::::::::::::::::::::::::::::::::::::::: challenge
+
+In a challenge you can present exercises to be done during lecture. 
+
+::::::::::::::::::::::::::::::: solution
+
+Solution to exercise optional. 
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+## Another section
+
+
+
+
+### Example 2
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Obligatory list of key points
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+## Reading
+
+- Relevant text book reading. I have included Gelman BDA3, BayesRules! and Statistical Re-thinking, if the book has something on the subject. 
+
+- Other sources possible too, if you feel a topic is better presented elsewhere. 
+
+## References
+
