@@ -329,12 +329,12 @@ Now it's evident that the sample trajectories explore the entire posterior distr
 ``` r
 # Plot
 p_joint_2 <- ggplot() +
-  # warmup samples
+  # Warm-up samples
   geom_path(data = samples2 %>%
               filter(warmup == TRUE),
             aes(theta1, theta2, color = chain),
             alpha = 0.25) +
-  # post-warmup samples
+  # Post-warm-up samples
   geom_path(data = samples2 %>%
               filter(warmup == FALSE),
             aes(theta1, theta2, color = chain))

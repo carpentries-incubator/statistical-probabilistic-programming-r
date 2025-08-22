@@ -315,7 +315,7 @@ normal_loo_lpds <- lapply(1:N, function(i) {
                             refresh = 0
                             ) 
   
-  # samples
+  # Samples
   my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
     do.call(cbind, .) %>% 
     set_colnames(c("mu", "sigma"))
@@ -343,7 +343,7 @@ cauchy_loo_lpds <- lapply(1:N, function(i) {
                             refresh = 0
                             ) 
   
-  # samples
+  # Samples
   my_samples <- rstan::extract(my_cauchy_fit, c("mu", "sigma")) %>% 
     do.call(cbind, .) %>% 
     set_colnames(c("mu", "sigma"))

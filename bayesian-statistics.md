@@ -145,9 +145,9 @@ In practice, this means dividing the values by the area under the unnormalized p
 
 
 ``` r
-# normalize 
+# Normalize 
 posterior <- posterior/(sum(posterior)*delta)
-# likelihood also normalized for better visualization
+# Likelihood also normalized for better visualization
 likelihood <- likelihood/(sum(likelihood)*delta)
 ```
 
@@ -158,7 +158,7 @@ Finally, we can plot these functions
 # Make data frame
 df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
-# wide to long format
+# Wide to long format
 df1_l <- df1 %>%
   gather(key = "Function", value = "value", -theta)
 
@@ -312,7 +312,7 @@ df2 <- df2 %>%
 # Posterior
 df2 <- df2 %>% 
   mutate(posterior = prior*likelihood) %>% 
-  mutate(posterior = posterior/(sum(posterior)*delta^2)) # normalize
+  mutate(posterior = posterior/(sum(posterior)*delta^2)) # Normalize
 
 
 # Plot
