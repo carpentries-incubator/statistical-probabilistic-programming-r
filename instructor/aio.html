@@ -36,7 +36,7 @@
       <div class="large-logo">
         <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
           <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
-            <a href="https://cdh.carpentries.org/the-lesson-life-cycle.html#early-development-pre-alpha-through-alpha" class="external-link alert-link">
+            <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
               <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
               Pre-Alpha
             </a>
@@ -316,7 +316,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="other-topics.html">7. Stan extensions</a>
+        <a href="stan-extensions.html">7. Stan extensions</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -394,7 +394,7 @@
         
 <section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 68 minutes</p>
@@ -591,9 +591,9 @@ X)_{\text{unnormalized}} \cdot \delta,\]</span> where <span class="math inline">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># normalize </span></span>
+<code class="sourceCode R"><span><span class="co"># Normalize </span></span>
 <span><span class="va">posterior</span> <span class="op">&lt;-</span> <span class="va">posterior</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span></span>
-<span><span class="co"># likelihood also normalized for better visualization</span></span>
+<span><span class="co"># Likelihood also normalized for better visualization</span></span>
 <span><span class="va">likelihood</span> <span class="op">&lt;-</span> <span class="va">likelihood</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">likelihood</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Finally, we can plot these functions</p>
@@ -604,7 +604,7 @@ X)_{\text{unnormalized}} \cdot \delta,\]</span> where <span class="math inline">
 <code class="sourceCode R"><span><span class="co"># Make data frame</span></span>
 <span><span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu">data.frame</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_grid</span>, <span class="va">likelihood</span>, <span class="va">prior</span>, <span class="va">posterior</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># wide to long format</span></span>
+<span><span class="co"># Wide to long format</span></span>
 <span><span class="va">df1_l</span> <span class="op">&lt;-</span> <span class="va">df1</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"Function"</span>, value <span class="op">=</span> <span class="st">"value"</span>, <span class="op">-</span><span class="va">theta</span><span class="op">)</span></span>
 <span></span>
@@ -625,6 +625,7 @@ between these points.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -681,6 +682,7 @@ d\theta.\)</span></p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -794,7 +796,7 @@ below.</p>
 <span><span class="co"># Posterior</span></span>
 <span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="va">df2</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">prior</span><span class="op">*</span><span class="va">likelihood</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">posterior</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># normalize</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>posterior <span class="op">=</span> <span class="va">posterior</span><span class="op">/</span><span class="op">(</span><span class="fu">sum</span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># Normalize</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
@@ -855,6 +857,7 @@ axis, as if drawn by a gravitational force.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -867,8 +870,8 @@ the MAPs of the marginal posteriors of <span class="math inline">\(\alpha\)</spa
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
+<span class="callout-header">Callout</span>
 <div class="callout-inner">
-<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>The conjugate prior for the Gamma likelihood <a href="https://en.wikipedia.org/wiki/Gamma_distribution#Bayesian_inference" class="external-link">exists</a>,
 which means there is a prior that causes the posterior to be of the same
@@ -938,6 +941,7 @@ samples within the interval.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -986,8 +990,8 @@ line):</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Likelihood determines the probability of data conditional on the
@@ -1023,7 +1027,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 64 minutes</p>
@@ -1082,8 +1086,8 @@ your local computer.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
+<span class="callout-header">Callout</span>
 <div class="callout-inner">
-<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>With Stan, you can fit model that have continuous parameters. Models
 with discrete parameters such as most classification models are
@@ -1220,9 +1224,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2:
-Chain 2:  Elapsed Time: 0.003 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
 Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.006 seconds (Total)
+Chain 2:                0.007 seconds (Total)
 Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1245,9 +1249,9 @@ Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3:
-Chain 3:  Elapsed Time: 0.003 seconds (Warm-up)
+Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
 Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.006 seconds (Total)
+Chain 3:                0.007 seconds (Total)
 Chain 3:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
@@ -1300,7 +1304,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
 lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
 
-Samples were drawn using NUTS(diag_e) at Tue Nov 19 00:55:28 2024.
+Samples were drawn using NUTS(diag_e) at Fri Aug 22 10:21:35 2025.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at
 convergence, Rhat=1).</code></pre>
@@ -1322,6 +1326,7 @@ figures.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -1336,7 +1341,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1362,6 +1367,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -1377,7 +1383,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Modifying the data block so that it declares the hyperparameters as
 data (e.g. <code>real&lt;lower=0&gt; alpha;</code>) enables setting the
@@ -1480,8 +1486,8 @@ from the normal distribution for each posterior sample <span class="math inline"
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 6e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+Chain 1: Gradient evaluation took 5e-06 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -1498,8 +1504,8 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 0.009 seconds (Warm-up)
-Chain 1:                0.007 seconds (Sampling)
+Chain 1:  Elapsed Time: 0.008 seconds (Warm-up)
+Chain 1:                0.008 seconds (Sampling)
 Chain 1:                0.016 seconds (Total)
 Chain 1:
 
@@ -1523,9 +1529,9 @@ Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2:
-Chain 2:  Elapsed Time: 0.01 seconds (Warm-up)
+Chain 2:  Elapsed Time: 0.009 seconds (Warm-up)
 Chain 2:                0.008 seconds (Sampling)
-Chain 2:                0.018 seconds (Total)
+Chain 2:                0.017 seconds (Total)
 Chain 2:
 
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
@@ -1573,9 +1579,9 @@ Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4:
-Chain 4:  Elapsed Time: 0.009 seconds (Warm-up)
+Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
 Chain 4:                0.008 seconds (Sampling)
-Chain 4:                0.017 seconds (Total)
+Chain 4:                0.016 seconds (Total)
 Chain 4: </code></pre>
 </div>
 <p>Next, we’ll extract posterior samples and generate a plot for the
@@ -1636,6 +1642,7 @@ histogram and compare it to that of the data.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -1652,7 +1659,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1687,6 +1694,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -1699,7 +1707,7 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1736,8 +1744,8 @@ slope <span class="math inline">\(\beta\)</span>, and noise term <span class="ma
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Stan is a tool for efficient posterior distribution sample
@@ -1777,7 +1785,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">Markov chain Monte Carlo</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 63 minutes</p>
@@ -2075,6 +2083,7 @@ drawn samples provide a representative picture of the target.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -2195,12 +2204,12 @@ posterior distribution:</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="va">p_joint_2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># warmup samples</span></span>
+<span>  <span class="co"># Warm-up samples</span></span>
 <span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples2</span> <span class="op">%&gt;%</span></span>
 <span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span><span class="va">theta1</span>, <span class="va">theta2</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span>,</span>
 <span>            alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># post-warmup samples</span></span>
+<span>  <span class="co"># Post-warm-up samples</span></span>
 <span>  <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">samples2</span> <span class="op">%&gt;%</span></span>
 <span>              <span class="fu">filter</span><span class="op">(</span><span class="va">warmup</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>            <span class="fu">aes</span><span class="op">(</span><span class="va">theta1</span>, <span class="va">theta2</span>, color <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span></span>
@@ -2267,8 +2276,8 @@ about divergent transitions automatically.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Markov chain Monte Carlo methods can be used to generate samples
@@ -2295,7 +2304,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical models</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 14 minutes</p>
@@ -2706,6 +2715,7 @@ concentrated and better capture the true values.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -2852,8 +2862,8 @@ developed/developing countries etc.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Hierarchical models are appropriate for scenarios where the study
@@ -2887,7 +2897,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-model-comparison"><p>Content from <a href="model-comparison.html">Model comparison</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 62 minutes</p>
@@ -3263,7 +3273,7 @@ the log predictive densities of data points evaluated based on</p>
 <span>                            refresh <span class="op">=</span> <span class="fl">0</span></span>
 <span>                            <span class="op">)</span> </span>
 <span>  </span>
-<span>  <span class="co"># samples</span></span>
+<span>  <span class="co"># Samples</span></span>
 <span>  <span class="va">my_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">my_normal_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">do.call</span><span class="op">(</span><span class="va">cbind</span>, <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">set_colnames</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span>
@@ -3291,7 +3301,7 @@ the log predictive densities of data points evaluated based on</p>
 <span>                            refresh <span class="op">=</span> <span class="fl">0</span></span>
 <span>                            <span class="op">)</span> </span>
 <span>  </span>
-<span>  <span class="co"># samples</span></span>
+<span>  <span class="co"># Samples</span></span>
 <span>  <span class="va">my_samples</span> <span class="op">&lt;-</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu">extract</span><span class="op">(</span><span class="va">my_cauchy_fit</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">do.call</span><span class="op">(</span><span class="va">cbind</span>, <span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>    <span class="fu">set_colnames</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span>
@@ -3411,8 +3421,8 @@ normal model.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
+<span class="callout-header">Callout</span>
 <div class="callout-inner">
-<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>There are packages that enable computing WAIC and approximate
 leave-one-out score automatically so, in practice, there is seldom need
@@ -3425,8 +3435,8 @@ options tools.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Bayesian model comparison can be performed (for example) with
@@ -3450,7 +3460,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-gaussian-processes"><p>Content from <a href="gaussian-processes.html">Gaussian processes</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/gaussian-processes.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 63 minutes</p>
@@ -3563,6 +3573,7 @@ some realizations from a GP with <span class="math inline">\(\mu = (0,
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -3700,8 +3711,8 @@ standard deviation to <span class="math inline">\(\sigma =
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 8.5e-05 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.85 seconds.
+Chain 1: Gradient evaluation took 8.4e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.84 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -3718,15 +3729,15 @@ Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
 Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 31.869 seconds (Warm-up)
-Chain 1:                36.204 seconds (Sampling)
-Chain 1:                68.073 seconds (Total)
+Chain 1:  Elapsed Time: 32.263 seconds (Warm-up)
+Chain 1:                36.505 seconds (Sampling)
+Chain 1:                68.768 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: There were 492 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+<pre class="warning" tabindex="0"><code>Warning: There were 496 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 </div>
 <div class="codewrapper">
@@ -3737,7 +3748,7 @@ https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <div class="codewrapper">
 <h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 2.11, indicating chains have not mixed.
+<pre class="warning" tabindex="0"><code>Warning: The largest R-hat is 2.12, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat</code></pre>
 </div>
@@ -3790,6 +3801,7 @@ plausible.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -3805,7 +3817,7 @@ posterior look like at the extremes?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Uncertainty grows at locations away from the data points and starts
 to resemble the prior. At the data locations, the uncertainty is
@@ -3930,6 +3942,7 @@ one recovered without the Cholesky parameterization?</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -3942,7 +3955,7 @@ one recovered without the Cholesky parameterization?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3957,7 +3970,7 @@ one recovered without the Cholesky parameterization?</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>[1] 0.6006667</code></pre>
+<pre class="output" tabindex="0"><code>[1] 0.5946667</code></pre>
 </div>
 </div>
 </div>
@@ -4116,6 +4129,7 @@ ends. Why might this be?</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -4130,7 +4144,7 @@ prediction range.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Let’s modify the program by setting the GP mean to a negative value
 and treating the length scale as a parameter.</p>
@@ -4209,8 +4223,8 @@ and treating the length scale as a parameter.</p>
 <pre class="output" tabindex="0"><code>
 SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1:
-Chain 1: Gradient evaluation took 0.001301 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 13.01 seconds.
+Chain 1: Gradient evaluation took 0.001276 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 12.76 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1:
 Chain 1:
@@ -4227,9 +4241,9 @@ Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
 Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1:
-Chain 1:  Elapsed Time: 17.445 seconds (Warm-up)
-Chain 1:                17.491 seconds (Sampling)
-Chain 1:                34.936 seconds (Total)
+Chain 1:  Elapsed Time: 17.856 seconds (Warm-up)
+Chain 1:                17.438 seconds (Sampling)
+Chain 1:                35.294 seconds (Total)
 Chain 1: </code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb25">
@@ -4262,6 +4276,7 @@ Chain 1: </code></pre>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -4273,8 +4288,8 @@ Chain 1: </code></pre>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>GPs provide a means for non-parametric regression.</li>
@@ -4288,11 +4303,11 @@ Chain 1: </code></pre>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</section></section><section id="aio-other-topics"><p>Content from <a href="other-topics.html">Stan extensions</a></p>
+</section></section><section id="aio-stan-extensions"><p>Content from <a href="stan-extensions.html">Stan extensions</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
-        <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/other-topics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan-extensions.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
@@ -4533,6 +4548,7 @@ model for the data.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -4654,7 +4670,7 @@ draws. Then, we will plot uncertainty intervals for <span class="math inline">\(
 <span><span class="co"># Plotting uncertainty intervals</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_intervals</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Alternatively, we can plot the (marginal) posterior sample histograms
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Alternatively, we can plot the (marginal) posterior sample histograms
 or densities with credible intervals as shaded areas as follows:</p>
 <div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4665,14 +4681,14 @@ or densities with credible intervals as shaded areas as follows:</p>
 <span>                      prob <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>                      point_est <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb22">
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plotting histogram</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_hist</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-11-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><code>bayesplot</code> also provides functions for assessing MCMC
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-11-2.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><code>bayesplot</code> also provides functions for assessing MCMC
 convergence and visualizing fit diagnostics. For example, we can
 generate trace plots for the chains:</p>
 <div class="codewrapper sourceCode" id="cb23">
@@ -4683,10 +4699,11 @@ generate trace plots for the chains:</p>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">mcmc_trace</span><span class="op">(</span><span class="va">cauchy_draws</span>, pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"mu"</span>, <span class="st">"sigma"</span><span class="op">)</span>,</span>
 <span>                      facet_args <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge2" class="callout challenge">
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
+<span class="callout-header">Challenge</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -4732,14 +4749,14 @@ Alternatively, you can plot the corresponding histograms.</p>
 <span><span class="co"># Limit x range for better illustration</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">ppc_dens_overlay</span><span class="op">(</span>y <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span>, yrep <span class="op">=</span> <span class="va">X_rep_sub</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb26">
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot histograms</span></span>
 <span><span class="fu">bayesplot</span><span class="fu">::</span><span class="fu">ppc_hist</span><span class="op">(</span>y <span class="op">=</span> <span class="va">df5</span><span class="op">$</span><span class="va">X</span>, yrep <span class="op">=</span> <span class="va">X_rep_sub</span><span class="op">)</span> <span class="op">+</span> <span class="fu">xlim</span><span class="op">(</span><span class="op">-</span><span class="fl">25</span>,<span class="fl">50</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
 </div>
 </div>
@@ -4867,10 +4884,10 @@ Formula: time | cens(1 - status) ~ sex + age + ph.karno_status
 
 Regression Coefficients:
                     Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept               1.27      0.69    -0.15     2.58 1.00     5012     2490
-sex                    -0.51      0.17    -0.83    -0.19 1.00     4789     2922
-age                     0.01      0.01    -0.01     0.03 1.00     5207     2779
-ph.karno_statushigh    -0.36      0.18    -0.72    -0.01 1.00     4534     2669
+Intercept               1.27      0.68    -0.11     2.57 1.00     4304     2666
+sex                    -0.50      0.16    -0.83    -0.19 1.00     4768     2842
+age                     0.01      0.01    -0.01     0.03 1.00     4607     2784
+ph.karno_statushigh    -0.36      0.18    -0.70    -0.02 1.00     4471     2616
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -4896,10 +4913,10 @@ argument.</p>
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>                     Estimate Est.Error  l-95% CI   u-95% CI
-Intercept           3.5486294  1.985898 0.8641319 13.1790893
-sex                 0.6031900  1.179877 0.4380762  0.8288425
-age                 1.0131344  1.009490 0.9948428  1.0323407
-ph.karno_statushigh 0.6964744  1.194624 0.4884050  0.9913700</code></pre>
+Intercept           3.5576154  1.970680 0.8962140 13.1193479
+sex                 0.6044998  1.179035 0.4369700  0.8279120
+age                 1.0130229  1.009435 0.9945742  1.0318059
+ph.karno_statushigh 0.6956990  1.193047 0.4959062  0.9847118</code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4910,7 +4927,7 @@ ph.karno_statushigh 0.6964744  1.194624 0.4884050  0.9913700</code></pre>
 <span>                          pars <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"b_sex"</span>, <span class="st">"b_age"</span>, <span class="st">"b_ph.karno_statushigh"</span><span class="op">)</span>,</span>
 <span>                          transform <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Based on the estimates, it seems that age has only a minor effect on
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Based on the estimates, it seems that age has only a minor effect on
 the hazard. Female sex and being “high” in <code>ph.karno</code> imply
 smaller hazards, meaning that these factors are protective.</p>
 <p>After fitting the model, we can print information about the priors
@@ -4955,7 +4972,7 @@ t-distribution with three degrees of freedom. The Stan program
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>// generated with brms 2.21.0
+<pre class="output" tabindex="0"><code>// generated with brms 2.22.0
 functions {
   /* distribution functions of the Cox proportional hazards model
    * parameterize hazard(t) = baseline(t) * mu
@@ -4970,35 +4987,68 @@ functions {
   real cox_lhaz(real y, real mu, real bhaz, real cbhaz) {
     return log(bhaz) + log(mu);
   }
+  vector cox_lhaz(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return log(bhaz) + log(mu);
+  }
+
+  // equivalent to the log survival function
   real cox_lccdf(real y, real mu, real bhaz, real cbhaz) {
-    // equivalent to the log survival function
     return - cbhaz * mu;
   }
+  real cox_lccdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return - dot_product(cbhaz, mu);
+  }
+
   real cox_lcdf(real y, real mu, real bhaz, real cbhaz) {
     return log1m_exp(cox_lccdf(y | mu, bhaz, cbhaz));
   }
+  real cox_lcdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return sum(log1m_exp(- cbhaz .* mu));
+  }
+
   real cox_lpdf(real y, real mu, real bhaz, real cbhaz) {
     return cox_lhaz(y, mu, bhaz, cbhaz) + cox_lccdf(y | mu, bhaz, cbhaz);
   }
+  real cox_lpdf(vector y, vector mu, vector bhaz, vector cbhaz) {
+    return sum(cox_lhaz(y, mu, bhaz, cbhaz)) + cox_lccdf(y | mu, bhaz, cbhaz);
+  }
+
   // Distribution functions of the Cox model in log parameterization
   real cox_log_lhaz(real y, real log_mu, real bhaz, real cbhaz) {
     return log(bhaz) + log_mu;
   }
+  vector cox_log_lhaz(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return log(bhaz) + log_mu;
+  }
+
   real cox_log_lccdf(real y, real log_mu, real bhaz, real cbhaz) {
     return - cbhaz * exp(log_mu);
   }
+  real cox_log_lccdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return - dot_product(cbhaz, exp(log_mu));
+  }
+
   real cox_log_lcdf(real y, real log_mu, real bhaz, real cbhaz) {
     return log1m_exp(cox_log_lccdf(y | log_mu, bhaz, cbhaz));
   }
+  real cox_log_lcdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return sum(log1m_exp(- cbhaz .* exp(log_mu)));
+  }
+
   real cox_log_lpdf(real y, real log_mu, real bhaz, real cbhaz) {
     return cox_log_lhaz(y, log_mu, bhaz, cbhaz) +
+           cox_log_lccdf(y | log_mu, bhaz, cbhaz);
+  }
+  real cox_log_lpdf(vector y, vector log_mu, vector bhaz, vector cbhaz) {
+    return sum(cox_log_lhaz(y, log_mu, bhaz, cbhaz)) +
            cox_log_lccdf(y | log_mu, bhaz, cbhaz);
   }
 }
 data {
   int&lt;lower=1&gt; N;  // total number of observations
   vector[N] Y;  // response variable
-  array[N] int&lt;lower=-1,upper=2&gt; cens;  // indicates censoring
+  // censoring indicator: 0 = event, 1 = right, -1 = left, 2 = interval censored
+  array[N] int&lt;lower=-1,upper=2&gt; cens;
   int&lt;lower=1&gt; K;  // number of population-level effects
   matrix[N, K] X;  // population-level design matrix
   int&lt;lower=1&gt; Kc;  // number of population-level effects after centering
@@ -5013,8 +5063,28 @@ data {
   int prior_only;  // should the likelihood be ignored?
 }
 transformed data {
+  // indices of censored data
+  int Nevent = 0;
+  int Nrcens = 0;
+  int Nlcens = 0;
+  array[N] int Jevent;
+  array[N] int Jrcens;
+  array[N] int Jlcens;
   matrix[N, Kc] Xc;  // centered version of X without an intercept
   vector[Kc] means_X;  // column means of X before centering
+  // collect indices of censored data
+  for (n in 1:N) {
+    if (cens[n] == 0) {
+      Nevent += 1;
+      Jevent[Nevent] = n;
+    } else if (cens[n] == 1) {
+      Nrcens += 1;
+      Jrcens[Nrcens] = n;
+    } else if (cens[n] == -1) {
+      Nlcens += 1;
+      Jlcens[Nlcens] = n;
+    }
+  }
   for (i in 2:K) {
     means_X[i - 1] = mean(X[, i]);
     Xc[, i - 1] = X[, i] - means_X[i - 1];
@@ -5023,7 +5093,8 @@ transformed data {
 parameters {
   vector[Kc] b;  // regression coefficients
   real Intercept;  // temporary intercept for centered predictors
-  simplex[Kbhaz] sbhaz;  // baseline coefficients
+  // baseline hazard coefficients
+  simplex[Kbhaz] sbhaz;
 }
 transformed parameters {
   real lprior = 0;  // prior contributions to the log posterior
@@ -5041,16 +5112,10 @@ model {
     // initialize linear predictor term
     vector[N] mu = rep_vector(0.0, N);
     mu += Intercept + Xc * b;
-    for (n in 1:N) {
-    // special treatment of censored data
-      if (cens[n] == 0) {
-        target += cox_log_lpdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      } else if (cens[n] == 1) {
-        target += cox_log_lccdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      } else if (cens[n] == -1) {
-        target += cox_log_lcdf(Y[n] | mu[n], bhaz[n], cbhaz[n]);
-      }
-    }
+    // vectorized log-likelihood contributions of censored data
+    target += cox_log_lpdf(Y[Jevent[1:Nevent]] | mu[Jevent[1:Nevent]], bhaz[Jevent[1:Nevent]], cbhaz[Jevent[1:Nevent]]);
+    target += cox_log_lccdf(Y[Jrcens[1:Nrcens]] | mu[Jrcens[1:Nrcens]], bhaz[Jrcens[1:Nrcens]], cbhaz[Jrcens[1:Nrcens]]);
+    target += cox_log_lcdf(Y[Jlcens[1:Nlcens]] | mu[Jlcens[1:Nlcens]], bhaz[Jlcens[1:Nlcens]], cbhaz[Jlcens[1:Nlcens]]);
   }
   // priors including constants
   target += lprior;
@@ -5156,7 +5221,7 @@ the function <code>brms::conditional_effects</code>.</p>
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">plot</span><span class="op">(</span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">fit_hier</span><span class="op">)</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The function can also plot variable interactions. Let’s plot the
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The function can also plot variable interactions. Let’s plot the
 conditional effect for interaction between Anger and btype.</p>
 <div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5165,7 +5230,7 @@ conditional effect for interaction between Anger and btype.</p>
 <code class="sourceCode R"><span><span class="co"># Plot conditional effect for interaction of Anger and btype</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="fu">conditional_effects</span><span class="op">(</span><span class="va">fit_hier</span>, effects <span class="op">=</span> <span class="st">"Anger:btype"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/other-topics-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let us now do a slight alteration in model and add another
+<figure><img src="../fig/stan-extensions-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let us now do a slight alteration in model and add another
 group-level intercept for the item variable. The priors are same as in
 the first model. The <code>update</code> function can be used to modify
 the formula without writing it anew in its entirety.</p>
@@ -5269,6 +5334,7 @@ compared to the first model.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
+<span class="callout-header">Discussion</span>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
@@ -5303,8 +5369,8 @@ summaries, and diagnostics.</p>
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
 </div>
+<span class="callout-header">Key Points</span>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>There are several R packages that provide more user-friendly ways of
@@ -5342,7 +5408,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2024-11-19 |
+<p>Last updated on 2025-08-22 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -6031,7 +6097,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.10" class="external-link">sandpaper (0.16.10)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.7" class="external-link">pegboard (0.7.7)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.5" class="external-link">varnish (1.0.5)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.17.1" class="external-link">sandpaper (0.17.1)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.7" class="external-link">varnish (1.0.7)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -6043,19 +6109,19 @@ any links that you are not going to use.
   <script type="application/ld+json">
     {
   "@context": "https://schema.org",
-  "@type": "TrainingMaterial",
+  "@type": "LearningResource",
   "@id": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "inLanguage": "en",
-  "dct:conformsTo": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
+  "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, The Carpentries",
   "name": "All in One View",
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/aio.html",
-  "dateCreated": "2024-09-24",
-  "dateModified": "2024-12-03",
-  "datePublished": "2024-12-03"
+  "dateCreated": "2025-08-22",
+  "dateModified": "2025-08-22",
+  "datePublished": "2025-08-22"
 }
 
   </script><script>
