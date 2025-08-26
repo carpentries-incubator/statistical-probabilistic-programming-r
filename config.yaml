@@ -65,7 +65,7 @@ episodes:
 - hierarchical-models.Rmd
 - model-comparison.Rmd
 - gaussian-processes.Rmd
-- other-topics.Rmd
+- stan-extensions.Rmd
 - exercises.Rmd
 
 # Information for Learners
