@@ -5,10 +5,30 @@ exercises: 2
 ---
 
 ```{r setup,  message=FALSE, echo=FALSE}
-library(rstan)
+library(cmdstanr)
 library(tidyverse)
 library(magrittr)
 library(grafify)
+
+cmdstan_setup <- function() {
+  dir.create("C:/cmdstan_work", FALSE, TRUE)
+  dir.create("C:/cmdstan_temp", FALSE, TRUE)
+
+  Sys.setenv(
+    TMPDIR = "C:/cmdstan_temp",
+    TEMP   = "C:/cmdstan_temp",
+    TMP    = "C:/cmdstan_temp"
+  )
+
+  options(
+    cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
+    cmdstanr_write_exe_dir = "C:/cmdstan_work"
+  )
+}
+
+cmdstan_setup()
+
+cmdstanr::register_knitr_engine(override = TRUE)
 
 theme_set(theme_bw(20))
 
@@ -40,7 +60,7 @@ The first one is the posterior predictive check, which involves comparing a fitt
 
 ## Data
 
-Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points. The data is included in the course's data folder at 
+Throughout the chapter, we will use the same simulated data set in the examples, a set of $N=88$ univariate numerical data points. The data are available in the course's `data` folder as `df5.csv`.
 
 Looking at the data histogram, it's evident that the data is approximately symmetrically distributed around 0. However, there is some dispersion in the data, and an extreme positive value, suggesting that the tails might be longer than those of a normal distribution. The Cauchy distribution is a potential alternative and below we will compare the suitability of these two distributions on this data. 
 
@@ -56,6 +76,7 @@ scale <- 1
 X <- rcauchy(N, location, scale) %>% round(., 3)
 df5 <- data.frame(X)
 
+write.csv(df5, "data/df5.csv", row.names = FALSE)
 # write.csv(df5, "df5", col.names = FALSE, row.names = FALSE)
 ```
 
@@ -124,14 +145,14 @@ generated quantities {
 
 Let's fit model and extract the replicates. 
 
-```{r}
+```{r, results = "hide", message = FALSE}
 # Fit
-normal_fit <- sampling(normal_model,
-                       list(N = N, X = df5$X), 
+normal_fit <- normal_model$sample(data = list(N = N, X = df5$X), 
                        refresh = 0)
 
 # Extract 
-X_rep <- rstan::extract(normal_fit, "X_rep")[[1]] %>% 
+X_rep <- normal_fit$draws("X_rep") %>%
+  posterior::as_draws_matrix() %>%
   data.frame() %>%
   mutate(sample = 1:nrow(.))
 
@@ -153,7 +174,7 @@ X_rep_sub <- X_rep %>% filter(sample %in%
 
 # Wide --> long
 X_rep_sub_l <- X_rep_sub %>%
-  gather(key = "key", value = "value", -sample) %>% 
+  pivot_longer(cols = -sample, names_to = "key", values_to = "value") %>% 
   mutate(Data = "X_rep")
 
 X_dummy <- data.frame(value = rep(df5$X, N_rep), 
@@ -243,11 +264,13 @@ generated quantities {
 
 A comparison of data $X$ and $X^{rep}$ from the Cauchy model shows good agreement between the posterior predictions and the data. The distributions appear to closely match around 0, and the replicates contain some extreme values similarly to the data.
 
-```{r, fig.width=15, fig.height=10, echo = FALSE}
-cauchy_fit <- sampling(cauchy_model, list(N = N, X = df5$X), 
+```{r, fig.width=15, fig.height=10, echo = FALSE, results = "hide", message = FALSE}
+cauchy_fit <- cauchy_model$sample(data = list(N = N, X = df5$X), 
                        refresh = 0)
 
-X_rep <- rstan::extract(cauchy_fit, "X_rep")[[1]] %>% data.frame() %>%
+X_rep <- cauchy_fit$draws("X_rep") %>%
+  posterior::as_draws_matrix() %>%
+  data.frame() %>%
   mutate(sample = 1:nrow(.))
 
 
@@ -261,7 +284,9 @@ X_rep_sub <- X_rep %>% filter(sample %in%
 
 # Wide --> long
 X_rep_sub_l <- X_rep_sub %>%
-  gather(key = "key", value = "value", -sample) %>% 
+  pivot_longer(cols = -sample, 
+               names_to = "key", 
+               values_to = "value") %>% 
   mutate(Data = "X_rep")
 
 X_dummy <- data.frame(value = rep(df5$X, N_rep), 
@@ -321,20 +346,22 @@ The log pointwise predictive density is computed as $\sum_{i=1}^N\log(\frac{1}{S
 
 Let's use the WAIC to compare the normal and Cauchy models. First we'll need to fit both models on the data using the Stan programs utilized above. 
 
-```{r}
+```{r, results = "hide", message = FALSE}
 stan_data <- list(N = N, X = df5$X)
 
 # Fit
-normal_fit <- sampling(normal_model, stan_data,
+normal_fit <- normal_model$sample(stan_data,
                        refresh = 0)
-cauchy_fit <- sampling(cauchy_model, stan_data, 
+cauchy_fit <- cauchy_model$sample(stan_data, 
                        refresh = 0)
 
 # Extract samples
-normal_samples <- rstan::extract(normal_fit, c("mu", "sigma")) %>%
-  data.frame
-cauchy_samples <- rstan::extract(cauchy_fit, c("mu", "sigma")) %>%
-  data.frame
+normal_samples <- normal_fit$draws(c("mu", "sigma")) |>
+  posterior::as_draws_matrix() |>
+  as.data.frame() 
+cauchy_samples <- cauchy_fit$draws(c("mu", "sigma")) |>
+  posterior::as_draws_matrix() |>
+  as.data.frame()
 ```
 
 
@@ -346,8 +373,8 @@ get_ppd_point <- function(x, samples, model) {
   # Loop over posterior samples  
   pp_dens <- lapply(1:nrow(samples), function(S) {
     
-    my_mu <- samples[S, "mu"]
-    my_sigma <- samples[S, "sigma"]
+    my_mu <- samples$mu[S]
+    my_sigma <- samples$sigma[S]
     
     if(model == "normal") {
       # Normal(x | mu, sigma^2)
@@ -358,7 +385,7 @@ get_ppd_point <- function(x, samples, model) {
       # Cauchy(x | location = mu, scale = sigma^2)
       dcauchy(x = x,
               location = my_mu,
-              scale = )
+              scale = my_sigma)
     }
     
   }) %>%
@@ -415,116 +442,84 @@ Above, $\text{lppd}_\text{loo-cv}$  is the sum of the log predictive densities o
 
 Let's implement this in R.
 
-```{r}
-# Loop over data partitions
+```{r, results = "hide", message = FALSE}
+# 1. Loop over leave-one-out data partitions for Normal Model
 normal_loo_lpds <- lapply(1:N, function(i) {
+  my_X <- df5$X[-i]
+  my_x <- df5$X[i]
   
-  # Subset data
-  my_X <- X[-i]
-  my_x <- X[i]
+  my_normal_fit <- normal_model$sample(
+    data = list(N = length(my_X), X = my_X),
+    refresh = 0
+  ) 
   
-  # Fit model
-  my_normal_fit <- sampling(normal_model,
-                            list(N = length(my_X),
-                                 X = my_X),
-                            refresh = 0
-                            ) 
+  my_samples <- my_normal_fit$draws(c("mu", "sigma")) |> 
+    posterior::as_draws_df()
   
-  # Samples
-  my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
-    do.call(cbind, .) %>% 
-    set_colnames(c("mu", "sigma"))
+  my_lppd <- get_ppd_point(my_x, my_samples, "normal") |> 
+    mean() |>  
+    log()
   
-  # lppd
-  my_lppd <- get_ppd_point(my_x, my_samples, "normal") %>% 
-    mean %>% log
-  
-  data.frame(i, lppd = my_lppd, model = "normal_loo")
-  
-}) %>%
-  do.call(rbind, .)
+  data.frame(i = i, lppd = my_lppd, model = "normal_loo")
+}) |> 
+  bind_rows()
 
-# Same for Cauchy:
+# 2. Loop over leave-one-out data partitions for Cauchy Model
 cauchy_loo_lpds <- lapply(1:N, function(i) {
+  my_X <- df5$X[-i]
+  my_x <- df5$X[i]
   
- # Subset data
-  my_X <- X[-i]
-  my_x <- X[i]
+  my_cauchy_fit <- cauchy_model$sample(
+    data = list(N = length(my_X), X = my_X),
+    refresh = 0
+  ) 
   
-  # Fit model
-  my_cauchy_fit <- sampling(cauchy_model,
-                            list(N = length(my_X),
-                                 X = my_X),
-                            refresh = 0
-                            ) 
+  my_samples <- my_cauchy_fit$draws(c("mu", "sigma")) |> 
+    posterior::as_draws_df()
   
-  # Samples
-  my_samples <- rstan::extract(my_cauchy_fit, c("mu", "sigma")) %>% 
-    do.call(cbind, .) %>% 
-    set_colnames(c("mu", "sigma"))
+  my_lppd <- get_ppd_point(my_x, my_samples, "cauchy") |>  
+    mean() |>  
+    log()
   
-  # lppd
-  my_lppd <- get_ppd_point(my_x, my_samples, "cauchy") %>% 
-    mean %>% log
-  
-  data.frame(i, lppd = my_lppd, model = "cauchy_loo")
-  
-}) %>%
-  do.call(rbind, .)
+  data.frame(i = i, lppd = my_lppd, model = "cauchy_loo")
+}) |> 
+  bind_rows()
 
 
-# Predictive density for data points using full data in training
-normal_full_lpd <- lapply(1, function(dummy) {
-  
-  # Fit model
-  my_normal_fit <- sampling(normal_model,
-                            list(N = length(X),
-                                 X = X), 
-                            refresh = 0)
-  
-  # Get data
-  my_samples <- rstan::extract(my_normal_fit, c("mu", "sigma")) %>% 
-    do.call(cbind, .) %>% 
-    set_colnames(c("mu", "sigma"))
-  
-  # Compute lppd
-  lppds <- lapply(1:N, function(i) {
-    
-    my_lppd <- get_ppd_point(X[i], my_samples, "normal") %>% 
-      mean %>% log
-    
-    data.frame(i, lppd = my_lppd, model = "normal")
-  }) %>% do.call(rbind, .)
-  
-  return(lppds)
-}) %>%
-  do.call(rbind, .)
+# 3. Predictive density for data points using FULL data (Normal Model)
+my_normal_full_fit <- normal_model$sample(
+  data = list(N = nrow(df5), X = df5$X), 
+  refresh = 0
+)
 
-cauchy_full_lpd <- lapply(1, function(dummy) {
-  
-  # Fit model
-  my_cauchy_fit <- sampling(cauchy_model,
-                            list(N = length(X),
-                                 X = X), 
-                            refresh = 0)
-  
-  # Get data
-  my_samples <- rstan::extract(my_cauchy_fit, c("mu", "sigma")) %>% 
-    do.call(cbind, .) %>% 
-    set_colnames(c("mu", "sigma"))
-  
-  # Compute lppd
-  lppds <- lapply(1:N, function(i) {
-    
-    my_lppd <- get_ppd_point(X[i], my_samples, "cauchy") %>% 
-      mean %>% log
-    
-    data.frame(i, lppd = my_lppd, model = "cauchy")
-  }) %>% do.call(rbind, .)
-  
-  return(lppds)
-}) %>%
-  do.call(rbind, .)
+normal_samples_full <- my_normal_full_fit$draws(c("mu", "sigma")) |> 
+  posterior::as_draws_df()
+
+normal_full_lpd <- lapply(1:N, function(i) {
+  my_lppd <- get_ppd_point(df5$X[i], normal_samples_full, "normal") |> 
+    mean() |>  
+    log()
+  data.frame(i = i, lppd = my_lppd, model = "normal")
+}) |> 
+  bind_rows()
+
+
+# 4. Predictive density for data points using FULL data (Cauchy Model)
+my_cauchy_full_fit <- cauchy_model$sample(
+  data = list(N = nrow(df5), X = df5$X), 
+  refresh = 0
+)
+
+cauchy_samples_full <- my_cauchy_full_fit$draws(c("mu", "sigma")) |> 
+  posterior::as_draws_df()
+
+cauchy_full_lpd <- lapply(1:N, function(i) {
+  my_lppd <- get_ppd_point(df5$X[i], cauchy_samples_full, "cauchy") |> 
+    mean() |>  
+    log()
+  data.frame(i = i, lppd = my_lppd, model = "cauchy")
+}) |> 
+  bind_rows()
 ```
 
 
@@ -532,14 +527,14 @@ Let's combine the computed log densities, and compute model-wise sums
 
 ```{r}
 # Combine
-lppds <- rbind(normal_loo_lpds, 
-              normal_full_lpd, 
-              cauchy_loo_lpds,
-              cauchy_full_lpd)
+lppds <- bind_rows(normal_loo_lpds, 
+                   normal_full_lpd, 
+                   cauchy_loo_lpds, 
+                   cauchy_full_lpd)
 
 lppd_summary <- lppds %>% 
   group_by(model) %>% 
-  summarize(lppd = sum(lppd))
+  summarize(lppd = sum(lppd), .groups = "drop")
 ```
 
 
@@ -547,12 +542,17 @@ Finally, we can compute the estimated of the effective number of parameters. As 
 
 ```{r}
 # Effective number of parameters
-p_loo_cv_normal <- lppd_summary[lppd_summary$model == "normal", "lppd"] - lppd_summary[lppd_summary$model == "normal_loo", "lppd"]
-p_loo_cv_cauchy <- lppd_summary[lppd_summary$model == "cauchy", "lppd"] - lppd_summary[lppd_summary$model == "cauchy_loo", "lppd"]
+normal_full_val <- lppd_summary %>% filter(model == "normal") %>% pull(lppd)
+normal_loo_val  <- lppd_summary %>% filter(model == "normal_loo") %>% pull(lppd)
+cauchy_full_val <- lppd_summary %>% filter(model == "cauchy") %>% pull(lppd)
+cauchy_loo_val  <- lppd_summary %>% filter(model == "cauchy_loo") %>% pull(lppd)
 
+# Calculate effective number of parameters
+p_loo_cv_normal <- normal_full_val - normal_loo_val
+p_loo_cv_cauchy <- cauchy_full_val - cauchy_loo_val
 
-paste0("Effective number of parameters, normal = ", p_loo_cv_normal)
-paste0("Effective number of parameters, cauchy = ", p_loo_cv_cauchy)
+print(paste0("Effective number of parameters, normal = ", round(p_loo_cv_normal, 4)))
+print(paste0("Effective number of parameters, cauchy = ", round(p_loo_cv_cauchy, 4)))
 
 ```
 
