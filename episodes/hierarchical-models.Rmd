@@ -11,21 +11,38 @@ library(tidyverse)
 library(cowplot)
 library(grafify)
 
-compiled_dir <- file.path(getwd(), "stan_compiled")
-dir.create(compiled_dir, showWarnings = FALSE)
 
-Sys.setenv(TMPDIR = compiled_dir)
-Sys.setenv(TMP = compiled_dir)
-Sys.setenv(TEMP = compiled_dir)
+cmdstan_setup <- function() {
 
-options(cmdstanr_write_stan_file_dir = compiled_dir)
-options(cmdstanr_write_exe_dir = compiled_dir)
+  home_dir <- normalizePath("~", winslash = "/")
+  work_dir <- file.path(home_dir, "cmdstan_work")
+  temp_dir <- file.path(home_dir, "cmdstan_temp")
 
-# Specialized knitr engine, Markdown compiler automatically save, compile to cmdstanr
+  dir.create(work_dir, FALSE, TRUE)
+  dir.create(temp_dir, FALSE, TRUE)
+
+  Sys.setenv(
+    TMPDIR = temp_dir,
+    TEMP   = temp_dir,
+    TMP    = temp_dir
+  )
+
+  options(
+    cmdstanr_write_stan_file_dir = work_dir,
+    cmdstanr_write_exe_dir = work_dir
+  )
+}
+
+cmdstan_setup()
+
 cmdstanr::register_knitr_engine(override = TRUE)
 
 theme_set(theme_bw(15))
 posterior_color <- "#56B4E9"
+```
+
+```{r}
+Sys.getenv(c("TMP", "TEMP", "TMPDIR"))
 ```
 
 :::::::::::::::::::::::::::::::::::::: questions 
