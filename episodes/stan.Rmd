@@ -12,12 +12,30 @@ library(grafify)
 library(cowplot)
 library(cmdstanr)
 
-dir.create("stan_compiled", showWarnings = FALSE)
 
-options(cmdstanr_write_stan_file_dir = file.path(getwd(), "stan_compiled"))
-options(cmdstanr_write_exe_dir = file.path(getwd(), "stan_compiled"))
+cmdstan_setup <- function() {
 
-# Specialized knitr engine, Markdown compiler automatically save, compile to cmdstanr
+  home_dir <- normalizePath("~", winslash = "/")
+  work_dir <- file.path(home_dir, "cmdstan_work")
+  temp_dir <- file.path(home_dir, "cmdstan_temp")
+
+  dir.create(work_dir, FALSE, TRUE)
+  dir.create(temp_dir, FALSE, TRUE)
+
+  Sys.setenv(
+    TMPDIR = temp_dir,
+    TEMP   = temp_dir,
+    TMP    = temp_dir
+  )
+
+  options(
+    cmdstanr_write_stan_file_dir = work_dir,
+    cmdstanr_write_exe_dir = work_dir
+  )
+}
+
+cmdstan_setup()
+
 cmdstanr::register_knitr_engine(override = TRUE)
 
 theme_set(theme_bw(15))
