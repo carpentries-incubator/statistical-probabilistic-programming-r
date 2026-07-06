@@ -6,13 +6,34 @@ exercises: 3
 
 
 ```{r, include=FALSE}
-library(rstan)
+library(cmdstanr)
 library(tidyverse)
 library(grafify)
 library(cowplot)
 library(mvtnorm)
-theme_set(theme_bw(15))
 
+
+cmdstan_setup <- function() {
+  dir.create("C:/cmdstan_work", FALSE, TRUE)
+  dir.create("C:/cmdstan_temp", FALSE, TRUE)
+
+  Sys.setenv(
+    TMPDIR = "C:/cmdstan_temp",
+    TEMP   = "C:/cmdstan_temp",
+    TMP    = "C:/cmdstan_temp"
+  )
+
+  options(
+    cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
+    cmdstanr_write_exe_dir = "C:/cmdstan_work"
+  )
+}
+
+cmdstan_setup()
+
+cmdstanr::register_knitr_engine(override = TRUE)
+
+theme_set(theme_bw(15))
 posterior_color <- "#56B4E9"
 ```
 
@@ -75,7 +96,9 @@ gp_samples_l <- gp_samples %>%
   t %>% 
   data.frame %>% 
   mutate(x = seq(0, 100, by = 1)) %>% 
-  gather(key = "sample", value = "y", -x)
+  pivot_longer(cols = -x,
+               names_to = "sample", 
+               values_to = "y")
 
 
 gp_sample_p <- ggplot(data = gp_samples_l) +
@@ -129,8 +152,8 @@ Take a moment to digest the structure of the Stan program.
 data {
   // Data
   int<lower=1> N_data;
-  real y[N_data];
-  real x_data[N_data];
+  array[N_data] real y;
+  array[N_data] real x_data;
   
   // GP hyperparameters
   real<lower=0> alpha;
@@ -141,13 +164,14 @@ data {
   
   // Prediction points
   int<lower=1> N_pred;
-  real x_pred[N_pred];
+  array[N_pred] real x_pred;
 }
+
 transformed data {
   // Number of data and prediction points
   int<lower=1> N = N_data + N_pred;
   
-  real x[N];
+  array[N] real x;
   matrix[N, N] K;
   
   x[1:N_data] = x_data;
@@ -182,16 +206,19 @@ Let's fit the model. We'll use hyperparameter values $\lambda = 1$, $\alpha = 1$
 
 ```{r}
 # Fit
-gp_samples <- rstan::sampling(gp_model,
-                       list(N_data = nrow(df6),
-                            x_data = as.array(df6$x),
-                            y = as.array(df6$y),
-                            lambda = 1,
-                            alpha = 1,
-                            sigma = 0.1,
-                            N_pred = N_pred,
-                            x_pred = x_pred),
-                       chains = 1, iter = 1000)
+gp_samples <- gp_model$sample(
+              data = list(N_data = nrow(df6),
+                          x_data = as.array(df6$x),
+                          y = as.array(df6$y),
+                          lambda = 1,
+                          alpha = 1,
+                          sigma = 0.1,
+                          N_pred = N_pred,
+                          x_pred = x_pred),
+              chains = 1, 
+              iter_warmup = 500,
+              iter_sampling = 500,
+              refresh = 0)
 ```
 
 
@@ -199,8 +226,10 @@ The inference takes some time (about a minute on a standard laptop) even though 
 
 
 ```{r}
-f_samples <- rstan::extract(gp_samples, "f")[["f"]] %>% 
-  t %>% data.frame() %>% 
+f_samples <- gp_samples$draws("f") %>% 
+  posterior::as_draws_matrix() %>% 
+  t() %>% 
+  data.frame() %>% 
   mutate(x = c(df6$x, x_pred)) # data and prediction locations
 
 f_samples_l <- f_samples %>% 
@@ -243,8 +272,8 @@ The Stan program below implements this parameterization. The Cholesky decomposit
 data {
   // Data
   int<lower=1> N_data;
-  real y[N_data];
-  real x_data[N_data];
+  array[N_data] real y;
+  array[N_data] real x_data;
   
   // GP hyperparameters
   real<lower=0> alpha;
@@ -254,12 +283,13 @@ data {
   
   // Prediction points
   int<lower=1> N_pred;
-  real x_pred[N_pred];
+  array[N_pred] real x_pred;
 }
+  
 transformed data {
   int<lower=1> N = N_data + N_pred;
   
-  real x[N];
+  array[N] real x;
   matrix[N, N] K;
   matrix[N, N] L;
   
@@ -294,38 +324,76 @@ model {
 
 Let's compile and fit this model using the same data. Fitting is completed in a few seconds with no convergence issues: 
 
+```{r, include=FALSE}
+Sys.setenv(
+  TMPDIR = "C:/cmdstan_temp",
+  TEMP   = "C:/cmdstan_temp",
+  TMP    = "C:/cmdstan_temp"
+)
+options(
+  cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
+  cmdstanr_write_exe_dir = "C:/cmdstan_work"
+)
+
+# Guarantee cholesky model compilation remains in the allowed path
+if(!exists("gp_cholesky_model")) {
+  gp_cholesky_model <- cmdstanr::cmdstan_model(cmdstanr::write_stan_file(gp_cholesky_model_code))
+}
+```
+
+
 ```{r}
-gp_cholesky_samples <- rstan::sampling(gp_cholesky_model,
-                       list(N_data = nrow(df6),
-                            x_data = as.array(df6$x),
-                            y = as.array(df6$y),
-                            lambda = 1,
-                            alpha = 1,
-                            sigma = 0.1,
-                            N_pred = N_pred,
-                            x_pred = x_pred),
-                       chains = 1, iter = 2000, 
-                       refresh = 0)
+gp_cholesky_samples <- gp_cholesky_model$sample(
+                       data = list(N_data = nrow(df6),
+                                   x_data = as.array(df6$x),
+                                   y = as.array(df6$y),
+                                   lambda = 1,
+                                   alpha = 1,
+                                   sigma = 0.1,
+                                   N_pred = N_pred,
+                                   x_pred = x_pred),
+                       chains = 1, 
+                       iter_warmup = 1000,
+                       iter_sampling = 1000,
+                       refresh = 0
+                       )
 ```
 
 
 Let's examine the results. How is the posterior different from the one recovered without the Cholesky parameterization?
 
 ```{r}
-f_cholesky_samples <- rstan::extract(gp_cholesky_samples, "f")[["f"]] %>% 
-  t %>% data.frame() %>% 
-  mutate(x = c(df6$x, x_pred))
 
-f_cholesky_samples_l <- f_cholesky_samples %>% 
-  gather(key = "sample", value = "f", -x)
+f_matrix <- posterior::as_draws_matrix(gp_cholesky_samples$draws("f"))
 
-p_cholesky_f <- ggplot() +
+N_data <- nrow(df6)
+f_pred_matrix <- f_matrix[, (N_data + 1):ncol(f_matrix)]
+
+f_pred_df <- as.data.frame(t(f_pred_matrix))
+f_pred_df$x <- x_pred
+f_cholesky_samples_l <- f_pred_df %>%   
+  tidyr::pivot_longer(
+    cols = -x,          
+    names_to = "draw", 
+    values_to = "f"
+  )
+
+
+p_cholesky_f <- ggplot() +  
   geom_line(
-    data = f_cholesky_samples_l,
-    aes(x = x, y = f, group = sample),
-    alpha = 0.05) +
-  geom_point(data = df6, 
-             aes(x = x, y = y), color ="red") 
+    data = f_cholesky_samples_l,    
+    aes(x = x, y = f, group = draw),    
+    alpha = 0.05,
+    color = "black"
+  ) +  
+  geom_point(
+    data = df6,              
+    aes(x = x, y = y), 
+    color = "red",
+    size = 2
+  ) +
+  labs(x = "x", y = "f") +
+  theme_bw(15)
 
 print(p_cholesky_f)
 
@@ -342,7 +410,7 @@ For the previous example, compute the posterior probability for $f(0) > 0$.
 posterior_at_0 <- f_cholesky_samples_l %>%
   filter(x == 0)
 
-mean(posterior_at_0 > 0)
+mean(posterior_at_0$f > 0)
 
 ```
 
@@ -414,24 +482,26 @@ In the model block, we utilize the built-in Stan function `bernoulli_logit` to w
 
 
 ```{stan output.var="logistic_gp_model"}
+
 data {
   // Data
   int<lower=1> N_data;
-  int<lower=0, upper=1> y[N_data];
-  real x_data[N_data];
+  array[N_data] int<lower=0, upper=1> y;
+  array[N_data] real x_data;
 
   // Prediction points
   int<lower=1> N_pred;
-  real x_pred[N_pred];
+  array[N_pred] real x_pred;
 
   // GP hyperparameters
   real<lower=0> alpha;
   real<lower=0> lambda;
 }
+
 transformed data {
   int<lower=1> N = N_data + N_pred;
 
-  real x[N];
+  array[N] real x;
   matrix[N, N] K;
   matrix[N, N] L;
 
@@ -466,7 +536,7 @@ model {
   eta ~ normal(0, 1);
 }
 generated quantities{
-  vector[N] theta = 1 / (1 + exp(-(alpha + f)));
+  vector[N] theta = 1 / (1 + exp(-(a + f)));
 }
 
 ```
@@ -479,19 +549,19 @@ Let's fit the model and extract the posterior summary of $\theta$.
 x_pred <- seq(min(insect$x), max(insect$x), length.out = 100)
 N_pred <- length(x_pred)
 
-logistic_gp_fit <- rstan::sampling(logistic_gp_model,
-                                   list(N_data = nrow(insect),
-                                        y = insect$y,
-                                        x_data = insect$x,
-                                        alpha = 1,
-                                        lambda = 3,
-                                        N_pred = N_pred,
-                                        x_pred = x_pred),
+logistic_gp_fit <- logistic_gp_model$sample(
+                                   data = list(N_data = nrow(insect),
+                                               y = insect$y,
+                                               x_data = insect$x,
+                                               alpha = 1,
+                                               lambda = 3,
+                                               N_pred = N_pred,
+                                               x_pred = x_pred),
                                    refresh = 0)
 
-theta_summary <- rstan::summary(logistic_gp_fit, "theta")$summary %>%
+theta_summary <- logistic_gp_fit$summary("theta") %>%
   data.frame() %>%
-  select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>%
+  select(lower_2.5 = q5, mean, upper_97.5 = q95) %>%
   mutate(x = c(insect$x, x_pred))
 ```
 
@@ -523,18 +593,19 @@ Let's modify the program by setting the GP mean to a negative value and treating
 data {
   // Data
   int<lower=1> N_data;
-  int<lower=0, upper=1> y[N_data];
-  real x_data[N_data];
+  array[N_data] int<lower=0, upper=1> y;
+  array[N_data] real x_data;
 
   // Prediction points
   int<lower=1> N_pred;
-  real x_pred[N_pred];
+  array[N_pred] real x_pred;
 
   real<lower=0> alpha;
 }
 transformed data {
   int<lower=1> N = N_data + N_pred;
-  real x[N];
+  array[N] real x;
+  
   x[1:N_data] = x_data;
   x[(N_data+1):N] = x_pred;
 }
@@ -577,18 +648,33 @@ generated quantities{
 Refit the model and check posterior
 
 ```{r}
-logistic_gp_fit2 <- rstan::sampling(logistic_gp_model2,
-                                   list(N_data = nrow(insect),
-                                        y = insect$y,
-                                        x_data = insect$x,
-                                        alpha = 1,
-                                        N_pred = N_pred,
-                                        x_pred = x_pred),
-                                   chains = 1)
+Sys.setenv(
+  TMPDIR = "C:/cmdstan_temp",
+  TEMP   = "C:/cmdstan_temp",
+  TMP    = "C:/cmdstan_temp"
+)
+options(
+  cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
+  cmdstanr_write_exe_dir = "C:/cmdstan_work"
+)
 
-theta_summary2 <- rstan::summary(logistic_gp_fit2, "theta")$summary %>%
+if(!exists("logistic_gp_model2")) {
+  logistic_gp_model2 <- cmdstanr::cmdstan_model(cmdstanr::write_stan_file(logistic_gp_model2_code))
+}
+
+logistic_gp_fit2 <- logistic_gp_model2$sample(
+                                   data = list(N_data = nrow(insect),
+                                               y = insect$y,
+                                               x_data = insect$x,
+                                               alpha = 1,
+                                               N_pred = N_pred,
+                                               x_pred = x_pred),
+                                   chains = 1,
+                                   refresh = 0)
+
+theta_summary2 <- logistic_gp_fit2$summary("theta") %>%
   data.frame() %>%
-  select(lower_2.5 = X2.5., mean, upper_97.5 = X97.5.) %>%
+  select(lower_2.5 = q5, mean, upper_97.5 = q95) %>%
   mutate(x = c(insect$x, x_pred))
 
 p_theta2 <-
