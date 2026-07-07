@@ -41,10 +41,6 @@ theme_set(theme_bw(15))
 posterior_color <- "#56B4E9"
 ```
 
-```{r}
-Sys.getenv(c("TMP", "TEMP", "TMPDIR"))
-```
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How does Bayesian modeling accommodate group structure?
