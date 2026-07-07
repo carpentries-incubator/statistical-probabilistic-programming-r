@@ -6,6 +6,13 @@ exercises: 2
 
 
 ```{r, include=FALSE}
+home_dir <- normalizePath("~", winslash = "/")
+safe_dir <- file.path(home_dir, "cmdstan_temp")
+if (!dir.exists(safe_dir)) dir.create(safe_dir, FALSE, TRUE)
+
+Sys.setenv(TMPDIR = safe_dir, TEMP = safe_dir, TMP = safe_dir)
+
+library(cmdstanr)
 library(magrittr)
 library(tidyverse)
 library(grafify)
@@ -15,6 +22,14 @@ library(bayesplot)
 library(splines2)
 theme_set(theme_bw(15))
 
+options(
+  brms.backend = "cmdstanr",
+  cmdstanr_write_stan_file_dir = safe_dir,
+  cmdstanr_write_exe_dir       = safe_dir,
+  cmdstanr_write_exe_ext       = ".txt"
+)
+
+cmdstanr::register_knitr_engine(override = TRUE)
 
 okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
 
@@ -50,7 +65,7 @@ The `loo` package allows computing approximate leave-one-out cross-validation (l
 
 We will demonstrate `loo` package usage on the model comparison example studied in Episode 5. We will fit the normal and Cauchy models on the same synthetic data, then use the tools provided in `loo` to compute and compare the approximate loo-cv scores for these two models. 
 
-To be able to utilize the package functions, we need to add a log-likelihood computation in the Stan code, in the generated quantities block. The object containing the log-likelihood needs to be named `log_lik` so the 'loo' functions can find it. Below, we demonstrate this with the two models we are comparing.
+To be able to utilize the package functions, we need to add a log-likelihood computation in the Stan code, in the generated quantities block. The generated quantities block computes the pointwise log-likelihood, stored in a variable named `log_lik`. CmdStanR automatically recognizes this variable, allowing the loo package to compute approximate leave-one-out cross-validation. Below, we demonstrate this with the two models we are comparing.
 
 ```{stan output.var="normal_model_loo"}
 // Normal model
@@ -130,15 +145,19 @@ df5 <- data.frame(X = c(-2.27, 1.941, 0.502, -0.378, -0.226, -0.786, -0.209, -0.
 N <- 88
 ```
 
-```{r}
+```{r, results = "hide", message = FALSE}
 # Fit normal model
-normal_fit <- rstan::sampling(normal_model_loo,
-                       list(N = N, X = df5$X), 
-                       refresh = 0, seed = 2024)
+normal_fit <- normal_model_loo$sample(
+                       data = list(N = N, X = df5$X), 
+                       refresh = 0, 
+                       seed = 2024
+                       )
 # Fit cauchy model
-cauchy_fit <- rstan::sampling(cauchy_model_loo,
-                       list(N = N, X = df5$X), 
-                       refresh = 0, seed = 2024)
+cauchy_fit <- cauchy_model_loo$sample(
+                       data = list(N = N, X = df5$X), 
+                       refresh = 0, 
+                       seed = 2024
+                       )
 
 ```
 
@@ -146,11 +165,11 @@ We can now compute PSIS-LOO for both of the models with `loo::loo` function. Aft
 
 ```{r}
 # PSIS-LOO computation for normal model
-normal_loo <- loo::loo(normal_fit)
+normal_loo <- normal_fit$loo()
 print(normal_loo)
 
 # PSIS-LOO computation for cauchy model
-cauchy_loo <- loo::loo(cauchy_fit)
+cauchy_loo <- cauchy_fit$loo()
 print(cauchy_loo)
 ```
 
@@ -172,12 +191,12 @@ The comparison shows that the elpd difference is larger than the standard error,
 
 ::::::::::::::::::::::::::::::: solution
 
-First we need to extract the log-likelihood values from the fitted model object.
+First we need to extract the log-likelihood values from the fitted model object using `draws()`.
 
 ```{r}
 # Extracting loglik
-normal_loglik <- loo::extract_log_lik(normal_fit)
-cauchy_loglik <- loo::extract_log_lik(cauchy_fit)
+normal_loglik <- normal_fit$draws("log_lik", format = "matrix")
+cauchy_loglik <- cauchy_fit$draws("log_lik", format = "matrix")
 
 # Computing WAIC for the models
 normal_waic <- loo::waic(normal_loglik)
@@ -208,7 +227,7 @@ We will demonstrate using `bayesplot` with the Cauchy model used in the first ex
 
 ```{r}
 # Extracting draws
-cauchy_draws <- as.array(cauchy_fit)
+cauchy_draws <- cauchy_fit$draws()
 
 # Plotting uncertainty intervals
 bayesplot::mcmc_intervals(cauchy_draws, pars = c("mu", "sigma"))
@@ -246,18 +265,12 @@ Perform a graphical posterior predictive checks with `bayesplot`. Using the Cauc
 ```{r}
 # Extracting replicates and getting a subset
 set.seed(2024)
-X_rep <- rstan::extract(cauchy_fit, "X_rep")[[1]] %>%
-  data.frame() %>%
-    mutate(sample = 1:nrow(.))
+X_rep <- cauchy_fit$draws("X_rep", format = "matrix")
 
 N_rep <- 9
 
-X_rep_sub <- X_rep %>% filter(sample %in%
-                                sample(X_rep$sample,
-                                       N_rep,
-                                       replace = FALSE))
-X_rep_sub <- X_rep_sub[, -89] %>%
-  as.matrix()
+selected_samples <- sample(1:nrow(X_rep), size = N_rep, replace = FALSE)
+X_rep_sub <- X_rep[selected_samples, ]
 ```
 
 ```{r, message = FALSE, warning = FALSE}
@@ -281,7 +294,7 @@ bayesplot::ppc_hist(y = df5$X, yrep = X_rep_sub) + xlim(-25,50)
 
 We will now introduce the `brms` R package. The package allows fitting probabilistic generalized (non-)linear models with Stan. A large range of distributions and link functions are supported, in addition to multilevel structure. Moreover, several built-in functions are available for priors. 
 
-Models are specified using familiar R formula syntax, input into an R function which compiles and calls the Stan model in the backend.
+Models are specified using familiar R formula syntax. Throughout this lesson, `brms` uses `CmdStanR` as the backend to compile and fit the corresponding Stan models.
 
 The package also provides tools for evaluating the fit and MCMC convergence. These tools, in turn, use functions from the `loo` and `bayesplot` packages, that is, many of the same tools we covered earlier in this Episode. 
 
@@ -333,10 +346,17 @@ lung$ph.karno_status <- cut(lung$ph.karno,
                             labels = c("low", "high"))
 
 # Fitting the model
-fit_cox <- brms::brm(time | cens(1 - status) ~ sex + age + ph.karno_status,
-             data = lung, family = brmsfamily("cox"), seed = 2024,
-             silent = 2, refresh = 0, cores = 4,
-             prior = prior(normal(0,10), class = b))
+fit_cox <- brms::brm(
+  time | cens(1 - status) ~ sex + age + ph.karno_status,
+  data = lung,
+  family = brmsfamily("cox"),
+  backend = "cmdstanr",
+  seed = 2024,
+  silent = 2,
+  refresh = 0,
+  cores = 4,
+  prior = prior(normal(0, 10), class = b)
+)
 # Summary of the fit
 summary(fit_cox)
 ```
@@ -365,7 +385,7 @@ After fitting the model, we can print information about the priors used with the
 brms::get_prior(fit_cox)
 ```
 
-The population-level effects have the normal prior we specified. In `brms`, the default prior for the intercept is Student's t-distribution with three degrees of freedom. The Stan program `brms` ran under the hood can be printed with the `brms::stancode` function.
+The population-level effects have the normal prior we specified. In `brms`, the default prior for the intercept is Student's t-distribution with three degrees of freedom. The Stan program generated by `brms` can be inspected using `brms::stancode()`. When `backend = "cmdstanr"` is used, this Stan program is compiled and sampled with CmdStan.
 
 ```{r}
 # Print the Stan code
@@ -386,19 +406,25 @@ VerbAgg <- lme4::VerbAgg
 head(VerbAgg)
 ```
 
-We will estimate population-level effects for Anger, Gender, btype and situ, and includea group-level intercept for id. The variable of interest is the binary r2, which contains the response to an question in the questionnaire. We will use $\text{Normal}(0, 10)$ as the prior for all the population-level effects. For the standard deviation of group-level effect we will set a (half-)$\text{Cauchy}(0, 5)$ prior. By default, `brms` uses half-Student's t-distribution with three degrees of freedom for standard deviation parameters. The group-level intercept for variable id is specified with the argument `(1|id)`. Let's now fit the model.
+We will estimate population-level effects for Anger, Gender, btype and situ, and include a group-level intercept for id. The variable of interest is the binary r2, which contains the response to an question in the questionnaire. We will use $\text{Normal}(0, 10)$ as the prior for all the population-level effects. For the standard deviation of group-level effect we will set a (half-)$\text{Cauchy}(0, 5)$ prior. By default, `brms` uses half-Student's t-distribution with three degrees of freedom for standard deviation parameters. The group-level intercept for variable id is specified with the argument `(1|id)`. Let's now fit the model.
 
 ```{r}
 # Change coding for r2
 VerbAgg <- VerbAgg %>%
   mutate(r2 = ifelse(r2 == "N", 0, 1))
 # Fit model
-fit_hier <- brms::brm(r2 ~ Anger + Gender + btype + situ + (1|id),
-                      family = bernoulli, 
-                      data = VerbAgg,
-                      seed = 2024, cores = 4, silent = 2, refresh = 0,
-                      prior = prior(normal(0, 10), class = b) + 
-                        prior(cauchy(0,5), class = sd))
+fit_hier <- brms::brm(
+  r2 ~ Anger + Gender + btype + situ + (1 | id),
+  family = bernoulli,
+  data = VerbAgg,
+  backend = "cmdstanr",
+  seed = 2024,
+  cores = 4,
+  silent = 2,
+  refresh = 0,
+  prior = prior(normal(0, 10), class = b) +
+    prior(cauchy(0, 5), class = sd)
+)
 # Summary
 summary(fit_hier)
 ```
@@ -407,8 +433,10 @@ The conditional effects of the predictors can easily be plotted with the functio
 
 ```{r}
 # Conditional effects
-plots <- plot(conditional_effects(fit_hier), plot = FALSE)
-cowplot::plot_grid(plots[[1]], plots[[2]], plots[[3]], plots[[4]])
+plots <- suppressMessages(
+  plot(brms::conditional_effects(fit_hier), plot = FALSE))
+suppressMessages(
+cowplot::plot_grid(plots[[1]], plots[[2]], plots[[3]], plots[[4]]))
 
 ```
 
@@ -426,7 +454,7 @@ Let us now do a slight alteration in model and add another group-level intercept
 ```{r}
 # Update model
 fit_hier2 <- update(fit_hier, formula. = ~ . + (1|item), newdata = VerbAgg, seed = 2024,
-                    cores = 4, silent = 2, refresh = 0)
+                    cores = 4, silent = 2, refresh = 0, backend = "cmdstanr")
 # Summary
 summary(fit_hier2)
 ```
@@ -452,9 +480,15 @@ Experiment with different priors for the model. How much does the chosen prior a
 
 ## Other packages built on Stan
 
-In addition to the ones covered here, there are several other packages that take advantage of Stan. Here we will briefly introduce some of them.  [CmdStanR](https://mc-stan.org/cmdstanr/index.html) is a lightweight command-line-based interface for Stan and provides and alternative for rstan. [rstanarm](https://mc-stan.org/rstanarm/) emulates the model fitting R functions using Stan. The package can do lot of the same things as `brms`, but they do have differences, for example `rstanarm` models come pre-compiled while `brms` compiles the models when called. 
+In addition to the packages covered here, there are several other packages that take advantage of Stan. Here we will briefly introduce some of them.
 
-[shinystan](https://mc-stan.org/shinystan/) uses Shiny and provides user with interactive, customizable visual and numerical summaries of model parameters and convergence diagnostics. [projpred](https://mc-stan.org/projpred/) performs projection predictive variable selection for various models. The package works with models from `brms` and `rstanarm`. [posterior](https://mc-stan.org/posterior/) provides tools for manipulating posterior draws, and contains methods for common operations, such as,  subsetting and binding, and producing posterior summaries, and diagnostics. 
+[rstanarm](https://mc-stan.org/rstanarm/) provides an interface for fitting common Bayesian regression models using Stan. It allows users to specify models using familiar R modeling syntax. Unlike `brms`, which generates Stan code based on the user-defined model formula, `rstanarm` uses a collection of pre-compiled Stan models.
+
+[shinystan](https://mc-stan.org/shinystan/) uses Shiny to provide interactive, customizable visual and numerical summaries of model parameters and convergence diagnostics.
+
+[projpred](https://mc-stan.org/projpred/) performs projection predictive variable selection for Bayesian models. It can be used with models fitted using packages such as `brms` and `rstanarm`.
+
+[posterior](https://mc-stan.org/posterior/) provides tools for manipulating posterior draws and performing common operations such as subsetting, combining, summarizing, and diagnosing posterior distributions. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
