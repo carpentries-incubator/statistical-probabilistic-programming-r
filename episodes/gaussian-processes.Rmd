@@ -14,18 +14,23 @@ library(mvtnorm)
 
 
 cmdstan_setup <- function() {
-  dir.create("C:/cmdstan_work", FALSE, TRUE)
-  dir.create("C:/cmdstan_temp", FALSE, TRUE)
+
+  home_dir <- normalizePath("~", winslash = "/")
+  work_dir <- file.path(home_dir, "cmdstan_work")
+  temp_dir <- file.path(home_dir, "cmdstan_temp")
+
+  dir.create(work_dir, FALSE, TRUE)
+  dir.create(temp_dir, FALSE, TRUE)
 
   Sys.setenv(
-    TMPDIR = "C:/cmdstan_temp",
-    TEMP   = "C:/cmdstan_temp",
-    TMP    = "C:/cmdstan_temp"
+    TMPDIR = temp_dir,
+    TEMP   = temp_dir,
+    TMP    = temp_dir
   )
 
   options(
-    cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
-    cmdstanr_write_exe_dir = "C:/cmdstan_work"
+    cmdstanr_write_stan_file_dir = work_dir,
+    cmdstanr_write_exe_dir = work_dir
   )
 }
 
