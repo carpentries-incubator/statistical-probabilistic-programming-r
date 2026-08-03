@@ -5,6 +5,12 @@ exercises: 2
 ---
 
 ```{r, include=FALSE}
+home_dir <- normalizePath("~", winslash = "/")
+safe_dir <- file.path(home_dir, "cmdstan_temp")
+if (!dir.exists(safe_dir)) dir.create(safe_dir, FALSE, TRUE)
+
+Sys.setenv(TMPDIR = safe_dir, TEMP = safe_dir, TMP = safe_dir)
+
 library(magrittr)
 library(tidyverse)
 library(grafify)
@@ -12,66 +18,129 @@ library(cowplot)
 library(brms)
 library(bayesplot)
 library(splines2)
+library(survival)
+library(TreeSummarizedExperiment)
+library(survminer)
+library(mia)
+library(cmdstanr)
+
 theme_set(theme_bw(15))
-
-
 okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
-
 prior_color <- "#009E73"
 likelihood_color <- "#E69F00"
 posterior_color <- "#56B4E9"
-
 bayesplot::color_scheme_set("brightblue")
+
+options(
+  brms.backend = "cmdstanr",
+  cmdstanr_write_stan_file_dir = safe_dir,
+  cmdstanr_write_exe_dir       = safe_dir,
+  cmdstanr_write_exe_ext       = ".txt"  
+)
+
+cmdstanr::register_knitr_engine(override = TRUE)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
 ```
 
 ::: questions
-- What is survival analysis?   
-- How to perform survival analysis with Stan?
+- What are survival models and how do they handle censored time-to-event data?
+- How can Bayesian survival models be implemented and interpreted using Stan?
 :::
 
 ::: objectives
--   Understand survival analysis basics: hazard, survival function, censoring.
-
--   Learn to fit Weibull (parametric) and Cox proportional hazards (semiparametric) survival models using Stan.
-
--   Explore a more advanced model with hierarchical structure.
+- Understand survival functions, hazard functions, and censoring in survival data.
+- Learn to implement and compare Weibull and Cox proportional hazards models using Stan.
+- Extend survival models with hierarchical structures and evaluate model results.
 :::
 
-Survival (or time-to-event) data arise when the outcome of interest is the time until some event occurs, such as device failure, disease onset or death. A key difference to ordinary regression settings is that time-to-event data are commonly censored, meaning that for some data points the event has not occurred by the end of the observation period. This implies that the exact event time is unknown and analyses must use techniques that account for both observed event times and censored observations.
+Survival (or time-to-event) data arise when the outcome of interest is the time until some event occurs, such as device failure, disease onset or death. A key difference to ordinary regression settings is that time-to-event data are commonly censored, meaning that for some data points the event has not occurred by the end of the observation period. This may happen because the study ends before the event occurs, a participant leaves the study, or the event is otherwise not observed during follow-up. This implies that the exact event time is unknown and analyses must use techniques that account for both observed event times and censored observations.
 
 :::::::::::::::::: callout 
 
-In this episode, we will exclusively analyze right-censored data, meaning data where the event occurs during the follow-up time, or after this period. This is the most common type of censoring but there are two other censoring mechanisms are sometimes encountered. In *left censoring*, the event occurs before observation begins, so the event time is only known to be earlier than a given time point. *Interval censoring* means a situation where the event occurs between two observation times, but the exact timing is unknown. 
+In this episode, we will exclusively analyze right-censored data, where each individual is followed until either the event occurs or the observation period ends. For censored individuals, the event time is only known to be longer than the observed follow-up time. This is the most common type of censoring, but there are two other censoring mechanisms are sometimes encountered. In *left censoring*, the event occurs before observation begins, so the event time is only known to be earlier than a given time point. *Interval censoring* means a situation where the event occurs between two observation times, but the exact timing is unknown. 
 
 ::::::::::::::::::
 
 Before we start building survival models in Stan, we need to first get familiar with some mathematical concepts important in survival analysis. 
 
-The two functions central to specifying common survival models are the survival function $S(t) = P(T > t)$ and the hazard function $h(t)$. The former gives the probability of surviving beyond time $t$, whereas the latter specifies the instantaneous risk for event at time $t$ among those who have not experienced an event yet. Formally the hazard is defined as $$h(t) = \lim_{dt \to 0} \dfrac{P(t \le T < t + dt \mid T \ge t)}{dt}.
-$$ These two functions are linked through the identity $S(t) = \exp\{-H(t)\},$ where $H(t)$ is the cumulative hazard $H(t) = \int_0^t h(u)\,du$.
+For each individual, we observe a follow-up time
+\[
+Y_i=\min(T_i,C_i),
+\]
 
-While a wealth of various tools for survival analysis  have been presented, including modern machine learning approaches, in this episode, we will focus on two relatively standard models: the parametric Weibull model and the semiparametric Cox proportional hazards model. Both of these model use the multiplicative form $h(t \mid x) = h_0(t)\,\exp(x^\top \beta),$ where  $h_0(t)$ is the baseline hazard describing hazard evolution when covariates equal zero.
+where \(T_i\) is the true event time and \(C_i\) is the censoring time. We also observe an indicator variable that records whether the event occurred during follow-up. This indicator is usually defined as
 
-A key distinction between the two models is that the Weibull model uses an explicit functional form for the baseline hazard (and simultaneously for the event times), while in the Cox model this is left unspecified. The Weibull models gains statistical strength from this assumed functional form. However, a mismatch between the assumption and data can lead to a poor model fit. The Cox model, on the other hand, can be more robust when the baseline hazard shape is unknown. Both approaches enable assessment of covariate effects of survival times, but only the Weibull model allows explicit survival time predictions.
+\[
+\delta_i =
+\begin{cases}
+1, & \text{if } T_i \leq C_i \quad \text{(event observed)},\\
+0, & \text{if } T_i > C_i \quad \text{(right censored)}.
+\end{cases}
+\]
 
-The way censored events are accounted for in both models is by including the (incomplete) information in them in likelihood directly. In other words, the probability of event time being longer than the censoring threshold, namely $1 - F_T(t^{cens})$, where $F_T(t) = \text{Pr}(T < t)$ is the cumulative distribution function of survival time. Below, we will demonstrate how this is coded in Stan but first we will review our survival data. 
+The two functions central to specifying common survival models are the survival function $S(t) = P(T > t)$ and the hazard function $h(t)$. The former gives the probability of surviving beyond time $t$, whereas the latter describes the instantaneous event rate at time \(t\) among individuals who have not experienced the event before \(t\). Formally the hazard is defined as $$h(t) = \lim_{dt \to 0} \dfrac{P(t \le T < t + dt \mid T \ge t)}{dt}.
+$$ These two functions are linked through the identity $S(t) = \exp\{-H(t)\},$ where $H(t)$ is the cumulative hazard, representing the accumulated hazard up to time \(t\), $H(t) = \int_0^t h(u)\,du$.
 
-<!-- Present and demo these below -->
-<!-- Posterior draws allow direct uncertainty quantification for quantities of interest such as hazard ratios $\exp(\beta)$, median survival times, survival curves at selected covariate values, and contrasts between treatments or groups. -->
+While a wealth of various tools for survival analysis  have been presented, including modern machine learning approaches, in this episode, we will focus on two relatively standard models: the parametric Weibull model and the semiparametric Cox proportional hazards model. Both of these models use the multiplicative form $h(t \mid x) = h_0(t)\,\exp(x^\top \beta),$ where  $h_0(t)$ is the baseline hazard describing hazard evolution when covariates equal zero.
+
+A key distinction between the two models is that the Weibull model uses an explicit functional form for the baseline hazard (and simultaneously for the event times), while in the Cox model this is left unspecified. The Weibull model gains statistical strength from this assumed functional form. However, a mismatch between the assumption and data can lead to a poor model fit. The Cox model, on the other hand, can be more robust when the baseline hazard shape is unknown. Both approaches enable assessment of covariate effects on survival. The Weibull model provides survival predictions directly through its assumed distribution, whereas Cox models require an estimate of the baseline hazard to obtain absolute survival predictions.
+
+Censored observations contribute information through the survival function, because although the exact event time is unknown, we know that the event has not occurred before the observed follow-up time. In other words, the contribution of a censored observation is the probability that the event time exceeds the censoring threshold, namely \(1-F_T(t^{cens})\), where \(F_T(t)=\text{Pr}(T<t)\) is the cumulative distribution function of survival time.
+
+The survival models introduced above can be formulated using different statistical frameworks. In this episode, we adopt a Bayesian approach and implement survival models using Stan. We focus on how the Bayesian framework extends survival analysis by representing model parameters through posterior distributions, allowing uncertainty in survival quantities of interest to be quantified directly.
+
+## Bayesian survival analysis
+
+The survival models introduced above describe the relationship between covariates and time-to-event outcomes through quantities such as regression coefficients, hazard functions, and survival probabilities. These models can be estimated using either frequentist or Bayesian approaches. In this episode, we focus on the Bayesian formulation, where uncertainty about survival model parameters is represented through posterior distributions.
+
+The main difference between classical and Bayesian survival analysis is how uncertainty is handled. Traditional survival models typically provide point estimates of parameters together with uncertainty measures based on large-sample approximations. In contrast, Bayesian survival models estimate a posterior distribution for each unknown parameter by combining the survival likelihood with prior distributions.
+
+For survival models, the likelihood accounts for both observed events and censored observations. After combining this likelihood with prior information, we obtain posterior distributions for model parameters such as regression coefficients, Weibull shape parameters, and hierarchical effects.
+
+Using Stan, we obtain samples from these posterior distributions through Markov chain Monte Carlo (MCMC) methods. These posterior draws allow us to directly calculate uncertainty for quantities of interest in survival analysis. For example, instead of estimating a single hazard ratio, we obtain its posterior distribution:
+
+\[
+HR=\exp(\beta).
+\]
+
+Similarly, posterior samples can be transformed to obtain survival curves, median survival times, and predictions for new individuals while naturally propagating parameter uncertainty.
+
+Before implementing the survival models in Stan, we first introduce the experimental dataset that will be used throughout this episode. This dataset provides time-to-event outcomes and relevant covariates, allowing us to apply the Bayesian survival framework developed above in a practical setting.
 
 ## Survival data
 
-Our data are bacterial abundance profiles from stool samples of laboratory grown mice [FIX: add ref]. The data includes measurements from 150 mice and 48 microbial genera, with follow-up recorded as the time to type 1 diabetes onset or censoring at [FIX] days. Approximately half of the mice developed type diabetes during the follow-up. 
+To demonstrate survival analysis in Stan, we will analyze a real-world biological dataset containing gut microbiome profiles from laboratory-grown mice (ref?). The aim is to investigate whether the abundance of specific bacterial genera measured in stool samples is associated with the time until Type 1 Diabetes (T1D) onset.
 
-The data is included in the R package $mia$ which contains tools for microbiome data analysis, and we will load the data from there. 
+For each mouse, the dataset contains:
 
-All continuous microbial abundances (log transformed proportions) are standardized to have mean 0 and standard deviation 1 before modeling. Consequently, hazard ratios are interpreted per one standard deviation increase in abundance. 
+* the observed follow-up time (`Event_time`), corresponding to the survival observation $(Y_i=\min(T_i,C_i))$,
+* an event indicator (`Event`), where 1 denotes diabetes onset during follow-up and 0 indicates right censoring, and
+* measurements of bacterial abundances for 48 microbial genera, which are used as covariates in the survival models.
+
+The dataset is provided as a `TreeSummarizedExperiment` object in the lesson repository. We use the `mia` package for microbiome data manipulation and analysis, and to work with microbiome assays stored in the `TreeSummarizedExperiment` format.
+
+Before fitting survival models, we preprocess the microbial abundance data using a standard workflow:
+
+1. **Relative abundance transformation:** Raw sequencing counts are converted into relative abundances to account for differences in sequencing depth between samples.
+
+2. **Prevalence filtering:** Microbial genera that are rarely observed across samples are removed to reduce sparsity and improve the reliability of abundance estimates. A genus is considered present when its relative abundance exceeds a predefined detection threshold, and only genera observed in a sufficient fraction of samples are retained.
+
+3. **Logarithmic transformation:** Since microbial abundance data are highly skewed and may contain zero values, the retained microbial abundances are log-transformed using a small pseudocount to stabilize variance and improve numerical behavior.
+
+4. **Standardization:** Continuous microbial abundance covariates are standardized to have mean 0 and standard deviation 1. This improves computational stability during Hamiltonian Monte Carlo sampling in Stan. Additionally, hazard ratios can be interpreted as the change in hazard associated with a one standard deviation increase in log-transformed microbial abundance.
+
+The following code loads the dataset, performs the pre-processing steps, and prepares the data structure required for survival model implementation in Stan.
 
 ```{r, message=FALSE, warning=FALSE}
-# Packages
+# Load required libraries for data processing and handling
 library(tidyverse)
-library(rstan)
-library(posterior) # Where needed? [FIX?]
+library(cmdstanr)
+library(posterior) 
 library(survival)
 library(TreeSummarizedExperiment)
 library(survminer)
@@ -79,30 +148,67 @@ library(mia)
 ```
 
 ```{r, warning=FALSE, message=FALSE}
-# Load TSE
-tse <-  readRDS(file.path("data", "survival_tse.rds"))
 
-# Relative abundance + log transform
+# Load TSE
+tse <- readRDS(file.path("data", "survival_tse.rds"))
+
+
+# Relative abundance transformation
 tse <- tse |>
-  transformAssay(method = "relabundance", assay.type = "counts", name = "relabundance") |>
-  transformAssay(method = "log", assay.type = "relabundance", pseudocount = 1e-6, name = "log_abund")
+  transformAssay(
+    method = "relabundance",
+    assay.type = "counts",
+    name = "relabundance"
+  )
+
+
+# Extract relative abundance matrix
+rel <- assay(tse, "relabundance")
+
+
+# Prevalence filtering
+# A genus is considered present if relative abundance >= 0.1%
+REL_PRES_MIN <- 1e-3
+
+# Retain genera present in at least 30% of samples
+PREV_MIN <- 0.30
+
+genus_prevalence <- rowMeans(rel >= REL_PRES_MIN)
+
+selected_microbes <- names(
+  genus_prevalence[genus_prevalence >= PREV_MIN]
+)
+
+length(selected_microbes)
+
+# Log transform selected microbial abundances
+tse <- transformAssay(
+  tse,
+  method = "log",
+  assay.type = "relabundance",
+  pseudocount = 1e-6,
+  name = "log_abund"
+)
+
 
 # Features (samples x microbes)
-df <- as.data.frame(t(assay(tse, "log_abund")))
+df <- as.data.frame(
+  t(assay(tse, "log_abund")[selected_microbes, , drop = FALSE])
+)
+
 
 # Outcomes
-df$Event      <- colData(tse)$Event
+df$Event <- colData(tse)$Event
 df$Event_time <- colData(tse)$Event_time
 
-# Pick 10 random microbes as covariates
-# [FIX: pick covariates that produce at least some non-zero effects]
-set.seed(2025)
-feature_cols <- setdiff(names(df), c("Event", "Event_time"))
-selected_microbes <- sample(feature_cols, min(10L, length(feature_cols)))
 
 # Build design matrix (scaled)
-X <- scale(as.matrix(df[, selected_microbes, drop = FALSE]))
+X <- scale(
+  as.matrix(df[, selected_microbes, drop = FALSE])
+)
+
 K <- ncol(X)
+
 
 # Analysis data frame
 analysis_df <- data.frame(
@@ -111,277 +217,469 @@ analysis_df <- data.frame(
   X,
   check.names = FALSE
 )
+
 rownames(analysis_df) <- rownames(df)
+
 
 # Stan data
 standata <- list(
-  N    = nrow(analysis_df),
-  K    = K,
-  time = as.vector(analysis_df$time),
-  event= as.integer(analysis_df$event),
-  X    = as.matrix(analysis_df[, colnames(X), drop = FALSE])
+  N     = nrow(analysis_df),
+  K     = K,
+  time  = as.vector(analysis_df$time),
+  event = as.integer(analysis_df$event),
+  X     = as.matrix(
+    analysis_df[, colnames(X), drop = FALSE]
+  )
 )
 
 ```
 
+After prevalence filtering, the remaining microbial genera were included as covariates in the survival models. In this dataset, 28 microbial genera passed the filtering criteria.
+
+Before fitting any survival models, it is good practice to inspect the processed dataset and verify that the survival outcomes and covariates have been prepared correctly. In particular, we check that the dataset contains both observed events and right-censored observations, and that the follow-up times and covariates have the expected structure.
+
+```{r}
+# Inspect the structure of the analysis dataset
+glimpse(analysis_df)
+
+# Check the number of observed events and censored observations
+table(analysis_df$event)
+
+# Inspect the distribution of follow-up times
+summary(analysis_df$time)
+
+# View the first observations
+head(analysis_df)
+```
+
+## Kaplan–Meier estimate
+
+Before fitting parametric survival models, we first visualize the observed survival experience using the Kaplan–Meier estimator. Unlike the Weibull and Cox models introduced later, the Kaplan–Meier estimator is a non-parametric method that does not assume a specific distribution for the event times.
+
+The Kaplan–Meier estimator provides an estimate of the survival function
+
+\[
+S(t)=P(T>t),
+\]
+
+and naturally incorporates right-censored observations. Censored individuals contribute information up to their last observed follow-up time, after which their event status remains unknown.
+
+For our dataset, the Kaplan–Meier curve represents the estimated probability that a mouse remains free of Type 1 Diabetes (T1D) as follow-up time increases. This provides an exploratory summary of the observed survival patterns before introducing model-based estimates.
+
+```{r}
+# Kaplan-Meier estimate
+km_fit <- survfit(
+  Surv(time, event) ~ 1,
+  data = analysis_df
+)
+
+# Plot Kaplan-Meier curve
+ggsurvplot(
+  km_fit,
+  data = analysis_df,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  xlab = "Follow-up time (years)",
+  ylab = "Probability of remaining diabetes-free",
+  ggtheme = theme_bw()
+)
+```
+
+The Kaplan–Meier curve shows a gradual decline in diabetes-free survival over the follow-up period, with increasing uncertainty at later times due to fewer individuals remaining at risk. While this provides an overall view of survival patterns, it does not explain the factors associated with differences in event risk. Therefore, we next introduce Bayesian survival models with microbial covariates to investigate these associations.
+
+
 ## Weibull survival model
 
-The Weibull model is a versatile parametric choice for time-to-event data that uses the Weibull distribution for the event times $T$. The distribution has two parameters: shape $k>0$ and scale  $\lambda>0$. A common way to include parameters in the model is to set the exponentiated linear term as the scale parameter: 
-
-$$\lambda = \exp(\beta_0 + \beta_1X_1 + \ldots + \beta_KX_K),$$where $X_i$ are the covariate values and $\beta_i$ the corresponding regression coefficients. The scale parameter calibrates the time axis, with larger values implying longer survival. 
-
-The shape parameter, on the other hand, controls how the risk evolves over time: when $0<k<1$ the hazard decreases, with $k=1$ it is constant, and when $k>1$ it increases. This ability to capture decreasing, constant, or increasing hazards with a single parameter, makes the Weibull distribution is a good starting point for event time modeling.
-
-
-The survival and hazard functions can be shown to take the following form [FIX: add reference]: 
-
+The Weibull model is a parametric survival model that specifies a probability distribution for event times. In the Bayesian framework, the unknown Weibull parameters and regression coefficients are treated as uncertain quantities and estimated through their posterior distributions. The distribution has two parameters: shape $k>0$ and scale  $\lambda>0$. A common way to include covariates in the model is to let the scale parameter depend on a linear predictor,
+  
+  $$
+\lambda = \exp(\beta_0 + \beta_1X_1 + \cdots + \beta_KX_K),
 $$
-S(t)=\exp\left[-\left(\frac{t}{\lambda}\right)^{k}\right],
+where \(X_i\) are the covariate values and \(\beta_i\) are the corresponding regression coefficients. Here, the covariates enter the model through the scale parameter, corresponding to an accelerated failure time (AFT) parameterization. Since the scale parameter determines the time scale of the distribution, larger values of $\lambda$ correspond to longer expected survival times. Consequently, positive regression coefficients increase survival time, whereas negative coefficients decrease it.
+
+The shape parameter, on the other hand, controls how the risk evolves over time: when $0<k<1$ the hazard decreases, with $k=1$ it is constant, and when $k>1$ it increases. This flexibility makes the Weibull distribution a useful starting point for modeling a wide range of survival processes.
+
+The survival and hazard functions can be shown to take the following form (Klein and Moeschberger, 2003): 
+  
+$$
+  S(t)=\exp\left[-\left(\frac{t}{\lambda}\right)^{k}\right],
 $$ 
-and
+  and
 $$ 
-h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}. 
+  h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}. 
 $$
-A convenient summary is the median survival time 
+  A convenient summary is the median survival time 
 $$ 
-\operatorname{med}(T)=\lambda(\log 2)^{1/k}, 
+  \operatorname{med}(T)=\lambda(\log 2)^{1/k}, 
 $$
-which increases linearly with $\lambda$ and, for a fixed $\lambda$, decreases as $k$ increases.
+  which increases linearly with $\lambda$ and, for a fixed $\lambda$, decreases as $k$ increases.
 
-It is easy to show that increasing one covariate $x_j$ by one unit, while holding other covariates constant results in an increase
+Under this parameterization, increasing a covariate $x_j$ by one unit while holding all other covariates constant results in the hazard ratio:
 
 $$
-\mathrm{HR}_j \;=\; \frac{h\!\left(t \mid x_j + 1\right)}{h\!\left(t \mid x_j\right)} \;=\; \exp\!\left(-k\,\beta_j\right).
+  \mathrm{HR}_j \;=\; \frac{h\!\left(t \mid x_j + 1\right)}{h\!\left(t \mid x_j\right)} \;=\; \exp\!\left(-k\,\beta_j\right).
 $$
-
-Thus a positive $\beta_j$ yields $\mathrm{HR}_j<1$ (lower hazard; protective) and a negative $\beta_j$ yields $\mathrm{HR}_j>1$ (higher hazard). 
+  
+Thus, under this AFT parameterization, a positive regression coefficient increases the Weibull scale parameter, leading to longer survival times and a hazard ratio smaller than one. Conversely, a negative coefficient decreases the scale parameter, resulting in shorter survival times and a hazard ratio greater than one.
 
 
 
 ### Example
 
-Next, we illustrate the Weibull survival model by estimating effects and the corresponding hazard ratios of bacterial genera on diabetes incidence. 
-
-Stan program for the model is below. The data likelihood is coded using the `target +=` notation. This simply means that the term after this notation is added in log likelihood of the model, and is equivalent to the standard `~` notation. [FIX: why use the target notation?] The program is implemented to also accommodate covariate-free regression, thus the zero lower bound for the number of covariates `K`.
-
-<!-- Kaplan-Meier -->
-<!-- A simple descriptive summary is the Kaplan–Meier curve, which estimates the survival function $$ -->
-<!-- S(t) = P(T > t) -->
-<!-- $$and handles right censoring naturally. We will use Kaplan–Meier estimates for exploratory checks alongside model-based summaries. -->
+We now implement the Weibull survival model in Stan using the microbiome dataset introduced earlier. Our goal is to estimate the associations between microbial abundances and the time to Type 1 Diabetes onset, and to summarize these effects using posterior hazard ratios.
 
 
-```{stan output.var="weibull_model"}
-// Weibull survival model (shape k, scale λ), simple AFT form
+The Stan program for the Weibull model is shown below. The likelihood is specified using the `target +=` notation, which directly increments the model's log posterior density. Unlike the `~` notation, `target +=` allows different likelihood contributions to be added explicitly for observed events and right-censored observations. This makes it well suited for survival models, where events contribute the log probability density (`weibull_lpdf`) and censored observations contribute the log survival probability (`weibull_lccdf`). The program is also written to accommodate models without covariates by allowing the number of covariates, `K`, to be zero.
+
+
+```{stan output.var= "weibull_model"}
+// Weibull survival model (shape k, scale lambda), Bayesian AFT form
+
 data {
-  int<lower=1> N;                    // number of observations
-  int<lower=0> K;                    // number of covariates
-  vector<lower=0>[N] time;           // observed times t_i
-  int<lower=0,upper=1> event[N];     // 1=event, 0=right-censored
-  matrix[N, K] X;                    // covariates (N x K, K can be 0)
+  int<lower=1> N;                         // number of observations
+  int<lower=0> K;                         // number of covariates
+  vector<lower=0>[N] time;                // observed follow-up times
+  array[N] int<lower=0, upper=1> event;   // 1=event, 0=right censored
+  matrix[N, K] X;                         // standardized covariates
 }
 
 parameters {
-  real<lower=0> k;                   // Weibull shape
-  real beta0;                        // intercept
-  vector[K] beta;                    // coefficients
+  real<lower=0> k;                        // Weibull shape parameter
+  real beta0;                             // intercept
+  vector[K] beta;                         // regression coefficients
 }
 
 transformed parameters {
   vector<lower=0>[N] lambda;
-  
-  if (K > 0) lambda = exp(beta0 + X * beta);
-    else lambda = exp(rep_vector(beta0, N));
+
+  // AFT formulation:
+  // log(lambda_i) = beta0 + X_i beta
+  lambda = exp(beta0 + X * beta);
 }
 
 model {
-  // weakly-informative priors
-  k     ~ lognormal(0, 1);
+  // Priors
+  k ~ lognormal(0, 1);
   beta0 ~ normal(0, 1);
-  if (K > 0) beta ~ normal(0, 1);
+  beta ~ normal(0, 1);
 
-  // likelihood
-  // [FIX: factorize, without for loop]
+
+  // Factorized survival likelihood
   for (i in 1:N) {
-    if (event[i] == 1) // events
+
+    if (event[i] == 1) {
+
+      // Observed events:
+      // contribution from Weibull density
       target += weibull_lpdf(time[i] | k, lambda[i]);
-    else // censored cases
-      target += weibull_lccdf(time[i] | k, lambda[i]);  // log S(t_i)
+
+    } else {
+
+      // Right-censored observations:
+      // contribution from survival function S(t)
+      target += weibull_lccdf(time[i] | k, lambda[i]);
+
+    }
   }
 }
 
-generated quantities {
-  vector[N] t_median; // median survival time
-  for (i in 1:N)
-    t_median[i] = lambda[i] * pow(log(2), 1.0 / k);
-}
 
+generated quantities {
+
+  vector[N] t_median;
+
+  for (i in 1:N) {
+    t_median[i] = lambda[i] * pow(log(2), 1.0/k);
+  }
+}
 ```
 
 
+After fitting the Weibull model, we transform posterior draws of the regression coefficients and the Weibull shape parameter to obtain posterior distributions of hazard ratios:
 
-Next, we fit the model and obtain the HRs by transforming the posterior draws of $k$ and $\beta_j$ with $\exp(-k\,\beta_j)$, and then use the posterior median and the $95%$ CIs and our summaries. We visualize the results with an ordered forest plot highlighting covariates whose CI excludes 1.
+\[
+HR_j = \exp(-k\beta_j).
+\]
 
-[FIX: check code]
+Because Bayesian inference provides samples from the posterior distribution, uncertainty in hazard ratios can be obtained directly by applying this transformation to every posterior draw. We summarize each hazard ratio using its posterior median and 95% credible interval.
+
+The resulting posterior summaries are visualized using a forest plot.
 
 ```{r, fig.width=10, fig.height=6, dpi=300}
-# Fit
-fit <- rstan::sampling(
-  object  = weibull_model,
-  data    = standata,
-  seed    = 2025, refresh = 0
+
+# Fit Weibull model
+fit <- weibull_model$sample(
+  data = standata,
+  seed = 2026,
+  chains = 4,
+  parallel_chains = 4,
+  refresh         = 0,
+  show_messages   = FALSE
 )
 
-# Print summary
-# print(fit, pars = c("k","beta0","beta"))
 
-# Posterior draws
-M <- posterior::as_draws_matrix(fit)
-k_draw <- M[, "k"]
+# Extract posterior draws
+draws <- posterior::as_draws_matrix(fit$draws())
+
+# Weibull shape parameter
+k_draw <- draws[, "k"]
+
 K <- standata$K
 covar_names <- colnames(standata$X)
 
-# Hazard ratios
+
+# Calculate posterior hazard ratios
 hr_mat <- do.call(rbind, lapply(seq_len(K), function(j) {
-  bj <- M[, paste0("beta[", j, "]")]
-  hr_draw <- exp(- k_draw * bj)
+
+  beta_draw <- draws[, paste0("beta[", j, "]")]
+
+  hr_draw <- exp(-k_draw * beta_draw)
+
   c(
-    med = median(hr_draw),
-    lo  = unname(quantile(hr_draw, 0.025)),
-    hi  = unname(quantile(hr_draw, 0.975))
+    median = median(hr_draw),
+    lower  = quantile(hr_draw, 0.025),
+    upper  = quantile(hr_draw, 0.975)
   )
 }))
+
+
+# Create summary data frame
 hr_df <- as.data.frame(hr_mat)
+
 hr_df$term <- covar_names
-names(hr_df) <- c("HR","lower","upper","term")
 
-# Significance
-hr_df$signif <- (hr_df$lower > 1) | (hr_df$upper < 1)
+names(hr_df) <- c(
+  "HR",
+  "lower",
+  "upper",
+  "term"
+)
+
+
+# Identify taxa where 95% credible interval excludes 1
+hr_df$association <- 
+  (hr_df$lower > 1) | (hr_df$upper < 1)
+
+
+# Order taxa
 hr_df <- hr_df[order(hr_df$HR), ]
-hr_df$term <- factor(hr_df$term, levels = hr_df$term)
 
-# Plot a forest plot of hazard ratios
-ggplot(hr_df, aes(y = term, x = HR, color = signif)) +
-  geom_vline(xintercept = 1, linetype = "dashed", color = "grey70") +
-  geom_pointrange(aes(xmin = lower, xmax = upper), size = 0.6) +
-  scale_x_continuous(trans = "log10") +
-  scale_color_manual(values = c(`TRUE` = "firebrick", `FALSE` = "#2C3E50"), guide = "none") +
-  labs(title = "Weibull hazard ratios",
-       x = "Hazard ratio (log scale)", y = NULL) +
+hr_df$term <- factor(
+  hr_df$term,
+  levels = hr_df$term
+)
+
+
+# Forest plot
+ggplot(hr_df, aes(y = term, x = HR, color = association)) +
+  geom_vline(
+    xintercept = 1,
+    linetype = "dashed",
+    color = "grey70"
+  ) +
+  geom_pointrange(
+    aes(xmin = lower, xmax = upper),
+    size = 0.6
+  ) +
+  scale_x_continuous(
+    trans = "log10"
+  ) +
+  scale_color_manual(
+    values = c(`TRUE` = "firebrick", `FALSE` = "#2C3E50"), 
+    guide = "none"
+  ) +
+  labs(
+    title = "Posterior hazard ratios from Weibull model",
+    x = "Hazard ratio (log scale, per SD increase)",
+    y = NULL
+  ) +
   theme_bw() +
   theme(
     panel.grid.minor = element_blank(),
     plot.title = element_text(face = "bold")
   )
-
 ```
 
-As evident in the the plot, several taxa exclude 1 implying posterior evidence for an association between the genus and diabetes. 
+
+As evident from the forest plot, only a subset of the microbial genera have 95% credible intervals that exclude the reference value of 1, indicating posterior evidence of an association with the hazard of Type 1 Diabetes onset. Hazard ratios greater than 1 correspond to an increased instantaneous risk of diabetes onset, whereas hazard ratios less than 1 indicate a protective association. Because the microbial abundances were standardized before model fitting, each hazard ratio represents the change in hazard associated with a one standard deviation increase in the log-transformed abundance of the corresponding genus.
+
+For the remaining genera, the 95% credible intervals include 1, indicating that the posterior uncertainty is consistent with both increased and decreased hazards.
 
 
-To assess *discrimination*, that is, how well the model is able to correctly rank cases bases on event risk, we form a risk score from the linear predictors $\log\lambda_i=\beta_0+x_i^\top\beta$. We quantify discrimination with Harrell's C-index, which is the ratio of correctly ranked cases and all comparable pairs. Comparability is determined by censoring; two cases cannot be compared if event times for both are censored, or if one case is censored before the other experiences an event. 
-[FIX: compute and compare C posteriors]
+## Model discrimination
 
-We can also visualize discrimination ability by using posterior medians of $\beta_0$ and $\beta$. By splitting subjects at the median score value (Low vs High), we can generate the respective Kaplan–Meier curves:
+Besides estimating hazard ratios, it is useful to assess how well the fitted model discriminates between individuals with higher and lower event risk. A commonly used measure is Harrell's concordance index (C-index), which is the proportion of comparable pairs of individuals whose predicted risks are correctly ordered.
 
-[FIX: remove p-value; K-M plot with median score split per posterior sample?]
+The C-index ranges from 0 to 1, with 1 indicating perfect discrimination and 0.5 indicating performance no better than random ordering. Values below 0.5 suggest that the model predicts the risk ordering in the opposite direction. Comparable pairs are determined by the observed event times and censoring indicators.
+
+```{r}
+library(survival)
+
+# Posterior median coefficients
+beta0_med <- median(draws[, "beta0"])
+beta_med <- sapply(seq_len(K), function(j)
+  median(draws[, paste0("beta[", j, "]")])
+)
+
+# Model score where larger values indicate better survival
+risk_score <- beta0_med + as.matrix(standata$X) %*% beta_med
+
+# Harrell's C-index
+c_index <- concordance(
+  Surv(standata$time, standata$event) ~ risk_score
+)
+
+c_index$concordance
+```
+
+The fitted Weibull model achieved a C-index of approximately 0.76, indicating that the model correctly ranks individuals according to their relative risk in about 76% of comparable pairs.
+
+Although the C-index provides a quantitative measure of discrimination, it does not directly show how survival patterns differ between individuals with different predicted risks. To visualize this separation, individuals are divided into low- and high-risk groups based on the model-based risk score, and Kaplan–Meier survival curves are compared between the groups.
+
 
 ```{r, fig.width=10, fig.height=6, dpi=300, warning=FALSE}
-# Posterior medians for the AFT linear predictor
-beta0_med <- median(M[, "beta0"])
-beta_med  <- sapply(seq_len(K), function(j) median(M[, paste0("beta[", j, "]")]))
 
-# Model-based score
-risk_lp <- as.numeric(beta0_med + as.matrix(standata$X) %*% beta_med)
+risk_score <- -(beta0_med + as.matrix(standata$X) %*% beta_med)
 
-# Data for KM
+# Create data frame for Kaplan-Meier estimation
 dat_km <- data.frame(
   time  = standata$time,
-  event = standata$event,           # 1 = event, 0 = censored
-  risk  = risk_lp
+  event = standata$event,
+  risk  = as.numeric(risk_score)
 )
 
-# Median split (High score = better survival)
-cut_pt <- median(dat_km$risk, na.rm = TRUE)
-dat_km$group <- factor(
-  ifelse(dat_km$risk > cut_pt, "High score", "Low score"),
-  levels = c("Low score", "High score")
+# Divide individuals into low- and high-risk groups
+# based on the median predicted risk score
+risk_cutoff <- median(dat_km$risk)
+
+dat_km$risk_group <- factor(
+  ifelse(dat_km$risk >= risk_cutoff,
+         "High risk",
+         "Low risk"),
+  levels = c("Low risk", "High risk")
 )
 
-# Kaplan–Meier fit and plot
-sf <- survfit(Surv(time, event) ~ group, data = dat_km)
 
+# Kaplan-Meier survival curves
+km_fit <- survfit(
+  Surv(time, event) ~ risk_group,
+  data = dat_km
+)
+
+
+# Plot survival curves
 ggsurvplot(
-  sf, data = dat_km,
-  conf.int    = TRUE,
-  pval        = TRUE,
-  legend.labs = levels(dat_km$group),
-  palette     = c("#E64B35", "#4DBBD5"),
-  xlab = "Time", ylab = "Survival probability"
+  km_fit,
+  data = dat_km,
+  conf.int = TRUE,
+  legend.title = "Predicted risk group",
+  legend.labs = c("Low risk", "High risk"),
+  xlab = "Time (years)",
+  ylab = "Survival probability"
 )
-
 ```
-
-Kaplan–Meier curves by the model-based score (median split) show clear separation: the high AFT score group (larger $\log\lambda$, implying longer times) has higher survival (curve above), while the low-score group declines faster.
-
-<!-- The log-rank test indicates a statistically significant difference. -->
-
-
-<!-- Here -->
-
+The Kaplan–Meier curves provide a visual assessment of whether the predicted risk groups exhibit different survival patterns. Separation between the curves indicates that the model-based risk score captures meaningful differences in diabetes onset timing.
 
 :::::::::::::::::::::::::::::: challenge
-Generate a posterior predictive distribution for the event times. 
-::::::::::::::::::::::::::::::::::::::::
+Generate posterior predictive event times using the fitted Weibull model.
 
-<!-- :::::::::::::::::::::::::::::: challenge -->
+Using posterior draws from the fitted model:
 
-<!-- Pick two microbial covariates from the Weibull forest plot:   -->
-<!-- one with HR < 1 and one with HR > 1. -->
+1. Simulate event times for a selected individual.
+2. Summarize the predicted survival time using the posterior median and a 95% credible interval.
 
-<!-- 1. Explain in words what each hazard ratio means for time to T1D onset.   -->
-<!-- 2. Remember that covariates are standardized: interpret the HRs per one–standard deviation increase. -->
+::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::: solution
 
-<!-- ::::::::::::::::::::::: solution -->
+Use the posterior samples of the Weibull parameters to generate predictive event times. For each posterior draw, calculate the individual-specific scale parameter:
 
-<!-- **HR < 1**   -->
-<!-- A one–standard deviation increase in the microbial covariate is associated with a lower instantaneous risk of T1D onset (protective effect). -->
+\[
+\lambda_i^{(s)} = \exp(\beta_0^{(s)} + x_i^\top\beta^{(s)})
+\]
 
-<!-- **HR > 1**   -->
-<!-- A one–standard deviation increase in the microbial covariate is associated with a higher instantaneous risk of T1D onset (harmful effect). -->
+and simulate:
 
-<!-- :::::::::::::::::::::::::::::::: -->
+\[
+T_i^{(s)} \sim \text{Weibull}(k^{(s)}, \lambda_i^{(s)})
+\]
 
-<!-- :::::::::::::::::::::::::::::::::::::::: -->
+The simulated event times represent the posterior predictive distribution. Summarize these samples using their median and quantiles to obtain the posterior median survival time and the 95% credible interval.
 
-
+::::::::::::::::::::::::::::::::::
 
 ## Cox proportional hazards model
 
-The Cox model is a semiparametric approach for time-to-event data in which covariates act multiplicatively on the hazard. Let $T$ be the event time and $x$ the covariates. The hazard is
 
-$$
-h(t \mid x) \;=\; h_0(t)\,\exp\!\bigl(x^\top \beta\bigr),
-$$
+The Cox proportional hazards (PH) model is a semiparametric approach for time-to-event data in which covariates act multiplicatively on the hazard function. In the Bayesian formulation, the regression coefficients are treated as uncertain quantities and estimated through their posterior distributions, while the baseline hazard is not specified parametrically.
 
-where $h_0(t)$ is an unspecified baseline hazard. Through the cumulative baseline hazard $H_0(t)=\int_0^t h_0(u)\,du$, the survival function can be written
+Let \(T\) be the event time and \(X\) denote the covariates. The hazard function is defined as
 
-$$
-S(t \mid x) \;=\; \exp\!\Bigl[-\,H_0(t)\,\exp\!\bigl(x^\top \beta\bigr)\Bigr]
-\;=\; S_0(t)^{\,\exp(x^\top \beta)}.
-$$
+\[
+h(t \mid X) = h_0(t)\exp(X^\top\beta),
+\]
 
-The coefficients $\beta$ are log–hazard ratios: a one-unit increase in $x_j$ multiplies the hazard by $\exp(\beta_j)$. Estimation is based on the partial likelihood, which compares each event’s linear predictor to those of individuals still at risk at that time and avoids modeling $h_0(t)$. The key assumption is proportional hazards, meaning the hazard ratio for two covariate values is constant over time.
+where \(h_0(t)\) is the baseline hazard function and \(\beta\) represents the regression coefficients. Unlike the Weibull accelerated failure time (AFT) model, where covariates influence the survival time through the scale parameter, the Cox PH model directly describes how covariates modify the instantaneous event risk.
+
+Through the cumulative baseline hazard,
+
+\[
+H_0(t)=\int_0^t h_0(u)\,du,
+\]
+
+the survival function can be written as
+
+\[
+S(t \mid X)=\exp\left[-H_0(t)\exp(X^\top\beta)\right]
+=S_0(t)^{\exp(X^\top\beta)}.
+\]
+
+This formulation shows that covariates act by scaling the cumulative hazard while leaving the baseline hazard unspecified.
+
+The coefficients \(\beta\) are interpreted as log-hazard ratios. For a one-unit increase in covariate \(x_j\), while keeping other covariates fixed, the hazard changes by
+
+\[
+\mathrm{HR}_j=
+\frac{h(t \mid x_j+1)}
+{h(t \mid x_j)}
+=\exp(\beta_j).
+\]
+
+Therefore, a positive coefficient gives
+
+\[
+\mathrm{HR}_j>1,
+\]
+
+indicating an increased hazard, while a negative coefficient gives
+
+\[
+\mathrm{HR}_j<1,
+\]
+
+indicating a protective association and reduced hazard.
+
+Estimation of the Cox model is based on the partial likelihood, which compares the linear predictor of an individual experiencing the event with those of individuals who remain at risk at the same event time. This approach avoids specifying the baseline hazard function, making the Cox model a flexible alternative to fully parametric survival models.
+
+The key assumption of the Cox PH model is the proportional hazards assumption, which states that hazard ratios between individuals remain constant over time. Under this assumption, the relative effect of covariates on the event risk does not change during the follow-up period.
+
+In the Bayesian implementation, posterior samples of the regression coefficients are obtained through Markov chain Monte Carlo methods. These posterior draws allow direct uncertainty quantification for hazard ratios and other quantities of interest.
+
+The Cox partial likelihood used in this implementation estimates regression coefficients without specifying the baseline hazard. This makes the model flexible for estimating relative effects, such as hazard ratios, but it does not directly provide absolute survival probabilities or event-time predictions.
+
 
 ::::::::::::::::::::: callout
-Baseline hazard can be estimated using splines, which enables survival time predictions. 
 
-In brms this can be done as follows: [FIX]
-:::::::::::::::::::::::::::::
+When individual survival prediction is required, the baseline hazard can be modeled explicitly using flexible approaches such as spline-based baseline hazard models. These approaches retain the proportional hazards structure while allowing estimation of individual survival curves and posterior predictive event times.
+
+:::::::::::::::::::::
+
 
 ### Example
 
-Next, we illustrate the Cox proportional hazards model by estimating hazard ratios and comparing risk groups with Kaplan–Meier curves. We fit the model via the partial likelihood (leaving the baseline hazard unspecified) and then summarize covariate effects as exponentiated coefficients $exp(\beta)$. Below is the structure of the Stan program.
+In this example, we illustrate the Cox proportional hazards model by estimating posterior hazard ratios and comparing risk groups using Kaplan–Meier curves. The model is implemented in Stan using the Cox partial likelihood formulation.
+Below is the Stan program for the model.
+
 
 ```{stan output.var="cox_model"}
 // Cox proportional hazards model, partial likelihood (PH form)
@@ -389,14 +687,14 @@ data {
   int<lower=1> N;                    // observations
   int<lower=0> K;                    // number of covariates
   vector<lower=0>[N] time;           // observed times t_i
-  int<lower=0, upper=1> event[N];    // 1=event, 0=right-censored
+  array[N] int<lower=0, upper=1> event; // 1=event, 0=right-censored
   matrix[N, K] X;                    // covariates (N x K, K can be 0)
 }
 
 transformed data {
   // Indices of observed events 
   int<lower=0> n_event = 0;
-  int event_idx[N];
+  array[N] int event_idx;
   for (i in 1:N) {
     if (event[i] == 1) {
       n_event += 1;
@@ -435,119 +733,210 @@ generated quantities {
 
 ```
 
-In our Cox proportional hazards setup the hazard for subject $i$ is modeled as $$
-h_i(t) = h_0(t)\,\exp\!\big(x_i^\top\beta\big),
-$$ where $h_0(t)$ is an unspecified baseline hazard and $\beta$ are log–hazard ratio coefficients. If we increase a single covariate $x_j$ by one unit (holding the others fixed), the hazard scales by $$
-\mathrm{HR}_j \;=\; \frac{h\!\left(t \mid x_j + 1\right)}{h\!\left(t \mid x_j\right)} \;=\; \exp(\beta_j).
-$$ Unlike the Weibull AFT parameterization (where $\mathrm{HR}_j=\exp(-k\,\beta_j)$ so a positive $\beta_j$ is protective), in the Cox PH model a positive $\beta_j$ yields $\mathrm{HR}_j>1$ (higher hazard) and a negative $\beta_j$ yields $\mathrm{HR}_j<1$ (lower hazard is protective). In the code, we obtain HRs directly from posterior draws of $\beta_j$ via $\exp(\beta_j)$ and summarize them by the posterior median and the $95\%$ credible interval (2.5%–97.5%).
+The Cox model estimates the regression coefficients \(\beta\), which represent log-hazard ratios. Therefore, the hazard ratio for a one-unit increase in covariate \(x_j\), while holding other covariates constant, is calculated as
 
-The next chunk transforms posterior draws of $\beta_j$ into hazard-ratio draws via $\exp(\beta_j)$, summarizes each covariate by the posterior median and 95% credible interval, and then produces an ordered forest plot highlighting covariates whose intervals do not include 1. The model is fit with 4 chains and 4000 iterations per chain.
+\[
+\mathrm{HR}_j =
+\frac{h(t \mid x_j+1)}
+{h(t \mid x_j)}
+=
+\exp(\beta_j).
+\]
+
+Unlike the Weibull AFT model, where the hazard ratio is obtained as \(\exp(-k\beta_j)\) because covariates act through the survival-time scale parameter, the Cox PH model directly models the effect of covariates on the hazard. Therefore, in the Cox model:
+
+- \(\mathrm{HR}_j > 1\) indicates an increased hazard (shorter time to event),
+- \(\mathrm{HR}_j < 1\) indicates a protective association (lower hazard and longer survival time).
+
+In the Bayesian analysis, hazard ratios are calculated from posterior draws of \(\beta_j\) using \(\exp(\beta_j)\). The posterior median and the 95% credible interval (2.5%–97.5%) are then used to summarize the uncertainty of each microbial association.
+
+Posterior draws of the regression coefficients are transformed into hazard ratios using \(\exp(\beta_j)\). For each genus, we summarize the posterior median hazard ratio and its 95% credible interval using an ordered forest plot.
+
 
 ```{r, fig.width=10, fig.height=6, dpi=300}
-# Fit the Cox model
-fit <- rstan::sampling(
-  object  = cox_model,
-  data    = standata,
-  chains  = 4, iter = 4000, warmup = 1000,
-  seed    = 2025, refresh = 0,
-  control = list(adapt_delta = 0.95)
+# Fit the Cox proportional hazards model
+fit <- cox_model$sample(
+  data = standata,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 3000,
+  seed = 2025,
+  refresh = 0,
+  adapt_delta = 0.95
 )
 
-# Print summary
-print(fit, pars = c("beta"))
+# Extract posterior draws
+draws <- posterior::as_draws_matrix(fit$draws())
 
-# Posterior draws
-M <- posterior::as_draws_matrix(fit)
 K <- standata$K
 covar_names <- colnames(standata$X)
 
-# Cox PH hazard ratios
+# Posterior hazard ratios
 hr_mat <- do.call(rbind, lapply(seq_len(K), function(j) {
-  bj <- M[, paste0("beta[", j, "]")]
-  hr_draw <- exp(bj)
+
+  beta_draw <- draws[, paste0("beta[", j, "]")]
+
+  hr_draw <- exp(beta_draw)
+
   c(
-    med = median(hr_draw),
-    lo  = unname(quantile(hr_draw, 0.025)),
-    hi  = unname(quantile(hr_draw, 0.975))
+    median = median(hr_draw),
+    lower  = quantile(hr_draw, 0.025),
+    upper  = quantile(hr_draw, 0.975)
   )
 }))
+
 hr_df <- as.data.frame(hr_mat)
-hr_df$term <- covar_names
-names(hr_df) <- c("HR","lower","upper","term")
 
-# Significance
-hr_df$signif <- (hr_df$lower > 1) | (hr_df$upper < 1)
+hr_df$term  <- covar_names
+
+names(hr_df) <- c(
+  "HR",
+  "lower",
+  "upper",
+  "term"
+)
+
+hr_df$association <-
+  (hr_df$lower > 1) | (hr_df$upper < 1)
+
 hr_df <- hr_df[order(hr_df$HR), ]
-hr_df$term <- factor(hr_df$term, levels = hr_df$term)
 
-# Plot a forest plot of hazard ratios
-ggplot(hr_df, aes(y = term, x = HR, color = signif)) +
-  geom_vline(xintercept = 1, linetype = "dashed", color = "grey70") +
-  geom_pointrange(aes(xmin = lower, xmax = upper), size = 0.6) +
-  scale_x_continuous(trans = "log10") +
-  scale_color_manual(values = c(`TRUE` = "firebrick", `FALSE` = "#2C3E50"), guide = "none") +
-  labs(title = "Cox PH hazard ratios",
-       x = "Hazard ratio (log scale)", y = NULL) +
+hr_df$term  <- factor(
+  hr_df$term ,
+  levels = hr_df$term 
+)
+
+# Forest plot
+ggplot(hr_df, aes(y = term, x = HR, color = association)) +
+
+  geom_vline(
+    xintercept = 1,
+    linetype = "dashed",
+    color = "grey70"
+  ) +
+
+  geom_pointrange(
+    aes(
+      xmin = lower,
+      xmax = upper
+    ),
+    size = 0.6
+  ) +
+
+  scale_x_continuous(
+    trans = "log10"
+  ) +
+
+  scale_color_manual(
+    values = c(
+      `TRUE` = "firebrick",
+      `FALSE` = "#2C3E50"
+    ),
+    guide = "none"
+  ) +
+
+  labs(
+    title = "Cox PH hazard ratios",
+    x = "Hazard ratio (log scale)",
+    y = NULL
+  ) +
+
   theme_bw() +
+
   theme(
     panel.grid.minor = element_blank(),
     plot.title = element_text(face = "bold")
   )
-
 ```
 
-For the Cox PH model, the hazard‐ratio pattern mirrors the Weibull results: hazard ratios left of 1 (with 95% intervals not crossing 1) suggest protective associations, while those right of 1 indicate increased hazard; intervals that cross 1 are inconclusive. In our analysis, the Cox HRs align closely with the Weibull HRs, leading to very similar forest plots.
 
-To visualize how the Cox model separates risk, we form a model-based risk score from the PH linear predictor $\eta_i = x_i^\top \beta$ using posterior medians of $\beta$. We split subjects at the median of this score (“Low” vs “High”) and compare their Kaplan–Meier curves with a log-rank test. The Kaplan–Meier estimator is nonparametric and does not depend on the Cox model itself, only the grouping into “Low” and “High” risk comes from the model, so the same KM machinery could equally be used with the Weibull-based risk score.
+In the Cox model, taxa with HR > 1 indicate increased diabetes onset hazard, while taxa with HR < 1 indicate protective associations. Taxa whose 95% credible intervals exclude 1 show stronger posterior evidence of an association, whereas intervals overlapping 1 indicate insufficient evidence for a directional effect.
 
-```{r, fig.width=10, fig.height=6, dpi=300, warning=FALSE}
-# Posterior medians for the PH linear predictor
-beta_med <- sapply(seq_len(K), function(j) median(M[, paste0("beta[", j, "]")]))
-risk_lp  <- as.numeric(as.matrix(standata$X) %*% beta_med)
+Hazard ratios describe individual associations but do not measure overall model discrimination. Therefore, we evaluate the ability of the Cox model to rank individuals according to their event risk using Harrell's concordance index (C-index). Harrell's concordance index (C-index) measures how well the model ranks individuals according to their predicted event risk.
+
+```{r}
+library(survival)
+
+# Posterior median linear predictor
+beta_med <- sapply(seq_len(K), function(j)
+  median(draws[, paste0("beta[", j, "]")])
+)
+
+# Cox risk score (higher = higher hazard)
+risk_score <- -as.numeric(
+  as.matrix(standata$X) %*% beta_med
+)
+
+# Harrell's C-index
+c_index <- concordance(
+  Surv(standata$time, standata$event) ~ risk_score
+)
+
+c_index$concordance
+```
+
+The fitted Cox model achieved a C-index of approximately 0.76, indicating that the model correctly ranks individuals in about 76% of comparable pairs. Values above 0.5 indicate better-than-random discrimination, with higher values representing stronger predictive ability.
+
+To visualize the risk separation captured by the model, individuals are divided into high- and low-risk groups based on the median Cox risk score, and their Kaplan–Meier survival curves are compared.
+
+
+```{r}
+# Cox linear predictor for risk grouping
+km_risk_score <- as.numeric(
+  as.matrix(standata$X) %*% beta_med
+)
 
 dat_km <- data.frame(
-  time  = standata$time,
+  time = standata$time,
   event = standata$event,
-  risk  = risk_lp
+  risk = km_risk_score
 )
 
-# Median split of the risk score (High risk = worse survival)
-cut_pt <- median(dat_km$risk, na.rm = TRUE)
-dat_km$group <- factor(
-  ifelse(dat_km$risk > cut_pt, "High risk", "Low risk"),
-  levels = c("High risk", "Low risk")
+# Median split
+risk_cutoff <- median(dat_km$risk)
+
+dat_km$risk_group <- factor(
+  ifelse(dat_km$risk >= risk_cutoff,
+         "High risk",
+         "Low risk"),
+  levels = c("Low risk", "High risk")
 )
 
-# Kaplan–Meier fit and plot
-sf <- survfit(Surv(time, event) ~ group, data = dat_km)
+# Kaplan-Meier curves
+km_fit <- survfit(
+  Surv(time, event) ~ risk_group,
+  data = dat_km
+)
 
 ggsurvplot(
-  sf, data = dat_km,
-  conf.int     = TRUE,
-  pval         = TRUE,
-  legend.title = "Model-based risk",
-  legend.labs  = levels(dat_km$group),
-  palette      = c("#E64B35", "#4DBBD5"),
-  xlab         = "Time", ylab = "Survival probability"
+  km_fit,
+  data = dat_km,
+  conf.int = TRUE,
+  legend.title = "Predicted risk group",
+  legend.labs = c("Low risk", "High risk"),
+  xlab = "Time",
+  ylab = "Survival probability"
 )
-
-
 ```
+The Kaplan–Meier curves show the survival patterns of the predicted risk groups. The high-risk group (larger \(x^\top\beta\)) shows lower survival probability, indicating earlier diabetes onset compared with the low-risk group. Clear separation between curves suggests that the Cox risk score captures meaningful differences in event risk.
 
-Kaplan–Meier curves by the model-based score (median split) show clear separation: the high PH risk group (larger $\eta = x^\top\beta$, implying higher hazard) has lower survival (curve below), while the low-risk group remains higher. The log-rank test indicates a statistically significant difference.
+
 
 ## Hierarchical survival model
 
-In the final example we switch from the microbiome data to a clinical survival dataset. The cancer data from the survival package contains follow-up on patients with advanced lung cancer, with time recorded from study entry to death or censoring. Each patient has several baseline covariates, including age, sex, ECOG performance status, physician- and patient-rated Karnofsky scores, daily caloric intake, and weight loss in last six months. In addition, patients are treated at different institutions, indexed by the variable inst.
+In this final example, we consider a hierarchical extension of the Cox proportional hazards model using the `cancer` dataset from the `survival` package. In addition to patient-level covariates, patients are clustered by treatment institution, allowing institution-specific frailties to capture unexplained between-institution heterogeneity.
 
-To capture both individual-level risk factors and between-institution heterogeneity, we construct a hierarchical Cox proportional hazards model. All baseline covariates enter the linear predictor as fixed effects, while the institution index defines group-specific frailties that are modeled as random effects on the log-hazard scale. For patient $i$ treated at institution $g[i]$, the hazard is
+The hierarchical Cox model extends the standard Cox model by combining fixed effects for patient characteristics with random effects that account for variation between institutions. For patient \(i\) treated at institution \(g[i]\), the hazard is
 
 $$
-h_i(t) \;=\; h_0(t)\,\exp\bigl(x_i^\top \beta + u_{g[i]}\bigr), 
-\qquad u_g \sim \mathcal{N}(0, \sigma_u^2),
+h_i(t)=h_0(t)\exp\!\left(x_i^\top\beta+u_{g[i]}\right),
+\qquad
+u_g\sim\mathcal{N}(0,\sigma_u^2),
 $$
 
-where $x_i$ is the vector of scaled baseline covariates, $\beta$ are fixed-effect coefficients, and $u_g$ is the institution-specific frailty term with variance $\sigma_u^2$. All baseline covariates are standardized (mean 0, standard deviation 1), so hazard ratios summarize the effect of a one–standard deviation increase in each covariate.
+where \(x_i\) is the vector of standardized baseline covariates, \(\beta\) are the fixed-effect regression coefficients, and \(u_g\) is the institution-specific frailty with variance \(\sigma_u^2\). The random effects allow each institution to have its own baseline risk after accounting for patient-level predictors.
+
+All baseline covariates are standardized (mean 0 and standard deviation 1), so the hazard ratios correspond to a one-standard-deviation increase in each covariate.
 
 ```{r}
 # Data
@@ -593,26 +982,26 @@ standata_cancer <- list(
   event = as.integer(analysis_df_cancer$event),
   X     = as.matrix(analysis_df_cancer[, colnames(X), drop = FALSE])
 )
-
 ```
 
-Next we implement this hierarchical specification in Stan by extending the Cox proportional hazards model with a random intercept for each institution. The linear predictor combines fixed effects for the scaled covariates with a group-specific frailty term, and inference proceeds again via the partial likelihood. As before, covariate effects are expressed as hazard ratios obtained by exponentiating the regression coefficients, allowing us to quantify how each predictor multiplies the event hazard while the frailty term accounts for unexplained heterogeneity between institutions.
+The following Stan program implements the hierarchical Cox proportional hazards model by extending the standard Cox model with institution-specific random effects (frailties) while retaining the partial likelihood formulation.
+
 
 ```{stan output.var="cox_hier_model"}
 // Stan: hierarchical Cox proportional hazards model
 data {
   int<lower=1> N;                     // observations
   int<lower=1> G;                     // groups
-  int<lower=1,upper=G> group[N];      // group index
+  array[N] int<lower=1, upper=G> group;      // group index
   int<lower=0> K;                     // number of covariates
   vector<lower=0>[N] time;            // observed times t_i
-  int<lower=0,upper=1> event[N];      // 1=event, 0=censored
+  array[N] int<lower=0, upper=1> event;      // 1=event, 0=censored
   matrix[N, K] X;                     // covariates
 }
 
 transformed data {
   int<lower=0> n_event = 0;
-  int event_idx[N];
+  array[N] int event_idx;
   for (i in 1:N) {
     if (event[i] == 1) {
       n_event += 1;
@@ -656,30 +1045,35 @@ generated quantities {
     HR[k] = exp(beta[k]);
 }
 
-
 ```
+
+The following code fits the hierarchical Cox model and extracts posterior samples for the fixed effects and institution-specific frailties. Hazard ratios are then obtained by exponentiating the posterior regression coefficients.
 
 ```{r, fig.width=10, fig.height=6, dpi=300}
 # Fit hierarchical Cox and plot Hazard Ratios
-fit_cancer_cox_hier <- rstan::sampling(
-  object  = cox_hier_model,
+fit_cancer_cox_hier <- cox_hier_model$sample(
   data    = standata_cancer,
-  chains  = 4, iter = 4000, warmup = 1000,
-  seed    = 2025, refresh = 0,
-  control = list(adapt_delta = 0.95)
+  chains  = 4, 
+  iter_warm = 1000, 
+  iter_sampling = 3000,
+  seed    = 2026, 
+  refresh = 0,
+  adapt_delta = 0.95
 )
 
 # Summary: fixed effects + frailty variance
-print(fit_cancer_cox_hier, pars = c("beta","sigma_u","var_frailty","HR"))
+fit_cancer_cox_hier$summary(variables = c("beta","sigma_u","var_frailty","HR"))
 
 # Posterior draws
-M_cancer_cox <- posterior::as_draws_matrix(fit_cancer_cox_hier)
+draws_cancer <- posterior::as_draws_matrix(fit_cancer_cox_hier$draws())
 K <- standata_cancer$K
 covar_names_cancer <- colnames(standata_cancer$X)
 
 # Cox PH hazard ratios
 hr_df_cancer <- do.call(rbind, lapply(seq_len(K), function(j) {
-  hr_draw <- exp(M_cancer_cox[, paste0("beta[", j, "]")])
+  beta_draw <- draws_cancer[, paste0("beta[", j, "]")]
+
+  hr_draw <- exp(beta_draw)
   data.frame(
     HR    = median(hr_draw),
     lower = unname(quantile(hr_draw, 0.025)),
@@ -709,49 +1103,83 @@ ggplot(hr_df_cancer, aes(y = term, x = HR, color = signif)) +
 
 ```
 
-Performance status variables (ph.ecog and ph.karno) have hazard ratios above 1, with intervals not overlapping 1, indicating strong evidence that poorer performance status is associated with higher mortality. Age also shows a harmful effect, though with greater posterior uncertainty. In contrast, patient-rated Karnofsky score and caloric intake (meal.cal) have hazard ratios centered below or near 1, suggesting weak or mild protective associations that are mostly uncertain. Weight loss shows a hazard ratio slightly below/around 1, but with wide uncertainty, so its association with survival is unclear. Sex (female lower hazard) appears protective with a hazard ratio below 1.
+The forest plot summarizes the posterior hazard ratios for patient-level covariates after accounting for institution-specific frailty. Poorer performance status (ph.ecog and ph.karno) shows the strongest association with mortality, with hazard ratios above 1 and credible intervals excluding 1. Other covariates show weaker or more uncertain effects. The estimated frailty variance suggests some remaining between-institution heterogeneity after adjusting for patient characteristics.
 
-The frailty variance is small but non-zero, indicating modest but detectable between-institution heterogeneity: some institutions have slightly higher or lower baseline hazard even after adjusting for patient-level predictors, but these differences are limited in magnitude compared to fixed effects.
+we next evaluate model discrimination using Harrell’s concordance index (C-index) because these hazard ratios describe individual associations with mortality risk, they do not measure how well the model ranks patients according to their overall risk.
 
-Overall, performance status dominates the risk profile, while other baseline variables show smaller and more uncertain associations. The hierarchical model accounts for institutional heterogeneity but the main structure of covariate effects remains driven by individual-level predictors.
 
-Next we split subjects at the median of this score (“Low” vs “High”) and compare their Kaplan–Meier curves with a log-rank test.
+```{r}
+library(survival)
 
-```{r, fig.width=10, fig.height=6, dpi=300}
-# Posterior medians for the PH linear predictor
+# Posterior median fixed effects
 beta_med_cancer <- sapply(seq_len(K), function(j) {
-  median(M_cancer_cox[, paste0("beta[", j, "]")])
+  median(draws_cancer[, paste0("beta[", j, "]")])
 })
 
-# Model-based risk score (higher = worse survival)
-risk_lp_cancer <- as.numeric(as.matrix(standata_cancer$X) %*% beta_med_cancer)
+# Patient-level risk score from fixed effects
+# negative sign used so larger values correspond to better survival
+risk_score_cancer <- -as.numeric(
+  as.matrix(standata_cancer$X) %*% beta_med_cancer
+)
+
+
+# Harrell's C-index
+c_index_cancer <- concordance(
+  Surv(standata_cancer$time, standata_cancer$event) ~ risk_score_cancer
+)
+
+c_index_cancer$concordance
+```
+
+The hierarchical Cox model achieved a C-index of approximately 0.65, indicating its ability to rank patients according to their mortality risk.
+
+Although the C-index provides an overall measure of discrimination, it does not visualize differences in survival between risk groups. Therefore, we next compare Kaplan–Meier survival curves for patients classified into high- and low-risk groups based on the model-derived risk score.
+
+```{r, fig.width=10, fig.height=6, dpi=300}
+# Posterior median fixed-effect coefficients
+beta_med_cancer <- sapply(seq_len(K), function(j) {
+  median(draws_cancer[, paste0("beta[", j, "]")])
+})
+
+# Patient-level risk score (higher = higher mortality risk)
+risk_score_cancer <- as.numeric(
+  as.matrix(standata_cancer$X) %*% beta_med_cancer
+)
 
 dat_km_cancer <- data.frame(
   time  = standata_cancer$time,
   event = standata_cancer$event,
-  risk  = risk_lp_cancer
+  risk  = risk_score_cancer
 )
 
-# Median split of the risk score (High risk = worse survival)
-cut_pt_cancer <- median(dat_km_cancer$risk, na.rm = TRUE)
-dat_km_cancer$group <- factor(
-  ifelse(dat_km_cancer$risk > cut_pt_cancer, "High risk", "Low risk"),
-  levels = c("High risk", "Low risk")
+# Median split of predicted risk score
+risk_cutoff <- median(dat_km_cancer$risk, na.rm = TRUE)
+
+dat_km_cancer$risk_group <- factor(
+  ifelse(
+    dat_km_cancer$risk >= risk_cutoff,
+    "High risk",
+    "Low risk"
+  ),
+  levels = c("Low risk", "High risk")
 )
 
-# Kaplan–Meier fit and plot
-sf_cancer <- survfit(Surv(time, event) ~ group, data = dat_km_cancer)
+# Kaplan–Meier curves
+km_fit_cancer <- survfit(
+  Surv(time, event) ~ risk_group,
+  data = dat_km_cancer
+)
 
 ggsurvplot(
-  sf_cancer, data = dat_km_cancer,
-  conf.int     = TRUE,
-  pval         = TRUE,
+  km_fit_cancer,
+  data = dat_km_cancer,
+  conf.int = TRUE,
+  pval = TRUE,
   legend.title = "Model-based risk",
-  legend.labs  = levels(dat_km_cancer$group),
-  palette      = c("#E64B35", "#4DBBD5"),
-  xlab         = "Time", ylab = "Survival probability"
+  legend.labs = c("Low risk", "High risk"),
+  xlab = "Time",
+  ylab = "Survival probability"
 )
-
 ```
 
 Kaplan–Meier curves by the model-based score (median split) show clear separation: the high PH risk group has lower survival, while the low-risk group remains higher. The log-rank test indicates a statistically significant difference.
@@ -765,15 +1193,15 @@ Kaplan–Meier curves by the model-based score (median split) show clear separat
 :::
 
 
-
 :::::::::::::::::::::::::::::: challenge
 
-Fit a Bayesian Cox proportional hazards model with sex as the only covariate and then compare the model-based hazard ratio with nonparametric Kaplan–Meier curves.
+Fit a Bayesian Cox proportional hazards model with sex as the only covariate and compare the estimated hazard ratio with Kaplan–Meier survival curves.
 
-1. Fit the Cox PH model in Stan using the code above and inspect the posterior summary for `beta` and `HR`.  
-2. Compute the posterior median hazard ratio (`HR_med`) and a 95% credible interval (`HR_ci`) for Female vs Male and interpret these in words.  
-3. Plot Kaplan–Meier curves for males and females and compare them to the Cox model’s posterior hazard ratio: do they tell a consistent story about differences in survival by sex?
+1. Fit the Cox PH model in Stan using sex as the covariate and inspect the posterior estimates of `beta` and `HR`.
+2. Transform posterior draws of `beta` into hazard-ratio draws and summarize the posterior median and 95% credible interval for Female vs Male.
+3. Plot Kaplan–Meier curves by sex and compare the nonparametric survival patterns with the Cox model estimate.
 
+::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::: solution
 
@@ -804,24 +1232,26 @@ standata_sex <- list(
 
 
 # Fit Cox PH -model
-fit_cox_sex <- rstan::sampling(
-  object  = cox_model,      # same as in the lecture
-  data    = standata_sex,
-  chains  = 4, iter = 4000, warmup = 1000,
-  seed    = 2025, refresh = 0,
-  control = list(adapt_delta = 0.95)
+fit_cox_sex <- cox_model$sample(
+  data = standata_sex,
+  chains = 4,
+  iter_warmup = 1000,
+  iter_sampling = 3000,
+  seed = 2025,
+  refresh = 0,
+  adapt_delta = 0.95
 )
 
 ```
 
 
 ```{r}
-print(fit_cox_sex, pars = c("beta", "HR"))
+fit_cox_sex$summary("beta")
 ```
 
 
 ```{r}
-M_sex <- posterior::as_draws_matrix(fit_cox_sex)
+M_sex <- posterior::as_draws_matrix(fit_cox_sex$draws())
 
 # log-hazard ratio Female vs Male
 beta_draw  <- M_sex[, "beta[1]"]
@@ -837,8 +1267,11 @@ HR_ci
 
 ```{r}
 # Kaplan-Meier
-cancer2$sex_factor <- factor(cancer2$sex, levels = c(1, 2),
-                             labels = c("Male", "Female"))
+cancer2$sex_factor <- factor(
+  cancer2$sex,
+  levels = c(1,2),
+  labels = c("Male","Female")
+)
 
 sf_sex <- survfit(Surv(time, event) ~ sex_factor, data = cancer2)
 
@@ -853,19 +1286,20 @@ ggsurvplot(
 
 ```
 
+1. The posterior median hazard ratio for Female vs Male is approximately 0.63, suggesting that females have a lower estimated mortality hazard compared with males.
 
+2. The 95% credible interval is approximately (0.43, 0.91), which is mostly below 1, indicating strong posterior support for a protective association of female sex.
 
-1. Posterior median hazard ratio (Female vs Male) is about **0.63**. Females have roughly **37% lower** instantaneous risk of death than males at any given time.
+3. The Kaplan–Meier curves show higher survival probabilities among females, consistent with the Cox model estimate.
 
-2. The 95% credible interval is about **(0.43, 0.91)**, entirely below 1. This provides clear evidence that females have a lower hazard of death than males in this dataset.
+::::::::::::::::::::::::::::::
 
-3. The Kaplan–Meier curve for females lies above the curve for males. Nonparametric KM estimates also indicate better survival for women, consistent with the Cox model’s hazard ratio.
-   
-::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::
-
+The Cox model and Kaplan–Meier curves provide complementary views of survival differences: the Cox model quantifies the relative hazard, while Kaplan–Meier curves visualize the corresponding survival patterns over time.
 
 ## Resources
 
--   User’s guide <https://mc-stan.org/docs/stan-users-guide/survival.html>
+-  User’s guide <https://mc-stan.org/docs/stan-users-guide/survival.html>
+-  R survival package documentation: <https://cran.r-project.org/package=survival>
+-   Bürkner, P. C. (2017). *brms: An R Package for Bayesian Multilevel Models Using Stan*. Journal of Statistical Software,   80(1), 1–28.<https://doi.org/10.18637/jss.v080.i01>
+
+

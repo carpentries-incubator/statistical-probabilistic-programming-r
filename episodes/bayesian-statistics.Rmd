@@ -29,7 +29,7 @@ Learn to
 - formulate prior, likelihood, posterior distributions.
 - fit a Bayesian model with the grid approximation.
 - communicate posterior information.
-- work with with posterior samples.
+- work with posterior samples.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -5,14 +5,35 @@ exercises: 2
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+home_dir <- normalizePath("~", winslash = "/")
+safe_dir <- file.path(home_dir, "cmdstan_temp")
+if (!dir.exists(safe_dir)) dir.create(safe_dir, FALSE, TRUE)
+
+Sys.setenv(TMPDIR = safe_dir, TEMP = safe_dir, TMP = safe_dir)
 
 library(tidyverse)
 library(magrittr)
-library(rstan)
+library(cmdstanr)
 library(cowplot)
 library(grafify)
 library(mvtnorm)
+library(brms)
+
+options(
+  brms.backend = "cmdstanr",
+  cmdstanr_write_stan_file_dir = safe_dir,
+  cmdstanr_write_exe_dir       = safe_dir,
+  cmdstanr_write_exe_ext       = ".txt"  
+)
+
+cmdstanr::register_knitr_engine(override = TRUE)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE, 
+  message = FALSE
+)
 ```
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -410,7 +431,7 @@ a, b \sim N(0, 1) \\
 \sigma \sim \Gamma(2, 1) \\
 $$
 
-Generate the [prior predictive distribution](https://mc-stan.org/docs/2_26/stan-users-guide/prior-predictive-checks.html), plot it, and visually assess the validity of the priors.
+Generate the [prior predictive distribution](https://mc-stan.org/docs/stan-users-guide/prior-predictive-checks.html), plot it, and visually assess the validity of the priors.
 
 
 
@@ -471,7 +492,7 @@ Plot the data with the posterior for temperature. Plot the marginal posterior fo
 
 Hint: 
 
-See https://mc-stan.org/docs/functions-reference/gaussian-process-covariance-functions.html for info on periodic kernel in Stan. 
+See [Stan Functions Reference: GP Covariance](https://mc-stan.org/docs/functions-reference/matrix_operations.html#gaussian-process-covariance-functions) for details on the periodic kernel syntax in Stan.
 
 [1] (Chambers, J. M., Cleveland et al. (1983) Graphical Methods for Data Analysis)
 
@@ -529,7 +550,7 @@ Sometimes count data has more zeros than is expected when using, for example, Po
 
 ```{r}
 # Install the package to get the data
-install.packages(AER)
+install.packages("AER")
 # Get data
 data("DoctorVisits", package = "AER")
 ```
