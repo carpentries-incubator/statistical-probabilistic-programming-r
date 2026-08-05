@@ -10,6 +10,10 @@
         "Name": "r-universe",
         "URL": "https://stan-dev.r-universe.dev"
       }
+      {
+        "Name": "BioCsoft",
+        "URL": "https://bioconductor.org/packages/3.23/bioc"
+      }
     ]
   },
   "Packages": {
