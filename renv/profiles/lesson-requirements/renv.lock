@@ -16,6 +16,9 @@
       }
     ]
   },
+  "Bioconductor": {
+    "Version": "3.23"
+  },
   "Packages": {
     "AER": {
       "Package": "AER",
