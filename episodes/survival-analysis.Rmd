@@ -21,8 +21,7 @@ library(splines2)
 library(survival)
 library(TreeSummarizedExperiment)
 library(survminer)
-library(mia)
-library(cmdstanr)
+# library(cmdstanr)
 
 theme_set(theme_bw(15))
 okabi_colors <- c("#E69F00", "#56B4E9", "#009E73")
@@ -144,7 +143,7 @@ library(posterior)
 library(survival)
 library(TreeSummarizedExperiment)
 library(survminer)
-library(mia)
+# library(mia)
 ```
 
 ```{r, warning=FALSE, message=FALSE}
@@ -154,12 +153,20 @@ tse <- readRDS(file.path("data", "survival_tse.rds"))
 
 
 # Relative abundance transformation
-tse <- tse |>
-  transformAssay(
-    method = "relabundance",
-    assay.type = "counts",
-    name = "relabundance"
-  )
+counts <- SummarizedExperiment::assay(tse, "counts")
+
+sample_totals <- colSums(counts)
+
+if (any(sample_totals == 0)) {
+  stop("At least one sample has a total count of zero.")
+}
+
+rel <- sweep(
+  counts,
+  MARGIN = 2,
+  STATS = sample_totals,
+  FUN = "/"
+)
 
 
 # Extract relative abundance matrix
@@ -182,24 +189,15 @@ selected_microbes <- names(
 length(selected_microbes)
 
 # Log transform selected microbial abundances
-tse <- transformAssay(
-  tse,
-  method = "log",
-  assay.type = "relabundance",
-  pseudocount = 1e-6,
-  name = "log_abund"
+log_abund <- log(
+  rel[selected_microbes, , drop = FALSE] + 1e-6
 )
 
-
-# Features (samples x microbes)
-df <- as.data.frame(
-  t(assay(tse, "log_abund")[selected_microbes, , drop = FALSE])
-)
-
+df <- as.data.frame(t(log_abund))
 
 # Outcomes
-df$Event <- colData(tse)$Event
-df$Event_time <- colData(tse)$Event_time
+df$Event <- sample_data$Event
+df$Event_time <- sample_data$Event_time
 
 
 # Build design matrix (scaled)
