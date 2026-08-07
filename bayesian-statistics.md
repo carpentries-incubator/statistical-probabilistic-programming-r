@@ -8,44 +8,68 @@ exercises: 8
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How are statistical models formulated and fitted within the Bayesian framework?
+- How are statistical models specified and fitted within the Bayesian framework?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-Learn to 
+After completing this episode, learners will be able to:
 
-- formulate prior, likelihood, posterior distributions.
-- fit a Bayesian model with the grid approximation.
-- communicate posterior information.
-- work with with posterior samples.
+- specify prior, likelihood, and posterior distributions;
+- fit a Bayesian model using grid approximation;
+- summarize and communicate posterior uncertainty; and
+- work with samples from a posterior distribution.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Bayes' formula
 
-The starting point of Bayesian statistics is Bayes' theorem, expressed as:
+Suppose we have observed data $X$ and have chosen to analyze them using a statistical model with parameters $\theta$. Before examining the data, we may already have information or assumptions about plausible values of these parameters. Bayesian analysis provides a formal framework for combining this prior information with the evidence contained in the data and assessing how our knowledge about the parameters changes.
+
+The starting point of Bayesian data analysis is Bayes’ theorem:
 
 $$
-  p(\theta | X) = \frac{p(X | \theta) p(\theta)  }{p(X)} \\
+  p(\theta | X) = \frac{p(X | \theta) p(\theta)  }{p(X)}. \\
 $$
 
-When dealing with a statistical model, this theorem is used to infer the probability distribution of the model parameters $\theta$, conditional on the available data $X$. These probabilities are quantified by the *posterior distribution* $p(\theta | X)$, which is primary the target of probabilistic modeling.
+The distribution $p(\theta \mid X)$ is called the *posterior distribution*. It describes our uncertainty about the parameters after observing the data and is the primary target of Bayesian inference.
 
-On the right-hand side of the formula, the *likelihood function* $p(X | \theta)$ gives plausibility of the data given $\theta$, and determines the impact of the data on the posterior.  
+The term $p(X \mid \theta)$ is called the *likelihood* and describes the probability density of the observed data under a given value of $\theta$. The likelihood determines how the observed data update our information about the parameters.
 
-A defining feature of Bayesian modeling is the second term in the numerator, the *prior distribution* $p(\theta)$. The prior is used to incorporate beliefs about $\theta$ before considering the data.
+A defining feature of Bayesian modeling is the *prior distribution* $p(\theta)$. The prior represents information or assumptions about the parameters before the observed data are taken into account.
 
-The denominator on the right-hand side  $p(X)$ is called the marginal probability, and is often practically impossible to compute. For this reason the proportional version of Bayes' formula is typically employed:
-
+The denominator,
 
 $$
-p(\theta | X) \propto p(\theta)  p(X | \theta).
+p(X),
 $$
 
-The proportional Bayes' formula yields an unnormalized posterior distribution, which can subsequently be normalized to obtain the posterior. 
+is called the *marginal likelihood* and acts as a normalizing constant ensuring the posterior distribution integrates to one. Because it is often difficult to calculate directly, analytical solutions for the posterior are available for a limited set of cases and the Bayes’ theorem is commonly used in the proportional form:
 
+$$
+p(\theta \mid X)
+\propto
+p(\theta)p(X \mid \theta).
+$$
+
+Thus, the posterior distribution is proportional to the product of the prior and the likelihood. As we will later see, for many purposes, the unnormalized form of the posterior is sufficient. 
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::: challenge
+
+A researcher uses linear regression to study how weekly exercise is associated with systolic blood pressure. Previous studies suggest that more exercise is associated with lower blood pressure.
+
+What are the model parameters? Which parameter does the prior information concern, and what does it suggest?
+
+:::::::::::::::::: solution
+
+A simple linear regression model has three parameters: the intercept, the slope, and the residual standard deviation. The information from prior studies concerns the slope: because greater exercise is expected to be associated with lower blood pressure, the slope is expected to be negative.
+
+::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
@@ -58,20 +82,20 @@ Assume we are trying to estimate the prevalence of left-handedness in humans, ba
 The outcome is binary and the students are assumed to be independent (e.g. no twins), so the binomial distribution is the appropriate choice for likelihood:
 
 $$
-p(X|\theta) = Bin(7 | 50, \theta).
+p(X|\theta) = \text{Binomial}(7 | 50, \theta).
 $$
 
 
-Without further justification, we'll choose $p(\theta) = Beta(\theta |1, 10)$ as the prior distribution, so the unnormalized posterior distribution is 
+Without further justification, we'll choose $p(\theta) = \text{Beta}(\theta |1, 10)$ as the prior distribution, so the unnormalized posterior distribution is 
 
 $$
-p(\theta | X) = \text{Bin}(7 | 50, \theta) \cdot \text{Beta}(\theta | 1, 10).
+p(\theta | X) = \text{Binomial}(7 | 50, \theta) \cdot \text{Beta}(\theta | 1, 10).
 $$
 
 Below, we'll plot these functions. Likelihood (which is not a distribution!) has been normalized for better illustration. 
 
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-2-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 
 The figure shows that the majority of the mass in the posterior distribution is concentrated between 0 and 0.25. This implies that, given the available data and prior distribution, the model is fairly confident that the value of $\theta$ is between these values. The peak of the posterior is at approximately 0.1 representing the most likely value. This aligns well with intuitive expectations about left-handedness in humans. 
@@ -98,7 +122,7 @@ Two specific types of posterior intervals are often of interest:
 
 The following figures illustrate selected posterior intervals for the previous example along with the posterior mode, or *maximum a posteriori* (MAP) estimate. 
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-3-1.png" alt="" style="display: block; margin: auto;" />
 
 
 ## Grid approximation
@@ -173,7 +197,7 @@ p1 <- ggplot(df1_l,
 p1
 ```
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-7-1.png" alt="" style="display: block; margin: auto;" />
 
 
 The points in the figure represent the values of the functions computed at the grid locations. The lines depict linear interpolations between these points. 
@@ -325,7 +349,7 @@ p_joint_posterior <- df2 %>%
 p_joint_posterior
 ```
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-13-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 
 Next, we'll compute the posterior mode, which is a point in the 2-dimensional parameter space. 
@@ -343,7 +367,7 @@ df2[which.max(df2$posterior), c("alpha", "beta")]
 
 Often, in addition to the parameters of interest, the model contains parameters we are not interested in. For instance, we might only be interested in $\alpha$, in which case $\beta$ would be a 'nuisance' parameter. Nuisance parameters are part of the full ('joint') posterior, but they can be discarded by integrating the joint posterior over these parameters. A posterior integrated over some parameters is called a marginal posterior. 
 
-Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta$. Intuitively, it can be helpful to think of marginalization as a process where all of the joint posterior mass is drawn towards the $\alpha$ axis, as if drawn by a gravitational force. 
+Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta$. Intuitively, it can be helpful to think of marginalization as a process where all of the joint posterior mass is drawn towards the $\alpha$ axis, as if by a gravitational force. 
 
 
 ``` r
@@ -363,7 +387,7 @@ p_alpha_posterior <- alpha_posterior %>%
 p_alpha_posterior
 ```
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-15-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::: challenge
@@ -373,13 +397,17 @@ Does the MAP of the joint posterior of $\theta = (\alpha, \beta)$ correspond to 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::: callout
-The conjugate prior for the Gamma likelihood [exists](https://en.wikipedia.org/wiki/Gamma_distribution#Bayesian_inference), which means there is a prior that causes the posterior to be of the same shape.
+
+It is known that for the Gamma likelihood there exists a prior resulting in a posterior of the same distribution type. Such priors are called *conjugate priors* (see [table](https://en.wikipedia.org/wiki/Conjugate_prior#Table_of_conjugate_distributions)).
+
+
+
 ::::::::::::::::::::::::::::::::::::::::
 
 
 ## Working with samples
 
-The main limitation of the grid approximation is that it becomes impractical for models with even a moderate number of parameters. The reason is that the number of computations grows as $O \{ \Delta^p \}$ where $\Delta$ is the number of grid points per model parameter and $p$ the number of parameters. This quickly becomes prohibitive, and the grid approximation is seldom used in practice. The standard approach to fitting Bayesian models is to draw samples from the posterior with Markov chain Monte Carlo (MCMC) methods. These methods are the topic of a later episode but we'll anticipate this now by studying how posterior summaries can be computed based on samples. 
+The main limitation of the grid approximation is that it becomes impractical for models with even a moderate number of parameters. The reason is that the computational burden grows as $O \{ \Delta^p \}$ where $\Delta$ is the number of grid points per model parameter and $p$ the number of parameters. This quickly becomes prohibitive, and the grid approximation is seldom used in practice. The standard approach to fitting Bayesian models is to draw samples from the posterior with Markov chain Monte Carlo (MCMC) methods. These methods are the topic of a later episode but we'll anticipate this now by studying how posterior summaries can be computed based on samples. 
 
 ## Example 4: handedness with samples
 
@@ -410,7 +438,7 @@ ggplot() +
   labs(x = expression(theta))
 ```
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-17-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 
 
@@ -425,7 +453,7 @@ Compute the posterior mean, variance, 90% CI and $Pr(\theta > 0.1)$ using the ge
 
 ## Posterior predictive distribution
 
-Now we have learned how to fit a probabilistic model using the grid approximation and how to compute posterior summaries of the model parameters based on the fit or with posterior samples. A potentially interesting question that the posterior doesn't directly answer is what do possible unobserved data values $\tilde{X}$ look like, conditional on the observed values $X$. 
+Now we have learned how to fit a probabilistic model using the grid approximation and how to compute posterior summaries of the model parameters based on the fit or with posterior samples. An often interesting question that the posterior doesn't directly answer is what do possible unobserved data values $\tilde{X}$ look like, conditional on the observed values $X$. In other words, what predictions does the model give?
 
 The unknown value can be predicted using the *posterior predictive distribution*  $p(\tilde{X} | X) = \int p(\tilde{X} | \theta) p(\theta | X) d\theta$. Using samples, this distribution can be sampled from by first drawing a value $\theta^s$ from the posterior and then generating a random value from the likelihood function $p(\tilde{X} | \theta^s)$. 
 
@@ -446,7 +474,7 @@ ggplot() +
   geom_vline(xintercept = 7, color = "red")
 ```
 
-<img src="fig/bayesian-statistics-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/bayesian-statistics-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
 
 
 

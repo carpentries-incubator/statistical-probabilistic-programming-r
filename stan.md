@@ -19,24 +19,28 @@ exercises: 4
 
 Learn how to
 
-- implement statistical models in Stan.
-- generate posterior samples with Stan.
-- extract and process samples generated with Stan. 
+- implement statistical models in Stan; 
+- generate posterior samples with Stan; 
+- extract and process samples generated with Stan.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 Stan is a probabilistic programming language that can be used to specify probabilistic models and to generate samples from posterior distributions. 
 
-The standard steps is using Stan is to first write the statistical model in a separate text file, then to call Stan from R (or other supported interface) which performs the sampling. Instead of having to write formulas the model can be written using built-in functions and sampling statements similar to written text. The sampling process is performed with a Markov Chain Monte Carlo (MCMC) algorithm, which we will study in a later episode. For now, however, our focus is on understanding how to execute it using Stan. 
+The standard workflow when using Stan is to first write the statistical model in a separate text file, and then to call Stan from R using `cmdstanr`, which interfaces with the underlying CmdStan engine to perform the sampling. Instead of having to write explicit mathematical formulas the model is specified using built-in functions and sampling statements similar to written text. The sampling process is performed with a Markov Chain Monte Carlo (MCMC) algorithm, a topic of a later episode. For now, however, our focus is on understanding how to execute it using Stan. 
 
-Several R packages have been built that simplify Stan usage. For example, brms allows specifying models via R's customary formula syntax, while bayesplot provides a library of plotting functions. In this lesson, however, we will first learn using Stan from the bottom-up, by writing Stan programs, extracting the posterior samples and generating the plots ourselves. Later, in episode 7, we'll introduce the usage of some of these additional packages. 
+To get started, follow the instructions provided at **[https://mc-stan.org/cmdstanr/](https://mc-stan.org/cmdstanr/)** to install `cmdstanr` and the underlying CmdStan backend on your local computer.
 
-To get started, follow the instructions provided at https://mc-stan.org/users/interfaces/ to install Stan on your local computer.
+::::::::::::::::::::::::::::::::::: callout
+
+Several R packages have been built that simplify Stan usage. For example, brms allows specifying models via R's customary formula syntax, while bayesplot provides a library of plotting functions. In this lesson, however, we will first learn using Stan from the bottom-up, by writing Stan programs, extracting the posterior samples and performing subsequent analyses ourselves. Later, in episode 7, we'll introduce the usage of some of these additional packages. 
+
+:::::::::::::::::::::::::::::::::::::::::::
 
 
 ::::::::::::::::::::::::::::::::::: callout
 
-With Stan, you can fit models that have continuous parameters, but sampling from models with discrete parameters (e.g. clustering models) is not directly supported. In some cases, we can work around this by marginalizing out the discrete parameters, which makes the model fit possible in Stan. However, these workarounds are not always straightforward.
+With Stan, you can fit models that have continuous parameters, but sampling from models with discrete parameters (e.g. clustering models) is not directly supported. In some cases, we can work around this by marginalizing out the discrete parameters, which makes the model fit possible in Stan. However, such workarounds are not always straightforward.
 
 :::::::::::::::::::::::::::::::::::::::::::
 
@@ -45,24 +49,24 @@ With Stan, you can fit models that have continuous parameters, but sampling from
 
 A Stan program is organized into several blocks that collectively define the model. Typically, a Stan program includes at least the following blocks:
 
-1. Data: This block is used to declare the input data provided to the model. It specifies the types and dimensions of the data variables incorporated into the model.
+1. Data: This block is used to declare the input data. It specifies the types and dimensions of the data variables incorporated into the model.
 
 2. Parameters: In this block, the model parameters are declared. 
 
 3. Model: The likelihood and prior distributions are included here through sampling statements. 
 
-For best practices, it is recommended to specify Stan programs in separate text files with a .stan extension, which can then be called from R.
+For best practices, it is recommended to specify Stan programs in separate text files with a .stan extension, which can then be read, compiled, and sampled from R using `cmdstanr`.
 
 
 ## Example 1: Beta-binomial model
   
 The following Stan program specifies the Beta-binomial model, and consists of data, parameters, and model blocks. 
 
-The data variables are the total sample size $N$ and $x$, the outcome of a binary variable (coin flip, handedness etc.). The declared data type is `int` for integer, and the variables have a lower bound 1 and 0 for $N$ and $x$, respectively.  Notice that each line ends with a semicolon.
+The data variables are the total sample size $N$ and $x$, the outcome of a binary variable (coin flip, handedness etc.). The declared data type is `int` for integer, and the variables have a lower bound 1 and 0 for $N$ and $x$, respectively. Notice that each line ends with a semicolon.
 
 In the parameters block we declare $\theta$, the probability for a success. Since this parameter is a probability, it is a real number restricted between 0 and 1.
 
-In the model block, the likelihood is specified with the sampling statement `x ~ binomial(N, theta)`. This line includes the binomial distribution $\text{Bin}(x | N, theta)$ in the target distribution. The prior is set similarly, and omitting the prior implies a uniform prior. Comments can be included after two forward slashes. 
+In the model block, the likelihood is specified with the sampling statement `x ~ binomial(N, theta)`. This line includes the binomial distribution $\text{Binomial}(x | N, theta)$ in the target distribution. The prior is set similarly, and omitting the prior implies a uniform prior. Comments can be included after two forward slashes. 
   
 
 
@@ -77,7 +81,6 @@ In the model block, the likelihood is specified with the sampling statement `x ~
   }
   
   model{
-    
     // Likelihood
     x ~ binomial(N, theta);
     
@@ -89,161 +92,148 @@ When the Stan program has been saved we need to compile it. In R, this is done b
 
 
 ``` r
-binomial_model <- stan_model("binomial_model.stan")
+binomial_model <- cmdstan_model("binomial_model.stan")
 ```
 
-Once the program has been compiled, it can be used to generate the posterior samples by calling the function `sampling()`. The data needs to be input as a list.
+Once the program has been compiled, it can be used to generate the posterior samples by calling the `$sample()` method on the model object. The data need to be supplied as a list.
 
 
 ``` r
-set.seed(135)
-
 binom_data <- list(N = 50, x = 7)
 
-binom_samples <- sampling(object = binomial_model,
-                          data = binom_data)
+binom_samples <- binomial_model$sample(data = binom_data,
+                          seed = 135)
 ```
 
 ``` output
+Running MCMC with 4 sequential chains...
 
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
-Chain 1: 
-Chain 1: Gradient evaluation took 4e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-Chain 1: Adjust your expectations accordingly!
-Chain 1: 
-Chain 1: 
-Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 1: 
-Chain 1:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 1:                0.003 seconds (Sampling)
-Chain 1:                0.007 seconds (Total)
-Chain 1: 
+Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 1 finished in 0.0 seconds.
+Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 2 finished in 0.0 seconds.
+Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 3 finished in 0.0 seconds.
+Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 4 finished in 0.0 seconds.
 
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
-Chain 2: 
-Chain 2: Gradient evaluation took 1e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
-Chain 2: Adjust your expectations accordingly!
-Chain 2: 
-Chain 2: 
-Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 2: 
-Chain 2:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 2:                0.003 seconds (Sampling)
-Chain 2:                0.007 seconds (Total)
-Chain 2: 
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
-Chain 3: 
-Chain 3: Gradient evaluation took 1e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
-Chain 3: Adjust your expectations accordingly!
-Chain 3: 
-Chain 3: 
-Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 3: 
-Chain 3:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 3:                0.003 seconds (Sampling)
-Chain 3:                0.007 seconds (Total)
-Chain 3: 
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
-Chain 4: 
-Chain 4: Gradient evaluation took 1e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.01 seconds.
-Chain 4: Adjust your expectations accordingly!
-Chain 4: 
-Chain 4: 
-Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 4: 
-Chain 4:  Elapsed Time: 0.004 seconds (Warm-up)
-Chain 4:                0.003 seconds (Sampling)
-Chain 4:                0.007 seconds (Total)
-Chain 4: 
+All 4 chains finished successfully.
+Mean chain execution time: 0.0 seconds.
+Total execution time: 0.6 seconds.
 ```
 
 
-With the default settings, Stan executes 4 MCMC chains, each with 2000 iterations (more about this in the next episode). During the run, Stan provides progress information, aiding in estimating the running time, particularly for complex models or extensive datasets. In this case the sampling took only a fraction of a second. 
+With the default settings, CmdStan (via `cmdstanr`) runs 4 MCMC chains. Each chain runs for 2000 total iterations (more about this in the next episode). During the run, CmdStan provides real-time progress information, aiding in estimating the running time, particularly for complex models or extensive datasets. In this case, the sampling took only a fraction of a second. 
 
-Running `binom_samples`, a summary for the model parameter $p$ is printed, facilitating a quick review of the results.
+Running `binom_samples$summary()`, a summary for the model parameter $\theta$ is printed, facilitating a quick review of the results.
 
 
 ``` r
-binom_samples
+binom_samples$summary()
 ```
 
 ``` output
-Inference for Stan model: anon_model.
-4 chains, each with iter=2000; warmup=1000; thin=1; 
-post-warmup draws per chain=1000, total post-warmup draws=4000.
-
-        mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
-theta   0.16    0.00 0.05   0.07   0.12   0.15   0.18   0.26  1545    1
-lp__  -22.80    0.02 0.69 -24.75 -22.93 -22.53 -22.37 -22.33  1987    1
-
-Samples were drawn using NUTS(diag_e) at Mon Nov 10 08:23:27 2025.
-For each parameter, n_eff is a crude measure of effective sample size,
-and Rhat is the potential scale reduction factor on split chains (at 
-convergence, Rhat=1).
+# A tibble: 2 × 10
+  variable    mean  median     sd    mad       q5     q95  rhat ess_bulk
+  <chr>      <dbl>   <dbl>  <dbl>  <dbl>    <dbl>   <dbl> <dbl>    <dbl>
+1 lp__     -22.8   -22.5   0.743  0.292  -24.1    -22.3    1.00    1634.
+2 theta      0.156   0.153 0.0484 0.0477   0.0851   0.240  1.00    1214.
+# ℹ 1 more variable: ess_tail <dbl>
 ```
 
 
-This summary can also be accessed as a matrix with `summary(binom_samples)$summary`.
-
-Often, however, it is necessary process the individual samples. These can be extracted as follows:
+This summary is returned as a data frame, allowing easy manipulation using, for example, tidyverse tools. Often, however, it is necessary to process the individual samples. These can be extracted as a matrix using the $draws() from `cmdstanr` method:
 
 
 ``` r
-theta_samples <- rstan::extract(binom_samples, "theta")[["theta"]]
+theta_samples <- binom_samples$draws("theta", format = "matrix")
 ```
 
 Now we can use the methods presented in the previous Episode to compute posterior summaries, credible intervals and to generate figures. 
-
 
 :::::::::::::::::::::::::::::::::::: challenge
 
@@ -257,8 +247,9 @@ Compute the 95% credible intervals for the samples drawn with Stan. What is the 
 CI95 <- quantile(theta_samples, probs = c(0.025, 0.975))
 theta_between_0.05_0.15 <- mean(theta_samples>0.05 & theta_samples<0.15)
 
+plot_data <- data.frame(theta = as.vector(theta_samples))
 
-p <- ggplot(data = data.frame(theta = theta_samples)) +
+p <- ggplot(data = plot_data) +
   geom_histogram(aes(x = theta), bins = 30) +
   coord_cartesian(xlim = c(0, 1))
 
@@ -266,7 +257,7 @@ p <- ggplot(data = data.frame(theta = theta_samples)) +
 print(p)
 ```
 
-<img src="fig/stan-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/stan-rendered-unnamed-chunk-7-1.png" alt="" style="display: block; margin: auto;" />
 
 
 ::::::::::::::::::::::::::::::
@@ -285,8 +276,7 @@ Can you modify the Stan program further so that you can set the hyperparameters 
 
 ::::::::::::::::::::: solution
 
-Modifying the data block so that it declares the hyperparameters as data (e.g. `real<lower=0> alpha;`) enables setting the hyperparameter values as part of data. This makes it possible to change the hyperparameters without modifying the Stan file. 
-
+Modifying the data block so that it declares the hyperparameters as data (e.g. `real<lower=0> alpha;` and `real<lower=0> beta;`) allows the prior parameters to be specified from R rather than hard-coded in the Stan program. This allows changing prior parameters without having to modify and recompile the program.
 
 ::::::::::::::::::::::::::::::
 
@@ -300,15 +290,15 @@ In addition to the data, parameters, and model blocks there are additional block
 
 2. Transformed data: This block is used for transformations of the data variables. It is often employed to preprocess or modify the input data before it is used in the main model. Common tasks include standardization, scaling, or other data adjustments.
 
-3. Transformed parameters: In this block, transformations of the parameters are defined. If transformed parameters are used on the left-hand side of sampling statements in the model block, the Jacobian adjustment for the posterior density needs to be included in the model block as well. 
+3. Transformed parameters: In this block, transformations of the parameters are defined. If transformed parameters are used on the left-hand side of sampling statements in the model block, the Jacobian adjustment for the posterior density needs to be included in the model block as well ([see](https://mc-stan.org/docs/stan-users-guide/reparameterization.html#changes-of-variables)). 
 
-4. Generated quantities: This block is used to define quantities based on both data and model parameters. These quantities are not part of the model but are useful for post-processing. 
+4. Generated quantities: This block is used to define quantities based on both data and model parameters. These quantities are not part of the model but are useful for post-processing. Each quantity is evaluated for every posterior sample, producing a corresponding posterior distribution.
 
 We will make use of these additional structures in subsequent illustrations. 
 
 ## Example 2: Normal model
 
-Next, let's implement the normal model in Stan. First we'll generate some data $X$ from a normal model with unknown mean and standard deviation parameters $\mu$ and $\sigma$
+Next, let's implement the normal model in Stan. First we'll generate some data $X$ from a normal model with unknown mean and standard deviation parameters $\mu$ and $\sigma$:
 
 
 ``` r
@@ -326,8 +316,12 @@ X <- rnorm(n = N,
 normal_data <- list(N = N, X = X)
 ```
 
+::::::::::::::::: callout
+A common and useful step in model development is to simulate data from the model using known parameter values, fit the model to the simulated data, and compare the estimated parameters with the values used to generate the data. If the estimates do not align with the true parameters, this may indicate problems with the model specification, simulation procedure, identifiability, or fitting algorithm.
+:::::::::::::::::::::::::
 
-The Stan program for the normal model is specified in the next code chunk. It introduces a new data type (vector) and leverages vectorization in the likelihood statement. In the end of the program, a generated quantities block is included which generates new data (X_tilde) to estimate what unseen data points might look like. This resulting distribution is referred to as the *posterior predictive distribution*, which is generated by drawing a random realization from the normal distribution for each posterior sample $(\mu, \sigma)$.
+
+The Stan program for the normal model is specified in the next code chunk. It introduces a new data type (vector) and leverages vectorization in the likelihood statement which speeds up the sampling. In the end of the program, a generated quantities block is included which generates new data (X_tilde) from the posterior predictive distribution. As mentioned above, each X_tilde sample is generated by drawing a random realization from the normal distribution for each posterior sample $(\mu, \sigma)$.
 
 
 
@@ -343,6 +337,7 @@ parameters {
 }
 model {
   // Vectorized likelihood
+  // Equivalent to for(i in 1:N) X[i] ~ normal(mu, sigma);
   X ~ normal(mu, sigma);
   
   // Priors
@@ -355,126 +350,120 @@ generated quantities {
 }
 ```
 
-Let's fit the model to the data 
+Let's fit the model to the data using `cmdstanr`: 
 
 
 ``` r
-normal_samples <- rstan::sampling(normal_model, 
-                                  normal_data)
+normal_samples <- normal_model$sample(data = normal_data)
 ```
 
 ``` output
+Running MCMC with 4 sequential chains...
 
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
-Chain 1: 
-Chain 1: Gradient evaluation took 5e-06 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-Chain 1: Adjust your expectations accordingly!
-Chain 1: 
-Chain 1: 
-Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 1: 
-Chain 1:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 1:                0.007 seconds (Sampling)
-Chain 1:                0.015 seconds (Total)
-Chain 1: 
+Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 1 finished in 0.0 seconds.
+Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 2 finished in 0.0 seconds.
+Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 3 finished in 0.0 seconds.
+Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 4 finished in 0.0 seconds.
 
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
-Chain 2: 
-Chain 2: Gradient evaluation took 2e-06 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
-Chain 2: Adjust your expectations accordingly!
-Chain 2: 
-Chain 2: 
-Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 2: 
-Chain 2:  Elapsed Time: 0.009 seconds (Warm-up)
-Chain 2:                0.008 seconds (Sampling)
-Chain 2:                0.017 seconds (Total)
-Chain 2: 
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
-Chain 3: 
-Chain 3: Gradient evaluation took 4e-06 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-Chain 3: Adjust your expectations accordingly!
-Chain 3: 
-Chain 3: 
-Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 3: 
-Chain 3:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 3:                0.007 seconds (Sampling)
-Chain 3:                0.015 seconds (Total)
-Chain 3: 
-
-SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
-Chain 4: 
-Chain 4: Gradient evaluation took 2e-06 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.02 seconds.
-Chain 4: Adjust your expectations accordingly!
-Chain 4: 
-Chain 4: 
-Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-Chain 4: 
-Chain 4:  Elapsed Time: 0.008 seconds (Warm-up)
-Chain 4:                0.008 seconds (Sampling)
-Chain 4:                0.016 seconds (Total)
-Chain 4: 
+All 4 chains finished successfully.
+Mean chain execution time: 0.0 seconds.
+Total execution time: 0.5 seconds.
 ```
-
 
 Next, we'll extract posterior samples and generate a plot for the joint, and marginal posteriors. The true unknown parameter values are included in the plots in red. 
 
+
 ``` r
 # Extract parameter samples
-par_samples <- rstan::extract(normal_samples, c("mu", "sigma")) %>% 
-  do.call(cbind, .) %>% 
-  data.frame
-
+par_samples <- normal_samples$draws(c("mu", "sigma"), format = "df")
 
 # Full posterior
 p_posterior <- ggplot(data = par_samples) + 
@@ -483,41 +472,46 @@ p_posterior <- ggplot(data = par_samples) +
            color = "red", size = 5)
 
 # Marginal posteriors
-p_marginals <- ggplot(data = par_samples %>% gather) + 
+p_marginals <- ggplot(data = par_samples %>% 
+                         as.data.frame() %>% 
+                         tidyr::pivot_longer(cols = c(mu, sigma))) + 
   geom_histogram(aes(x = value), bins = 40) + 
-  geom_vline(data = data.frame(key = c("mu", "sigma"), 
-                               value = c(unknown_mu, unknown_sigma)), 
-             aes(xintercept = value), color = "red", linewidth = 1) +
-  facet_wrap(~key, scales = "free")
+  geom_vline(data = data.frame(
+    name = c("mu", "sigma"), 
+    value = c(unknown_mu, unknown_sigma)
+  ), 
+  aes(xintercept = value), color = "red", linewidth = 1) +
+  facet_wrap(~name, scales = "free")
 
 
-p <- cowplot::plot_grid(p_posterior, p_marginals,
-                        ncol = 1)
+p <- cowplot::plot_grid(p_posterior, p_marginals, ncol = 1)
 
 print(p)
 ```
 
-<img src="fig/stan-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
-
+<img src="fig/stan-rendered-unnamed-chunk-11-1.png" alt="" style="display: block; margin: auto;" />
 
 Let's also plot the posterior predictive distribution samples histogram and compare it to that of the data. 
 
 
 ``` r
-PPD <- rstan::extract(normal_samples, c("X_tilde"))[[1]] %>% 
-  data.frame(X_tilde = . )
+PPD <- normal_samples$draws("X_tilde", format = "df")$X_tilde
+PPD <- data.frame(X_tilde = PPD)
+
+obs_data <- data.frame(X = X)
 
 p_PPD <- ggplot() + 
   geom_histogram(data = PPD, 
                  aes(x = X_tilde, y = after_stat(density)), 
                  bins = 30, fill = posterior_color) +
-  geom_histogram(data = data.frame(X), aes(x = X, y = after_stat(density)), 
+  geom_histogram(data = obs_data, 
+                 aes(x = X, y = after_stat(density)), 
                  bins = 30, alpha = 0.5)
 
 print(p_PPD)
 ```
 
-<img src="fig/stan-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="fig/stan-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" />
 
 
 
@@ -527,7 +521,7 @@ print(p_PPD)
 
 Write a Stan program for linear regression with one dependent variable. 
 
-Generate data from the linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$, and noise term $\sigma$.
+Generate data from a linear model and use the Stan program to estimate the intercept $\alpha$, slope $\beta$, and deviation term $\sigma$.
 
 ::::::::::::::::::::: solution
 
@@ -545,7 +539,6 @@ parameters {
 }
 
 model {
-  
   // Likelihood
   y ~ normal(alpha + beta * x, sigma);
   
@@ -565,7 +558,7 @@ model {
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-Modify the program for linear regression so it facilitates $M$ dependent variables. 
+Modify the program for linear regression with $M$ predictor variables. 
 
 ::::::::::::::::::::: solution
 
@@ -606,30 +599,23 @@ model {
 
 
 
-
-
-
-
-
-
-
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Stan is a tool for efficient posterior distribution sample generation. 
-- A Stan program is specified in a separate text file that consists of code blocks, with the data, parameters, and model blocks being the most crucial ones.
-
+- A Stan program is specified in a separate `.stan` file consisting of code blocks, and can be compiled and sampled from R using `cmdstanr`.
+- Subsequent analysis of the posterior samples is performed outside Stan.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
 ## Resources
 
-- Official release paper https://www.jstatsoft.org/article/view/v076i01 
-- User’s guide https://mc-stan.org/docs/2_18/stan-users-guide/
-- Function’s reference https://mc-stan.org/docs/functions-reference/
-- Reference manual https://mc-stan.org/docs/reference-manual/
-- Stan forum https://discourse.mc-stan.org 
-- Case studies https://mc-stan.org/users/documentation/case-studies
+- Official release paper: [https://www.jstatsoft.org/article/view/v076i01](https://www.jstatsoft.org/article/view/v076i01)
+- Stan User's Guide: [https://mc-stan.org/docs/stan-users-guide/](https://mc-stan.org/docs/stan-users-guide/)
+- Stan Reference Manual: [https://mc-stan.org/docs/reference-manual/](https://mc-stan.org/docs/reference-manual/)
+- Stan Functions Reference: [https://mc-stan.org/docs/functions-reference/](https://mc-stan.org/docs/functions-reference/)
+- Stan Discourse Forum: [https://discourse.mc-stan.org](https://discourse.mc-stan.org)
+- Stan Case Studies: [https://mc-stan.org/users/documentation/case-studies](https://mc-stan.org/users/documentation/case-studies)
 
 ## Reading
 
