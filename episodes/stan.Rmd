@@ -12,6 +12,10 @@ library(grafify)
 library(cowplot)
 library(cmdstanr)
 
+# Install CmdStan if it isn't available
+if (is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE))) {
+  cmdstanr::install_cmdstan(cores = 2)
+}
 
 cmdstan_setup <- function() {
 
