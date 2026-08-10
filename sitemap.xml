@@ -127,6 +127,9 @@
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/stan.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/survival-analysis.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor-notes.html</loc>
   </url>
   <url>
@@ -173,5 +176,8 @@
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/stan.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/survival-analysis.html</loc>
   </url>
 </urlset>

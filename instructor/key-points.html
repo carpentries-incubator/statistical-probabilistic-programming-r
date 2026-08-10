@@ -258,6 +258,90 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="mcmc.html">3. Markov chain Monte Carlo</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="hierarchical-models.html">4. Hierarchical models</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="model-comparison.html">5. Model comparison</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="gaussian-processes.html">6. Gaussian processes</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="survival-analysis.html">7. Survival Analysis</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="stan-extensions.html">8. Stan extensions</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush10">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading10">
+        <a href="exercises.html">9. Exercises</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -342,7 +426,65 @@ consisting of code blocks, and can be compiled and sampled from R using
 <code>cmdstanr</code>.</li>
 <li>Subsequent analysis of the posterior samples is performed outside
 Stan.</li>
-</ul></section>
+</ul></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">Markov chain Monte Carlo</a></h2>
+<hr class="half-width">
+<ul>
+<li>Markov chain Monte Carlo methods can be used to generate samples
+from a posterior distribution.</li>
+<li>Values of the chain are generated from a proposal distribution.</li>
+<li>Proposals towards higher areas of the target distribution are
+accepted with higher probability.</li>
+<li>MCMC convergence should always be monitored.</li>
+</ul></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical models</a></h2>
+<hr class="half-width">
+<ul>
+<li>Hierarchical models are appropriate for scenarios where the study
+population naturally divides into subgroups.</li>
+<li>Hierarchical models borrow statistical strength across the
+population groups.</li>
+<li>Population distributions hold information about the variation of the
+model parameters over the whole population.</li>
+</ul></section><section id="model-comparison"><h2 class="section-heading"><a href="model-comparison.html">Model comparison</a></h2>
+<hr class="half-width">
+<ul>
+<li>Bayesian model comparison can be performed (for example) with
+posterior predictive checks, information criteria, and
+cross-validation.</li>
+</ul></section><section id="gaussian-processes"><h2 class="section-heading"><a href="gaussian-processes.html">Gaussian processes</a></h2>
+<hr class="half-width">
+<ul>
+<li>GPs provide a means for non-parametric regression.</li>
+<li>A GP has two parameters: mean, and covariance.</li>
+<li>GPs can be used a part of more complex models.</li>
+</ul></section><section id="survival-analysis"><h2 class="section-heading"><a href="survival-analysis.html">Survival Analysis</a></h2>
+<hr class="half-width">
+<ul>
+<li><p>Survival analysis models time until an event while handling
+censoring and aims to describe and compare time-to-event patterns across
+covariates or groups.</p></li>
+<li><p>Time-to-event outcomes can be modeled parametrically with a
+Weibull model that specifies survival and hazard functions or
+semiparametrically with a Cox proportional hazards model that leaves the
+baseline hazard unspecified while estimating relative risk.</p></li>
+<li><p>The hazard summarizes instantaneous event risk, hazard ratios
+compare risk between groups or covariate levels, and Kaplan–Meier curves
+provide a nonparametric survival estimate often shown with a log-rank
+test.</p></li>
+</ul></section><section id="stan-extensions"><h2 class="section-heading"><a href="stan-extensions.html">Stan extensions</a></h2>
+<hr class="half-width">
+<ul>
+<li>There are several R packages that provide more user-friendly ways of
+using Stan.</li>
+<li>
+<code>brms</code> package can be used to fit a vast array of
+different Bayesian models.</li>
+<li>
+<code>bayesplot</code> package is a library for various plotting
+tools.</li>
+<li>Approximate leave-one-out cross-validation can be performed with the
+<code>loo</code> package.</li>
+</ul></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">Exercises1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>5. Model comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a>7. Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a></a></h2>
+<hr class="half-width"></section>
 </div>
     </main>
 </div>
@@ -391,9 +533,9 @@ Stan.</li>
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/key-points.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/key-points.html",
-  "dateCreated": "2026-08-07",
-  "dateModified": "2026-08-07",
-  "datePublished": "2026-08-07"
+  "dateCreated": "2026-08-10",
+  "dateModified": "2026-08-10",
+  "datePublished": "2026-08-10"
 }
 
   </script><script>
