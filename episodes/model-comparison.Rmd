@@ -10,6 +10,12 @@ library(tidyverse)
 library(magrittr)
 library(grafify)
 
+# Install CmdStan if it isn't available
+if (is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE))) {
+  cmdstanr::install_cmdstan(cores = 2)
+}
+s
+
 cmdstan_setup <- function() {
   dir.create("C:/cmdstan_work", FALSE, TRUE)
   dir.create("C:/cmdstan_temp", FALSE, TRUE)
