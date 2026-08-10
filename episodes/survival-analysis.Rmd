@@ -5,6 +5,13 @@ exercises: 2
 ---
 
 ```{r, include=FALSE}
+
+# Install CmdStan if it isn't available
+if (is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE))) {
+  cmdstanr::install_cmdstan(cores = 2)
+}
+
+
 home_dir <- normalizePath("~", winslash = "/")
 safe_dir <- file.path(home_dir, "cmdstan_temp")
 if (!dir.exists(safe_dir)) dir.create(safe_dir, FALSE, TRUE)
