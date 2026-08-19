@@ -8,6 +8,33 @@ exercises: 4
 
 
 
+::::::::::::::::::::: instructor
+The goal of this episode is to teach the basic Stan workflow:
+
+  1. Implement a model in a Stan program; 
+  2. Feed in data and generate posterior samples; 
+  3. Extract summaries or samples in R.
+
+### What to emphasize
+
+  - Stan generates the posterior samples, with cmdstanr providing the interface from R. Subsequent analysis is done in R.
+    - MCMC is presented in a later episode.
+  - The basic program blocks answer the following questions:
+    - data: What do we observe?
+    - parameters: What do we want to infer?
+    - model: How are data and parameters related?
+  - Parameter constraints can be important, and incorrectly specified constraints can prevent the program from working correctly.
+  - The generated quantities block is where posterior predictions (and other derived quantities) are generated.
+  - Posterior predictions naturally incorporate both parameter uncertainty and observation-level variability.
+  - Simulation is an important model-development tool, and failure to reasonably recover the generating parameters can signal issues.
+
+### Tips
+
+  - Have learners install and test CmdStan before the lesson! Compiler problems are common and can consume substantial teaching time.
+  - There is no need to spend much time on MCMC mechanics, diagnostics, Jacobians, or code optimization; these can be covered later.
+
+::::::::::::::::::::::::::::::::
+
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
@@ -58,7 +85,7 @@ A Stan program is organized into several blocks that collectively define the mod
 For best practices, it is recommended to specify Stan programs in separate text files with a .stan extension, which can then be read, compiled, and sampled from R using `cmdstanr`.
 
 
-## Example 1: Beta-binomial model
+## Example 1: Binomial model
   
 The following Stan program specifies the Beta-binomial model, and consists of data, parameters, and model blocks. 
 
@@ -203,7 +230,7 @@ Chain 4 finished in 0.0 seconds.
 
 All 4 chains finished successfully.
 Mean chain execution time: 0.0 seconds.
-Total execution time: 0.6 seconds.
+Total execution time: 0.5 seconds.
 ```
 
 
@@ -237,7 +264,7 @@ Now we can use the methods presented in the previous Episode to compute posterio
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-Compute the 95% credible intervals for the samples drawn with Stan. What is the probability that $\theta \in (0.05, 0.15)$? Plot a histogram of the posterior samples. 
+Compute the 95% credible intervals from the samples drawn with Stan. What is the posterior probability that $\theta \in (0.05, 0.15)$? Plot a histogram of the posterior samples. 
 
 
 ::::::::::::::::::::: solution
@@ -269,7 +296,7 @@ print(p)
 
 :::::::::::::::::::::::::::::::::::: challenge
 
-Try modifying the Stan program so that you add a $Beta(\alpha, \beta)$ prior for $\theta$.
+Try modifying the Stan program so that you add a $\text{Beta}(\alpha, \beta)$ prior for $\theta$.
 
 Can you modify the Stan program further so that you can set the hyperparameters $\alpha, \beta$ as part of the data? What is the benefit of using this approach?
 
@@ -604,6 +631,20 @@ model {
 - Stan is a tool for efficient posterior distribution sample generation. 
 - A Stan program is specified in a separate `.stan` file consisting of code blocks, and can be compiled and sampled from R using `cmdstanr`.
 - Subsequent analysis of the posterior samples is performed outside Stan.
+
+After this episode, you should be able to use Stan to fit probabilistic models by:
+
+- Writing Stan model code, including:
+  - data types and declarations,
+  - program blocks,
+  - sampling statements, and
+  - data, parameters, priors, the model, and generated quantities.
+- Providing data to the model.
+- Compiling and fitting the model.
+- Accessing the model output and posterior samples.
+- Manipulating posterior samples.
+- Visualizing the results.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 

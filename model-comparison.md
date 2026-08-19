@@ -5,6 +5,10 @@ exercises: 2
 ---
 
 
+``` error
+Error:
+! object 's' not found
+```
 
 
 :::::::::::::::::::::::::::::::::::::: questions 

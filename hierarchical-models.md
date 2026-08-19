@@ -6,6 +6,33 @@ exercises: 4
 
 
 
+
+:::::::::::::::::: instructor
+The goal of this episode is to introduce hierarchical modeling as the way to model related groups:
+
+1. Represent group-specific parameters as draws from a common population distribution;
+2. Implement hierarchical models in Stan;
+3. Understand how the different pooling strategies share information. 
+
+### What to emphasize
+
+- Hierarchical models are useful when observations naturally belong to related groups.
+- Group-specific parameters assumed to arise from a common population distribution.
+- This produces **partial pooling**: estimates for individual groups are informed both by their own data and that from the other groups.
+- The amount of data for a group generally affects their estimates proportionally: the less data the bigger the pooling effect towards the population mean. 
+- The parameters of the population distribution (hyperparameters) are themselves inferred from the data.
+- Hierarchical models quantify variation both within and between groups.
+- Posterior prediction can be performed both for existing groups and, conceptually, for new groups drawn from the same population.
+
+### Tips
+
+- Partial pooling is the central concept. Contrast it explicitly with complete pooling and fitting each group independently.
+- It might be a good idea to live code an unpooled model into a partially pooled one by simply by changing the hyperparameters into variables and giving them priors. Such mechanical edits may provide a good starting point for a conceptual discussion: why does this simple change produce partial pooling, and how does the code relate to the corresponding mathematical model specification?
+
+::::::::::::::::::::::::::::: 
+
+
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How does Bayesian modeling accommodate group structure?
@@ -481,7 +508,7 @@ ggplot() +
 
 ### Extensions
 
-Here, we analyzed the height for women in a randomly chosen countries using a hierarchical model. The model could be extended further, for instance, by adding hierarchy between sexes, continents, developed/developing countries etc. 
+Here, we analyzed the height for women in a randomly chosen countries using a hierarchical model. The model could be extended further, for instance, by adding hierarchy between sexes, continents, developed/developing countries etc. However, specifying the correlation between all these aspects could be complicated. 
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

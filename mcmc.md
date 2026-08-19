@@ -7,6 +7,36 @@ exercises: 3
 
 
 
+::::::::::::::::::::: instructor
+
+The goal of this episode is to provide understanding of how posterior samples are generated, and how the reliability of MCMC sampling can be assessed:
+
+1. Understand the basic idea of MCMC;
+2. Implement a simple Metropolis–Hastings sampler;
+3. Gain intuition about how the sampling can go awry; 
+
+### What to emphasize
+
+- MCMC is a means for generating samples from (posterior) distributions.
+- The target distribution doesn't have to be the posterior; the applications are broader!
+- In a Markov chain, each sample is generated based on the previous one. 
+- Code idea: the proposed move is accepted or rejected according to the relative posterior density.
+- The proposal distribution affects efficiency.
+- Warm-up discards bias of initial part of chain.
+- Running multiple chains with distinct starting locations is important to aid mixing. 
+- Trace plots provide an intuitive visual assessment of mixing; (\hat{R}) formalizes comparison of within- and between-chain variation.
+- A sampler can appear to behave well but still fail to explore the posterior comprehensively, e.g. for multimodal posteriors. 
+
+### Tips
+
+- The aim is intuition rather than theory.
+- Spend time visualizing chain trajectories. This illustrates concepts such as warm-up, mixing, autocorrelation, and multimodality.
+- Online applets such as https://chi-feng.github.io/mcmc-demo/app.html are useful (HMC, NUTS).
+- The hand-written Metropolis–Hastings sampler is pedagogical. Learners are not expected to implement their own samplers for real analyses. However, writings samplers is still a relevant skill for many more complex models!
+- Connect this episode to Stan: Stan automates the sampling machinery, but users still need to determine sample trustworthiness.
+
+::::::::::::::::::::::::::::::::
+
 
 :::::::::::::::::::::::::::::::::::::: questions 
 

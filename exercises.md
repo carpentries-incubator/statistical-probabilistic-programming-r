@@ -18,19 +18,18 @@ The purpose of this Episode is to provide material for practicing probabilistic 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-# 1. Basics
+## 1. Basics
 
-## 1.1 Grid approximation: normal model with unknown mean 
+### 1.1 Grid approximation: normal model with unknown mean 
 
 Generate 1000 data points from the normal model. Use a randomly generated mean parameter, $\mu \sim N(0,1)$ and set the standard deviation $\sigma=1$.
 
-The grid approximation for this model was introduced in Episode XX but the implementation doesn't work for the generated data. Locate the source of error and make the necessary modifications to get the program working.
+The grid approximation for this model was introduced in Episode 1 but the implementation doesn't always work for the generated data (repeat the data simulation and fitting a few times to verify this). Locate the source of error and make the necessary modifications to get the program working.
 
 Plot the posterior of $\mu$. 
 
-
  
-## 1.2 Grid approximation: Gamma-Poisson 
+### 1.2 Grid approximation: Gamma-Poisson 
 
 The Gamma-Poisson model can be stated as: 
 
@@ -38,11 +37,13 @@ $$y_i \sim \text{Pois}(\lambda) \\
  \lambda \sim \Gamma(1, 1), $$
 
 where $y_i$ are non-negative data points, and Pois is the Poisson distribution with rate parameter $\lambda > 0$.
+
 Implement a grid approximation for this model.
 
-Apparently (https://en.wikipedia.org/wiki/Poisson_distribution), the number of chewing gum on a sidewalk tile is approximately Poisson distributed.
+[Apparently](https://en.wikipedia.org/wiki/Poisson_distribution), the number of chewing gum on a sidewalk tile is approximately Poisson distributed.
 
 Estimate the average number of gum on a Reykjavik side walk tile (lambda), using the data 
+
 
 ``` r
 y <- c(2,7,4,3,5,2,7,5,5,5)
@@ -50,7 +51,7 @@ y <- c(2,7,4,3,5,2,7,5,5,5)
 
 
 
-## 1.3 Less data means bigger prior effect 
+### 1.3 Less data means bigger prior effect 
 
 Show that as the amount of available data increases, the effect of the prior decreases. 
 
@@ -61,19 +62,16 @@ Instructions:
     - Simulate a sequence of 50 tosses with Pr(heads) = p. 
   - Fit the grid approximation using the first 1, 5, 10, 15,..., 50 tosses. 
     - Use a Beta prior for p.
-  - Compare the posteriors the prior.
+  - Compare the posteriors to the prior.
 
-
-  
-
-## 1.4 Grid approximation: for a normal model with unknown mean and standard deviation 
+### 1.4 Grid approximation: for a normal model with unknown mean and standard deviation 
 
 
 The following data is a collection of daily milk yield (in liters) for dairy cows.
 
 
 ``` r
-X <- c(30.25, 34.98, 29.66, 20.14, 23.92, 38.61, 36.89, 34.68, 25.83, 29.93)
+X <- c(30.3, 35.0, 29.7, 20.1, 23.9, 38.6, 36.9, 34.7, 25.8, 29.9)
 ```
 
 
@@ -87,7 +85,7 @@ What is the probability that the average daily milk yield is more than 30 liters
 
 
 
-## 1.5 Sampling the Gamma 
+### 1.5 Sampling the Gamma 
 
 Let's model the following observations X with the exponential likelihood, $\text{Exp}(\lambda)$:
 
@@ -98,8 +96,6 @@ X <-  c(0.166, 1.08, 1.875, 0.413, 1.369, 0.463, 0.735,
         0.889, 0.051, 0.688, 0.119, 0.078, 1.624, 0.553, 0.523, 
        0.644, 0.284, 1.744, 1.468)
 ```
-
-
 
 
 If we use a $\Gamma(2, 1)$ prior, the posterior distribution can be shown to be 
@@ -114,18 +110,18 @@ Generate 5000 samples from the posterior and compute
 3. the probabilities $Pr(\lambda > 1), Pr( 1 < \lambda < 1.5), Pr(\lambda < 1 \text{  or } \lambda > 1.5)$
 
 
-## 1.6 Grid approximation: Cauchy distribution 
+### 1.6 Grid approximation: Cauchy distribution 
 
 (Emulated from BDA3: p59. Ex.11)
 
-Suppose y1,...,y5 are independent samples from a Cauchy distribution with scale 1 and unknown location $\theta$. Given the observations $(y_1, . . . , y_5) = (43, 44, 45, 46.5, 47.5)$:
+Let y1,...,y5 be independent samples from a Cauchy distribution with scale 1 and unknown location $\theta$. Given the observations $(y_1, . . . , y_5) = (43, 44, 45, 46.5, 47.5)$:
 
 a) Compute the unnormalized posterior density function, $p(\theta)p(y|\theta)$, on a grid of points $\theta = 0, 1/m , 2/m ,..., 100$, for some large integer $m$. Using the grid approximation, compute and plot the normalized posterior density function as a function of $\theta$. Assume a uniform prior for over [0, 100]. 
 b) Generate 1000 samples of $\theta$ from the posterior and plot a histogram of the samples.
-c) Use each of the samples generated in b) to generate a new data point $y_6$ from the likelihood function and plot a histogram of these draws.
+c) Use each of the samples generated in b) to generate a new data point $y_6$ from the likelihood function and plot a histogram of these draws. From which distribution are these samples from?
 
 
-## 1.7 Sampling the Normal 
+### 1.7 Sampling the Normal 
 
 The posterior for the normal model with unknown $\mu$ and $\sigma$ can be sampled as follows (BDA3:p.65):
 
@@ -141,14 +137,11 @@ a) Generate 5000 samples from the posterior using the data
 X <- c(21.1, 20.8, 21.9, 20.5, 18.7, 24.1, 18.6, 15.4, 16.9, 20.8)
 ```
 
-
-
 b) Compute the posterior for the coefficient of variation $CV = \frac{\sigma}{\mu}$.
 c) Generate samples for an unseen data point $\tilde{X}$.
 d) Compare the distribution in c) to one generated using only the MAP estimate. Is there a discrepancy and why?
 
-
-## 1.8 HPDI 
+### 1.8 HPDI 
 
 Another approach to summarizing the posterior is to compute the *shortest* interval that contains $p\%$ of the posterior. Such interval is called highest posterior density interval (HPDI). 
 
@@ -161,10 +154,10 @@ Hint: If you sort the posterior samples in order, each set of n consecutive samp
 
 <!-- ************************************************************************ -->
 
-# 2. Stan
+## 2. Stan
 
 
-## 2.1 Gamma-Poisson model 
+### 2.1 Gamma-Poisson model 
 
 The Gamma-Poisson model can be stated as: 
 
@@ -185,7 +178,7 @@ y <- c(2,7,4,3,5,2,7,5,5,5)
 Compute the MAP, mean and 90% CIs and include them in a figure with a histogram of posterior samples.
 
 
-## 2.2 Dice
+### 2.2 Dice
 
 Write a Stan program that implements the following statistical model: 
 
@@ -202,16 +195,12 @@ X <- c(3, 2, 6, 3, 6, 2, 5, 6, 5, 6, 4, 1, 4, 2, 5, 4, 6, 6, 5, 4, 1, 3, 3, 4, 2
 ```
 
 
-
-  
 1. Plot the marginal posteriors for each $\theta_i$. 
 
-2. Is the dice fair? Quantify this somehow
-
-Hint: You can e.g. compute a posterior probability difference of some of the dice faces. 
+2. Is the dice fair? Quantify this somehow.
 
 
-## 2.3 Normal model 
+### 2.3 Normal model 
 
 Implement the Normal model in Stan.
 
@@ -225,10 +214,10 @@ Fit the model using the data
 X <- c(3.7, 2.8, 4.03, 2.11, 2.58, 0.96, 1.74, 0.34, 0.75, 2.07)
 ```
 
-Plot the posterior distribution and color the points according to the condition $CV < 1$.
+Plot the posterior samples and color the points according to the condition $CV < 1$.
 
 
-## 2.4. Time series modeling 
+### 2.4. Time series modeling 
 
 
 The AR(1) process is defined by the recursion: 
@@ -244,9 +233,9 @@ Using the data in `data/time_series.txt`, do the following:
 
 
 
-# 3. MCMC
+## 3. MCMC
 
-## 3.1 Binomial model 
+### 3.1 Binomial model 
 
 Implement the Metropolis-Hastings algorithm for the beta-binomial model.
 
@@ -258,7 +247,7 @@ Compute the proportion of accepted proposals for the sampler.
 
 
 
-## 3.2. Gibbs sampler 
+### 3.2. Gibbs sampler 
 
 
 Consider the distribution 
@@ -277,7 +266,7 @@ Build a Gibbs sampler that draws samples from $p(x, y)$. Visualize the resulting
 
 
 
-## 3.3. Gamma with discrete rate 
+### 3.3. Gamma with discrete rate 
 
 The data
 
@@ -301,15 +290,15 @@ Generate the initial value randomly: $N_0 \sim \text{Uniform}(-100, 100)$ and co
 
 
 
-## 3.4. $\hat{R}$
+### 3.4. $\hat{R}$
 
 Write a function that returns the $\hat{R}$ statistic for a collection of MCMC chains. Compute $\hat{R}$ for the samples from one of the exercises 3.1-3.3, and plot the trace plots.    
 
 See p.285 in BDA3 for the definition of $\hat{R}$. 
 
-# 4. Hierarchical models
+## 4. Hierarchical models
 
-## 4.1. Model analysis 
+### 4.1. Model analysis 
 
 Examine the following statistical models.
 Determine if they exhibit a hierarchical structure. If not, introduce modifications to make them hierarchical.
@@ -345,7 +334,7 @@ $$
 
 
 
-## 4.2. Hierarchical Gamma-Poisson 
+### 4.2. Hierarchical Gamma-Poisson 
 
 A hierarchical Gamma-Poisson model can be stated as follows:
 
@@ -367,7 +356,7 @@ Identify the data subgroups. Visualize the posterior distribution of beta. Gener
 
 
 
-## 4.3. Hierarchical Poisson regression 
+### 4.3. Hierarchical Poisson regression 
 
 A Poisson regression model can be specified as $y_i \sim \text{Pois}(\exp^{\alpha + \beta x_i})$, where $x_i$ and $y_i$ are corresponding data points.
 
@@ -380,40 +369,41 @@ Build a Stan program for hierarchical Poisson regression, with hierarchical stru
 Generate and visualize posteriors for the population distributions of $\alpha$ and $\beta$. What is the probability that $\beta > 0$ in the population? What implications does $\beta > 0$ have in terms of the application?
 
 
-## 4.4. Hierarchical binomial model 
+### 4.4. Hierarchical binomial model 
 
-As commonly acknowledged, multiple humanoid species inhabit various solar systems within the Milky Way galaxy.
+The file `data/divorce.txt`, contains information on divorced couples in different countries based on a limited database.
 
-The file, `data/handedness.txt`, contains data on the handedness of some of these species, with $N$ representing the sample size and $x$ denoting the count of left-handed specimens. The objective is to estimate the prevalence of left-handedness, $\theta$.
+The column N contains the number of couples from the country and x denotes the number of divorces out of N. 
+You want to analyze theta_i, divorce rates across the various countries. 
 
-Develop Stan programs for both unpooled and partially pooled binomial models. Utilize the unpooled model to fit the completely pooled model.
+Fit the pooled, unpooled and partially pooled binomial model in Stan. 
 
-Incorporate Beta priors for $\theta$. Compare the estimates, such as means, derived from the distinct pooling strategies.
-
-
-
-# 5. Model comparison
+Use Beta priors for theta.
+Compare the estimates from the distinct pooling strategies.
 
 
 
 
-## 5.1 Prior predictive check 
+## 5. Model comparison
 
-In a salmon farm research facility, the relationship between the length of salmons (in meters, $y$) and the amount of food provided (in grams, $x$) is studied. The amount of food administered in 21 salmon pools is meticulously controlled, ranging from 40 to 60 grams per individual salmon in one-gram increments.
+### 5.1 Prior predictive check 
 
-The chosen statistical model is linear regression: 
+The following model is used to analyse orange tree growth:
 
-$$
-y \sim N(a + bx, \sigma^2) \\
-a, b \sim N(0, 1) \\
-\sigma \sim \Gamma(2, 1) \\
-$$
+y_i ~ normal(slope[i] * x, sigma)
+slope ~ lognormal(mu_slope, sigma_slope) 
+sigma ~ gamma(2, 0.1);
+mu_slope ~ normal(0, 1);
+sigma_slope ~ gamma(2, 10);
 
-Generate the [prior predictive distribution](https://mc-stan.org/docs/stan-users-guide/prior-predictive-checks.html), plot it, and visually assess the validity of the priors.
+In order to assess the validity of the priors, generate samples from the prior predictive distribution. Visualize the corresponding lines and add the observed data (Orange.txt*) on top of them. Is the prior reasonable in the sense that the predicted growth trajectories are within reasonable range?
+
+Hint: Check [stan manual](https://mc-stan.org/docs/stan-users-guide/posterior-predictive-checks.html#prior-predictive-checks) to see how the prior predictive distribution can be generated in Stan. You can also do this without Stan. 
 
 
+* Pinheiro J, Bates DM (2000). Mixed-Effects Models in S and S-PLUS, series Statistics and Computing. Springer New York. ISBN 9780387989570.
 
-## 5.2. Posterior predictive check 
+### 5.2. Posterior predictive check 
 
 The white noise process is perhaps the simplest non-trivial time series model. If $i$ is the time index, then the model can be specified as $x_i \sim N(0, \sigma^2)$ for all $i = 1, \ldots ,N$. 
 
@@ -438,10 +428,24 @@ Hint: lag-1 autocorrelation is simply the Pearson correlation between $x_{1:(N-1
 
 
 
-# 6. Gaussian processes
+
+### 5.3 WAIC 
+
+Consider the polynomial regression models with 0 (intercept only), 1 (linear regression), 2 (quadratic), 3 (cubic) degrees.
+
+Which of these four models best describes the data in `data/WAIC_data.txt` in terms of the WAIC?
+  
+Implement a single Stan program with the polynomial degree fed as data and generate the WAIC in R as described in BDA3 p.174.
+
+### 3.4 Bayesian CV 
+
+Using the data in, `data/divorce.txt`, perform Bayesian leave-one-out cross-validation to compare the hierarchical and completely pooled binomial models built in exercise 4.4.
 
 
-## 6.1. GP prediction 
+## 6. Gaussian processes
+
+
+### 6.1. GP prediction 
 
 Consider the following data $(x, y)$:
 
@@ -458,9 +462,9 @@ Model the data as $y \sim N(f(x), \sigma^2)$ and give $f(x)$ a Gaussian process 
 Plot the posterior for $f$ along with the data, and compute the posterior probability for $f(0) > 0$. 
 
 
-## 6.2. GP prediction 
+### 6.2. GP prediction 
 
-The file `data/nytemp.txt` contains daily maximum temperatures ($Temp$) in New York from May to September 1973 [1]. The column $x$ gives the day number for the date (Jan 1st is day number 1 etc). 
+The file `data/nytemp.txt` contains daily maximum temperatures ($Temp$) in New York from May to September 1973*. The column $x$ gives the day number for the date (Jan 1st is day number 1 etc). 
 
 Do Gaussian process regression on the data and estimate the temperature trend for the year 1973. Use a periodic covariance kernel with $\alpha = 100$ and $\lambda = 10$, and set a suitable value for the period. Set $\sigma$ (deviance from the trend) as an unknown parameter in Stan. 
 
@@ -471,11 +475,10 @@ Hint:
 
 See [Stan Functions Reference: GP Covariance](https://mc-stan.org/docs/functions-reference/matrix_operations.html#gaussian-process-covariance-functions) for details on the periodic kernel syntax in Stan.
 
-[1] (Chambers, J. M., Cleveland et al. (1983) Graphical Methods for Data Analysis)
+*(Chambers, J. M., Cleveland et al. (1983) Graphical Methods for Data Analysis)
 
 
-
-## 6.3. GP prediction 
+### 6.3. GP prediction 
 
 The data file `data/stock.txt` contains the (scaled and transformed) stock price of a company over 250 days.
 
@@ -495,7 +498,7 @@ Set the hyperparameters $\alpha_{1}, \alpha_{2}$ and $\lambda_{1}, \lambda_{2}$ 
 
 Is such a model appropriate for predicting stock prices into the future?
 
-Hint: Running the Stan program can take quite a long time, so do the initial testing using only 1 chain and, for example, 500 iterations. 
+Hint: Running the Stan program can take quite a long time, so do the initial testing using, for example, only 1 chain and 500 iterations. 
 
 
 
@@ -507,9 +510,9 @@ Hint: Running the Stan program can take quite a long time, so do the initial tes
 
 
 
-# 7. Other topics
+## 7. Stan extensions 
 
-## 7.1 Hierarchical models using `brms`
+### 7.1 Hierarchical models using `brms`
 
 a) 
 
@@ -521,7 +524,7 @@ b)
 
 Fit the hierarchical Poisson regression model fitted in exercise 4.3 using `brms`. After fitting the models plot the city specific estimates for alpha and beta.
 
-## 7.2 Zero-inflated poisson model 
+### 7.2 Zero-inflated poisson model 
 
 Sometimes count data has more zeros than is expected when using, for example, Poisson or negative binomial model. This type of data can be called zero-inflated. An example of this type of data is `DoctorVisits` dataset from `AER` R package. The data describes the amount of doctor visits based on Australian Health Survey in 1977—1987.
 
@@ -539,7 +542,7 @@ These packages will be installed into "/__w/statistical-probabilistic-programmin
 
 # Installing packages --------------------------------------------------------
 [32m✔[0m AER 1.2-17                               [linked from cache]
-Successfully installed 1 package in 5.3 milliseconds.
+Successfully installed 1 package in 4.3 milliseconds.
 ```
 
 ``` r

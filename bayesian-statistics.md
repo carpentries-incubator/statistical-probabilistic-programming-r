@@ -6,6 +6,40 @@ exercises: 8
 
 
 
+
+::::::::::::::::::::::::::::::::::::: instructor
+
+- Prior specification is a common source of confusion. 
+
+The goal of this episode is to introduce the basic Bayesian modeling framework and build intuition for posterior inference:
+
+1. Specify a model in terms of a likelihood and prior;
+2. Understand the posterior as the combination of prior information and observed data;
+3. Summarize posterior information using point estimates, intervals, probabilities;
+4. Understand necessity of posterior sampling.
+
+### What to emphasize
+
+  - Bayesian inference is fundamentally about updating information: the prior describes understanding before observed the data is taken into account. The posterior combines prior understanding and data. 
+  - The likelihood encodes the statistical model. 
+  - The posterior is a distribution so points point estimates are always reductionist. 
+  - Grid approximation is used as a pedagogical tool, concretizing prior, likelihood and posterior. Moreover, it illustrates the challenges necessitating sample-based analysis. 
+  - The two-dimensional example illustrates: 
+    - joint posterior distributions;
+    - marginalizing over nuisance parameters; 
+    - the difficulty of using grid approximation for higher-dimensional models.
+  - Posterior samples offer a convenient representation of the posterior; point estimates, probabilities, and predictions are easily calculated from samples.
+  - Posterior predictions include uncertainty about model parameters and variability in future observations.
+
+### Tips
+
+- Focus on developing intuition about prior --> likelihood --> posterior rather than on Bayes' theorem algebra.
+- The handedness example is deliberately simple. Encourage learners to experiment with the prior and sample size to observe their relative influence. 
+- Make the transition from grids to samples explicit: the remaining course operates on posterior samples.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How are statistical models specified and fitted within the Bayesian framework?

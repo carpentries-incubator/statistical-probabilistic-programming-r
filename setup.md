@@ -10,7 +10,7 @@ Instructions for installing CmdStanR and Stan are available [here](https://mc-st
 
 The lessons require relatively little prior knowledge. However, familiarity with basic concepts in probability and statistics (summary statistics, probability densities etc.). Learners should also have a solid working knowledge of R, including data wrangling and visualization.
 
-The primary sources in preparing the material were A. Gelman et al., "[Bayesian Data Analysis](https://users.aalto.fi/~ave/BDA3.pdf)" (3rd ed.), and R. McElreath's ”[Statistical Rethinking](https://xcelab.net/rm/)” (2nd edition). The [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/index.html) and the [website](https://avehtari.github.io/BDA_course_Aalto/index.html) of Aki Vehtari's Bayesian Data Analysis course were also consulted.
+The primary sources in preparing the material were A. Gelman et al., "[Bayesian Data Analysis](https://users.aalto.fi/~ave/BDA3.pdf)" (3rd ed.), and R. McElreath's ”[Statistical Rethinking](https://xcelab.net/rm/)” (2nd edition). The [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/index.html), Michael Betancourt's [writings](https://betanalpha.github.io/writing/), and the [website](https://avehtari.github.io/BDA_course_Aalto/index.html) of Aki Vehtari's Bayesian Data Analysis course were also consulted.
 
 The lessons also require some additional R packages. Run the following code to install and load the packages and set the graphical theme.
 ```R
