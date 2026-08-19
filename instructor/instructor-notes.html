@@ -40,13 +40,13 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
-          <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
+        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-warning">
+          <abbr title="This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
-              <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
-              Pre-Alpha
+              <i aria-hidden="true" class="icon" data-feather="alert-triangle" style="border-radius: 5px"></i>
+              Alpha
             </a>
-            <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
+            <span class="visually-hidden">This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.</span>
           </abbr>
         </span>
 
@@ -410,18 +410,226 @@ any links that you are not going to use.
 <h3 id="bayesian-statistics-headingInstructor1">
 <a href="bayesian-statistics.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#bayesian-statistics-headingInstructor1"></a>
 </h3>
+<ul>
+<li>Prior specification is a common source of confusion.</li>
+</ul>
+<p>The goal of this episode is to introduce the basic Bayesian modeling
+framework and build intuition for posterior inference:</p>
+<ol style="list-style-type: decimal">
+<li>Specify a model in terms of a likelihood and prior;</li>
+<li>Understand the posterior as the combination of prior information and
+observed data;</li>
+<li>Summarize posterior information using point estimates, intervals,
+probabilities;</li>
+<li>Understand necessity of posterior sampling.</li>
+</ol>
+<div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a>
+</h3>
+<ul>
+<li>Bayesian inference is fundamentally about updating information: the
+prior describes understanding before observed the data is taken into
+account. The posterior combines prior understanding and data.</li>
+<li>The likelihood encodes the statistical model.</li>
+<li>The posterior is a distribution so points point estimates are always
+reductionist.</li>
+<li>Grid approximation is used as a pedagogical tool, concretizing
+prior, likelihood and posterior. Moreover, it illustrates the challenges
+necessitating sample-based analysis.</li>
+<li>The two-dimensional example illustrates:
+<ul>
+<li>joint posterior distributions;</li>
+<li>marginalizing over nuisance parameters;</li>
+<li>the difficulty of using grid approximation for higher-dimensional
+models.</li>
+</ul>
+</li>
+<li>Posterior samples offer a convenient representation of the
+posterior; point estimates, probabilities, and predictions are easily
+calculated from samples.</li>
+<li>Posterior predictions include uncertainty about model parameters and
+variability in future observations.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+</h3>
+<ul>
+<li>Focus on developing intuition about prior –&gt; likelihood –&gt;
+posterior rather than on Bayes’ theorem algebra.</li>
+<li>The handedness example is deliberately simple. Encourage learners to
+experiment with the prior and sample size to observe their relative
+influence.</li>
+<li>Make the transition from grids to samples explicit: the remaining
+course operates on posterior samples.</li>
+</ul>
+</div>
+<hr>
+<br><h3 id="bayesian-statistics-headingInstructor2">
+<a href="bayesian-statistics.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#bayesian-statistics-headingInstructor2"></a>
+</h3>
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
 <p>Hardyck, C. et al. (1976), Left-handedness and cognitive deficit <a href="https://en.wikipedia.org/wiki/Handedness" class="external-link uri">https://en.wikipedia.org/wiki/Handedness</a></p>
 <hr>
 <br></section><section id="stan"><h2 class="section-heading"><a href="stan.html">Stan</a></h2>
-<hr class="half-width"></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">Markov chain Monte Carlo</a></h2>
-<hr class="half-width"></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical models</a></h2>
-<hr class="half-width"></section><section id="model-comparison"><h2 class="section-heading"><a href="model-comparison.html">Model comparison</a></h2>
+<hr class="half-width">
+<h3 id="stan-headingInstructor1">
+<a href="stan.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#stan-headingInstructor1"></a>
+</h3>
+<p>The goal of this episode is to teach the basic Stan workflow:</p>
+<ol style="list-style-type: decimal">
+<li>Implement a model in a Stan program;</li>
+<li>Feed in data and generate posterior samples;</li>
+<li>Extract summaries or samples in R.</li>
+</ol>
+<div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a>
+</h3>
+<ul>
+<li>Stan generates the posterior samples, with cmdstanr providing the
+interface from R. Subsequent analysis is done in R.
+<ul>
+<li>MCMC is presented in a later episode.</li>
+</ul>
+</li>
+<li>The basic program blocks answer the following questions:
+<ul>
+<li>data: What do we observe?</li>
+<li>parameters: What do we want to infer?</li>
+<li>model: How are data and parameters related?</li>
+</ul>
+</li>
+<li>Parameter constraints can be important, and incorrectly specified
+constraints can prevent the program from working correctly.</li>
+<li>The generated quantities block is where posterior predictions (and
+other derived quantities) are generated.</li>
+<li>Posterior predictions naturally incorporate both parameter
+uncertainty and observation-level variability.</li>
+<li>Simulation is an important model-development tool, and failure to
+reasonably recover the generating parameters can signal issues.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+</h3>
+<ul>
+<li>Have learners install and test CmdStan before the lesson! Compiler
+problems are common and can consume substantial teaching time.</li>
+<li>There is no need to spend much time on MCMC mechanics, diagnostics,
+Jacobians, or code optimization; these can be covered later.</li>
+</ul>
+</div>
+<hr>
+<br></section><section id="mcmc"><h2 class="section-heading"><a href="mcmc.html">Markov chain Monte Carlo</a></h2>
+<hr class="half-width">
+<h3 id="mcmc-headingInstructor1">
+<a href="mcmc.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#mcmc-headingInstructor1"></a>
+</h3>
+<p>The goal of this episode is to provide understanding of how posterior
+samples are generated, and how the reliability of MCMC sampling can be
+assessed:</p>
+<ol style="list-style-type: decimal">
+<li>Understand the basic idea of MCMC;</li>
+<li>Implement a simple Metropolis–Hastings sampler;</li>
+<li>Gain intuition about how the sampling can go awry;</li>
+</ol>
+<div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a>
+</h3>
+<ul>
+<li>MCMC is a means for generating samples from (posterior)
+distributions.</li>
+<li>The target distribution doesn’t have to be the posterior; the
+applications are broader!</li>
+<li>In a Markov chain, each sample is generated based on the previous
+one.</li>
+<li>Code idea: the proposed move is accepted or rejected according to
+the relative posterior density.</li>
+<li>The proposal distribution affects efficiency.</li>
+<li>Warm-up discards bias of initial part of chain.</li>
+<li>Running multiple chains with distinct starting locations is
+important to aid mixing.</li>
+<li>Trace plots provide an intuitive visual assessment of mixing; ()
+formalizes comparison of within- and between-chain variation.</li>
+<li>A sampler can appear to behave well but still fail to explore the
+posterior comprehensively, e.g. for multimodal posteriors.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+</h3>
+<ul>
+<li>The aim is intuition rather than theory.</li>
+<li>Spend time visualizing chain trajectories. This illustrates concepts
+such as warm-up, mixing, autocorrelation, and multimodality.</li>
+<li>Online applets such as <a href="https://chi-feng.github.io/mcmc-demo/app.html" class="external-link uri">https://chi-feng.github.io/mcmc-demo/app.html</a> are useful
+(HMC, NUTS).</li>
+<li>The hand-written Metropolis–Hastings sampler is pedagogical.
+Learners are not expected to implement their own samplers for real
+analyses. However, writings samplers is still a relevant skill for many
+more complex models!</li>
+<li>Connect this episode to Stan: Stan automates the sampling machinery,
+but users still need to determine sample trustworthiness.</li>
+</ul>
+</div>
+<hr>
+<br></section><section id="hierarchical-models"><h2 class="section-heading"><a href="hierarchical-models.html">Hierarchical models</a></h2>
+<hr class="half-width">
+<h3 id="hierarchical-models-headingInstructor1">
+<a href="hierarchical-models.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#hierarchical-models-headingInstructor1"></a>
+</h3>
+<p>The goal of this episode is to introduce hierarchical modeling as the
+way to model related groups:</p>
+<ol style="list-style-type: decimal">
+<li>Represent group-specific parameters as draws from a common
+population distribution;</li>
+<li>Implement hierarchical models in Stan;</li>
+<li>Understand how the different pooling strategies share
+information.</li>
+</ol>
+<div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a>
+</h3>
+<ul>
+<li>Hierarchical models are useful when observations naturally belong to
+related groups.</li>
+<li>Group-specific parameters assumed to arise from a common population
+distribution.</li>
+<li>This produces <strong>partial pooling</strong>: estimates for
+individual groups are informed both by their own data and that from the
+other groups.</li>
+<li>The amount of data for a group generally affects their estimates
+proportionally: the less data the bigger the pooling effect towards the
+population mean.</li>
+<li>The parameters of the population distribution (hyperparameters) are
+themselves inferred from the data.</li>
+<li>Hierarchical models quantify variation both within and between
+groups.</li>
+<li>Posterior prediction can be performed both for existing groups and,
+conceptually, for new groups drawn from the same population.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+</h3>
+<ul>
+<li>Partial pooling is the central concept. Contrast it explicitly with
+complete pooling and fitting each group independently.</li>
+<li>It might be a good idea to live code an unpooled model into a
+partially pooled one by simply by changing the hyperparameters into
+variables and giving them priors. Such mechanical edits may provide a
+good starting point for a conceptual discussion: why does this simple
+change produce partial pooling, and how does the code relate to the
+corresponding mathematical model specification?</li>
+</ul>
+</div>
+<hr>
+<br></section><section id="model-comparison"><h2 class="section-heading"><a href="model-comparison.html">Model comparison</a></h2>
 <hr class="half-width"></section><section id="gaussian-processes"><h2 class="section-heading"><a href="gaussian-processes.html">Gaussian processes</a></h2>
 <hr class="half-width"></section><section id="survival-analysis"><h2 class="section-heading"><a href="survival-analysis.html">Survival Analysis</a></h2>
 <hr class="half-width"></section><section id="stan-extensions"><h2 class="section-heading"><a href="stan-extensions.html">Stan extensions</a></h2>
-<hr class="half-width"></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">Exercises1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>5. Model comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a>7. Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a></a></h2>
+<hr class="half-width"></section><section id="exercises"><h2 class="section-heading"><a href="exercises.html">Exercises</a></h2>
 <hr class="half-width"></section></section>
 </div>
     </main>
@@ -471,9 +679,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/instructor-notes.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/instructor-notes.html",
-  "dateCreated": "2026-08-10",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "dateCreated": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "datePublished": "2026-08-19"
 }
 
   </script><script>

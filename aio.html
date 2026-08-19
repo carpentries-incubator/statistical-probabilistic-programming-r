@@ -40,13 +40,13 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="incubator-logo" alt="Carpentries Incubator" src="assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
-          <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
+        <img id="incubator-logo" alt="Carpentries Incubator" src="assets/images/incubator-logo.svg"><span class="badge text-bg-warning">
+          <abbr title="This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
-              <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
-              Pre-Alpha
+              <i aria-hidden="true" class="icon" data-feather="alert-triangle" style="border-radius: 5px"></i>
+              Alpha
             </a>
-            <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
+            <span class="visually-hidden">This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.</span>
           </abbr>
         </span>
 
@@ -397,7 +397,7 @@
         
 <section id="aio-bayesian-statistics"><p>Content from <a href="bayesian-statistics.html">Short introduction to Bayesian statistics</a></p>
 <hr>
-<p>Last updated on 2026-08-07 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1064,7 +1064,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-stan"><p>Content from <a href="stan.html">Stan</a></p>
 <hr>
-<p>Last updated on 2026-08-07 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/stan.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1164,7 +1164,7 @@ through sampling statements.</p></li>
 <p>For best practices, it is recommended to specify Stan programs in
 separate text files with a .stan extension, which can then be read,
 compiled, and sampled from R using <code>cmdstanr</code>.</p>
-</section><section><h2 class="section-heading" id="example-1-beta-binomial-model">Example 1: Beta-binomial model<a class="anchor" aria-label="anchor" href="#example-1-beta-binomial-model"></a>
+</section><section><h2 class="section-heading" id="example-1-binomial-model">Example 1: Binomial model<a class="anchor" aria-label="anchor" href="#example-1-binomial-model"></a>
 </h2>
 <hr class="half-width">
 <p>The following Stan program specifies the Beta-binomial model, and
@@ -1322,7 +1322,7 @@ Chain 4 finished in 0.0 seconds.
 
 All 4 chains finished successfully.
 Mean chain execution time: 0.0 seconds.
-Total execution time: 0.6 seconds.</code></pre>
+Total execution time: 0.5 seconds.</code></pre>
 </div>
 <p>With the default settings, CmdStan (via <code>cmdstanr</code>) runs 4
 MCMC chains. Each chain runs for 2000 total iterations (more about this
@@ -1370,9 +1370,9 @@ figures.</p>
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
-<p>Compute the 95% credible intervals for the samples drawn with Stan.
-What is the probability that <span class="math inline">\(\theta \in
-(0.05, 0.15)\)</span>? Plot a histogram of the posterior samples.</p>
+<p>Compute the 95% credible intervals from the samples drawn with Stan.
+What is the posterior probability that <span class="math inline">\(\theta \in (0.05, 0.15)\)</span>? Plot a histogram
+of the posterior samples.</p>
 </div>
 </div>
 </div>
@@ -1381,7 +1381,7 @@ What is the probability that <span class="math inline">\(\theta \in
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1412,7 +1412,8 @@ What is the probability that <span class="math inline">\(\theta \in
 <div class="callout-inner">
 <h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
-<p>Try modifying the Stan program so that you add a <span class="math inline">\(Beta(\alpha, \beta)\)</span> prior for <span class="math inline">\(\theta\)</span>.</p>
+<p>Try modifying the Stan program so that you add a <span class="math inline">\(\text{Beta}(\alpha, \beta)\)</span> prior for
+<span class="math inline">\(\theta\)</span>.</p>
 <p>Can you modify the Stan program further so that you can set the
 hyperparameters <span class="math inline">\(\alpha, \beta\)</span> as
 part of the data? What is the benefit of using this approach?</p>
@@ -1424,7 +1425,7 @@ part of the data? What is the benefit of using this approach?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Modifying the data block so that it declares the hyperparameters as
 data (e.g. <code>real&lt;lower=0&gt; alpha;</code> and
@@ -1722,7 +1723,7 @@ slope <span class="math inline">\(\beta\)</span>, and deviation term
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1769,7 +1770,7 @@ slope <span class="math inline">\(\beta\)</span>, and deviation term
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1818,6 +1819,23 @@ consisting of code blocks, and can be compiled and sampled from R using
 <li>Subsequent analysis of the posterior samples is performed outside
 Stan.</li>
 </ul>
+<p>After this episode, you should be able to use Stan to fit
+probabilistic models by:</p>
+<ul>
+<li>Writing Stan model code, including:
+<ul>
+<li>data types and declarations,</li>
+<li>program blocks,</li>
+<li>sampling statements, and</li>
+<li>data, parameters, priors, the model, and generated quantities.</li>
+</ul>
+</li>
+<li>Providing data to the model.</li>
+<li>Compiling and fitting the model.</li>
+<li>Accessing the model output and posterior samples.</li>
+<li>Manipulating posterior samples.</li>
+<li>Visualizing the results.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1849,7 +1867,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-mcmc"><p>Content from <a href="mcmc.html">Markov chain Monte Carlo</a></p>
 <hr>
-<p>Last updated on 2026-08-10 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/mcmc.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2403,7 +2421,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-hierarchical-models"><p>Content from <a href="hierarchical-models.html">Hierarchical models</a></p>
 <hr>
-<p>Last updated on 2026-08-10 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2964,7 +2982,8 @@ countries.</p>
 <p>Here, we analyzed the height for women in a randomly chosen countries
 using a hierarchical model. The model could be extended further, for
 instance, by adding hierarchy between sexes, continents,
-developed/developing countries etc.</p>
+developed/developing countries etc. However, specifying the correlation
+between all these aspects could be complicated.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -3004,12 +3023,18 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-model-comparison"><p>Content from <a href="model-comparison.html">Model comparison</a></p>
 <hr>
-<p>Last updated on 2026-08-10 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/model-comparison.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 's' not found</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -3113,34 +3138,34 @@ generator <code>normal_rng</code>. Notice that a single posterior sample
 <span class="math inline">\((\mu_s, \sigma_s)\)</span> is used for each
 evaluation of the generated quantities block, resulting in a
 distribution of <span class="math inline">\(X^{rep}\)</span></p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="kw">data</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1" aria-label="code-block-1-3"></a>  <span class="dt">vector</span>[N] X;</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1" aria-label="code-block-1-4"></a>}</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1" aria-label="code-block-1-5"></a><span class="kw">parameters</span> {</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1" aria-label="code-block-1-6"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1" aria-label="code-block-1-7"></a>  <span class="dt">real</span> mu;</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1" aria-label="code-block-1-8"></a>}</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1" aria-label="code-block-1-9"></a><span class="kw">model</span> {</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1" aria-label="code-block-1-10"></a>  X ~ normal(mu, sigma);</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1" aria-label="code-block-1-11"></a>  </span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1" aria-label="code-block-1-12"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1" aria-label="code-block-1-13"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1" aria-label="code-block-1-14"></a>}</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1" aria-label="code-block-1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1" aria-label="code-block-1-16"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1" aria-label="code-block-1-17"></a>  <span class="dt">vector</span>[N] X_rep;</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1" aria-label="code-block-1-18"></a>  </span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1" aria-label="code-block-1-19"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1" aria-label="code-block-1-20"></a>    X_rep[i] = normal_rng(mu, sigma);</span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1" aria-label="code-block-1-21"></a>  }</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1" aria-label="code-block-1-22"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="kw">data</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a><span class="kw">parameters</span> {</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a><span class="kw">model</span> {</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>  X ~ normal(mu, sigma);</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a>  </span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>}</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a>  <span class="dt">vector</span>[N] X_rep;</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a>  </span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>    X_rep[i] = normal_rng(mu, sigma);</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a>  }</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a>}</span></code></pre>
 </div>
 <p>Let’s fit model and extract the replicates.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3174,32 +3199,32 @@ model is a poor choice for the data.</p>
 <p>Let’s do an identical analysis using the Cauchy model.</p>
 <p>The results are generated with code essentially copy-pasted from
 above, with a minor distinction in the Stan program.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">STAN<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="kw">data</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1" aria-label="code-block-3-3"></a>  <span class="dt">vector</span>[N] X;</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a>}</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1" aria-label="code-block-3-5"></a><span class="kw">parameters</span> {</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1" aria-label="code-block-3-6"></a>  <span class="co">// Scale</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1" aria-label="code-block-3-7"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1" aria-label="code-block-3-8"></a>  <span class="co">// location</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1" aria-label="code-block-3-9"></a>  <span class="dt">real</span> mu;</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1" aria-label="code-block-3-10"></a>}</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1" aria-label="code-block-3-11"></a><span class="kw">model</span> {</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1" aria-label="code-block-3-12"></a>  <span class="co">// location = mu and scale = sigma</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1" aria-label="code-block-3-13"></a>  X ~ cauchy(mu, sigma);</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1" aria-label="code-block-3-14"></a>  </span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1" aria-label="code-block-3-15"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1" aria-label="code-block-3-16"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1" aria-label="code-block-3-17"></a>}</span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1" aria-label="code-block-3-18"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1" aria-label="code-block-3-19"></a>  <span class="dt">vector</span>[N] X_rep;</span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1" aria-label="code-block-3-20"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1" aria-label="code-block-3-21"></a>    X_rep[i] = cauchy_rng(mu, sigma);</span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1" aria-label="code-block-3-22"></a>  }</span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1" aria-label="code-block-3-23"></a>}</span></code></pre>
+<pre class="sourceCode stan" tabindex="0"><code class="sourceCode stan"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="kw">data</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a>  <span class="dt">vector</span>[N] X;</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="kw">parameters</span> {</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a>  <span class="co">// Scale</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>  <span class="co">// location</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>  <span class="dt">real</span> mu;</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1" aria-label="code-block-4-11"></a><span class="kw">model</span> {</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1" aria-label="code-block-4-12"></a>  <span class="co">// location = mu and scale = sigma</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1" aria-label="code-block-4-13"></a>  X ~ cauchy(mu, sigma);</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1" aria-label="code-block-4-14"></a>  </span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1" aria-label="code-block-4-15"></a>  mu ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>  sigma ~ gamma(<span class="dv">2</span>, <span class="dv">1</span>);</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>}</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>  <span class="dt">vector</span>[N] X_rep;</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>    X_rep[i] = cauchy_rng(mu, sigma);</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1" aria-label="code-block-4-22"></a>  }</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1" aria-label="code-block-4-23"></a>}</span></code></pre>
 </div>
 <p>A comparison of data <span class="math inline">\(X\)</span> and <span class="math inline">\(X^{rep}\)</span> from the Cauchy model shows good
 agreement between the posterior predictions and the data. The
@@ -3238,7 +3263,7 @@ lower WAIC values imply a better fit.</p>
 <p>Let’s use the WAIC to compare the normal and Cauchy models. First
 we’ll need to fit both models on the data using the Stan programs
 utilized above.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3260,7 +3285,7 @@ utilized above.</p>
 </div>
 <p>Then we will write a function for computing WAIC, but first a helper
 function to compute posterior predictive density for a single point.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3317,7 +3342,7 @@ function to compute posterior predictive density for a single point.</p>
 <p>Applying this function to the posterior samples, we’ll obtain a lower
 value for the Cauchy model, implying a better fit to the data. This is
 in line with the posterior predictive check performed above.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3328,7 +3353,7 @@ in line with the posterior predictive check performed above.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 581.6718</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3363,7 +3388,7 @@ comparing models.<br><span class="math display">\[p_{\text{loo-cv}} = \text{lppd
 \text{lppd}_\text{loo-cv}.\]</span> Above, <span class="math inline">\(\text{lppd}_\text{loo-cv}\)</span> is the sum of
 the log predictive densities of data points evaluated based on</p>
 <p>Let’s implement this in R.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3447,7 +3472,7 @@ the log predictive densities of data points evaluated based on</p>
 </div>
 <p>Let’s combine the computed log densities, and compute model-wise
 sums</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3466,7 +3491,7 @@ parameters. As with WAIC, smaller values imply better suitability. In
 line with the posterior predictive check and WAIC, we see that, again,
 the Cauchy distribution gives a better description of the data that the
 normal model.</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3487,7 +3512,7 @@ normal model.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] "Effective number of parameters, normal = 32.5307"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5473,7 +5498,7 @@ a 95% credible interval.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Use the posterior samples of the Weibull parameters to generate
 predictive event times. For each posterior draw, calculate the
@@ -6464,7 +6489,7 @@ survival patterns with the Cox model estimate.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb132">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7772,7 +7797,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  --></section></section><section id="aio-exercises"><p>Content from <a href="exercises.html">Exercises</a></p>
 <hr>
-<p>Last updated on 2026-08-10 |
+<p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/exercises.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -7803,32 +7828,33 @@ they approximately refer to.</p>
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="basics">1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
-</h1>
-<div class="section level2">
-<h2 id="grid-approximation-normal-model-with-unknown-mean">1.1 Grid approximation: normal model with unknown mean<a class="anchor" aria-label="anchor" href="#grid-approximation-normal-model-with-unknown-mean"></a>
+<section><h2 class="section-heading" id="basics">1. Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="grid-approximation-normal-model-with-unknown-mean">1.1 Grid approximation: normal model with unknown mean<a class="anchor" aria-label="anchor" href="#grid-approximation-normal-model-with-unknown-mean"></a>
+</h3>
 <p>Generate 1000 data points from the normal model. Use a randomly
 generated mean parameter, <span class="math inline">\(\mu \sim
 N(0,1)\)</span> and set the standard deviation <span class="math inline">\(\sigma=1\)</span>.</p>
-<p>The grid approximation for this model was introduced in Episode XX
-but the implementation doesn’t work for the generated data. Locate the
+<p>The grid approximation for this model was introduced in Episode 1 but
+the implementation doesn’t always work for the generated data (repeat
+the data simulation and fitting a few times to verify this). Locate the
 source of error and make the necessary modifications to get the program
 working.</p>
 <p>Plot the posterior of <span class="math inline">\(\mu\)</span>.</p>
 </div>
-<div class="section level2">
-<h2 id="grid-approximation-gamma-poisson">1.2 Grid approximation: Gamma-Poisson<a class="anchor" aria-label="anchor" href="#grid-approximation-gamma-poisson"></a>
-</h2>
+<div class="section level3">
+<h3 id="grid-approximation-gamma-poisson">1.2 Grid approximation: Gamma-Poisson<a class="anchor" aria-label="anchor" href="#grid-approximation-gamma-poisson"></a>
+</h3>
 <p>The Gamma-Poisson model can be stated as:</p>
 <p><span class="math display">\[y_i \sim \text{Pois}(\lambda) \\
 \lambda \sim \Gamma(1, 1), \]</span></p>
 <p>where <span class="math inline">\(y_i\)</span> are non-negative data
-points, and Pois is the Poisson distribution with rate parameter <span class="math inline">\(\lambda &gt; 0\)</span>. Implement a grid
-approximation for this model.</p>
-<p>Apparently (<a href="https://en.wikipedia.org/wiki/Poisson_distribution" class="external-link uri">https://en.wikipedia.org/wiki/Poisson_distribution</a>), the
-number of chewing gum on a sidewalk tile is approximately Poisson
+points, and Pois is the Poisson distribution with rate parameter <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
+<p>Implement a grid approximation for this model.</p>
+<p><a href="https://en.wikipedia.org/wiki/Poisson_distribution" class="external-link">Apparently</a>,
+the number of chewing gum on a sidewalk tile is approximately Poisson
 distributed.</p>
 <p>Estimate the average number of gum on a Reykjavik side walk tile
 (lambda), using the data</p>
@@ -7839,9 +7865,9 @@ distributed.</p>
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">7</span>,<span class="fl">4</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">7</span>,<span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div class="section level2">
-<h2 id="less-data-means-bigger-prior-effect">1.3 Less data means bigger prior effect<a class="anchor" aria-label="anchor" href="#less-data-means-bigger-prior-effect"></a>
-</h2>
+<div class="section level3">
+<h3 id="less-data-means-bigger-prior-effect">1.3 Less data means bigger prior effect<a class="anchor" aria-label="anchor" href="#less-data-means-bigger-prior-effect"></a>
+</h3>
 <p>Show that as the amount of available data increases, the effect of
 the prior decreases.</p>
 <p>Instructions:</p>
@@ -7859,20 +7885,20 @@ tosses.
 <li>Use a Beta prior for p.</li>
 </ul>
 </li>
-<li>Compare the posteriors the prior.</li>
+<li>Compare the posteriors to the prior.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="grid-approximation-for-a-normal-model-with-unknown-mean-and-standard-deviation">1.4 Grid approximation: for a normal model with unknown mean and
+<div class="section level3">
+<h3 id="grid-approximation-for-a-normal-model-with-unknown-mean-and-standard-deviation">1.4 Grid approximation: for a normal model with unknown mean and
 standard deviation<a class="anchor" aria-label="anchor" href="#grid-approximation-for-a-normal-model-with-unknown-mean-and-standard-deviation"></a>
-</h2>
+</h3>
 <p>The following data is a collection of daily milk yield (in liters)
 for dairy cows.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">30.25</span>, <span class="fl">34.98</span>, <span class="fl">29.66</span>, <span class="fl">20.14</span>, <span class="fl">23.92</span>, <span class="fl">38.61</span>, <span class="fl">36.89</span>, <span class="fl">34.68</span>, <span class="fl">25.83</span>, <span class="fl">29.93</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">30.3</span>, <span class="fl">35.0</span>, <span class="fl">29.7</span>, <span class="fl">20.1</span>, <span class="fl">23.9</span>, <span class="fl">38.6</span>, <span class="fl">36.9</span>, <span class="fl">34.7</span>, <span class="fl">25.8</span>, <span class="fl">29.9</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Using the grid approximation for the normal model, estimate the
 average daily yield <span class="math inline">\(\mu\)</span>.</p>
@@ -7882,9 +7908,9 @@ for the marginal.</p>
 <p>What is the probability that the average daily milk yield is more
 than 30 liters?</p>
 </div>
-<div class="section level2">
-<h2 id="sampling-the-gamma">1.5 Sampling the Gamma<a class="anchor" aria-label="anchor" href="#sampling-the-gamma"></a>
-</h2>
+<div class="section level3">
+<h3 id="sampling-the-gamma">1.5 Sampling the Gamma<a class="anchor" aria-label="anchor" href="#sampling-the-gamma"></a>
+</h3>
 <p>Let’s model the following observations X with the exponential
 likelihood, <span class="math inline">\(\text{Exp}(\lambda)\)</span>:</p>
 <div class="codewrapper sourceCode" id="cb3">
@@ -7907,12 +7933,12 @@ mean and mode 2. the 50% and 95% credible intervals 3. the probabilities
 <span class="math inline">\(Pr(\lambda &gt; 1), Pr( 1 &lt; \lambda &lt;
 1.5), Pr(\lambda &lt; 1 \text{  or } \lambda &gt; 1.5)\)</span></p>
 </div>
-<div class="section level2">
-<h2 id="grid-approximation-cauchy-distribution">1.6 Grid approximation: Cauchy distribution<a class="anchor" aria-label="anchor" href="#grid-approximation-cauchy-distribution"></a>
-</h2>
+<div class="section level3">
+<h3 id="grid-approximation-cauchy-distribution">1.6 Grid approximation: Cauchy distribution<a class="anchor" aria-label="anchor" href="#grid-approximation-cauchy-distribution"></a>
+</h3>
 <p>(Emulated from BDA3: p59. Ex.11)</p>
-<p>Suppose y1,…,y5 are independent samples from a Cauchy distribution
-with scale 1 and unknown location <span class="math inline">\(\theta\)</span>. Given the observations <span class="math inline">\((y_1, . . . , y_5) = (43, 44, 45, 46.5,
+<p>Let y1,…,y5 be independent samples from a Cauchy distribution with
+scale 1 and unknown location <span class="math inline">\(\theta\)</span>. Given the observations <span class="math inline">\((y_1, . . . , y_5) = (43, 44, 45, 46.5,
 47.5)\)</span>:</p>
 <ol style="list-style-type: lower-alpha">
 <li>Compute the unnormalized posterior density function, <span class="math inline">\(p(\theta)p(y|\theta)\)</span>, on a grid of points
@@ -7925,12 +7951,13 @@ Assume a uniform prior for over [0, 100].</li>
 from the posterior and plot a histogram of the samples.</li>
 <li>Use each of the samples generated in b) to generate a new data point
 <span class="math inline">\(y_6\)</span> from the likelihood function
-and plot a histogram of these draws.</li>
+and plot a histogram of these draws. From which distribution are these
+samples from?</li>
 </ol>
 </div>
-<div class="section level2">
-<h2 id="sampling-the-normal">1.7 Sampling the Normal<a class="anchor" aria-label="anchor" href="#sampling-the-normal"></a>
-</h2>
+<div class="section level3">
+<h3 id="sampling-the-normal">1.7 Sampling the Normal<a class="anchor" aria-label="anchor" href="#sampling-the-normal"></a>
+</h3>
 <p>The posterior for the normal model with unknown <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> can be sampled as follows
 (BDA3:p.65):</p>
 <ol style="list-style-type: decimal">
@@ -7960,9 +7987,9 @@ X_n\}\)</span>.</p>
 estimate. Is there a discrepancy and why?</li>
 </ol>
 </div>
-<div class="section level2">
-<h2 id="hpdi">1.8 HPDI<a class="anchor" aria-label="anchor" href="#hpdi"></a>
-</h2>
+<div class="section level3">
+<h3 id="hpdi">1.8 HPDI<a class="anchor" aria-label="anchor" href="#hpdi"></a>
+</h3>
 <p>Another approach to summarizing the posterior is to compute the
 <em>shortest</em> interval that contains <span class="math inline">\(p\%\)</span> of the posterior. Such interval is
 called highest posterior density interval (HPDI).</p>
@@ -7976,13 +8003,12 @@ consecutive samples contains <span class="math inline">\(100 \cdot
 \frac{n}{N} \%\)</span> of the posterior, where <span class="math inline">\(N\)</span> is the total number of samples.</p>
 <!-- ************************************************************************ -->
 </div>
-</div>
-<div class="section level1">
-<h1 id="stan">2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>
-</h1>
-<div class="section level2">
-<h2 id="gamma-poisson-model">2.1 Gamma-Poisson model<a class="anchor" aria-label="anchor" href="#gamma-poisson-model"></a>
+</section><section><h2 class="section-heading" id="stan">2. Stan<a class="anchor" aria-label="anchor" href="#stan"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="gamma-poisson-model">2.1 Gamma-Poisson model<a class="anchor" aria-label="anchor" href="#gamma-poisson-model"></a>
+</h3>
 <p>The Gamma-Poisson model can be stated as:</p>
 <p><span class="math display">\[y_i \sim \text{Pois}(\lambda) \\
 \lambda \sim \Gamma(1, 1), \]</span></p>
@@ -8001,9 +8027,9 @@ have on the prior shape?</p>
 <p>Compute the MAP, mean and 90% CIs and include them in a figure with a
 histogram of posterior samples.</p>
 </div>
-<div class="section level2">
-<h2 id="dice">2.2 Dice<a class="anchor" aria-label="anchor" href="#dice"></a>
-</h2>
+<div class="section level3">
+<h3 id="dice">2.2 Dice<a class="anchor" aria-label="anchor" href="#dice"></a>
+</h3>
 <p>Write a Stan program that implements the following statistical
 model:</p>
 <p><span class="math display">\[y \sim \text{categorial}(\theta) \\
@@ -8021,14 +8047,12 @@ following data.</p>
 </div>
 <ol style="list-style-type: decimal">
 <li><p>Plot the marginal posteriors for each <span class="math inline">\(\theta_i\)</span>.</p></li>
-<li><p>Is the dice fair? Quantify this somehow</p></li>
+<li><p>Is the dice fair? Quantify this somehow.</p></li>
 </ol>
-<p>Hint: You can e.g. compute a posterior probability difference of some
-of the dice faces.</p>
 </div>
-<div class="section level2">
-<h2 id="normal-model">2.3 Normal model<a class="anchor" aria-label="anchor" href="#normal-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="normal-model">2.3 Normal model<a class="anchor" aria-label="anchor" href="#normal-model"></a>
+</h3>
 <p>Implement the Normal model in Stan.</p>
 <p>In the generated quantities block: - Generate a posterior predictive
 distribution - Generate posterior for <span class="math inline">\(CV =
@@ -8040,12 +8064,12 @@ distribution - Generate posterior for <span class="math inline">\(CV =
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="fl">3.7</span>, <span class="fl">2.8</span>, <span class="fl">4.03</span>, <span class="fl">2.11</span>, <span class="fl">2.58</span>, <span class="fl">0.96</span>, <span class="fl">1.74</span>, <span class="fl">0.34</span>, <span class="fl">0.75</span>, <span class="fl">2.07</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Plot the posterior distribution and color the points according to the
+<p>Plot the posterior samples and color the points according to the
 condition <span class="math inline">\(CV &lt; 1\)</span>.</p>
 </div>
-<div class="section level2">
-<h2 id="time-series-modeling">2.4. Time series modeling<a class="anchor" aria-label="anchor" href="#time-series-modeling"></a>
-</h2>
+<div class="section level3">
+<h3 id="time-series-modeling">2.4. Time series modeling<a class="anchor" aria-label="anchor" href="#time-series-modeling"></a>
+</h3>
 <p>The AR(1) process is defined by the recursion: <span class="math display">\[x_i \sim N(\phi \cdot x_{i-1},
 \sigma^2),\]</span> where <span class="math inline">\(i\)</span> is a
 time index. In other words, given some initial value <span class="math inline">\(x_1\)</span>, the next value <span class="math inline">\(x_2\)</span> is generated from a normal
@@ -8063,13 +8087,12 @@ predict the process 50 values into the future and plot the
 predictions.</li>
 </ol>
 </div>
-</div>
-<div class="section level1">
-<h1 id="mcmc">3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>
-</h1>
-<div class="section level2">
-<h2 id="binomial-model">3.1 Binomial model<a class="anchor" aria-label="anchor" href="#binomial-model"></a>
+</section><section><h2 class="section-heading" id="mcmc">3. MCMC<a class="anchor" aria-label="anchor" href="#mcmc"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="binomial-model">3.1 Binomial model<a class="anchor" aria-label="anchor" href="#binomial-model"></a>
+</h3>
 <p>Implement the Metropolis-Hastings algorithm for the beta-binomial
 model.</p>
 <p>Assume there are 50 people of whom 7 are left-handed. Estimate the
@@ -8081,9 +8104,9 @@ where <span class="math inline">\(\theta^*\)</span> is the proposal and
 sample.</p>
 <p>Compute the proportion of accepted proposals for the sampler.</p>
 </div>
-<div class="section level2">
-<h2 id="gibbs-sampler">3.2. Gibbs sampler<a class="anchor" aria-label="anchor" href="#gibbs-sampler"></a>
-</h2>
+<div class="section level3">
+<h3 id="gibbs-sampler">3.2. Gibbs sampler<a class="anchor" aria-label="anchor" href="#gibbs-sampler"></a>
+</h3>
 <p>Consider the distribution <span class="math display">\[ p(x, y) = C
 \cdot \exp^{-(x^2y^2 + x^2 + y^2 -8x -8y)/2},\]</span> where <span class="math inline">\(C\)</span> is a normalizing constant. It is known
 that the conditional distribution of x given y is the normal
@@ -8110,9 +8133,9 @@ the <span class="math inline">\(x\)</span> sample at step <span class="math inli
 <p>Build a Gibbs sampler that draws samples from <span class="math inline">\(p(x, y)\)</span>. Visualize the resulting
 distribution.</p>
 </div>
-<div class="section level2">
-<h2 id="gamma-with-discrete-rate">3.3. Gamma with discrete rate<a class="anchor" aria-label="anchor" href="#gamma-with-discrete-rate"></a>
-</h2>
+<div class="section level3">
+<h3 id="gamma-with-discrete-rate">3.3. Gamma with discrete rate<a class="anchor" aria-label="anchor" href="#gamma-with-discrete-rate"></a>
+</h3>
 <p>The data</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8132,23 +8155,22 @@ probability for staying still <span class="math inline">\((N^*=N)\)</span>.</p>
 \sim \text{Uniform}(-100, 100)\)</span> and compute an estimate for
 <span class="math inline">\(\beta\)</span>.</p>
 </div>
-<div class="section level2">
-<h2 id="hatr">3.4. <span class="math inline">\(\hat{R}\)</span>
+<div class="section level3">
+<h3 id="hatr">3.4. <span class="math inline">\(\hat{R}\)</span>
 <a class="anchor" aria-label="anchor" href="#hatr"></a>
-</h2>
+</h3>
 <p>Write a function that returns the <span class="math inline">\(\hat{R}\)</span> statistic for a collection of
 MCMC chains. Compute <span class="math inline">\(\hat{R}\)</span> for
 the samples from one of the exercises 3.1-3.3, and plot the trace
 plots.</p>
 <p>See p.285 in BDA3 for the definition of <span class="math inline">\(\hat{R}\)</span>.</p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="hierarchical-models">4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>
-</h1>
-<div class="section level2">
-<h2 id="model-analysis">4.1. Model analysis<a class="anchor" aria-label="anchor" href="#model-analysis"></a>
+</section><section><h2 class="section-heading" id="hierarchical-models">4. Hierarchical models<a class="anchor" aria-label="anchor" href="#hierarchical-models"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="model-analysis">4.1. Model analysis<a class="anchor" aria-label="anchor" href="#model-analysis"></a>
+</h3>
 <p>Examine the following statistical models. Determine if they exhibit a
 hierarchical structure. If not, introduce modifications to make them
 hierarchical.</p>
@@ -8180,9 +8202,9 @@ X_i \sim \Gamma(\alpha, \beta)   \\
 \beta \sim \Gamma(1, 1)
 \]</span></p>
 </div>
-<div class="section level2">
-<h2 id="hierarchical-gamma-poisson">4.2. Hierarchical Gamma-Poisson<a class="anchor" aria-label="anchor" href="#hierarchical-gamma-poisson"></a>
-</h2>
+<div class="section level3">
+<h3 id="hierarchical-gamma-poisson">4.2. Hierarchical Gamma-Poisson<a class="anchor" aria-label="anchor" href="#hierarchical-gamma-poisson"></a>
+</h3>
 <p>A hierarchical Gamma-Poisson model can be stated as follows:</p>
 <p><span class="math display">\[
 y_i \sim \text{Pois}(\lambda) \\
@@ -8201,9 +8223,9 @@ y_i \sim \text{Pois}(\lambda) \\
 beta. Generate samples from the population distribution of <span class="math inline">\(\lambda\)</span> in the generated quantities block
 and plot them in a histogram.</p>
 </div>
-<div class="section level2">
-<h2 id="hierarchical-poisson-regression">4.3. Hierarchical Poisson regression<a class="anchor" aria-label="anchor" href="#hierarchical-poisson-regression"></a>
-</h2>
+<div class="section level3">
+<h3 id="hierarchical-poisson-regression">4.3. Hierarchical Poisson regression<a class="anchor" aria-label="anchor" href="#hierarchical-poisson-regression"></a>
+</h3>
 <p>A Poisson regression model can be specified as <span class="math inline">\(y_i \sim \text{Pois}(\exp^{\alpha + \beta
 x_i})\)</span>, where <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are corresponding data points.</p>
 <p>Apply Poisson regression to model the annual rental count <span class="math inline">\((y_i)\)</span> for homestay apartments located at
@@ -8222,46 +8244,46 @@ hierarchical structure for both <span class="math inline">\(\alpha\)</span> and 
 implications does <span class="math inline">\(\beta &gt; 0\)</span> have
 in terms of the application?</p>
 </div>
-<div class="section level2">
-<h2 id="hierarchical-binomial-model">4.4. Hierarchical binomial model<a class="anchor" aria-label="anchor" href="#hierarchical-binomial-model"></a>
-</h2>
-<p>As commonly acknowledged, multiple humanoid species inhabit various
-solar systems within the Milky Way galaxy.</p>
-<p>The file, <code>data/handedness.txt</code>, contains data on the
-handedness of some of these species, with <span class="math inline">\(N\)</span> representing the sample size and <span class="math inline">\(x\)</span> denoting the count of left-handed
-specimens. The objective is to estimate the prevalence of
-left-handedness, <span class="math inline">\(\theta\)</span>.</p>
-<p>Develop Stan programs for both unpooled and partially pooled binomial
-models. Utilize the unpooled model to fit the completely pooled
-model.</p>
-<p>Incorporate Beta priors for <span class="math inline">\(\theta\)</span>. Compare the estimates, such as
-means, derived from the distinct pooling strategies.</p>
+<div class="section level3">
+<h3 id="hierarchical-binomial-model">4.4. Hierarchical binomial model<a class="anchor" aria-label="anchor" href="#hierarchical-binomial-model"></a>
+</h3>
+<p>The file <code>data/divorce.txt</code>, contains information on
+divorced couples in different countries based on a limited database.</p>
+<p>The column N contains the number of couples from the country and x
+denotes the number of divorces out of N. You want to analyze theta_i,
+divorce rates across the various countries.</p>
+<p>Fit the pooled, unpooled and partially pooled binomial model in
+Stan.</p>
+<p>Use Beta priors for theta. Compare the estimates from the distinct
+pooling strategies.</p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="model-comparison">5. Model comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>
-</h1>
-<div class="section level2">
-<h2 id="prior-predictive-check">5.1 Prior predictive check<a class="anchor" aria-label="anchor" href="#prior-predictive-check"></a>
+</section><section><h2 class="section-heading" id="model-comparison">5. Model comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>
 </h2>
-<p>In a salmon farm research facility, the relationship between the
-length of salmons (in meters, <span class="math inline">\(y\)</span>)
-and the amount of food provided (in grams, <span class="math inline">\(x\)</span>) is studied. The amount of food
-administered in 21 salmon pools is meticulously controlled, ranging from
-40 to 60 grams per individual salmon in one-gram increments.</p>
-<p>The chosen statistical model is linear regression:</p>
-<p><span class="math display">\[
-y \sim N(a + bx, \sigma^2) \\
-a, b \sim N(0, 1) \\
-\sigma \sim \Gamma(2, 1) \\
-\]</span></p>
-<p>Generate the <a href="https://mc-stan.org/docs/stan-users-guide/prior-predictive-checks.html" class="external-link">prior
-predictive distribution</a>, plot it, and visually assess the validity
-of the priors.</p>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="prior-predictive-check">5.1 Prior predictive check<a class="anchor" aria-label="anchor" href="#prior-predictive-check"></a>
+</h3>
+<p>The following model is used to analyse orange tree growth:</p>
+<p>y_i ~ normal(slope[i] * x, sigma) slope ~ lognormal(mu_slope,
+sigma_slope) sigma ~ gamma(2, 0.1); mu_slope ~ normal(0, 1); sigma_slope
+~ gamma(2, 10);</p>
+<p>In order to assess the validity of the priors, generate samples from
+the prior predictive distribution. Visualize the corresponding lines and
+add the observed data (Orange.txt*) on top of them. Is the prior
+reasonable in the sense that the predicted growth trajectories are
+within reasonable range?</p>
+<p>Hint: Check <a href="https://mc-stan.org/docs/stan-users-guide/posterior-predictive-checks.html#prior-predictive-checks" class="external-link">stan
+manual</a> to see how the prior predictive distribution can be generated
+in Stan. You can also do this without Stan.</p>
+<ul>
+<li>Pinheiro J, Bates DM (2000). Mixed-Effects Models in S and S-PLUS,
+series Statistics and Computing. Springer New York. ISBN
+9780387989570.</li>
+</ul>
 </div>
-<div class="section level2">
-<h2 id="posterior-predictive-check">5.2. Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
-</h2>
+<div class="section level3">
+<h3 id="posterior-predictive-check">5.2. Posterior predictive check<a class="anchor" aria-label="anchor" href="#posterior-predictive-check"></a>
+</h3>
 <p>The white noise process is perhaps the simplest non-trivial time
 series model. If <span class="math inline">\(i\)</span> is the time
 index, then the model can be specified as <span class="math inline">\(x_i \sim N(0, \sigma^2)\)</span> for all <span class="math inline">\(i = 1, \ldots ,N\)</span>.</p>
@@ -8274,13 +8296,29 @@ as the test statistic. Compute the posterior predictive p-value.</p>
 <p>Hint: lag-1 autocorrelation is simply the Pearson correlation between
 <span class="math inline">\(x_{1:(N-1)}\)</span> and <span class="math inline">\(x_{2:N}\)</span></p>
 </div>
+<div class="section level3">
+<h3 id="waic">5.3 WAIC<a class="anchor" aria-label="anchor" href="#waic"></a>
+</h3>
+<p>Consider the polynomial regression models with 0 (intercept only), 1
+(linear regression), 2 (quadratic), 3 (cubic) degrees.</p>
+<p>Which of these four models best describes the data in
+<code>data/WAIC_data.txt</code> in terms of the WAIC?</p>
+<p>Implement a single Stan program with the polynomial degree fed as
+data and generate the WAIC in R as described in BDA3 p.174.</p>
 </div>
-<div class="section level1">
-<h1 id="gaussian-processes">6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a>
-</h1>
-<div class="section level2">
-<h2 id="gp-prediction">6.1. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction"></a>
+<div class="section level3">
+<h3 id="bayesian-cv">3.4 Bayesian CV<a class="anchor" aria-label="anchor" href="#bayesian-cv"></a>
+</h3>
+<p>Using the data in, <code>data/divorce.txt</code>, perform Bayesian
+leave-one-out cross-validation to compare the hierarchical and
+completely pooled binomial models built in exercise 4.4.</p>
+</div>
+</section><section><h2 class="section-heading" id="gaussian-processes">6. Gaussian processes<a class="anchor" aria-label="anchor" href="#gaussian-processes"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="gp-prediction">6.1. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction"></a>
+</h3>
 <p>Consider the following data <span class="math inline">\((x,
 y)\)</span>:</p>
 <div class="codewrapper sourceCode" id="cb10">
@@ -8301,12 +8339,12 @@ with hyperparameters <span class="math inline">\(\lambda = 1\)</span>
 <p>Plot the posterior for <span class="math inline">\(f\)</span> along
 with the data, and compute the posterior probability for <span class="math inline">\(f(0) &gt; 0\)</span>.</p>
 </div>
-<div class="section level2">
-<h2 id="gp-prediction-1">6.2. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction-1"></a>
-</h2>
+<div class="section level3">
+<h3 id="gp-prediction-1">6.2. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction-1"></a>
+</h3>
 <p>The file <code>data/nytemp.txt</code> contains daily maximum
 temperatures (<span class="math inline">\(Temp\)</span>) in New York
-from May to September 1973 [1]. The column <span class="math inline">\(x\)</span> gives the day number for the date (Jan
+from May to September 1973*. The column <span class="math inline">\(x\)</span> gives the day number for the date (Jan
 1st is day number 1 etc).</p>
 <p>Do Gaussian process regression on the data and estimate the
 temperature trend for the year 1973. Use a periodic covariance kernel
@@ -8320,12 +8358,12 @@ against the true value (which was 38F).</p>
 <p>See <a href="https://mc-stan.org/docs/functions-reference/matrix_operations.html#gaussian-process-covariance-functions" class="external-link">Stan
 Functions Reference: GP Covariance</a> for details on the periodic
 kernel syntax in Stan.</p>
-<p>[1] (Chambers, J. M., Cleveland et al. (1983) Graphical Methods for
-Data Analysis)</p>
+<p>*(Chambers, J. M., Cleveland et al. (1983) Graphical Methods for Data
+Analysis)</p>
 </div>
-<div class="section level2">
-<h2 id="gp-prediction-2">6.3. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction-2"></a>
-</h2>
+<div class="section level3">
+<h3 id="gp-prediction-2">6.3. GP prediction<a class="anchor" aria-label="anchor" href="#gp-prediction-2"></a>
+</h3>
 <p>The data file <code>data/stock.txt</code> contains the (scaled and
 transformed) stock price of a company over 250 days.</p>
 <p>Implement the following model and use it to predict the stock 150
@@ -8348,16 +8386,15 @@ targets shorter-term variations around the trend.</p>
 <p>Is such a model appropriate for predicting stock prices into the
 future?</p>
 <p>Hint: Running the Stan program can take quite a long time, so do the
-initial testing using only 1 chain and, for example, 500 iterations.</p>
+initial testing using, for example, only 1 chain and 500 iterations.</p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="other-topics">7. Other topics<a class="anchor" aria-label="anchor" href="#other-topics"></a>
-</h1>
-<div class="section level2">
-<h2 id="hierarchical-models-using-brms">7.1 Hierarchical models using <code>brms</code>
-<a class="anchor" aria-label="anchor" href="#hierarchical-models-using-brms"></a>
+</section><section><h2 class="section-heading" id="stan-extensions">7. Stan extensions<a class="anchor" aria-label="anchor" href="#stan-extensions"></a>
 </h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="hierarchical-models-using-brms">7.1 Hierarchical models using <code>brms</code>
+<a class="anchor" aria-label="anchor" href="#hierarchical-models-using-brms"></a>
+</h3>
 <ol style="list-style-type: lower-alpha"><li>
 </li></ol>
 <p>Use <code>brms</code> to fit the hierarchical Gamma-Poisson model
@@ -8374,9 +8411,9 @@ which you can ignore.)</p>
 using <code>brms</code>. After fitting the models plot the city specific
 estimates for alpha and beta.</p>
 </div>
-<div class="section level2">
-<h2 id="zero-inflated-poisson-model">7.2 Zero-inflated poisson model<a class="anchor" aria-label="anchor" href="#zero-inflated-poisson-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="zero-inflated-poisson-model">7.2 Zero-inflated poisson model<a class="anchor" aria-label="anchor" href="#zero-inflated-poisson-model"></a>
+</h3>
 <p>Sometimes count data has more zeros than is expected when using, for
 example, Poisson or negative binomial model. This type of data can be
 called zero-inflated. An example of this type of data is
@@ -8400,7 +8437,7 @@ These packages will be installed into "/__w/statistical-probabilistic-programmin
 
 # Installing packages --------------------------------------------------------
 [32m✔[0m AER 1.2-17                               [linked from cache]
-Successfully installed 1 package in 5.3 milliseconds.</code></pre>
+Successfully installed 1 package in 4.3 milliseconds.</code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8438,7 +8475,7 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
 </div>
-</div></section>
+</section></section>
 </div>
     </main>
 </div>
@@ -8487,9 +8524,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/aio.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/aio.html",
-  "dateCreated": "2026-08-10",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "dateCreated": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "datePublished": "2026-08-19"
 }
 
   </script><script>

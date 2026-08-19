@@ -24,13 +24,13 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
-          <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
+        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-warning">
+          <abbr title="This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
-              <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
-              Pre-Alpha
+              <i aria-hidden="true" class="icon" data-feather="alert-triangle" style="border-radius: 5px"></i>
+              Alpha
             </a>
-            <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
+            <span class="visually-hidden">This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.</span>
           </abbr>
         </span>
 
@@ -355,7 +355,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Short introduction to Bayesian statistics</h1>
-        <p>Last updated on 2026-08-07 |
+        <p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/bayesian-statistics.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -369,6 +369,59 @@
 
         
 
+<div id="accordionInstructor1" class="accordion instructor-note accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
+  <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
+</button>
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div class="accordion-body">
+<ul><li>Prior specification is a common source of confusion.</li>
+</ul><p>The goal of this episode is to introduce the basic Bayesian modeling
+framework and build intuition for posterior inference:</p>
+<ol style="list-style-type: decimal"><li>Specify a model in terms of a likelihood and prior;</li>
+<li>Understand the posterior as the combination of prior information and
+observed data;</li>
+<li>Summarize posterior information using point estimates, intervals,
+probabilities;</li>
+<li>Understand necessity of posterior sampling.</li>
+</ol><div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a></h3>
+<ul><li>Bayesian inference is fundamentally about updating information: the
+prior describes understanding before observed the data is taken into
+account. The posterior combines prior understanding and data.</li>
+<li>The likelihood encodes the statistical model.</li>
+<li>The posterior is a distribution so points point estimates are always
+reductionist.</li>
+<li>Grid approximation is used as a pedagogical tool, concretizing
+prior, likelihood and posterior. Moreover, it illustrates the challenges
+necessitating sample-based analysis.</li>
+<li>The two-dimensional example illustrates:
+<ul><li>joint posterior distributions;</li>
+<li>marginalizing over nuisance parameters;</li>
+<li>the difficulty of using grid approximation for higher-dimensional
+models.</li>
+</ul></li>
+<li>Posterior samples offer a convenient representation of the
+posterior; point estimates, probabilities, and predictions are easily
+calculated from samples.</li>
+<li>Posterior predictions include uncertainty about model parameters and
+variability in future observations.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a></h3>
+<ul><li>Focus on developing intuition about prior –&gt; likelihood –&gt;
+posterior rather than on Bayes’ theorem algebra.</li>
+<li>The handedness example is deliberately simple. Encourage learners to
+experiment with the prior and sample size to observe their relative
+influence.</li>
+<li>Make the transition from grids to samples explicit: the remaining
+course operates on posterior samples.</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -497,12 +550,12 @@ confident that the value of <span class="math inline">\(\theta\)</span>
 is between these values. The peak of the posterior is at approximately
 0.1 representing the most likely value. This aligns well with intuitive
 expectations about left-handedness in humans.</p>
-<div id="accordionInstructor1" class="accordion instructor-note accordion-flush">
+<div id="accordionInstructor2" class="accordion instructor-note accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
-  <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
+<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
+  <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
 <div class="accordion-body">
 <p>Actual value from a study from 1975 with 7,688 children in US grades
 1-6 was 9.6%</p>
@@ -1067,9 +1120,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/bayesian-statistics.html",
-  "dateCreated": "2026-08-10",
-  "dateModified": "2026-08-07",
-  "datePublished": "2026-08-18"
+  "dateCreated": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "datePublished": "2026-08-19"
 }
 
   </script><script>

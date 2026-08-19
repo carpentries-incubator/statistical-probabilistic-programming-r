@@ -24,13 +24,13 @@
   <div class="container-fluid top-nav-container">
     <div class="col-md-8">
       <div class="large-logo">
-        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-danger">
-          <abbr title="This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.">
+        <img id="incubator-logo" alt="Carpentries Incubator" src="../assets/images/incubator-logo.svg"><span class="badge text-bg-warning">
+          <abbr title="This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.">
             <a href="https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html" class="external-link alert-link">
-              <i aria-hidden="true" class="icon" data-feather="alert-octagon" style="border-radius: 5px"></i>
-              Pre-Alpha
+              <i aria-hidden="true" class="icon" data-feather="alert-triangle" style="border-radius: 5px"></i>
+              Alpha
             </a>
-            <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
+            <span class="visually-hidden">This lesson is in the alpha phase, which means that it has been taught once and lesson authors are iterating on feedback.</span>
           </abbr>
         </span>
 
@@ -348,7 +348,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Hierarchical models</h1>
-        <p>Last updated on 2026-08-10 |
+        <p>Last updated on 2026-08-19 |
 
         <a href="https://github.com/carpentries-incubator/statistical-probabilistic-programming-r/edit/main/episodes/hierarchical-models.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -362,6 +362,54 @@
 
         
 
+<div id="accordionInstructor1" class="accordion instructor-note accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
+  <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
+</button>
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div class="accordion-body">
+<p>The goal of this episode is to introduce hierarchical modeling as the
+way to model related groups:</p>
+<ol style="list-style-type: decimal"><li>Represent group-specific parameters as draws from a common
+population distribution;</li>
+<li>Implement hierarchical models in Stan;</li>
+<li>Understand how the different pooling strategies share
+information.</li>
+</ol><div class="section level3">
+<h3 id="what-to-emphasize">What to emphasize<a class="anchor" aria-label="anchor" href="#what-to-emphasize"></a></h3>
+<ul><li>Hierarchical models are useful when observations naturally belong to
+related groups.</li>
+<li>Group-specific parameters assumed to arise from a common population
+distribution.</li>
+<li>This produces <strong>partial pooling</strong>: estimates for
+individual groups are informed both by their own data and that from the
+other groups.</li>
+<li>The amount of data for a group generally affects their estimates
+proportionally: the less data the bigger the pooling effect towards the
+population mean.</li>
+<li>The parameters of the population distribution (hyperparameters) are
+themselves inferred from the data.</li>
+<li>Hierarchical models quantify variation both within and between
+groups.</li>
+<li>Posterior prediction can be performed both for existing groups and,
+conceptually, for new groups drawn from the same population.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a></h3>
+<ul><li>Partial pooling is the central concept. Contrast it explicitly with
+complete pooling and fitting each group independently.</li>
+<li>It might be a good idea to live code an unpooled model into a
+partially pooled one by simply by changing the hyperparameters into
+variables and giving them priors. Such mechanical edits may provide a
+good starting point for a conceptual discussion: why does this simple
+change produce partial pooling, and how does the code relate to the
+corresponding mathematical model specification?</li>
+</ul></div>
+</div>
+</div>
+</div>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -901,7 +949,8 @@ countries.</p>
 <p>Here, we analyzed the height for women in a randomly chosen countries
 using a hierarchical model. The model could be extended further, for
 instance, by adding hierarchy between sexes, continents,
-developed/developing countries etc.</p>
+developed/developing countries etc. However, specifying the correlation
+between all these aspects could be complicated.</p>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -991,9 +1040,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/hierarchical-models.html",
   "identifier": "https://carpentries-incubator.github.io/statistical-probabilistic-programming-r/instructor/hierarchical-models.html",
-  "dateCreated": "2026-08-10",
-  "dateModified": "2026-08-10",
-  "datePublished": "2026-08-18"
+  "dateCreated": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "datePublished": "2026-08-19"
 }
 
   </script><script>
