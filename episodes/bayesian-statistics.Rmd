@@ -5,10 +5,10 @@ exercises: 8
 ---
 
 ```{r, include=FALSE}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
 library(cowplot)
-library(grafify)
-
 theme_set(theme_bw(15))
 prior_color <- "#009E73"
 likelihood_color <- "#E69F00"
@@ -78,14 +78,16 @@ $$
 
 The distribution $p(\theta \mid X)$ is called the *posterior distribution*. It describes our uncertainty about the parameters after observing the data and is the primary target of Bayesian inference.
 
-The term $p(X \mid \theta)$ is called the *likelihood* and describes the probability density of the observed data under a given value of $\theta$. The likelihood determines how the observed data update our information about the parameters.
+The term $p(X \mid \theta)$ is called the *likelihood* and describes the probability density of the observed data under a given value of $\theta$. The likelihood determines *how* the observed data update our information about the parameters.
 
 A defining feature of Bayesian modeling is the *prior distribution* $p(\theta)$. The prior represents information or assumptions about the parameters before the observed data are taken into account.
+
+In general, the posterior reflects both the likelihood and the prior: the stronger the prior, the less influence the data have. Conversely, as the amount of data increases, the prior generally has less influence on the posterior. This is an important point to remember!
 
 The denominator,
 
 $$
-p(X),
+p(X) = \int p(X \mid \theta)\,p(\theta)\,d\theta.,
 $$
 
 is called the *marginal likelihood* and acts as a normalizing constant ensuring the posterior distribution integrates to one. Because it is often difficult to calculate directly, analytical solutions for the posterior are available for a limited set of cases and the Bayes’ theorem is commonly used in the proportional form:
@@ -101,13 +103,13 @@ Thus, the posterior distribution is proportional to the product of the prior and
 
 ::::::::::::::::::::::::::::::::::::::::::::::::: challenge
 
-A researcher uses linear regression to study how weekly exercise is associated with systolic blood pressure. Previous studies suggest that more exercise is associated with lower blood pressure.
+In a study, linear regression is used to assess how weekly exercise is associated with systolic blood pressure. Previous studies suggest that more exercise is associated with lower blood pressure.
 
 What are the model parameters? Which parameter does the prior information concern, and what does it suggest?
 
 :::::::::::::::::: solution
 
-A simple linear regression model has three parameters: the intercept, the slope, and the residual standard deviation. The information from prior studies concerns the slope: because greater exercise is expected to be associated with lower blood pressure, the slope is expected to be negative.
+The basic linear regression model has three parameters: the intercept, the slope, and the residual standard deviation. The information from prior studies concerns the slope: greater exercise is expected to be associated with lower blood pressure, so the slope is expected to be negative.
 
 ::::::::::::::::::
 
@@ -138,7 +140,7 @@ $$
 Below, we'll plot these functions. Likelihood (which is not a distribution!) has been normalized for better illustration. 
 
 
-```{r, echo = FALSE, fig.height=4, out.width = '100%'}
+```{r, echo = FALSE, fig.height=4, out.width = '100%', dpi=300}
 
 # Set seed for reproducibility
 set.seed(543)
@@ -167,16 +169,24 @@ df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
 
 # Wide to long format
-df1_l <- df1 %>%
-  gather(key = "Function", value = "value", -theta)
+df1_l <- df1 |> 
+  pivot_longer(
+    cols = -theta,
+    names_to = "Function",
+    values_to = "value"
+  )
 
 # Plot
 p1 <- ggplot(df1_l, 
        aes(x = theta, y = value, color = Function)) + 
   # geom_point(linewidth = 2) +
   geom_line(linewidth = 1) +
-  scale_color_grafify() +
-  labs(x = expression(theta))
+  scale_color_manual(values = c(
+  likelihood = likelihood_color,
+  prior = prior_color,
+  posterior = posterior_color
+)) +
+  labs(x = expression(theta), y = "Value")
 
 p1
 ```
@@ -184,9 +194,11 @@ p1
 
 The figure shows that the majority of the mass in the posterior distribution is concentrated between 0 and 0.25. This implies that, given the available data and prior distribution, the model is fairly confident that the value of $\theta$ is between these values. The peak of the posterior is at approximately 0.1 representing the most likely value. This aligns well with intuitive expectations about left-handedness in humans. 
 
+
+
 ::::::::::::::::::::::::::::::::::::: instructor
 
-Actual value from a study from 1975 with 7,688 children in US grades 1-6 was 9.6%
+A value from a study from 1975 with 7,688 children in US grades 1-6 was 9.6%
 
 Hardyck, C. et al. (1976), Left-handedness and cognitive deficit
 https://en.wikipedia.org/wiki/Handedness
@@ -202,11 +214,11 @@ Two specific types of posterior intervals are often of interest:
 
 1. *Credible intervals* (CIs): These intervals leave equal posterior mass below and above them, computed as posterior quantiles. For instance, a 90% CI would span the range between the 5% and 95% quantiles. 
 
-2. *Defined boundary intervals*: Computed as the posterior mass for specific parts of the parameter space, these intervals quantify the probability for given parameter conditions. For example, we might be interested in the posterior probability that $\theta > 0$, $0<\theta<0.5$, or $\theta<0$ or $\theta > 0.5$. These probabilities can be computed by integrating the posterior over the corresponding sets. 
+2. *Defined boundary intervals*: Computed as the posterior mass for specific parts of the parameter space, these intervals quantify the probability for given parameter conditions. For example, we might be interested in the posterior probability that $\theta > 0$, $0<\theta<0.5$, or $\theta<0$ or $\theta > 0.5$. These probabilities can be computed by evaluating the area under the posterior over the corresponding sets. Mathematically, this is done by integrating. 
 
 The following figures illustrate selected posterior intervals for the previous example along with the posterior mode, or *maximum a posteriori* (MAP) estimate. 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.height=4, dpi = 300}
 
 # 90% CIs
 lower5 <- theta_grid[which.max(cumsum(posterior)*delta > 0.05)]
@@ -232,7 +244,8 @@ p1 <- my_p +
     geom_vline(xintercept = df1[which.max(df1$posterior), "theta"], 
                linetype = "dashed") +
     labs(title = paste0("90% CIs = (", lower5, ",", upper5, ")"), 
-         x = expression(theta))
+         x = expression(theta),
+         y = "Posterior")
 
 
 p2 <- my_p + 
@@ -249,21 +262,32 @@ p2 <- my_p +
               alpha = 0.5) +
   geom_vline(xintercept = df1[which.max(df1$posterior), "theta"], 
              linetype = "dashed") +
-    labs(title = paste0("Pr(theta < 0.1 or theta > 0.2) = ",
-                        round(Pr_theta_outside_0.1_0.2, 3)), 
-         x = expression(theta))
+    labs(title = bquote(
+    Pr(theta < 0.1 ~ "or" ~ theta > 0.2) ==
+      .(round(Pr_theta_outside_0.1_0.2, 3))
+  ), 
+         x = expression(theta),
+         y = "Posterior")
 
 
-p_area <- plot_grid(p1, p2, ncol = 1)
+p1
+p2
+# p_area <- plot_grid(p1, p2, ncol = 1)
 
-p_area
+# p_area
 
 ```
 
 
+:::::::::::::: discussion
+- What do you think is the *plausible* range for the prevalence of left-handedness in humans? What prior distribution could represent this belief?
+
+- How does the information contained in point estimates compare to posterior intervals?
+::::::::::::::::::::::::::
+
 ## Grid approximation
 
-Specifying a probabilistic model can be simple, but a common bottleneck in Bayesian data analysis is model fitting. Later in the course, we will begin using Stan, a state-of-the-art method for approximating the posterior. However, we'll begin fitting probabilistic model using the grid approximation. This approach involves computing the unnormalized posterior distribution at a grid of evenly spaced values in the parameter space and can be specified as follows:
+Specifying a probabilistic model can be simple, but the usual bottleneck in Bayesian data analysis is fitting the model. Later in the course, we will begin using Stan, a state-of-the-art method for approximating the posterior. However, we'll begin fitting probabilistic model using the grid approximation. This approach involves computing the unnormalized posterior distribution at a grid of evenly spaced values in the parameter space and can be specified as follows:
 
 1. Define a grid of parameter values.
 2. Compute the prior and likelihood on the grid.
@@ -277,13 +301,25 @@ Now, we'll implement the grid approximation for the handedness example in R.
 First, we'll load the required packages, define the data variables, and the grid of parameter values
 
 ```{r}
-# Sample size
+
+library(ggplot2)  # plotting
+library(dplyr)    # table manipulation
+library(tidyr)
+
+prior_color <- "#009E73"
+likelihood_color <- "#E69F00"
+posterior_color <- "#56B4E9"
+
+theme_set(theme_bw(15)) # Graphical theme
+
+
+# Number of students
 N <- 50
 
 # 7/50 are left-handed
 x <- 7
 
-# Define a grid of points in the interval [0, 1], with 0.01 interval
+# Define a grid of points in the interval [0, 1], with 0.01 spacing
 delta <- 0.01
 theta_grid <- seq(from = 0, to = 1, by = delta)
 ```
@@ -291,19 +327,22 @@ theta_grid <- seq(from = 0, to = 1, by = delta)
 Computing the values of the likelihood, prior, and unnormalized posterior is straightforward. While you can compute these using for-loops, vectorization as used below, is a more efficient approach:
 
 ``` {r}
+# Data likelihood computed using grid values
 likelihood <- dbinom(x = x, size = N, prob = theta_grid)
+# The prior similarly
 prior <- dbeta(theta_grid, 1, 10)
-posterior <- likelihood*prior
+# Unnormalized posterior
+posterior_unnormalized <- likelihood*prior
 ```
 
 Next, the posterior needs to be normalized.  
 
-In practice, this means dividing the values by the area under the unnormalized posterior. The area is computed with the integral $$\int_0^1 p(\theta | X)_{\text{unnormalized}} d\theta,$$ which is for a grid approximated function is the sum $$\sum_{\text{grid}} p(\theta | X)_{\text{unnormalized}} \cdot \delta,$$ where $\delta$ is the grid interval.
+In practice, this means dividing the function values by the area under the unnormalized posterior. The area is computed with the integral $$\int_0^1 p(\theta | X)_{\text{unnormalized}} d\theta,$$ which for a grid approximated function is the sum $$\sum_{\text{grid}} p(\theta | X)_{\text{unnormalized}} \cdot \delta,$$ where $\delta$ is the grid interval length.
 
 
 ``` {r}
 # Normalize 
-posterior <- posterior/(sum(posterior)*delta)
+posterior <- posterior_unnormalized/(sum(posterior_unnormalized)*delta)
 # Likelihood also normalized for better visualization
 likelihood <- likelihood/(sum(likelihood)*delta)
 ```
@@ -312,21 +351,29 @@ Finally, we can plot these functions
 
 ```{r, fig.width=10, fig.height=5}
 # Make data frame
-df1 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
+df2 <- data.frame(theta = theta_grid, likelihood, prior, posterior)
 
 # Wide to long format
-df1_l <- df1 %>%
-  gather(key = "Function", value = "value", -theta)
+df2_l <- df2 %>%
+  pivot_longer(
+    cols = -theta,
+    names_to = "Function",
+    values_to = "value"
+  )
 
 # Plot
-p1 <- ggplot(df1_l, 
+p2 <- ggplot(df2_l, 
        aes(x = theta, y = value, color = Function)) + 
   geom_point(size = 2) +
   geom_line(linewidth = 1) +
-  scale_color_grafify() + 
+  scale_color_manual(values = c(
+  likelihood = likelihood_color,
+  prior = prior_color,
+  posterior = posterior_color
+)) +
   labs(x = expression(theta))
 
-p1
+p2
 ```
 
 
@@ -355,10 +402,10 @@ In R, these statistics can be computed as follows:
 ```{r}
 
 data.frame(Estimate = c("Mode", "Mean", "Variance"), 
-           Value = c(df1[which.max(df1$posterior), "theta"],
-                     sum(df1$theta*df1$posterior*delta), 
-                     sum(df1$theta^2*df1$posterior*delta) -
-                       sum(df1$theta*df1$posterior*delta)^2))
+           Value = c(
+             df2[which.max(df2$posterior), "theta"],
+             sum(df2$theta*df2$posterior*delta), 
+             sum(df2$theta^2*df2$posterior*delta) - sum(df2$theta*df2$posterior*delta)^2))
 
 ```
 
@@ -408,7 +455,7 @@ The gamma distribution arises, for example, in applications that model the waiti
 X <- c(0.34, 0.2, 0.22, 0.77, 0.46, 0.73, 0.24, 0.66, 0.64)
 ```
 
-We'll estimate $\alpha$ and $\beta$ using the grid approximation. Similarly as before, we'll first need to define a grid. Since there are two parameters the parameter space is 2-dimensional and the grid needs to be defined at all pairwise combinations of the points of the individual grids. 
+Now, the model parameters are $\alpha$ and $\beta$ and our target is again the posterior distribution. Similarly as before, we'll first need to define a grid. Since there are two parameters, the posterior is 2-dimensional and the grid needs to be defined at all pairwise combinations of the points of the individual grids. 
 
 ```{r}
 delta <- 0.1
@@ -416,43 +463,44 @@ alpha_grid <- seq(from = 0.01, to = 15, by = delta)
 beta_grid <- seq(from = 0.01, to = 25, by = delta)
 
 # Get pairwise combinations
-df2 <- expand.grid(alpha = alpha_grid, beta = beta_grid)
+df3 <- expand.grid(alpha = alpha_grid, beta = beta_grid)
 ```
 
 
-Next, we'll compute the likelihood. As we assumed the data points to be independently generated from the gamma distribution, the likelihood is the product of the likelihoods of individual observations.
+Next, we'll compute the likelihood. As we assumed the data points to be independently generated from the gamma distribution, the likelihood is the *product* of the likelihoods of individual observations.
 
 ```{r}
 # Loop over all alpha, beta combinations
-for(i in 1:nrow(df2)) {
-  df2[i, "likelihood"] <- prod(
+# Calling dgamma() returns the likelihoods of individual data points
+for(i in 1:nrow(df3)) {
+  df3[i, "likelihood"] <- prod(
     dgamma(x = X,
-           shape = df2[i, "alpha"],
-           rate = df2[i, "beta"])
+           shape = df3[i, "alpha"],
+           rate = df3[i, "beta"])
     )
 }
 ```
 
-Next, we'll define priors for $\alpha$ and $\beta$. Only positive values are allowed, which should be reflected in the prior. We'll use $\Gamma$ priors with large variances.
+Next, we'll define priors for $\alpha$ and $\beta$. Only positive values are allowed, which should be reflected in the prior. Let's choose $\Gamma$ distribution with large variances, as we have little idea about their plausible value range.
 
 Notice, that normalizing the posterior now requires integrating over both dimensions, hence the $\delta^2$ below.
 
-```{r, fig.height= 5, out.width = '100%'}
+```{r, fig.height= 5, out.width = '100%', dpi=300}
 # Priors: alpha, beta ~ Gamma(2, .1)
-df2 <- df2 %>% 
+df3 <- df3 |>  
   mutate(prior = dgamma(x = alpha, 2, 0.1)*dgamma(x = beta, 2, 0.1))
 
 # Posterior
-df2 <- df2 %>% 
-  mutate(posterior = prior*likelihood) %>% 
+df3 <- df3|> 
+  mutate(posterior = prior*likelihood) |>  
   mutate(posterior = posterior/(sum(posterior)*delta^2)) # Normalize
 
 
 # Plot
-p_joint_posterior <- df2 %>% 
+p_joint_posterior <- df3 |>  
   ggplot() + 
   geom_tile(aes(x = alpha, y = beta, fill = posterior)) + 
-  scale_fill_gradientn(colours = rainbow(5)) +
+  scale_fill_gradientn(name = "Posterior", colours = rainbow(5)) +
   labs(x = expression(alpha), y = expression(beta))
 
 p_joint_posterior
@@ -462,27 +510,27 @@ p_joint_posterior
 Next, we'll compute the posterior mode, which is a point in the 2-dimensional parameter space. 
 
 ```{r}
-df2[which.max(df2$posterior), c("alpha", "beta")]
+df3[which.max(df3$posterior), c("alpha", "beta")]
 ```
 
 
 Often, in addition to the parameters of interest, the model contains parameters we are not interested in. For instance, we might only be interested in $\alpha$, in which case $\beta$ would be a 'nuisance' parameter. Nuisance parameters are part of the full ('joint') posterior, but they can be discarded by integrating the joint posterior over these parameters. A posterior integrated over some parameters is called a marginal posterior. 
 
-Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta$. Intuitively, it can be helpful to think of marginalization as a process where all of the joint posterior mass is drawn towards the $\alpha$ axis, as if by a gravitational force. 
+Let's now compute the marginal posterior for $\alpha$ by integrating over $\beta$. Intuitively, it can be helpful to think of marginalization as a process where all of the joint posterior mass is drawn towards the $\alpha$ axis in the figure above, as if by a gravitational force. 
 
-```{r, fig.height= 4, out.width = '100%'}
+```{r, fig.height= 4, out.width = '100%', dpi=300}
 # Get marginal posterior for alpha
-alpha_posterior <- df2 %>% 
-  group_by(alpha) %>% 
-  summarize(posterior = sum(posterior)) %>% 
+alpha_posterior <- df3 |> 
+  group_by(alpha) |> 
+  summarize(posterior = sum(posterior)) |>
   mutate(posterior = posterior/(sum(posterior)*delta))
 
-p_alpha_posterior <- alpha_posterior %>% 
+p_alpha_posterior <- alpha_posterior |> 
   ggplot() + 
   geom_line(aes(x = alpha, y = posterior), 
             color = posterior_color, 
             linewidth = 1) +
-  labs(x = expression(alpha))
+  labs(x = expression(alpha), y = "Posterior")
 
 p_alpha_posterior
 ```
@@ -496,9 +544,7 @@ Does the MAP of the joint posterior of $\theta = (\alpha, \beta)$ correspond to 
 
 :::::::::::::::::::::::::::::::: callout
 
-It is known that for the Gamma likelihood there exists a prior resulting in a posterior of the same distribution type. Such priors are called *conjugate priors* (see [table](https://en.wikipedia.org/wiki/Conjugate_prior#Table_of_conjugate_distributions)).
-
-
+It is known that for the Gamma likelihood there exists a prior resulting in a posterior of the same distribution type as the prior. Such priors are called *conjugate priors* (see [table](https://en.wikipedia.org/wiki/Conjugate_prior#Table_of_conjugate_distributions)). Conjugate priors were traditionally useful because they give analytically tractable posteriors. Modern computational methods can handle many models without closed-form posteriors, so conjugacy is less essential in practice.
 
 ::::::::::::::::::::::::::::::::::::::::
 
@@ -519,7 +565,7 @@ theta_samples <- rbeta(n, 1 + 7, 10 + 50 - 7)
 ```
 
 Plotting a histogram of these samples against the grid approximation posterior displays that both are indeed approximating the same distribution
-```{r, echo = TRUE, fig.height= 4, out.width = '100%'}
+```{r, echo = TRUE, fig.height= 4, out.width = '100%', dpi = 300}
 ggplot() + 
   geom_histogram(data = theta_samples %>% 
   data.frame(theta = .), 
@@ -531,10 +577,11 @@ ggplot() +
   geom_line(data = df1, 
             aes(x = theta, y = posterior), 
             color = posterior_color) +
-  labs(x = expression(theta))
+  labs(x = expression(theta), y = "Posterior")
 ```
 
 
+### Sample-based posterior summaries
 
 Computing posterior summaries from samples is easy. The posterior mean and variance are computed simply by taking the mean and variance of the samples, respectively. Posterior intervals are equally easy to compute: 90% CI is recovered from the appropriate quantiles and the probability of a certain parameter interval is the proportion of total samples within the interval. 
 
@@ -547,22 +594,28 @@ Compute the posterior mean, variance, 90% CI and $Pr(\theta > 0.1)$ using the ge
 
 ## Posterior predictive distribution
 
-Now we have learned how to fit a probabilistic model using the grid approximation and how to compute posterior summaries of the model parameters based on the fit or with posterior samples. An often interesting question that the posterior doesn't directly answer is what do possible unobserved data values $\tilde{X}$ look like, conditional on the observed values $X$. In other words, what predictions does the model give?
+Now we have learned how to fit a probabilistic model using the grid approximation and how to compute posterior summaries of the model parameters based on the fit or with posterior samples. An often relevant question that the posterior doesn't directly answer is what do possible unobserved data values $\tilde{X}$ look like, conditional on the observed values $X$. In other words, what predictions does the model give?
 
-The unknown value can be predicted using the *posterior predictive distribution*  $p(\tilde{X} | X) = \int p(\tilde{X} | \theta) p(\theta | X) d\theta$. Using samples, this distribution can be sampled from by first drawing a value $\theta^s$ from the posterior and then generating a random value from the likelihood function $p(\tilde{X} | \theta^s)$. 
+The unknown value can be predicted using the *posterior predictive distribution*  $p(\tilde{X} | X) = \int p(\tilde{X} | \theta) p(\theta | X) d\theta$. This distribution can be sampled from by first drawing a value $\theta^s$ from the posterior and then generating a random value from the likelihood function $p(\tilde{X} | \theta^s)$. 
 
-A posterior predictive distribution for the beta-binomial model, using the posterior samples of the previous example can be generated as
+For example, the posterior predictive distribution for the beta-binomial model, using the posterior samples of the previous example can be sampled from as
 
 ```{r}
-ppd <- rbinom(length(theta_samples), 50, prob = theta_samples)
+ppd <- rbinom(length(theta_samples), 1, prob = theta_samples)
+head(ppd, 10)
+mean(ppd)
 ```
 
-In other words, this is the distribution of the number of left-handed people in a yet unseen sample of 50 people. Let's plot the histogram of these samples and compare it to the observed data (red vertical line): 
 
-```{r}
+We can also generate replications of the original data setting by drawing 50 samples for each posterior sample. Let's plot the histogram of the amount of left-handed in these samples and compare it to the observed data (red vertical line): 
+
+```{r, dpi = 300}
+ppd_50 <- rbinom(length(theta_samples), 50, prob = theta_samples)
+
 ggplot() + 
-  geom_histogram(data = data.frame(ppd), 
-                 aes(x = ppd, y = after_stat(density)), binwidth = 1) +
+  geom_histogram(data = data.frame(ppd_50), 
+                 aes(x = ppd_50, y = after_stat(density)),
+                 fill = posterior_color, binwidth = 1) +
   geom_vline(xintercept = 7, color = "red")
 
 ```

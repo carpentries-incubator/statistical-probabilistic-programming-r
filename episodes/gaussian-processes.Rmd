@@ -6,42 +6,12 @@ exercises: 3
 
 
 ```{r, include=FALSE}
-library(cmdstanr)
-library(tidyverse)
-library(grafify)
+library(rstan)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(cowplot)
 library(mvtnorm)
-
-# Install CmdStan if it isn't available
-if (is.null(cmdstanr::cmdstan_version(error_on_NA = FALSE))) {
-  cmdstanr::install_cmdstan(cores = 2)
-}
-
-
-cmdstan_setup <- function() {
-
-  home_dir <- normalizePath("~", winslash = "/")
-  work_dir <- file.path(home_dir, "cmdstan_work")
-  temp_dir <- file.path(home_dir, "cmdstan_temp")
-
-  dir.create(work_dir, FALSE, TRUE)
-  dir.create(temp_dir, FALSE, TRUE)
-
-  Sys.setenv(
-    TMPDIR = temp_dir,
-    TEMP   = temp_dir,
-    TMP    = temp_dir
-  )
-
-  options(
-    cmdstanr_write_stan_file_dir = work_dir,
-    cmdstanr_write_exe_dir = work_dir
-  )
-}
-
-cmdstan_setup()
-
-cmdstanr::register_knitr_engine(override = TRUE)
 
 theme_set(theme_bw(15))
 posterior_color <- "#56B4E9"
@@ -216,7 +186,7 @@ Let's fit the model. We'll use hyperparameter values $\lambda = 1$, $\alpha = 1$
 
 ```{r}
 # Fit
-gp_samples <- gp_model$sample(
+gp_samples <- sampling(gp_model, 
               data = list(N_data = nrow(df6),
                           x_data = as.array(df6$x),
                           y = as.array(df6$y),
@@ -226,8 +196,7 @@ gp_samples <- gp_model$sample(
                           N_pred = N_pred,
                           x_pred = x_pred),
               chains = 1, 
-              iter_warmup = 500,
-              iter_sampling = 500,
+              iter = 1000,
               refresh = 0)
 ```
 
@@ -236,8 +205,7 @@ The inference takes some time (about a minute on a standard laptop) even though 
 
 
 ```{r}
-f_samples <- gp_samples$draws("f") %>% 
-  posterior::as_draws_matrix() %>% 
+f_samples <- extract(gp_samples, "f")[[1]] %>% 
   t() %>% 
   data.frame() %>% 
   mutate(x = c(df6$x, x_pred)) # data and prediction locations
@@ -334,26 +302,10 @@ model {
 
 Let's compile and fit this model using the same data. Fitting is completed in a few seconds with no convergence issues: 
 
-```{r, include=FALSE}
-Sys.setenv(
-  TMPDIR = "C:/cmdstan_temp",
-  TEMP   = "C:/cmdstan_temp",
-  TMP    = "C:/cmdstan_temp"
-)
-options(
-  cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
-  cmdstanr_write_exe_dir = "C:/cmdstan_work"
-)
-
-# Guarantee cholesky model compilation remains in the allowed path
-if(!exists("gp_cholesky_model")) {
-  gp_cholesky_model <- cmdstanr::cmdstan_model(cmdstanr::write_stan_file(gp_cholesky_model_code))
-}
-```
 
 
 ```{r}
-gp_cholesky_samples <- gp_cholesky_model$sample(
+gp_cholesky_samples <- sampling(gp_cholesky_model, 
                        data = list(N_data = nrow(df6),
                                    x_data = as.array(df6$x),
                                    y = as.array(df6$y),
@@ -363,8 +315,7 @@ gp_cholesky_samples <- gp_cholesky_model$sample(
                                    N_pred = N_pred,
                                    x_pred = x_pred),
                        chains = 1, 
-                       iter_warmup = 1000,
-                       iter_sampling = 1000,
+                       iter = 2000, 
                        refresh = 0
                        )
 ```
@@ -374,7 +325,7 @@ Let's examine the results. How is the posterior different from the one recovered
 
 ```{r}
 
-f_matrix <- posterior::as_draws_matrix(gp_cholesky_samples$draws("f"))
+f_matrix <- extract(gp_cholesky_samples, "f")[[1]]
 
 N_data <- nrow(df6)
 f_pred_matrix <- f_matrix[, (N_data + 1):ncol(f_matrix)]
@@ -559,7 +510,7 @@ Let's fit the model and extract the posterior summary of $\theta$.
 x_pred <- seq(min(insect$x), max(insect$x), length.out = 100)
 N_pred <- length(x_pred)
 
-logistic_gp_fit <- logistic_gp_model$sample(
+logistic_gp_fit <- sampling(logistic_gp_model, 
                                    data = list(N_data = nrow(insect),
                                                y = insect$y,
                                                x_data = insect$x,
@@ -658,21 +609,9 @@ generated quantities{
 Refit the model and check posterior
 
 ```{r}
-Sys.setenv(
-  TMPDIR = "C:/cmdstan_temp",
-  TEMP   = "C:/cmdstan_temp",
-  TMP    = "C:/cmdstan_temp"
-)
-options(
-  cmdstanr_write_stan_file_dir = "C:/cmdstan_work",
-  cmdstanr_write_exe_dir = "C:/cmdstan_work"
-)
 
-if(!exists("logistic_gp_model2")) {
-  logistic_gp_model2 <- cmdstanr::cmdstan_model(cmdstanr::write_stan_file(logistic_gp_model2_code))
-}
 
-logistic_gp_fit2 <- logistic_gp_model2$sample(
+logistic_gp_fit2 <- sampling(logistic_gp_model2, 
                                    data = list(N_data = nrow(insect),
                                                y = insect$y,
                                                x_data = insect$x,
@@ -682,7 +621,7 @@ logistic_gp_fit2 <- logistic_gp_model2$sample(
                                    chains = 1,
                                    refresh = 0)
 
-theta_summary2 <- logistic_gp_fit2$summary("theta") %>%
+theta_summary2 <- logistic_gp_fit2$summary("theta")$summary %>%
   data.frame() %>%
   select(lower_2.5 = q5, mean, upper_97.5 = q95) %>%
   mutate(x = c(insect$x, x_pred))

@@ -63,10 +63,10 @@ episodes:
 - stan.Rmd
 - mcmc.Rmd
 - hierarchical-models.Rmd
-- model-comparison.Rmd
-- gaussian-processes.Rmd
-- survival-analysis.Rmd
-- stan-extensions.Rmd
+# - model-comparison.Rmd
+# - gaussian-processes.Rmd
+# - survival-analysis.Rmd
+# - stan-extensions.Rmd
 - exercises.Rmd
 
 # Information for Learners
