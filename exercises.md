@@ -535,14 +535,13 @@ install.packages("AER")
 ```
 
 ``` output
-- Querying repositories for available source packages ... Done!
 The following package(s) will be installed:
 - AER [1.2-17]
-These packages will be installed into "/__w/statistical-probabilistic-programming-r/statistical-probabilistic-programming-r/renv/profiles/lesson-requirements/renv/library/linux-ubuntu-noble/R-4.6/x86_64-pc-linux-gnu".
+These packages will be installed into "~/.cache/R/renv/library/profiles/lesson-requirements/renv/lesson-9e647cdf/linux-ubuntu-noble/R-4.6/x86_64-pc-linux-gnu".
 
 # Installing packages --------------------------------------------------------
 [32m✔[0m AER 1.2-17                               [linked from cache]
-Successfully installed 1 package in 4.3 milliseconds.
+Successfully installed 1 package in 3.8 milliseconds.
 ```
 
 ``` r

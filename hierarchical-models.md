@@ -169,7 +169,7 @@ height_sim <- lapply(1:N_countries, function(i) {
                             sd = my_df$Mean.height.standard.error))
 
 }) %>% 
-  do.call(rbind, .)
+  bind_rows()
 ```
 
 
@@ -279,7 +279,7 @@ generated quantities {
 ```
 
 
-Now we can call Stan and fit the model using `cmdstanr`. Hierarchical models can encounter convergence issues and for this reason, we'll use 10000 iterations and set `adapt_delta = 0.99`. This controls the acceptance probability in Stan's adaptation period and will result in a smaller step size in the Markov chain. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `parallel_chains = 2`. 
+Now we can call Stan and fit the model. Hierarchical models can encounter convergence issues and for this reason, we'll use 5000 iterations and set `adapt_delta = 0.99`. This controls the acceptance probability in Stan's adaptation period and will result in a smaller step size in the Markov chain. Moreover, we'll speed up the inference by running 2 chains in parallel by setting `cores = 2`. 
 
 
 ``` r
@@ -287,16 +287,32 @@ stan_data <- list(G = length(unique(height_sim$Country)),
                   N = rep(N, length(Countries)), 
                   X = height_sim$Height)
 
-normal_hier_fit <- normal_hier_model$sample(
-                                   data = stan_data, 
-                                   iter_warmup = 5000,
-                                   iter_sampling = 5000,
-                                   chains = 2,
-                                   # Use to avoid divergent transitions:
-                                   adapt_delta = 0.99,
-                                   parallel_chains = 2,
-                                   seed = 123,
-                                   refresh = 0)
+normal_hier_fit <- sampling(normal_hier_model,
+                            data = stan_data, 
+                            iter = 5000,
+                            chains = 2,
+                            # Use to avoid divergent transitions:
+                            control = list(adapt_delta = 0.99),
+                            cores = 2,
+                            seed = 123,
+                            refresh = 0)
+
+
+par_summary <- summary(normal_hier_fit, c("mu", "sigma"))$summary |> 
+  data.frame() |> 
+  select(mean, Lower_CI = X2.5., Upper_CI = X97.5.)
+
+par_summary$par <- rownames(par_summary)
+par_summary <- par_summary |> separate(col = par, into = c("par", "Country"))
+```
+
+``` warning
+Warning: Expected 2 pieces. Additional pieces discarded in 20 rows [1, 2, 3, 4, 5, 6, 7,
+8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].
+```
+
+``` r
+par_summary$Country <- Countries[as.numeric(par_summary$Country)]
 ```
 
 
@@ -320,27 +336,29 @@ for(i in 1:N_countries) {
   my_stan_data <- list(N =  my_df %>% nrow, 
                        X = my_df$Height)
 
-  my_fit <- normal_pooled_model$sample(
-                              data = my_stan_data, 
-                              iter_warmup = 5000,
-                              iter_sampling = 5000,
-                              chains = 2,
-                              # Use to get rid of divergent transitions:
-                              adapt_delta = 0.99, 
-                              parallel_chains = 2,
-                              refresh = 0
+  my_fit <- sampling(normal_pooled_model, 
+                     data = my_stan_data, 
+                     iter = 5000,
+                     chains = 2,
+                     # Use to get rid of divergent transitions:
+                     control = list(adapt_delta = 0.99), 
+                     # cores = 2,
+                     refresh = 0
                             )
   
   
-  unpooled_summaries[[i]] <- my_fit$summary(c("mu", "sigma")) %>% 
-  data.frame() %>%
-  rename(par = variable, Lower_CI = q5, Upper_CI = q95) %>%
+  my_res <- summary(my_fit, c("mu", "sigma"))$summary %>% 
+  data.frame()
+  my_res$variable <- rownames(my_res)
+  my_res <- rename(my_res, 
+                   par = variable, Lower_CI = X2.5., Upper_CI = X97.5.) %>%
   mutate(country = my_country)
   
+  unpooled_summaries[[i]] <- my_res
 }
 
 
-unpooled_summaries <- do.call(rbind, unpooled_summaries)
+unpooled_summaries <- bind_rows(unpooled_summaries)
 ```
 
 
@@ -350,18 +368,8 @@ Let's first compare the marginal posteriors for the country-specific estimates f
 
 
 ``` r
-par_summary <- normal_hier_fit$summary(c("mu", "sigma")) %>% 
-  data.frame() %>%
-  rename(
-    Lower_CI = q5,   
-    Upper_CI = q95   
-  ) %>%
-  separate(variable, into = c("par", "country"), sep = "\\[") %>%
-  mutate(country = gsub("\\]", "", country)) %>%
-  mutate(country = Countries[as.integer(country)])
-
 ggplot() + 
-geom_errorbar(data = par_summary, aes(x = country, ymin = Lower_CI, ymax = Upper_CI),
+geom_errorbar(data = par_summary, aes(x = Country, ymin = Lower_CI, ymax = Upper_CI),
               color = posterior_color) + 
 geom_point(data = height_women10 %>% 
              rename_with(~ c('mu', 'sigma'), 3:4) %>% 
@@ -395,11 +403,10 @@ Let's then plot the population distribution's parameters, that is, the hyperpara
 
 ``` r
 ## Population distributions:
-population_samples_l <- normal_hier_fit$draws(c("mu_mu", "sigma_mu", "alpha_sigma", "beta_sigma"), 
-                                              format = "df") %>% 
-  data.frame() %>% 
-  rename(sample = .iteration) %>%
-  select(-c(.chain, .draw)) %>%
+population_samples_l <- rstan::extract(normal_hier_fit,
+                                c("mu_mu", "sigma_mu", "alpha_sigma","beta_sigma")) |> 
+  bind_cols() |> 
+  mutate(sample = row_number()) |> 
   pivot_longer(cols = -sample, 
                names_to = "hyperpar", 
                values_to = "value")
@@ -428,15 +435,21 @@ Let's then plot the population distributions and compare to the true sample mean
 
 
 ``` r
-population_l <- normal_hier_fit$draws(c("mu_tilde", "sigma_tilde"), format = "df") %>% 
-  data.frame() %>% 
-  rename(sample = .iteration, mu = mu_tilde, sigma = sigma_tilde) %>%
-  select(sample, mu, sigma) %>%
+population_l <- extract(normal_hier_fit, c("mu_tilde", "sigma_tilde")) |> 
+  bind_cols() |> 
+  mutate(sample = row_number()) |> 
+  select(sample, mu_tilde, sigma_tilde) %>%
   pivot_longer(cols = -sample, 
                names_to = "par", 
                values_to = "value")
+```
 
- 
+``` error
+Error in `UseMethod()`:
+! no applicable method for 'extract' applied to an object of class "stanfit"
+```
+
+``` r
 ggplot() + 
   geom_histogram(data = population_l,
                  aes(x = value, y = after_stat(density)),
@@ -451,7 +464,10 @@ ggplot() +
   labs(title = "Blue = posterior; black = sample")
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-13-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+``` error
+Error:
+! object 'population_l' not found
+```
 We can see that the population distribution is able to capture the measured average heights and standard deviations relatively well, although the within-country variation is estimated to be too concentrated. However, remember that these estimates are based on a limited sample: 10 out of 200 countries with 10 individuals in each group. 
 
 ### Posterior predictive distribution
@@ -472,7 +488,7 @@ height_all <- lapply(1:nrow(height_women), function(i) {
              Height = rnorm(N, my_df$mu, my_df$sigma))
 
 }) %>% 
-  do.call(rbind, .)
+  bind_rows()
 ```
 
 
@@ -480,12 +496,18 @@ height_all <- lapply(1:nrow(height_women), function(i) {
 
 ``` r
 # Extract the posterior predictive distribution
-PPD <- normal_hier_fit$draws("X_tilde", format = "df") %>% 
-  data.frame() %>% 
-  rename(sample = .iteration) %>%
-  select(sample, X_tilde)
+PPD <- extract(normal_hier_fit, "X_tilde")[[1]] |> 
+  data.frame() |> 
+  `colnames<-`("X_tilde") |> 
+  mutate(sample = row_number())
+```
 
+``` error
+Error in `UseMethod()`:
+! no applicable method for 'extract' applied to an object of class "stanfit"
+```
 
+``` r
 ggplot() + 
   geom_histogram(data = PPD, 
                  aes(x = X_tilde, y = after_stat(density)),
@@ -497,7 +519,10 @@ ggplot() +
                  bins = 100)
 ```
 
-<img src="fig/hierarchical-models-rendered-unnamed-chunk-15-1.png" alt="" style="display: block; margin: auto;" />
+``` error
+Error:
+! object 'PPD' not found
+```
 
 
 
